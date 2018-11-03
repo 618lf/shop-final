@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="COMMON">
+<sql id="andClause"><if test="criteria.valid">AND (1 = 1 <foreach collection="criteria.criteriaWithoutValue" item="item" separator="AND" open="AND">${item}</foreach><foreach collection="criteria.criteriaWithSingleValue" item="item" separator="AND" open="AND">${item.condition} #{item.value}</foreach><foreach collection="criteria.criteriaWithListValue" item="item" separator="AND" open="AND">${item.condition} <foreach collection="item.values" item="value" open="(" close=")" separator=",">#{value}</foreach></foreach><foreach collection="criteria.criteriaWithBetweenValue" item="item" separator="AND" open="AND">${item.condition} #{item.first} AND #{item.second}</foreach>)</if></sql>
+<sql id="whereClause"><if test="criteria.valid">WHERE (1 = 1 <foreach collection="criteria.criteriaWithoutValue" item="item" separator="AND" open="AND">${item}</foreach><foreach collection="criteria.criteriaWithSingleValue" item="item" separator="AND" open="AND">${item.condition} #{item.value}</foreach><foreach collection="criteria.criteriaWithListValue" item="item" separator="AND" open="AND">${item.condition} <foreach collection="item.values" item="value" open="(" close=")" separator=",">#{value}</foreach></foreach><foreach collection="criteria.criteriaWithBetweenValue" item="item" separator="AND" open="AND">${item.condition} #{item.first} AND #{item.second}</foreach>)</if> </sql>
+
+<resultMap id="BaseTreeResult" type="com.tmt.common.entity.TreeVO">
+   <result property="id" column="ID"/>
+   <result property="parent" column="PARENT"/>
+   <result property="parentIds" column="PARENT_IDS"/>
+   <result property="level" column="TREE_LEVEL"/>
+   <result property="treeName" column="TREE_NAME"/>
+   <result property="treeCode" column="TREE_CODE"/>
+   <result property="treeType" column="TREE_TYPE"/>
+   <result property="treePath" column="TREE_PATH"/>
+   <result property="treeDesc" column="TREE_DESC"/> 
+</resultMap>
+</mapper>

@@ -1,0 +1,130 @@
+package com.tmt.common.utils;
+
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+
+import org.apache.poi.util.IOUtils;
+import org.springframework.util.Assert;
+
+import com.sun.xml.internal.bind.marshaller.CharacterEscapeHandler;
+import com.tmt.common.exception.BaseRuntimeException;
+
+/**
+ * 使用Jaxb2.0实现XML<->Java Object的Mapper.
+ * 
+ * 在创建时需要设定所有需要序列化的Root对象的Class.
+ * 特别支持Root对象是Collection的情形.
+ * 
+ * @author calvin
+ * @version 2013-01-15
+ */
+@SuppressWarnings("restriction")
+public class JaxbMapper {
+
+	private static ConcurrentMap<Class<?>, JAXBContext> CONTEXT = null;
+	
+	/**
+	 * 池化
+	 */
+	static {
+		CONTEXT = new ConcurrentHashMap<Class<?>, JAXBContext>();
+	}
+	
+	/**
+	 * Java Object->Xml without encoding.
+	 */
+	public static String toXml(Object root) {
+		Class<?> clazz = ReflectUtil.getUserClass(root);
+		return toXml(root, clazz);
+	}
+
+	/**
+	 * Java Object->Xml with encoding.
+	 */
+	public static String toXml(Object root, Class<?> clazz) {
+		Marshaller marshaller = null;
+		try {
+			StringWriter writer = new StringWriter();
+			marshaller = createMarshaller(clazz);
+			marshaller.marshal(root, writer);
+			String xml = writer.toString();
+			IOUtils.closeQuietly(writer);
+			return xml;
+		} catch (JAXBException e) {
+			throw ExceptionUtil.unchecked(e);
+		}
+	}
+
+	/**
+	 * Xml->Java Object.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T fromXml(String xml, Class<T> clazz) {
+		Unmarshaller unmarshaller = null;
+		try {
+			unmarshaller = createUnmarshaller(clazz);
+			StringReader reader = new StringReader(xml);
+			return (T) unmarshaller.unmarshal(reader);
+		} catch (JAXBException e) {
+			throw ExceptionUtil.unchecked(e);
+		}
+	}
+
+	/**
+	 * 创建Marshaller并设定encoding(可为null).
+	 * 线程不安全，需要每次创建或pooling。
+	 */
+	public static Marshaller createMarshaller(Class<?> clazz) {
+		try {
+			JAXBContext jaxbContext = getJaxbContext(clazz);
+			Marshaller marshaller = jaxbContext.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+			marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
+			marshaller.setProperty(CharacterEscapeHandler.class.getName(), new CharacterEscapeHandler() {
+                public void escape(char[] ac, int i, int j, boolean flag,Writer writer) throws IOException {
+                writer.write( ac, i, j ); }
+            });
+			return marshaller;
+		} catch (Exception e) {
+			throw ExceptionUtil.unchecked(e);
+		}
+	}
+
+	/**
+	 * 创建UnMarshaller.
+	 * 线程不安全，需要每次创建或pooling。
+	 */
+	public static Unmarshaller createUnmarshaller(Class<?> clazz) {
+		try {
+			JAXBContext jaxbContext = getJaxbContext(clazz);
+			Unmarshaller marshaller = jaxbContext.createUnmarshaller();
+			return marshaller;
+		} catch (Exception e) {
+			throw ExceptionUtil.unchecked(e);
+		}
+	}
+
+	protected static JAXBContext getJaxbContext(Class<?> clazz) {
+		Assert.notNull(clazz, "'clazz' must not be null");
+		JAXBContext jaxbContext = CONTEXT.get(clazz);
+		if (jaxbContext == null) {
+			try {
+				jaxbContext = JAXBContext.newInstance(clazz);
+				CONTEXT.putIfAbsent(clazz, jaxbContext);
+			} catch (JAXBException ex) {
+				throw new BaseRuntimeException("Could not instantiate JAXBContext for class [" + clazz
+						+ "]: " + ex.getMessage(), ex);
+			}
+		}
+		return jaxbContext;
+	}
+}
