@@ -1,0 +1,14 @@
+# spring boot auto load Initializers and Application Listeners 
+# see all spring.factories
+
+# Shop only load Auto Configuration, look above
+com.shop.starter.ApplicationBoot=\
+org.springframework.boot.autoconfigure.web.embedded.EmbeddedWebServerFactoryCustomizerAutoConfiguration,\
+org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactoryAutoConfiguration,\
+org.springframework.boot.autoconfigure.web.servlet.DispatcherServletAutoConfiguration,\
+com.shop.config.web.WebMvcAutoConfiguration,\
+com.shop.config.web.HttpMessageConvertersAutoConfiguration,\
+com.shop.config.cache.CacheAutoConfiguration,\
+com.shop.config.security.SecurityAutoConfiguration,\
+com.shop.config.jdbc.DataBaseAutoConfiguration,\
+com.shop.config.ApplicationAutoConfiguration
