@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.system.dao.GroupUserDao">
+  <resultMap id="BaseResult" type="com.tmt.system.entity.GroupUser">
+    <result column="GROUP_ID" property="groupId" jdbcType="BIGINT"/>
+    <result column="USER_ID" property="userId" jdbcType="BIGINT"/>
+  </resultMap>
+  
+  <delete id="delete" parameterType="com.tmt.system.entity.GroupUser">
+    DELETE FROM SYS_GROUP_USER WHERE GROUP_ID = #{groupId} AND USER_ID = #{userId}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.system.entity.GroupUser">
+    INSERT INTO SYS_GROUP_USER (GROUP_ID, USER_ID) VALUES (#{groupId}, #{userId})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+   INSERT INTO SYS_GROUP_USER (GROUP_ID, USER_ID)
+   VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+   (#{item.groupId}, #{item.userId})
+   </foreach> 
+  </insert>
+  
+  <!-- 用户组ID查询拥有的权限 -->
+  <select id="findByGroupId" resultMap="BaseResult" parameterType="long">
+    SELECT GROUP_ID, USER_ID
+      FROM SYS_GROUP_USER
+     WHERE GROUP_ID = #{groupId}
+  </select>
+  
+  <!-- 用户组ID查询拥有的权限 -->
+  <select id="findByUserId" resultMap="BaseResult" parameterType="long">
+    SELECT GROUP_ID, USER_ID
+      FROM SYS_GROUP_USER
+     WHERE USER_ID = #{userId}
+  </select>
+</mapper>

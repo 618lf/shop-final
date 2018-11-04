@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.wechat.dao.MetaTextDao" >
+  <resultMap id="BaseResult" type="com.tmt.wechat.entity.MetaText"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="APP_ID" property="appId" jdbcType="VARCHAR"/>
+    <result column="KEYWORD" property="keyword" jdbcType="VARCHAR"/>
+    <result column="CONTENT" property="content" jdbcType="VARCHAR"/>
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT"/>
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, APP_ID, KEYWORD, CONTENT, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_DATE
+     FROM WECHAT_META_TEXT
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT ID, APP_ID, KEYWORD, CONTENT, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_DATE
+     FROM WECHAT_META_TEXT
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition">
+   SELECT ID, APP_ID, KEYWORD, CONTENT, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_DATE
+     FROM WECHAT_META_TEXT
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="java.lang.Integer">
+    SELECT COUNT(1) C FROM WECHAT_META_TEXT
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.wechat.entity.MetaText">
+   DELETE FROM WECHAT_META_TEXT WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.wechat.entity.MetaText">
+   INSERT INTO WECHAT_META_TEXT (ID, APP_ID, KEYWORD, CONTENT, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_DATE)
+   VALUES (#{id}, #{appId}, #{keyword}, #{content}, #{createId}, #{createName}, #{createDate}, #{updateDate})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO WECHAT_META_TEXT (ID, APP_ID, KEYWORD, CONTENT, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_DATE)
+    VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.id}, #{item.appId}, #{item.keyword}, #{item.content}, #{item.createId}, #{item.createName}, #{item.createDate}, #{item.updateDate})
+   </foreach> 
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.wechat.entity.MetaText">
+   UPDATE WECHAT_META_TEXT
+      SET APP_ID = #{appId},
+          KEYWORD = #{keyword},
+		  CONTENT = #{content},
+		  UPDATE_DATE = #{updateDate}
+    WHERE ID = #{id}
+  </update>
+</mapper>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.system.dao.MessageDao" >
+  <resultMap id="BaseResult" type="com.tmt.system.entity.Message" >
+    <result column="ID" property="id" jdbcType="BIGINT" />
+    <result column="TITLE" property="title" jdbcType="VARCHAR" />
+    <result column="CONTENT" property="content" jdbcType="VARCHAR" />
+    <result column="SEND_USER_ID" property="sendUserId" jdbcType="BIGINT" />
+    <result column="SEND_USER_NAME" property="sendUserName" jdbcType="VARCHAR" />
+    <result column="SEND_TIME" property="sendTime" jdbcType="TIMESTAMP" />
+    <result column="RECEIVER_USER_ID" property="receiverUserId" jdbcType="BIGINT" />
+    <result column="RECEIVER_USER_NAME" property="receiverUserName" jdbcType="VARCHAR" />
+    <result column="VIEW_TIME" property="viewTime" jdbcType="TIMESTAMP" />
+    <result column="STATUS" property="status" jdbcType="TINYINT" />
+    <result column="MSG_BOX" property="msgBox" jdbcType="VARCHAR" />
+    <result column="OWN" property="own" jdbcType="BIGINT" />
+    <result column="DEL_FALG" property="delFalg" jdbcType="TINYINT" />
+    <result column="RELA_TITLE" property="relaTitle" jdbcType="VARCHAR" />
+    <result column="RELA_URL" property="relaUrl" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="long" >
+    SELECT ID, TITLE, CONTENT, SEND_USER_ID, SEND_USER_NAME, SEND_TIME, RECEIVER_USER_ID,
+           RECEIVER_USER_NAME, VIEW_TIME, STATUS, MSG_BOX, OWN, DEL_FALG, RELA_TITLE, RELA_URL
+      FROM SYS_MESSAGE
+     WHERE ID = #{id}
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition" >
+   SELECT ID, TITLE, CONTENT, SEND_USER_ID, SEND_USER_NAME, SEND_TIME, RECEIVER_USER_ID,
+          RECEIVER_USER_NAME, VIEW_TIME, STATUS, MSG_BOX, OWN, DEL_FALG, RELA_TITLE, RELA_URL
+     FROM SYS_MESSAGE
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.system.entity.Message" >
+    DELETE FROM SYS_MESSAGE WHERE ID = #{id}
+  </delete>
+ 
+  <insert id="insert" parameterType="com.tmt.system.entity.Message" >
+    INSERT INTO SYS_MESSAGE (ID, TITLE, CONTENT, SEND_USER_ID, SEND_USER_NAME, SEND_TIME,
+      RECEIVER_USER_ID, RECEIVER_USER_NAME, VIEW_TIME, STATUS, MSG_BOX, OWN, DEL_FALG, RELA_TITLE, RELA_URL)
+    VALUES (#{id}, #{title}, #{content}, #{sendUserId}, #{sendUserName}, #{sendTime}, #{receiverUserId},
+      #{receiverUserName}, #{viewTime}, #{status}, #{msgBox}, #{own}, #{delFalg}, #{relaTitle}, #{relaUrl})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+   INSERT INTO SYS_MESSAGE (ID, TITLE, CONTENT, SEND_USER_ID, SEND_USER_NAME, SEND_TIME,
+          RECEIVER_USER_ID, RECEIVER_USER_NAME, VIEW_TIME, STATUS, MSG_BOX, OWN, DEL_FALG, RELA_TITLE, RELA_URL)
+   VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+   (#{item.id}, #{item.title}, #{item.content}, #{item.sendUserId}, #{item.sendUserName}, #{item.sendTime}, #{item.receiverUserId},
+      #{item.receiverUserName}, #{item.viewTime}, #{item.status}, #{item.msgBox}, #{item.own}, #{item.delFalg}, #{item.relaTitle}, #{item.relaUrl})
+   </foreach> 
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.system.entity.Message" >
+	 UPDATE SYS_MESSAGE
+        SET TITLE = #{title},
+	        CONTENT = #{content},
+	        RECEIVER_USER_ID = #{receiverUserId},
+	        RECEIVER_USER_NAME = #{receiverUserName}
+      WHERE ID = #{id}
+  </update>
+  
+  <update id="UpdateToTrash" parameterType="com.tmt.system.entity.Message" >
+	 UPDATE SYS_MESSAGE
+        SET MSG_BOX = #{msgBox}
+      WHERE ID = #{id}
+  </update>
+  
+  <update id="UpdateToRead" parameterType="com.tmt.system.entity.Message" >
+	 UPDATE SYS_MESSAGE
+        SET STATUS = #{status},
+            VIEW_TIME = #{viewTime}
+      WHERE ID = #{id}
+  </update>
+  
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="int" >
+    SELECT COUNT(1) FROM SYS_MESSAGE
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <select id="queryUnreadCount" parameterType="long" resultType="int" >
+    SELECT COUNT(1) FROM SYS_MESSAGE
+     WHERE MSG_BOX = 'IN' AND OWN = #{VALUE}
+       AND STATUS = '0' AND RECEIVER_USER_ID = #{VALUE}
+  </select>
+  
+  <select id="queryUnreadList" resultMap="BaseResult" parameterType="java.util.Map">
+  SELECT ID, TITLE, CONTENT, SEND_USER_ID, SEND_USER_NAME, SEND_TIME, RECEIVER_USER_ID,
+         RECEIVER_USER_NAME, VIEW_TIME, STATUS, MSG_BOX, OWN, DEL_FALG, RELA_TITLE, RELA_URL
+    FROM SYS_MESSAGE 
+   WHERE MSG_BOX = 'IN' AND OWN = #{RECEIVER_USER_ID}
+     AND STATUS = '0' AND RECEIVER_USER_ID = #{RECEIVER_USER_ID}
+   ORDER BY SEND_TIME DESC
+  </select>
+</mapper>

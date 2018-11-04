@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.system.dao.AttachmentDirDao" >
+  <resultMap id="BaseResult" type="com.tmt.system.entity.AttachmentDir"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="PARENT_ID" property="parentId" jdbcType="BIGINT"/>
+    <result column="PARENT_IDS" property="parentIds" jdbcType="VARCHAR"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="CODE" property="code" jdbcType="VARCHAR"/>
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT"/>
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="UPDATE_ID" property="updateId" jdbcType="BIGINT"/>
+    <result column="UPDATE_NAME" property="updateName" jdbcType="VARCHAR"/>
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+    <result column="DEL_FLAG" property="delFlag" jdbcType="TINYINT"/>
+    <result column="LEVEL" property="level" jdbcType="TINYINT"/>
+    <result column="PATH" property="path" jdbcType="VARCHAR"/>
+  </resultMap>
+  <select id="findTreeList" resultMap="COMMON.BaseTreeResult" parameterType="queryCondition">
+     SELECT * FROM (
+	 SELECT D.ID ID,D.PARENT_ID PARENT,D.PARENT_IDS PARENT_IDS,
+	        D.NAME TREE_NAME, D.CODE TREE_CODE, '' TREE_TYPE,
+	        D.LEVEL TREE_LEVEL, D.PATH TREE_PATH, '' TREE_DESC, 1 SORT
+	   FROM SYS_ATTACHMENT_DIR D
+	   <include refid="COMMON.whereClause"/>
+       <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+      )A
+  </select>
+  <select id="get" resultMap="BaseResult" parameterType="long" >
+   SELECT ID, PARENT_ID, PARENT_IDS, NAME, CODE, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID, 
+		  UPDATE_NAME, UPDATE_DATE, DEL_FLAG, LEVEL, PATH
+     FROM SYS_ATTACHMENT_DIR
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="getByCode" resultMap="BaseResult" parameterType="string" >
+   SELECT ID, PARENT_ID, PARENT_IDS, NAME, CODE, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID, 
+		  UPDATE_NAME, UPDATE_DATE, DEL_FLAG, LEVEL, PATH
+     FROM SYS_ATTACHMENT_DIR
+    WHERE CODE = #{CODE}
+  </select>
+  
+  <select id="queryParents" resultMap="BaseResult" parameterType="queryCondition">
+   SELECT ID, PARENT_ID, PARENT_IDS, NAME, CODE, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID, 
+		  UPDATE_NAME, UPDATE_DATE, DEL_FLAG, LEVEL, PATH
+     FROM SYS_ATTACHMENT_DIR AD
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT ID, PARENT_ID, PARENT_IDS, NAME, CODE, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID, 
+		  UPDATE_NAME, UPDATE_DATE, DEL_FLAG, LEVEL, PATH
+     FROM SYS_ATTACHMENT_DIR
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition" >
+   SELECT ID, PARENT_ID, PARENT_IDS, NAME, CODE, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID, 
+		  UPDATE_NAME, UPDATE_DATE, DEL_FLAG, LEVEL, PATH
+     FROM SYS_ATTACHMENT_DIR
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.system.entity.AttachmentDir" >
+   DELETE FROM SYS_ATTACHMENT_DIR WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.system.entity.AttachmentDir" >
+   INSERT INTO SYS_ATTACHMENT_DIR (ID, PARENT_ID, PARENT_IDS, NAME, CODE, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID, 
+		  UPDATE_NAME, UPDATE_DATE, DEL_FLAG, LEVEL, PATH)
+   VALUES (#{id}, #{parentId}, #{parentIds}, #{name}, #{code}, #{createId}, #{createName}, #{createDate}, 
+          #{updateId}, #{updateName}, #{updateDate}, #{delFlag}, #{level}, #{path})
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.system.entity.AttachmentDir" >
+   UPDATE SYS_ATTACHMENT_DIR
+      SET PARENT_ID = #{parentId},
+		  PARENT_IDS = #{parentIds},
+		  NAME = #{name},
+		  CODE = #{code},
+		  UPDATE_ID = #{updateId},
+		  UPDATE_NAME = #{updateName},
+		  UPDATE_DATE = #{updateDate},
+		  DEL_FLAG = #{delFlag},
+		  LEVEL = #{level},
+		  PATH = #{path}
+    WHERE ID = #{id}
+  </update>
+  
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="int" >
+    SELECT COUNT(1) C FROM SYS_ATTACHMENT_DIR
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <!-- 删除前的判断 -->
+  <select id="deleteDirCheck" parameterType="com.tmt.system.entity.AttachmentDir" resultType="int" >
+    SELECT COUNT(1) FROM (
+	    SELECT 1 FROM SYS_DUAL
+	       WHERE EXISTS (SELECT 1 FROM SYS_ATTACHMENT A WHERE A.DIR_ID=#{id})
+		UNION ALL
+		SELECT 1 FROM SYS_DUAL
+		       WHERE EXISTS (SELECT 1 FROM SYS_ATTACHMENT_DIR B WHERE b.PARENT_ID=#{id})
+    )A
+  </select>
+  
+</mapper>

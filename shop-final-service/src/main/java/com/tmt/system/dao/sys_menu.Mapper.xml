@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.system.dao.MenuDao" >
+  <resultMap id="BaseResult" type="com.tmt.system.entity.Menu" >
+    <result column="ID" property="id" jdbcType="BIGINT" />
+    <result column="PARENT_ID" property="parentId" jdbcType="BIGINT" />
+    <result column="PARENT_IDS" property="parentIds" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="HREF" property="href" jdbcType="VARCHAR" />
+    <result column="SUB_MENU" property="subMenu" jdbcType="VARCHAR"/>
+    <result column="TARGET" property="target" jdbcType="VARCHAR" />
+    <result column="ICON_CLASS" property="iconClass" jdbcType="VARCHAR" />
+    <result column="SORT" property="sort" jdbcType="INTEGER" />
+    <result column="LEVEL" property="level" jdbcType="TINYINT" />
+    <result column="TYPE" property="type" jdbcType="TINYINT" />
+    <result column="IS_SHOW" property="isShow" jdbcType="TINYINT" />
+    <result column="IS_ACTIVITI" property="isActiviti" jdbcType="TINYINT" />
+    <result column="PERMISSION" property="permission" jdbcType="VARCHAR" />
+    <result column="QUICK_MENU" property="quickMenu" jdbcType="VARCHAR" />
+    <result column="TOP_MENU" property="topMenu" jdbcType="VARCHAR" />
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT" />
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_ID" property="updateId" jdbcType="BIGINT" />
+    <result column="UPDATE_NAME" property="updateName" jdbcType="VARCHAR" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="REMARKS" property="remarks" jdbcType="VARCHAR" />
+    <result column="DEL_FLAG" property="delFlag" jdbcType="TINYINT" />
+    <result column="DEGREE" property="degree" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="getAll" resultMap="BaseResult">
+    SELECT ID, PARENT_ID, PARENT_IDS, NAME, HREF, SUB_MENU, TARGET, ICON_CLASS, SORT, LEVEL, IS_SHOW, IS_ACTIVITI, PERMISSION, 
+           CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID, UPDATE_NAME, UPDATE_DATE, REMARKS, DEL_FLAG,TYPE,QUICK_MENU,
+           TOP_MENU, DEGREE
+      FROM SYS_MENU WHERE ID != '0'
+     ORDER BY LEVEL,SORT
+  </select>
+  <select id="findAllWithRoot" resultMap="BaseResult">
+    SELECT ID, PARENT_ID, PARENT_IDS, NAME, HREF, SUB_MENU, TARGET, ICON_CLASS, SORT,LEVEL, IS_SHOW, IS_ACTIVITI, PERMISSION, 
+           CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID, UPDATE_NAME, UPDATE_DATE, REMARKS, DEL_FLAG,TYPE,QUICK_MENU,
+           TOP_MENU, DEGREE
+      FROM SYS_MENU
+     ORDER BY LEVEL,SORT
+  </select>
+  <select id="get" resultMap="BaseResult" parameterType="long" >
+    SELECT ID, PARENT_ID, PARENT_IDS, NAME, HREF, SUB_MENU, TARGET, ICON_CLASS, SORT, LEVEL,IS_SHOW, IS_ACTIVITI, PERMISSION, 
+           CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID, UPDATE_NAME, UPDATE_DATE, REMARKS, DEL_FLAG,TYPE,QUICK_MENU,
+           TOP_MENU, DEGREE
+      FROM SYS_MENU
+     WHERE ID = #{id}
+  </select>
+  <select id="findByCondition" resultMap="BaseResult" parameterType="java.util.Map" >
+    SELECT ID, PARENT_ID, PARENT_IDS, NAME, HREF, SUB_MENU, TARGET, ICON_CLASS, SORT, LEVEL,IS_SHOW, IS_ACTIVITI, PERMISSION, 
+           CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID, UPDATE_NAME, UPDATE_DATE, REMARKS, DEL_FLAG,TYPE,QUICK_MENU,
+           TOP_MENU, DEGREE
+      FROM SYS_MENU M WHERE M.LEVEL != 0
+      <if test="MENU_IDS != null">AND #{MENU_IDS} LIKE CONCAT(CONCAT('%,',M.ID),',%')</if> 
+      <if test="MENU_NAME != null">AND M.NAME LIKE CONCAT(CONCAT('%',#{MENU_NAME}),'%')</if> 
+      <if test="MENU_HREF != null">AND M.HREF LIKE CONCAT(CONCAT('%',#{MENU_HREF}),'%')</if> 
+      <if test="PARENT_ID != null">AND M.PARENT_ID = #{PARENT_ID}</if> 
+      <if test="PARENT_IDS != null">AND M.PARENT_IDS LIKE CONCAT(CONCAT('%,',#{PARENT_IDS}), ',%')</if> 
+     ORDER BY M.LEVEL,M.SORT
+  </select>
+  <delete id="delete" parameterType="com.tmt.system.entity.Menu" >
+    DELETE FROM SYS_MENU WHERE ID = #{id}
+  </delete>
+  <insert id="insert" parameterType="com.tmt.system.entity.Menu" >
+    INSERT INTO SYS_MENU (ID, PARENT_ID, PARENT_IDS, NAME, HREF, SUB_MENU, TARGET, ICON_CLASS, SORT, LEVEL, IS_SHOW,
+      IS_ACTIVITI, PERMISSION, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID, UPDATE_NAME,
+      UPDATE_DATE, REMARKS, DEL_FLAG, TYPE,QUICK_MENU,TOP_MENU, DEGREE)
+    VALUES (#{id}, #{parentId}, #{parentIds}, #{name}, #{href},  #{subMenu}, #{target}, #{iconClass}, #{sort}, #{level}, #{isShow}, #{isActiviti},
+      #{permission}, #{createId}, #{createName}, #{createDate},  #{updateId}, #{updateName}, #{updateDate}, #{remarks},
+      #{delFlag}, #{type}, #{quickMenu}, #{topMenu}, #{degree})
+  </insert>
+  <update id="update" parameterType="com.tmt.system.entity.Menu" >
+   UPDATE SYS_MENU
+      SET PARENT_ID = #{parentId},
+	      PARENT_IDS = #{parentIds},
+	      NAME = #{name},
+	      SUB_MENU = #{subMenu},
+	      HREF = #{href},
+	      TARGET = #{target},
+	      ICON_CLASS = #{iconClass},
+	      SORT = #{sort},
+	      LEVEL = #{level},
+	      IS_SHOW = #{isShow},
+	      TYPE= #{type},
+	      QUICK_MENU= #{quickMenu},
+	      TOP_MENU= #{topMenu},
+	      IS_ACTIVITI = #{isActiviti},
+	      PERMISSION = #{permission},
+	      UPDATE_ID = #{updateId},
+	      UPDATE_NAME = #{updateName},
+	      UPDATE_DATE = #{updateDate},
+	      REMARKS = #{remarks},
+	      DEL_FLAG = #{delFlag},
+	      DEGREE = #{degree}
+    WHERE ID = #{id}
+  </update>
+  <update id="updateSort" parameterType="com.tmt.system.entity.Menu" >
+   UPDATE SYS_MENU
+      SET SORT = #{sort}
+    WHERE ID = #{id}
+  </update>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="int" >
+    SELECT COUNT(1) FROM SYS_MENU  M WHERE M.LEVEL != 0
+    <include refid="COMMON.whereClause" />
+  </select>
+  <!-- 根据用户权限  
+       1.EXISTS 查询的是实际的权限
+       2.EXISTS 查询的是权限的父路径,方便展示菜单
+  -->
+  <select id="findAuthorityByUserId" resultMap="BaseResult" parameterType="long">
+    SELECT ID, PARENT_ID, PARENT_IDS, NAME, HREF, SUB_MENU, TARGET, ICON_CLASS, SORT, LEVEL, IS_SHOW, IS_ACTIVITI, PERMISSION, 
+           CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID, UPDATE_NAME, UPDATE_DATE, REMARKS, DEL_FLAG,TYPE,QUICK_MENU,
+           TOP_MENU, DEGREE
+      FROM SYS_MENU M
+	 WHERE (EXISTS (SELECT 1 FROM SYS_ROLE_USER U, SYS_ROLE_MENU A
+	                 WHERE M.ID = A.MENU_ID AND A.ROLE_ID = U.ROLE_ID
+	                   AND M.TYPE IN(2,3)  AND U.USER_ID = #{USERID})
+	        OR  EXISTS ( 
+	          SELECT 1 FROM SYS_MENU M2, SYS_ROLE_USER U, SYS_ROLE_MENU A
+	           WHERE CONCAT(',',M2.PARENT_IDS) LIKE CONCAT(CONCAT('%,',M.ID),',%')
+	             AND M2.TYPE IN(2)
+	             AND M2.ID = A.MENU_ID AND A.ROLE_ID = U.ROLE_ID
+	             AND U.USER_ID = #{USERID})
+	        ) AND M.LEVEL >= 1
+	  ORDER BY M.LEVEL , M.SORT      
+  </select>
+  
+  <!-- 根据用户权限  
+       1.EXISTS 查询的是实际的权限
+       2.EXISTS 查询的是权限的父路径,方便展示菜单
+  -->
+  <select id="findALlAuthorityByUserId" resultMap="BaseResult" parameterType="long">
+    SELECT ID, PARENT_ID, PARENT_IDS, NAME, HREF, SUB_MENU, TARGET, ICON_CLASS, SORT, LEVEL, IS_SHOW, IS_ACTIVITI, PERMISSION, 
+           CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID, UPDATE_NAME, UPDATE_DATE, REMARKS, DEL_FLAG,TYPE,QUICK_MENU,
+           TOP_MENU, DEGREE
+      FROM SYS_MENU M
+	 WHERE (EXISTS (
+	          SELECT 1 FROM SYS_GROUP_USER GU, SYS_GROUP_ROLE GR, SYS_ROLE_MENU A
+	           WHERE GU.GROUP_ID = GR.GROUP_ID AND GR.ROLE_ID = A.ROLE_ID
+	             AND M.ID = A.MENU_ID AND M.TYPE IN(2,3) 
+	             AND GU.USER_ID = #{USERID})
+	        OR EXISTS (
+	          SELECT 1 FROM SYS_MENU M2, SYS_GROUP_USER GU, SYS_GROUP_ROLE GR, SYS_ROLE_MENU A
+	           WHERE CONCAT(',',M2.PARENT_IDS) LIKE CONCAT(CONCAT('%,',M.ID),',%')
+	             AND GU.GROUP_ID = GR.GROUP_ID AND GR.ROLE_ID = A.ROLE_ID
+	             AND M2.ID = A.MENU_ID AND M2.TYPE IN(2)
+	             AND GU.USER_ID = #{USERID})
+	        ) AND M.LEVEL >= 1
+	  ORDER BY M.LEVEL , M.SORT      
+  </select>
+  <!-- 查询用户组的权限集合 -->
+  <select id="findAuthorityByGroupId" resultMap="BaseResult" parameterType="long">
+    SELECT ID, PARENT_ID, PARENT_IDS, NAME, HREF, SUB_MENU, TARGET, ICON_CLASS, SORT, LEVEL, IS_SHOW, IS_ACTIVITI, PERMISSION, 
+           CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID, UPDATE_NAME, UPDATE_DATE, REMARKS, DEL_FLAG,TYPE,QUICK_MENU,
+           TOP_MENU, DEGREE
+      FROM SYS_MENU M
+	 WHERE (EXISTS (
+	          SELECT 1 FROM SYS_GROUP_ROLE GR, SYS_ROLE_MENU A
+	           WHERE GR.ROLE_ID = A.ROLE_ID
+	             AND M.ID = A.MENU_ID AND M.TYPE IN(2,3) 
+	             AND GR.GROUP_ID = #{VALUE})
+	        OR EXISTS (
+	          SELECT 1 FROM SYS_MENU M2, SYS_GROUP_ROLE GR, SYS_ROLE_MENU A
+	           WHERE CONCAT(',',M2.PARENT_IDS) LIKE CONCAT(CONCAT('%,',M.ID),',%')
+	             AND GR.ROLE_ID = A.ROLE_ID
+	             AND M2.ID = A.MENU_ID AND M2.TYPE IN(2)
+	             AND GR.GROUP_ID = #{VALUE})
+	        ) AND M.LEVEL >= 1
+	  ORDER BY M.LEVEL , M.SORT      
+  </select>
+  
+  <select id="findMenusByRoleId" resultMap="BaseResult" parameterType="long">
+    SELECT M.ID, PARENT_ID, PARENT_IDS, NAME, HREF, SUB_MENU, TARGET, ICON_CLASS, SORT, LEVEL, IS_SHOW, IS_ACTIVITI, PERMISSION, 
+           CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID, UPDATE_NAME, UPDATE_DATE, REMARKS, DEL_FLAG,TYPE,QUICK_MENU,
+           TOP_MENU, DEGREE
+      FROM SYS_MENU M,SYS_ROLE_MENU MA
+     WHERE M.ID = MA.MENU_ID
+       AND MA.ROLE_ID = #{ROLE_ID}
+     ORDER BY NAME ,SORT
+  </select>
+  <select id="deleteMenuCheck" parameterType="com.tmt.system.entity.Menu" resultType="int" >
+     SELECT COUNT(1) FROM(
+		SELECT 1 FROM SYS_DUAL
+		 WHERE EXISTS (SELECT 1 FROM SYS_MENU A WHERE A.PARENT_ID = #{id})
+	 ) A
+  </select>
+  <!-- tree 选择时菜单是否可选 -->
+  <select id="treeMenuCheck" parameterType="long" resultType="int" >
+     SELECT COUNT(1) FROM (
+		SELECT 1 FROM SYS_MENU M1 
+	     WHERE EXISTS ( SELECT 1 FROM SYS_MENU M2
+	           WHERE CONCAT(',',M2.PARENT_IDS) LIKE CONCAT(CONCAT('%,',M1.ID),',%')
+	             AND m2.TYPE IN(2,3))
+	       AND M1.ID=#{id} )A
+  </select>
+</mapper>

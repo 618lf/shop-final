@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.system.dao.UserNoDao" >
+  <resultMap id="BaseResult" type="com.tmt.system.entity.UserNo"> 
+    <result column="ID" property="id" jdbcType="VARCHAR"/>
+    <result column="USER_ID" property="userId" jdbcType="BIGINT"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="String">
+   SELECT ID, USER_ID  FROM SYS_USER_NO
+    WHERE ID = #{id}
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.system.entity.UserNo">
+   DELETE FROM SYS_USER_NO WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.system.entity.UserNo">
+   INSERT INTO SYS_USER_NO (ID, USER_ID)
+   VALUES (#{id}, #{userId})
+  </insert>
+  
+  <select id="checkUserNo" resultType="int" parameterType="com.tmt.system.entity.User" >
+    SELECT COUNT(1) FROM SYS_USER_NO U 
+     WHERE U.ID = #{no} AND U.USER_ID != #{id}
+  </select>
+  
+  <select id="findUserByNo" resultMap="BaseResult" parameterType="String">
+	SELECT ID, USER_ID  FROM SYS_USER_NO
+     WHERE ID = #{id}
+  </select>
+  
+</mapper>

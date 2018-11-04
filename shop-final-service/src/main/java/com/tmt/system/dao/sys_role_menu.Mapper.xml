@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.system.dao.RoleMenuDao" >
+  <resultMap id="BaseResult" type="com.tmt.system.entity.RoleMenu" >
+    <result column="ROLE_ID" property="roleId" jdbcType="BIGINT" />
+    <result column="MENU_ID" property="menuId" jdbcType="BIGINT" />
+  </resultMap> 
+  
+  <delete id="delete" parameterType="com.tmt.system.entity.RoleMenu" >
+    DELETE FROM SYS_ROLE_MENU WHERE ROLE_ID = #{roleId} AND MENU_ID = #{menuId}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.system.entity.RoleMenu" >
+    INSERT INTO SYS_ROLE_MENU (ROLE_ID, MENU_ID)
+    VALUES (#{roleId}, #{menuId})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+   INSERT INTO SYS_ROLE_MENU (ROLE_ID, MENU_ID)
+   VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+   (#{item.roleId}, #{item.menuId})
+   </foreach> 
+  </insert>
+  
+  <select id="findByRoleId" resultMap="BaseResult" parameterType="long" >
+    SELECT MENU_ID, ROLE_ID
+      FROM SYS_ROLE_MENU
+     WHERE ROLE_ID = #{ROLE_ID}
+  </select>
+  
+  <select id="findByMenuId" resultMap="BaseResult" parameterType="long" >
+    SELECT MENU_ID, ROLE_ID
+      FROM SYS_ROLE_MENU
+     WHERE MENU_ID = #{MENU_ID}
+  </select>
+  
+</mapper>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.system.dao.RoleUserDao" >
+  <resultMap id="BaseResult" type="com.tmt.system.entity.RoleUser" >
+    <result column="USER_ID" property="userId" jdbcType="BIGINT" />
+    <result column="ROLE_ID" property="roleId" jdbcType="BIGINT" />
+  </resultMap>
+  
+  <delete id="delete" parameterType="com.tmt.system.entity.RoleUser" >
+     DELETE FROM SYS_ROLE_USER WHERE USER_ID = #{userId} AND ROLE_ID = #{roleId}
+  </delete>
+ 
+  <insert id="insert" parameterType="com.tmt.system.entity.RoleUser">
+    INSERT INTO SYS_ROLE_USER (USER_ID, ROLE_ID)
+    VALUES (#{userId}, #{roleId})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+   INSERT INTO SYS_ROLE_USER (USER_ID, ROLE_ID)
+   VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+   (#{item.userId}, #{item.roleId})
+   </foreach> 
+  </insert>
+  
+  <select id="findByRoleId" resultMap="BaseResult" parameterType="long">
+    SELECT USER_ID, ROLE_ID
+      FROM SYS_ROLE_USER
+     WHERE ROLE_ID = #{ROLE_ID}
+  </select> 
+  
+  <select id="findByUserId" resultMap="BaseResult" parameterType="long">
+    SELECT USER_ID, ROLE_ID
+      FROM SYS_ROLE_USER
+     WHERE USER_ID = #{USER_ID}
+  </select> 
+</mapper>

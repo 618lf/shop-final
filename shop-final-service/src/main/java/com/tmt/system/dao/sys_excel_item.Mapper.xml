@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.system.dao.ExcelItemDao" >
+  <resultMap id="BaseResultMap" type="com.tmt.system.entity.ExcelItem" >
+    <result column="ID" property="id" jdbcType="BIGINT" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="TEMPLATE_ID" property="templateId" jdbcType="BIGINT" />
+    <result column="COLUMN_NAME" property="columnName" jdbcType="VARCHAR" />
+    <result column="PROPERTY" property="property" jdbcType="VARCHAR" />
+    <result column="DATA_TYPE" property="dataType" jdbcType="VARCHAR" />
+    <result column="DATA_FORMAT" property="dataFormat" jdbcType="VARCHAR" />
+    <result column="VERIFY_FORMAT" property="verifyFormat" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="findByTempleteId" resultMap="BaseResultMap" parameterType="long" >
+   SELECT ID, NAME, TEMPLATE_ID, COLUMN_NAME, PROPERTY, DATA_TYPE, DATA_FORMAT,
+          VERIFY_FORMAT
+     FROM SYS_EXCEL_ITEM
+    WHERE TEMPLATE_ID = #{TEMPLATE_ID} 
+    ORDER BY LENGTH(COLUMN_NAME) ASC , COLUMN_NAME
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.system.entity.ExcelItem" >
+    DELETE FROM SYS_EXCEL_ITEM WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.system.entity.ExcelItem" >
+    INSERT INTO SYS_EXCEL_ITEM (ID, NAME, TEMPLATE_ID, COLUMN_NAME, PROPERTY,
+      DATA_TYPE, DATA_FORMAT, VERIFY_FORMAT)
+    VALUES (#{id}, #{name}, #{templateId}, #{columnName}, #{property}, #{dataType}, #{dataFormat}, #{verifyFormat})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+   INSERT INTO SYS_EXCEL_ITEM (ID, NAME, TEMPLATE_ID, COLUMN_NAME, PROPERTY,
+      DATA_TYPE, DATA_FORMAT, VERIFY_FORMAT)
+   VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+   (#{item.id}, #{item.name}, #{item.templateId}, #{item.columnName}, #{item.property}, #{item.dataType}, 
+    #{item.dataFormat}, #{item.verifyFormat})
+   </foreach> 
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.system.entity.ExcelItem">
+    UPDATE SYS_EXCEL_ITEM
+       SET NAME = #{name},
+	       TEMPLATE_ID = #{templateId},
+	       COLUMN_NAME = #{columnName},
+	       PROPERTY = #{property},
+	       DATA_TYPE = #{dataType},
+	       DATA_FORMAT = #{dataFormat},
+	       VERIFY_FORMAT = #{verifyFormat}
+     WHERE ID = #{id}
+  </update>
+</mapper>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.system.dao.GroupDao" >
+  <resultMap id="BaseResult" type="com.tmt.system.entity.Group" >
+    <result column="ID" property="id" jdbcType="BIGINT" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT" />
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_ID" property="updateId" jdbcType="BIGINT" />
+    <result column="UPDATE_NAME" property="updateName" jdbcType="VARCHAR" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="REMARKS" property="remarks" jdbcType="VARCHAR" />
+    <result column="DEL_FLAG" property="delFlag" jdbcType="TINYINT" />
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="long" >
+    SELECT ID, NAME, CODE, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID, UPDATE_NAME, UPDATE_DATE,
+           REMARKS, DEL_FLAG
+      FROM SYS_GROUP
+     WHERE ID = #{id}
+  </select>
+  <select id="getAll" resultMap="BaseResult">
+    SELECT ID, NAME, CODE, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID, UPDATE_NAME, UPDATE_DATE,
+           REMARKS, DEL_FLAG
+      FROM SYS_GROUP
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition" >
+    SELECT ID, NAME, CODE, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID, UPDATE_NAME, UPDATE_DATE,
+           REMARKS, DEL_FLAG
+      FROM SYS_GROUP
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.system.entity.Group" >
+    DELETE FROM SYS_GROUP WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.system.entity.Group" >
+    INSERT INTO SYS_GROUP (ID, NAME, CODE, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID,
+      UPDATE_NAME, UPDATE_DATE, REMARKS, DEL_FLAG)
+    VALUES (#{id}, #{name}, #{code}, #{createId}, #{createName}, #{createDate}, #{updateId}, #{updateName}, #{updateDate},
+      #{remarks}, #{delFlag})
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.system.entity.Group" >
+   UPDATE SYS_GROUP
+      SET NAME = #{name},
+          CODE = #{code},
+	      UPDATE_ID = #{updateId},
+	      UPDATE_NAME = #{updateName},
+	      UPDATE_DATE = #{updateDate},
+	      REMARKS = #{remarks},
+      	  DEL_FLAG = #{delFlag}
+    WHERE ID = #{id}
+  </update>
+  
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="int" >
+    SELECT COUNT(1) FROM SYS_GROUP D
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <select id="findByUserId" resultMap="BaseResult" parameterType="long" >
+    SELECT UG.ID, UG.NAME, UG.CODE, UG.CREATE_ID, UG.CREATE_NAME, UG.CREATE_DATE, UG.UPDATE_ID,
+           UG.UPDATE_NAME, UG.UPDATE_DATE, UG.REMARKS, UG.DEL_FLAG
+      FROM SYS_GROUP UG, SYS_GROUP_USER GU
+     WHERE UG.ID = GU.GROUP_ID
+       AND GU.USER_ID = #{userId}
+  </select>
+  
+</mapper>

@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.system.dao.UserDao" >
+  <resultMap id="BaseResult" type="com.tmt.system.entity.User" >
+    <result column="ID" property="id" jdbcType="BIGINT" />
+    <result column="OFFICE_ID" property="officeId" jdbcType="BIGINT" />
+    <result column="LOGIN_NAME" property="loginName" jdbcType="VARCHAR" />
+    <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+    <result column="NO" property="no" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+    <result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
+    <result column="LOGIN_IP" property="loginIp" jdbcType="VARCHAR" />
+    <result column="LOGIN_DATE" property="loginDate" jdbcType="TIMESTAMP" />
+    <result column="STATUS" property="status" jdbcType="TINYINT" />
+    <result column="SEX" property="sex" jdbcType="TINYINT"/>
+    <result column="PROVINCE" property="province" jdbcType="VARCHAR" />
+    <result column="CITY" property="city" jdbcType="VARCHAR" />
+    <result column="USER_TYPE" property="userType" jdbcType="VARCHAR"/>
+    <result column="HEADIMG" property="headimg" jdbcType="VARCHAR" />
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT" />
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="REMARKS" property="remarks" jdbcType="VARCHAR" />
+    <result column="DEL_FLAG" property="delFlag" jdbcType="CHAR"/>
+  </resultMap>
+  
+  <select id="findUserHeadimgById" parameterType="string" resultType="long">
+    SELECT U.HEADIMG FROM SYS_USER U WHERE ID = #{id}
+  </select>
+  
+  <select id="get" resultMap="BaseResult" parameterType="long">
+    SELECT ID, OFFICE_ID, LOGIN_NAME, PASSWORD, NO, NAME, EMAIL, MOBILE, USER_TYPE, LOGIN_IP, LOGIN_DATE, STATUS, 
+           CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_DATE, REMARKS, DEL_FLAG, SEX, PROVINCE, CITY, HEADIMG
+      FROM SYS_USER
+     WHERE ID = #{id}
+  </select>
+  
+  <select id="findTreeList" resultMap="COMMON.BaseTreeResult">
+    SELECT U.ID ,U.OFFICE_ID PARENT,'' PARENT_IDS,
+	       U.NAME TREE_NAME,U.NO TREE_CODE,
+	       1 TREE_TYPE, 1 TREE_LEVEL,'' TREE_PATH, '' TREE_DESC, 1 SORT
+	  FROM SYS_USER U
+	 WHERE 1 = 1
+	 <if test="CASCADE_WITH_OFFICE_ID != null">
+	   AND EXISTS(SELECT 1 FROM SYS_OFFICE O WHERE O.ID = U.OFFICE_ID AND (O.PARENT_IDS LIKE CONCAT(CONCAT('%,',#{CASCADE_WITH_OFFICE_ID}),',%')
+	             OR O.ID = #{CASCADE_WITH_OFFICE_ID}))
+	 </if> 
+	 <if test="CASCADE_OFFICE_ID != null">
+	   AND EXISTS(SELECT 1 FROM SYS_OFFICE O WHERE O.ID = U.OFFICE_ID AND (O.PARENT_IDS LIKE CONCAT(CONCAT('%,',#{CASCADE_OFFICE_ID}),',%'))
+	 </if> 
+	 <if test="OFFICE_ID != null">AND U.OFFICE_ID = #{OFFICE_ID}</if> 
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition" >
+    SELECT ID, OFFICE_ID, LOGIN_NAME, PASSWORD, NO, NAME, EMAIL, MOBILE, USER_TYPE, LOGIN_IP, LOGIN_DATE, STATUS, 
+           CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_DATE, REMARKS, DEL_FLAG, SEX, PROVINCE, CITY, HEADIMG
+      FROM SYS_USER U
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.system.entity.User" >
+    DELETE FROM SYS_USER WHERE ID = #{id}
+  </delete>
+
+  <insert id="insert" parameterType="com.tmt.system.entity.User" >
+    INSERT INTO SYS_USER (ID, OFFICE_ID, LOGIN_NAME, PASSWORD, NO, NAME, EMAIL, MOBILE, USER_TYPE, LOGIN_IP, LOGIN_DATE, STATUS, 
+           CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_DATE, REMARKS, DEL_FLAG, SEX, PROVINCE, CITY, HEADIMG)
+    VALUES (#{id}, #{officeId}, #{loginName}, #{password}, #{no}, #{name}, #{email}, #{mobile}, #{userType},
+      #{loginIp}, #{loginDate}, #{status}, #{createId}, #{createName}, #{createDate}, #{updateDate},
+      #{remarks}, #{delFlag}, #{sex}, #{province}, #{city}, #{headimg})
+  </insert>
+  
+  <!-- 系统管理员用户管理页面修改的数据  -->
+  <update id="update" parameterType="com.tmt.system.entity.User" >
+   UPDATE SYS_USER
+      SET OFFICE_ID = #{officeId},
+	      LOGIN_NAME = #{loginName},
+	      NO = #{no},
+	      NAME = #{name},
+	      EMAIL = #{email},
+	      MOBILE = #{mobile},
+	      STATUS = #{status},
+	      UPDATE_DATE = #{updateDate},
+	      REMARKS = #{remarks},
+	      DEL_FLAG = #{delFlag},
+	      SEX = #{sex}, 
+	      HEADIMG = #{headimg},
+	      PROVINCE = #{province},
+	      CITY = #{city}
+    WHERE ID = #{id}
+  </update>
+  
+  <!-- 管理员后台的个人修改信息 -->
+  <update id="updateSelfInfo" parameterType="com.tmt.system.entity.User">
+   UPDATE SYS_USER
+      SET NAME = #{name},
+          LOGIN_NAME = #{loginName},
+          EMAIL = #{email}, 
+	      MOBILE = #{mobile},
+	      UPDATE_DATE = #{updateDate},
+	      REMARKS = #{remarks},
+	      SEX = #{sex}, 
+	      HEADIMG = #{headimg}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updatePassWord" parameterType="com.tmt.system.entity.User" >
+     UPDATE SYS_USER
+	    SET PASSWORD = #{password}
+	  WHERE ID = #{id}
+  </update>
+  
+  <update id="updateStatus" parameterType="com.tmt.system.entity.User" >
+     UPDATE SYS_USER
+	    SET STATUS = #{status}
+	  WHERE ID = #{id}
+  </update>
+  
+  <update id="updatePassWordAndStatus" parameterType="com.tmt.system.entity.User" >
+     UPDATE SYS_USER
+	    SET PASSWORD = #{password},
+	    STATUS = #{status}
+	  WHERE ID = #{id}
+  </update>
+  
+  <update id="updateUserLoginAction" parameterType="com.tmt.system.entity.User" >
+     UPDATE SYS_USER
+	    SET LOGIN_IP = #{loginIp},
+	        LOGIN_DATE = #{loginDate}
+	  WHERE ID = #{id}
+  </update>
+  
+  <!-- 修改头像 -->
+  <update id="updateHeadimg" parameterType="com.tmt.system.entity.User">
+   UPDATE SYS_USER
+      SET HEADIMG = #{headimg}
+    WHERE ID = #{id}
+  </update>
+  
+  <!-- 忘记密码 -->
+  <update id="updateByForgetPassword" parameterType="com.tmt.system.entity.User" >
+     UPDATE SYS_USER
+	    SET SECRET_KEY = #{secretKey},
+	        EXPIRES_DATE = #{expiresDate}
+	  WHERE ID = #{id}
+  </update>
+  
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="int" >
+    SELECT COUNT(1) FROM SYS_USER U
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <select id="findUsersByRoleId" resultMap="BaseResult" parameterType="long" >
+    SELECT U.ID, OFFICE_ID, LOGIN_NAME, PASSWORD, NO, NAME, EMAIL, MOBILE, USER_TYPE, LOGIN_IP, LOGIN_DATE, STATUS, 
+           CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_DATE, REMARKS, DEL_FLAG, SEX, PROVINCE, CITY, HEADIMG
+      FROM SYS_USER U, SYS_ROLE_USER RU
+     WHERE U.ID = RU.USER_ID AND RU.ROLE_ID = #{ROLE_ID}
+  </select>
+  
+  <!-- tree 选择时 组织结构是否可选 -->
+  <select id="officeSelectCheck" parameterType="long" resultType="int" >
+     SELECT COUNT(1) FROM (
+	    SELECT 1 FROM SYS_DUAL E
+	           WHERE EXISTS (SELECT 1 FROM SYS_USER A WHERE A.OFFICE_ID=#{officeId})
+		UNION ALL
+		SELECT 1 FROM SYS_OFFICE E1 
+	     WHERE EXISTS (SELECT 1 FROM SYS_OFFICE E2 
+	           WHERE  CONCAT(',',E2.PARENT_IDS) LIKE CONCAT(CONCAT('%,',E1.ID),',%')
+	           AND EXISTS (SELECT 1 FROM SYS_USER A WHERE A.OFFICE_ID = E2.ID ))
+	    AND E1.ID=#{officeId}
+	 )A
+  </select>
+  
+  <!-- 查询用户组下的所有用户 -->
+  <select id="findUsersByGroupId" resultMap="BaseResult" parameterType="long" >
+    SELECT U.ID, OFFICE_ID, LOGIN_NAME, PASSWORD, NO, NAME, EMAIL, MOBILE, USER_TYPE, LOGIN_IP, LOGIN_DATE, STATUS, 
+           CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_DATE, REMARKS, DEL_FLAG, SEX, PROVINCE, CITY, HEADIMG
+      FROM SYS_USER U, SYS_GROUP_USER GU
+     WHERE U.ID = GU.USER_ID AND GU.GROUP_ID = #{GROUP_ID}
+  </select>
+  
+  <!-- 找回密码相关  -->
+  <resultMap id="ForgetPasswordBaseResult" type="com.tmt.system.entity.User" >
+    <result column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+    <result column="SECRET_KEY" property="secretKey" jdbcType="VARCHAR" />
+    <result column="EXPIRES_DATE" property="expiresDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <select id="findForgetPasswordUser" parameterType="Long" resultMap="ForgetPasswordBaseResult">
+    SELECT ID, EMAIL, SECRET_KEY, EXPIRES_DATE
+      FROM SYS_USER U WHERE ID = #{id}
+  </select>
+  
+  <resultMap id="IdBaseResult" type="com.tmt.system.entity.User" >
+    <result column="ID" property="id" jdbcType="BIGINT" />
+    <result column="NO" property="no" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <!-- 查询部门下的所有用户  -->
+  <select id="findOfficeUsers" resultMap="IdBaseResult" parameterType="long" >
+    SELECT U.ID, U.NO, U.NAME
+      FROM SYS_USER U
+     WHERE OFFICE_ID = #{VALUE}
+  </select>
+  
+  <!-- 查询部门下以及子部门的所有用户  -->
+  <select id="findDepartUsers" resultMap="IdBaseResult" parameterType="long" >
+    SELECT U.ID, U.NO, U.NAME
+      FROM SYS_USER U
+     WHERE (U.OFFICE_ID IN (
+       SELECT O.ID FROM SYS_OFFICE O  WHERE O.PARENT_IDS LIKE CONCAT(CONCAT('%,',#{VALUE}),',%')
+     ) OR U.OFFICE_ID = #{VALUE} )
+  </select>
+  <select id="lock" parameterType="com.tmt.system.entity.User" resultType="int">
+    SELECT 1 FROM SYS_USER D WHERE D.ID = #{id} FOR UPDATE
+  </select>
+</mapper>

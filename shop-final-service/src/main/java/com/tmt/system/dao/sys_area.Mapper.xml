@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.system.dao.AreaDao" >
+  <resultMap id="BaseResult" type="com.tmt.system.entity.Area" >
+    <result column="ID" property="id" jdbcType="BIGINT" />
+    <result column="PARENT_ID" property="parentId" jdbcType="BIGINT" />
+    <result column="PARENT_IDS" property="parentIds" jdbcType="VARCHAR" />
+    <result column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="TINYINT" />
+    <result column="LEVEL" property="level" jdbcType="TINYINT" />
+    <result column="PATH" property="path" jdbcType="VARCHAR" />
+    <result column="SORT" property="sort" jdbcType="INTEGER" />
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT" />
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <select id="get" resultMap="BaseResult" parameterType="long" >
+    SELECT ID, PARENT_ID, PARENT_IDS, CODE, NAME, TYPE, SORT, CREATE_ID, CREATE_NAME, CREATE_DATE,
+           UPDATE_DATE, LEVEL, PATH
+      FROM SYS_AREA
+     WHERE ID = #{id}
+  </select>
+  <select id="getByCode" resultMap="BaseResult" parameterType="string" >
+    SELECT ID, PARENT_ID, PARENT_IDS, CODE, NAME, TYPE, SORT, CREATE_ID, CREATE_NAME, CREATE_DATE,
+           UPDATE_DATE, LEVEL, PATH
+      FROM SYS_AREA
+     WHERE CODE = #{code}
+  </select>
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition" >
+    SELECT ID, PARENT_ID, PARENT_IDS, CODE, NAME, TYPE, SORT, CREATE_ID, CREATE_NAME, CREATE_DATE,
+           UPDATE_DATE, LEVEL, PATH
+      FROM SYS_AREA
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <delete id="delete" parameterType="com.tmt.system.entity.Area" >
+    DELETE FROM SYS_AREA WHERE ID = #{id}
+  </delete>
+  <insert id="insert" parameterType="com.tmt.system.entity.Area" >
+    INSERT INTO SYS_AREA (ID, PARENT_ID, PARENT_IDS, CODE, NAME, TYPE, SORT, CREATE_ID, CREATE_NAME,
+      CREATE_DATE, UPDATE_DATE, LEVEL, PATH)
+    VALUES (#{id}, #{parentId}, #{parentIds}, #{code}, #{name},#{type}, #{sort}, #{createId}, #{createName}, #{createDate},
+      #{updateDate}, #{level}, #{path})
+  </insert>
+  <update id="update" parameterType="com.tmt.system.entity.Area" >
+   UPDATE SYS_AREA
+      SET PARENT_ID = #{parentId},
+	      PARENT_IDS = #{parentIds},
+	      CODE = #{code},
+	      NAME = #{name},
+	      TYPE = #{type},
+	      LEVEL = #{level},
+	      PATH = #{path},
+	      UPDATE_DATE = #{updateDate},
+	      SORT = #{sort}
+    where ID = #{id}
+  </update>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="int" >
+    SELECT COUNT(1) FROM SYS_AREA D
+    <include refid="COMMON.whereClause" />
+  </select>
+  <select id="deleteAreaCheck" parameterType="com.tmt.system.entity.Area" resultType="int" >
+    SELECT COUNT(1) FROM (
+	    SELECT 1 FROM SYS_DUAL
+	       WHERE EXISTS (SELECT 1 FROM SYS_OFFICE A WHERE A.AREA_ID=#{id})
+		UNION ALL
+		SELECT 1 FROM SYS_DUAL
+		       WHERE EXISTS (SELECT 1 FROM SYS_AREA B WHERE b.PARENT_ID=#{id})
+    )A
+  </select>
+  <select id="queryAreasByLevel" resultMap="BaseResult" parameterType="java.util.Map">
+    SELECT ID, PARENT_ID, PARENT_IDS, CODE, NAME, TYPE, SORT, CREATE_ID, CREATE_NAME, CREATE_DATE,
+           UPDATE_DATE, LEVEL, PATH
+      FROM SYS_AREA
+     WHERE LEVEL = #{LEVEL}
+     <if test="PARENT_ID != null">AND PARENT_ID = #{PARENT_ID}</if> 
+     <if test="NAME != null">AND NAME LIKE CONCAT(CONCAT('%', #{NAME}), '%')</if>
+     ORDER BY SORT
+  </select>
+  <select id="queryAreasByBeforeLevel" resultMap="BaseResult" parameterType="java.util.Map">
+    SELECT ID, PARENT_ID, PARENT_IDS, CODE, NAME, TYPE, SORT, CREATE_ID, CREATE_NAME, CREATE_DATE,
+           UPDATE_DATE, LEVEL, PATH
+      FROM SYS_AREA
+     WHERE LEVEL &lt;= #{LEVEL}
+     <if test="PARENT_ID != null">AND PARENT_ID = #{PARENT_ID}</if> 
+     ORDER BY SORT
+  </select>
+  <select id="queryAllParents" resultMap="BaseResult" parameterType="long" >
+    SELECT B.*
+      FROM SYS_AREA A, SYS_AREA B
+     WHERE (A.PARENT_IDS LIKE CONCAT(CONCAT('%,',B.ID),',%') OR A.ID = B.ID) 
+       AND A.ID = #{id} AND B.LEVEL != 0 
+     ORDER BY B.LEVEL
+  </select>
+</mapper>

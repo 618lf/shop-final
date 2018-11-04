@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.system.dao.DictDao" >
+  <resultMap id="BaseResult" type="com.tmt.system.entity.Dict" >
+    <result column="ID" property="id" jdbcType="BIGINT" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="VALUE" property="value" jdbcType="VARCHAR" />
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT" />
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <select id="get" resultMap="BaseResult" parameterType="long" >
+    SELECT ID, NAME, CODE, VALUE, CREATE_ID, CREATE_NAME, CREATE_DATE
+      FROM SYS_DICT
+     WHERE ID = #{id}
+  </select>
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition" >
+    SELECT ID, NAME, CODE, VALUE, CREATE_ID, CREATE_NAME, CREATE_DATE
+      FROM SYS_DICT
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByCode" resultMap="BaseResult" parameterType="string" >
+    SELECT ID, NAME, CODE, VALUE, CREATE_ID, CREATE_NAME, CREATE_DATE
+      FROM SYS_DICT
+     WHERE CODE = #{VALUE}
+  </select>
+  <delete id="delete" parameterType="com.tmt.system.entity.Dict" >
+    DELETE FROM SYS_DICT WHERE ID = #{id}
+  </delete>
+  <insert id="insert" parameterType="com.tmt.system.entity.Dict" >
+    INSERT INTO SYS_DICT (ID, NAME, CODE, VALUE, CREATE_ID, CREATE_NAME, CREATE_DATE)
+    values (#{id}, #{name}, #{code}, #{value}, #{createId}, #{createName}, #{createDate})
+  </insert>
+  <update id="update" parameterType="com.tmt.system.entity.Dict" >
+   UPDATE SYS_DICT
+      SET NAME = #{name},
+          CODE = #{code},
+	      VALUE = #{value}
+    WHERE ID = #{id}
+  </update>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="int" >
+    SELECT COUNT(1) FROM SYS_DICT D
+    <include refid="COMMON.whereClause" />
+  </select>
+  <select id="checkDictCode"  resultType="int" parameterType="com.tmt.system.entity.Dict" >
+    SELECT COUNT(1) FROM SYS_DUAL WHERE EXISTS(
+      SELECT 1 FROM SYS_DICT D WHERE D.CODE = #{code} AND D.ID != #{id})
+  </select>
+  <select id="lock" parameterType="com.tmt.system.entity.Dict" resultType="int" >
+    SELECT 1 FROM SYS_DICT D WHERE D.CODE = #{code} FOR UPDATE
+  </select>
+</mapper>

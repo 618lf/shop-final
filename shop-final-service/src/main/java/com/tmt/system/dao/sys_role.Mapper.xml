@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.system.dao.RoleDao" >
+  <resultMap id="BaseResult" type="com.tmt.system.entity.Role">
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="OFFICE_ID" property="officeId" jdbcType="BIGINT"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="DATA_SCOPE" property="dataScope" jdbcType="VARCHAR"/>
+    <result column="CODE" property="code" jdbcType="VARCHAR"/>
+    <result column="PERMISSION" property="permission" jdbcType="VARCHAR"/>
+    <result column="CREATE_ID"  property="createId" jdbcType="BIGINT"/>
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="UPDATE_ID" property="updateId" jdbcType="BIGINT"/>
+    <result column="UPDATE_NAME" property="updateName" jdbcType="VARCHAR"/>
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+    <result column="REMARKS" property="remarks" jdbcType="VARCHAR"/>
+    <result column="DEL_FLAG" property="delFlag" jdbcType="TINYINT"/>
+  </resultMap> 
+  
+  <select id="get" resultMap="BaseResult" parameterType="long">
+    SELECT ID, OFFICE_ID, NAME, DATA_SCOPE, CODE, PERMISSION, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID,
+           UPDATE_NAME, UPDATE_DATE, REMARKS, DEL_FLAG
+      FROM SYS_ROLE
+     WHERE ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult" parameterType="long">
+    SELECT ID, OFFICE_ID, NAME, DATA_SCOPE, CODE, PERMISSION, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID,
+           UPDATE_NAME, UPDATE_DATE, REMARKS, DEL_FLAG
+      FROM SYS_ROLE
+  </select>
+  
+  <select id="findTreeList" resultMap="COMMON.BaseTreeResult">
+    SELECT R.ID ID ,R.OFFICE_ID PARENT,'' PARENT_IDS,
+	       R.NAME TREE_NAME,'' TREE_CODE,
+	       1 TREE_TYPE, 1 TREE_LEVEL,'' TREE_PATH, '' TREE_DESC, 1 SORT
+	  FROM SYS_ROLE R
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition">
+    SELECT ID, OFFICE_ID, NAME, DATA_SCOPE, CODE, PERMISSION, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID,
+           UPDATE_NAME, UPDATE_DATE, REMARKS, DEL_FLAG
+      FROM SYS_ROLE R
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.system.entity.Role">
+    DELETE FROM SYS_ROLE WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.system.entity.Role">
+    INSERT INTO SYS_ROLE (ID, OFFICE_ID, NAME, DATA_SCOPE, CODE, PERMISSION, CREATE_ID, CREATE_NAME, CREATE_DATE,
+      UPDATE_ID, UPDATE_NAME, UPDATE_DATE, REMARKS, DEL_FLAG)
+    VALUES (#{id}, #{officeId}, #{name}, #{dataScope}, #{code}, #{permission}, #{createId},
+      #{createName}, #{createDate}, #{updateId}, #{updateName}, #{updateDate}, #{remarks}, #{delFlag})
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.system.entity.Role">
+   UPDATE SYS_ROLE
+      SET OFFICE_ID = #{officeId},
+	      NAME = #{name},
+	      DATA_SCOPE = #{dataScope},
+	      CODE = #{code},
+	      PERMISSION =  #{permission},
+	      UPDATE_ID = #{updateId},
+	      UPDATE_NAME = #{updateName}, 
+	      UPDATE_DATE = #{updateDate},
+	      REMARKS = #{remarks},
+	      DEL_FLAG = #{delFlag}
+    WHERE ID = #{id}
+  </update>
+  
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="int" >
+    SELECT COUNT(1) FROM SYS_ROLE R
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <select id="findByUserId" resultMap="BaseResult" parameterType="long">
+    SELECT R.ID, OFFICE_ID, NAME, DATA_SCOPE, CODE, PERMISSION, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID,
+           UPDATE_NAME, UPDATE_DATE, REMARKS, DEL_FLAG
+      FROM SYS_ROLE R, SYS_ROLE_USER RU
+     WHERE R.ID = RU.ROLE_ID
+       AND RU.USER_ID = #{userId}
+  </select>
+  
+  <select id="findByGroupId" resultMap="BaseResult" parameterType="long">
+    SELECT R.ID, OFFICE_ID, NAME, DATA_SCOPE, CODE, PERMISSION, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID,
+           UPDATE_NAME, UPDATE_DATE, REMARKS, DEL_FLAG
+      FROM SYS_ROLE R, SYS_GROUP_ROLE GU
+     WHERE R.ID = GU.ROLE_ID
+       AND GU.GROUP_ID = #{groupId}
+  </select>
+  
+  <!-- 查询所有的权限，包括用户单独分配的和所属用户组分配的 -->
+  <select id="findAllByUserId" resultMap="BaseResult" parameterType="long">
+    SELECT ID, OFFICE_ID, NAME, DATA_SCOPE, CODE, PERMISSION, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID,
+           UPDATE_NAME, UPDATE_DATE, REMARKS, DEL_FLAG
+      FROM SYS_ROLE R
+     WHERE EXISTS (SELECT 1 FROM SYS_ROLE_USER RU WHERE RU.USER_ID = #{userId} AND R.ID = RU.ROLE_ID)
+       OR  EXISTS (SELECT 1 FROM SYS_GROUP_ROLE GR, SYS_GROUP_USER GU 
+                    WHERE GR.GROUP_ID = GU.GROUP_ID AND GR.ROLE_ID = R.ID AND GU.USER_ID = #{userId})
+  </select>
+  
+  <!-- tree 选择时 组织结构是否可选 -->
+  <select id="officeSelectCheck" parameterType="long" resultType="int">
+     SELECT COUNT(1) FROM (
+	    SELECT 1 FROM SYS_DUAL e
+	           WHERE EXISTS (SELECT 1 FROM SYS_ROLE A WHERE A.OFFICE_ID=#{officeId})
+		UNION ALL
+		SELECT 1 FROM SYS_OFFICE E1 
+	     WHERE EXISTS ( SELECT 1 FROM SYS_OFFICE E2 
+	           WHERE  CONCAT(',',E2.PARENT_IDS) LIKE CONCAT(CONCAT('%,',E1.ID),',%')
+	           AND EXISTS ( SELECT 1 FROM SYS_ROLE A WHERE A.OFFICE_ID = E2.ID ) )
+	    AND E1.ID=#{officeId})A
+  </select>
+  
+  <!-- 根据菜单权限查询当前用户拥有的权限集合  -->
+  <select id="findByMenuPermission" resultMap="BaseResult" parameterType="java.util.Map">
+   SELECT A.* FROM (
+    SELECT R.*
+      FROM SYS_ROLE R, SYS_ROLE_USER RU, SYS_MENU M, SYS_ROLE_MENU MA
+     WHERE R.ID = RU.ROLE_ID AND R.ID = MA.ROLE_ID AND M.ID = MA.MENU_ID
+       AND CONCAT(',',#{permissions},',') LIKE CONCAT(CONCAT('%,',M.PERMISSION),',%')
+       AND RU.USER_ID = #{userId} 
+    UNION ALL
+   SELECT R.*
+     FROM SYS_ROLE R, SYS_ROLE_USER RU
+    WHERE R.ID = RU.ROLE_ID AND RU.USER_ID = #{userId} 
+      AND CONCAT(',',#{permissions},',') LIKE CONCAT(CONCAT('%,',R.PERMISSION),',%')
+   ) A   ORDER BY A.DATA_SCOPE ASC
+  </select>
+  
+</mapper>

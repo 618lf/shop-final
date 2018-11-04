@@ -206,6 +206,12 @@
 			<version>${mybatis-spring.version}</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>${jdbc.driver.groupId}</groupId>
+			<artifactId>${jdbc.driver.artifactId}</artifactId>
+			<version>${jdbc.driver.version}</version>
+			<scope>provided</scope>
+		</dependency>
 		
 		<!-- web 服务 -->
 		<dependency>

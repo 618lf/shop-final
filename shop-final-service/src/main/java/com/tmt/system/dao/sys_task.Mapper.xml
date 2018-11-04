@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.system.dao.TaskDao">
+  <resultMap id="BaseResult" type="com.tmt.system.entity.Task">
+    <result column="ID" property="id" jdbcType="BIGINT" />
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="CRON_EXPRESSION" property="cronExpression" jdbcType="VARCHAR" />
+    <result column="ALLOW_EXECUTE_COUNT" property="allowExecuteCount" jdbcType="INTEGER" />
+    <result column="YET_EXECUTE_COUNT" property="yetExecuteCount" jdbcType="INTEGER" />
+    <result column="FAIL_EXECUTE_COUNT" property="failExecuteCount" jdbcType="INTEGER" />
+    <result column="PRE_EXECUTE_TIME" property="preExecuteTime" jdbcType="TIMESTAMP" />
+    <result column="NEXT_EXECUTE_TIME" property="nextExecuteTime" jdbcType="TIMESTAMP" />
+    <result column="BUSINESS_OBJECT" property="businessObject" jdbcType="VARCHAR" />
+    <result column="BUSINESS_OBJECT_NAME" property="businessObjectName" jdbcType="VARCHAR" />
+    <result column="TASK_STATUS" property="taskStatus" jdbcType="VARCHAR" />
+    <result column="MANUAL_OPERATION" property="manualOperation" jdbcType="INTEGER" />
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT" />
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_ID" property="updateId" jdbcType="BIGINT" />
+    <result column="UPDATE_NAME" property="updateName" jdbcType="VARCHAR" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="REMARKS" property="remarks" jdbcType="VARCHAR" />
+    <result column="DEL_FLAG" property="delFlag" jdbcType="TINYINT" />
+    <result column="CONCURRENT" property="concurrent" jdbcType="TINYINT" />
+    <result column="PARAMS" property="params" jdbcType="VARCHAR"/>
+    <result column="OPS" property="ops" jdbcType="VARCHAR"/>
+  </resultMap> 
+  
+  <select id="get" resultMap="BaseResult" parameterType="long" >
+    SELECT ID, NAME, CRON_EXPRESSION, ALLOW_EXECUTE_COUNT, YET_EXECUTE_COUNT, FAIL_EXECUTE_COUNT,
+           PRE_EXECUTE_TIME, NEXT_EXECUTE_TIME, BUSINESS_OBJECT, BUSINESS_OBJECT_NAME, TASK_STATUS,
+           MANUAL_OPERATION, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID, UPDATE_NAME, UPDATE_DATE,
+           REMARKS, DEL_FLAG, CONCURRENT, PARAMS, OPS
+      FROM SYS_TASK
+     WHERE ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+    SELECT ID, NAME, CRON_EXPRESSION, ALLOW_EXECUTE_COUNT, YET_EXECUTE_COUNT, FAIL_EXECUTE_COUNT,
+           PRE_EXECUTE_TIME, NEXT_EXECUTE_TIME, BUSINESS_OBJECT, BUSINESS_OBJECT_NAME, TASK_STATUS,
+           MANUAL_OPERATION, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID, UPDATE_NAME, UPDATE_DATE,
+           REMARKS, DEL_FLAG, CONCURRENT, PARAMS, OPS
+      FROM SYS_TASK
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition" >
+    SELECT ID, NAME, CRON_EXPRESSION, ALLOW_EXECUTE_COUNT, YET_EXECUTE_COUNT, FAIL_EXECUTE_COUNT,
+           PRE_EXECUTE_TIME, NEXT_EXECUTE_TIME, BUSINESS_OBJECT, BUSINESS_OBJECT_NAME, TASK_STATUS,
+           MANUAL_OPERATION, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID, UPDATE_NAME, UPDATE_DATE,
+           REMARKS, DEL_FLAG, CONCURRENT, PARAMS, OPS
+      FROM SYS_TASK
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  
+  <!-- 所有可执行的任务 -->
+  <select id="findRunAbleTasks" resultMap="BaseResult">
+    SELECT ID, NAME, CRON_EXPRESSION, ALLOW_EXECUTE_COUNT, YET_EXECUTE_COUNT, FAIL_EXECUTE_COUNT,
+           PRE_EXECUTE_TIME, NEXT_EXECUTE_TIME, BUSINESS_OBJECT, BUSINESS_OBJECT_NAME, TASK_STATUS,
+           MANUAL_OPERATION, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID, UPDATE_NAME, UPDATE_DATE,
+           REMARKS, DEL_FLAG, CONCURRENT, PARAMS, OPS
+      FROM SYS_TASK T
+     WHERE (T.TASK_STATUS = 'RUNABLE' OR  T.TASK_STATUS = 'RUNNING')
+  </select>
+  
+  <!-- 所有活着的任务, 锁表 -->
+  <select id="findActiveTasks" resultMap="BaseResult">
+    SELECT ID, NAME, CRON_EXPRESSION, ALLOW_EXECUTE_COUNT, YET_EXECUTE_COUNT, FAIL_EXECUTE_COUNT,
+           PRE_EXECUTE_TIME, NEXT_EXECUTE_TIME, BUSINESS_OBJECT, BUSINESS_OBJECT_NAME, TASK_STATUS,
+           MANUAL_OPERATION, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID, UPDATE_NAME, UPDATE_DATE,
+           REMARKS, DEL_FLAG, CONCURRENT, PARAMS, OPS
+      FROM SYS_TASK T
+     WHERE (T.TASK_STATUS = 'RUNABLE' OR  T.MANUAL_OPERATION &gt;= 1)
+       AND T.TASK_STATUS != 'RUNNING' FOR UPDATE
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.system.entity.Task">
+    DELETE FROM SYS_TASK WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.system.entity.Task">
+    INSERT INTO SYS_TASK (ID, NAME, CRON_EXPRESSION, ALLOW_EXECUTE_COUNT, YET_EXECUTE_COUNT, FAIL_EXECUTE_COUNT,
+           PRE_EXECUTE_TIME, NEXT_EXECUTE_TIME, BUSINESS_OBJECT, BUSINESS_OBJECT_NAME, TASK_STATUS,
+           MANUAL_OPERATION, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID, UPDATE_NAME, UPDATE_DATE,
+           REMARKS, DEL_FLAG, CONCURRENT, OPS)
+    values (#{id}, #{name}, #{cronExpression}, #{allowExecuteCount}, #{yetExecuteCount}, #{failExecuteCount},
+	       #{preExecuteTime}, #{nextExecuteTime}, #{businessObject}, #{businessObjectName}, #{taskStatus}, #{manualOperation},
+	       #{createId}, #{createName}, #{createDate}, #{updateId}, #{updateName}, #{updateDate}, #{remarks}, #{delFlag}, #{concurrent},
+	       #{ops})
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.system.entity.Task">
+    UPDATE SYS_TASK
+       SET NAME = #{name},
+	       CRON_EXPRESSION = #{cronExpression},
+	       ALLOW_EXECUTE_COUNT = #{allowExecuteCount},
+	       YET_EXECUTE_COUNT = #{yetExecuteCount},
+	       FAIL_EXECUTE_COUNT = #{failExecuteCount},
+	       PRE_EXECUTE_TIME = #{preExecuteTime},
+	       NEXT_EXECUTE_TIME = #{nextExecuteTime},
+	       BUSINESS_OBJECT = #{businessObject},
+	       BUSINESS_OBJECT_NAME = #{businessObjectName},
+	       MANUAL_OPERATION = #{manualOperation},
+	       UPDATE_ID = #{updateId},
+	       UPDATE_NAME = #{updateName},
+	       UPDATE_DATE = #{updateDate},
+	       REMARKS = #{remarks},
+	       DEL_FLAG = #{delFlag},
+	       CONCURRENT = #{concurrent},
+	       OPS = #{ops}
+     WHERE ID = #{id}
+  </update>
+  
+  <update id="updateExecuteStatus" parameterType="com.tmt.system.entity.Task">
+   UPDATE SYS_TASK
+      SET ALLOW_EXECUTE_COUNT = #{allowExecuteCount},
+	      YET_EXECUTE_COUNT = #{yetExecuteCount},
+	      FAIL_EXECUTE_COUNT = #{failExecuteCount},
+	      PRE_EXECUTE_TIME = #{preExecuteTime},
+	      NEXT_EXECUTE_TIME = #{nextExecuteTime},
+	      MANUAL_OPERATION = #{manualOperation},
+	      TASK_STATUS = #{taskStatus},
+	      PARAMS = #{params}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateOps" parameterType="com.tmt.system.entity.Task">
+   UPDATE SYS_TASK
+      SET OPS = #{ops}
+    WHERE ID = #{id}
+  </update>
+ 
+  <update id="updateStatus" parameterType="com.tmt.system.entity.Task">
+   UPDATE SYS_TASK
+      SET TASK_STATUS = #{taskStatus},
+          OPS = #{ops}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateManualOperation" parameterType="com.tmt.system.entity.Task">
+   UPDATE SYS_TASK
+      SET MANUAL_OPERATION = #{manualOperation}
+    WHERE ID = #{id}
+  </update>
+  
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="int">
+    SELECT COUNT(1) FROM SYS_TASK D
+    <include refid="COMMON.whereClause" />
+  </select>
+</mapper>

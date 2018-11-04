@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.wechat.dao.MetaRichDao" >
+  <resultMap id="BaseResult" type="com.tmt.wechat.entity.MetaRich"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="APP_ID" property="appId" jdbcType="VARCHAR"/>
+    <result column="KEYWORD" property="keyword" jdbcType="VARCHAR"/>
+    <result column="TITLE" property="title" jdbcType="VARCHAR"/>
+    <result column="IMAGE" property="image" jdbcType="VARCHAR"/>
+    <result column="TOP_IMAGE" property="topImage" jdbcType="TINYINT"/>
+    <result column="CONTENT" property="content" jdbcType="LONGVARCHAR"/>
+    <result column="AUTHOR" property="author" jdbcType="VARCHAR"/>
+    <result column="SOURCE" property="source" jdbcType="VARCHAR"/>
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT"/>
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+    <result column="REMARKS" property="remarks" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, APP_ID, KEYWORD, TITLE, IMAGE, TOP_IMAGE, CONTENT, AUTHOR, SOURCE, CREATE_ID, 
+		  CREATE_NAME, CREATE_DATE, UPDATE_DATE, REMARKS
+     FROM WECHAT_META_RICH
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT ID, APP_ID, KEYWORD, TITLE, IMAGE, TOP_IMAGE, CONTENT, AUTHOR, SOURCE, CREATE_ID, 
+		  CREATE_NAME, CREATE_DATE, UPDATE_DATE, REMARKS
+     FROM WECHAT_META_RICH
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition">
+   SELECT ID, APP_ID, KEYWORD, TITLE, IMAGE, TOP_IMAGE, CONTENT, AUTHOR, SOURCE, CREATE_ID, 
+		  CREATE_NAME, CREATE_DATE, UPDATE_DATE, REMARKS
+     FROM WECHAT_META_RICH
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="java.lang.Integer">
+    SELECT COUNT(1) C FROM WECHAT_META_RICH
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.wechat.entity.MetaRich">
+   DELETE FROM WECHAT_META_RICH WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.wechat.entity.MetaRich">
+   INSERT INTO WECHAT_META_RICH (ID, APP_ID, KEYWORD, TITLE, IMAGE, TOP_IMAGE, CONTENT, AUTHOR, SOURCE, CREATE_ID, 
+		  CREATE_NAME, CREATE_DATE, UPDATE_DATE, REMARKS)
+   VALUES (#{id}, #{appId}, #{keyword}, #{title}, #{image}, #{topImage}, #{content}, #{author}, #{source}, #{createId}, 
+		  #{createName}, #{createDate}, #{updateDate}, #{remarks})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO WECHAT_META_RICH (ID, APP_ID, KEYWORD, TITLE, IMAGE, TOP_IMAGE, CONTENT, AUTHOR, SOURCE, CREATE_ID, 
+		  CREATE_NAME, CREATE_DATE, UPDATE_DATE, REMARKS)
+    VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.id}, #{item.appId}, #{item.keyword}, #{item.title}, #{item.image}, #{item.topImage}, #{item.content}, #{item.author}, #{item.source}, #{item.createId}, 
+		  #{item.createName}, #{item.createDate}, #{item.updateDate}, #{item.remarks})
+   </foreach> 
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.wechat.entity.MetaRich">
+   UPDATE WECHAT_META_RICH
+      SET APP_ID = #{appId},
+          KEYWORD = #{keyword},
+		  TITLE = #{title},
+		  IMAGE = #{image},
+		  TOP_IMAGE = #{topImage},
+		  CONTENT = #{content},
+		  AUTHOR = #{author},
+		  SOURCE = #{source},
+		  UPDATE_DATE = #{updateDate},
+		  REMARKS = #{remarks}
+    WHERE ID = #{id}
+  </update>
+</mapper>

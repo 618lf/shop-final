@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.system.dao.EmailTaskDao" >
+  <resultMap id="BaseResult" type="com.tmt.system.entity.EmailTask" >
+    <result column="ID" property="id" jdbcType="BIGINT" />
+    <result column="EMAIL_FORM" property="emailForm" jdbcType="VARCHAR" />
+    <result column="EMAIL_TITLE" property="emailTitle" jdbcType="VARCHAR" />
+    <result column="EMAIL_TO" property="emailTo" jdbcType="VARCHAR" />
+    <result column="EMAIL_CC" property="emailCc" jdbcType="VARCHAR" />
+    <result column="EMAIL_TEMPLATE" property="emailTemplate" jdbcType="VARCHAR" />
+    <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="SEND_FLAG" property="sendFlag" jdbcType="TINYINT" />
+    <result column="STATUS" property="status" jdbcType="TINYINT" />
+  </resultMap>
+  
+  <resultMap id="BaseResultWithBLOBs" type="com.tmt.system.entity.EmailTask" extends="BaseResult" >
+    <result column="EMAIL_CONTENT" property="emailContent" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  
+  <select id="querySendAbleEmails" resultMap="BaseResultWithBLOBs">
+   SELECT ID, EMAIL_FORM, EMAIL_TITLE, EMAIL_TO, EMAIL_CC, EMAIL_TEMPLATE, CREATE_ID,
+          CREATE_NAME, CREATE_DATE, SEND_FLAG, STATUS, EMAIL_CONTENT
+     FROM SYS_EMAIL_TASK
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.system.entity.EmailTask" >
+    DELETE FROM SYS_EMAIL_TASK WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.system.entity.EmailTask" >
+    INSERT INTO SYS_EMAIL_TASK (ID, EMAIL_FORM, EMAIL_TITLE, EMAIL_TO, EMAIL_CC,
+      EMAIL_TEMPLATE, CREATE_ID, CREATE_NAME, CREATE_DATE, SEND_FLAG, STATUS, EMAIL_CONTENT)
+    VALUES (#{id}, #{emailForm}, #{emailTitle}, #{emailTo}, #{emailCc}, #{emailTemplate}, #{createId},
+      #{createName}, #{createDate}, #{sendFlag}, '0', #{emailContent})
+  </insert>
+  
+  <insert id="insert2" parameterType="com.tmt.system.entity.EmailTask" >
+    INSERT INTO SYS_EMAIL_TASK_OLD (ID, EMAIL_FORM, EMAIL_TITLE, EMAIL_TO, EMAIL_CC,
+      EMAIL_TEMPLATE, CREATE_ID, CREATE_NAME, CREATE_DATE, SEND_FLAG, STATUS, EMAIL_CONTENT)
+    VALUES (#{id}, #{module}, #{emailForm}, #{emailTitle}, #{emailTo}, #{emailCc}, #{emailTemplate}, #{createId},
+      #{createName}, #{createDate}, #{sendFlag}, '1', #{emailContent})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+   INSERT INTO SYS_EMAIL_TASK_OLD (ID, EMAIL_FORM, EMAIL_TITLE, EMAIL_TO, EMAIL_CC,
+          EMAIL_TEMPLATE, CREATE_ID, CREATE_NAME, CREATE_DATE, SEND_FLAG, STATUS, EMAIL_CONTENT)
+   VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+   (#{item.id}, #{item.emailForm}, #{item.emailTitle}, #{item.emailTo}, #{item.emailCc}, #{item.emailTemplate}, #{item.createId},
+    #{item.createName}, #{item.createDate}, #{item.sendFlag}, '1', #{item.emailContent})
+   </foreach> 
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.system.entity.EmailTask" >
+   UPDATE SYS_EMAIL_TASK
+      SET STATUS = #{status}
+    WHERE ID = #{id}
+  </update>
+</mapper>

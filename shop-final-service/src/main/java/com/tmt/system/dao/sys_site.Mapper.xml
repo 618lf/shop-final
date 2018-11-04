@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.system.dao.SiteDao" >
+  <resultMap id="BaseResult" type="com.tmt.system.entity.Site"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="SITE_URL" property="siteUrl" jdbcType="VARCHAR"/>
+    <result column="LOGO" property="logo" jdbcType="VARCHAR"/>
+    <result column="SHORT_NAME" property="shortName" jdbcType="VARCHAR"/>
+    <result column="KEYWORDS" property="keywords" jdbcType="VARCHAR"/>
+    <result column="DESCRIPTION" property="description" jdbcType="VARCHAR"/>
+    <result column="COMPANY" property="company" jdbcType="VARCHAR"/>
+    <result column="ADDRESS" property="address" jdbcType="VARCHAR"/>
+    <result column="PHONE" property="phone" jdbcType="VARCHAR"/>
+    <result column="ZIP_CODE" property="zipCode" jdbcType="VARCHAR"/>
+    <result column="EMAIL" property="email" jdbcType="VARCHAR"/>
+    <result column="CERTTEXT" property="certtext" jdbcType="VARCHAR"/>
+    <result column="IS_SITE_ENABLED" property="isSiteEnabled" jdbcType="TINYINT"/>
+    <result column="SITE_CLOSE_MESSAGE" property="siteCloseMessage" jdbcType="VARCHAR"/>
+    <result column="LOCALE" property="locale" jdbcType="VARCHAR"/>
+    <result column="WATERMARK_ALPHA" property="watermarkAlpha" jdbcType="VARCHAR"/>
+    <result column="WATERMARK_IMAGE_FILE" property="watermarkImageFile" jdbcType="VARCHAR"/>
+    <result column="WATERMARK_POSITION" property="watermarkPosition" jdbcType="VARCHAR"/>
+    <result column="IS_REGISTER_ENABLED" property="isRegisterEnabled" jdbcType="TINYINT"/>
+    <result column="DISABLED_USERNAME" property="disabledUsername" jdbcType="VARCHAR"/>
+    <result column="USERNAME_MIN_LENGTH" property="usernameMinLength" jdbcType="INTEGER"/>
+    <result column="USERNAME_MAX_LENGTH" property="usernameMaxLength" jdbcType="INTEGER"/>
+    <result column="PASSWORD_MIN_LENGTH" property="passwordMinLength" jdbcType="INTEGER"/>
+    <result column="PASSWORD_MAX_LENGTH" property="passwordMaxLength" jdbcType="INTEGER"/>
+    <result column="REGISTER_POINT" property="registerPoint" jdbcType="INTEGER"/>
+    <result column="REGISTER_AGREEMENT" property="registerAgreement" jdbcType="VARCHAR"/>
+    <result column="IS_MULTI_LOGIN" property="isMultiLogin" jdbcType="TINYINT"/>
+    <result column="ACCOUNT_LOCK_COUNT" property="accountLockCount" jdbcType="INTEGER"/>
+    <result column="ACCOUNT_LOCK_TIME" property="accountLockTime" jdbcType="INTEGER"/>
+    <result column="SAFE_KEY_EXPIRY_TIME" property="safeKeyExpiryTime" jdbcType="INTEGER"/>
+    <result column="UPLOAD_IMAGE_MAX_SIZE" property="uploadImageMaxSize" jdbcType="INTEGER"/>
+    <result column="UPLOAD_MEDIA_MAX_SIZE" property="uploadMediaMaxSize" jdbcType="INTEGER"/>
+    <result column="UPLOAD_FILE_MAX_SIZE" property="uploadFileMaxSize" jdbcType="INTEGER"/>
+    <result column="UPLOAD_IMAGE_EXTENSION" property="uploadImageExtension" jdbcType="VARCHAR"/>
+    <result column="UPLOAD_MEDIA_EXTENSION" property="uploadMediaExtension" jdbcType="VARCHAR"/>
+    <result column="UPLOAD_FILE_EXTENSION" property="uploadFileExtension" jdbcType="VARCHAR"/>
+    <result column="IMAGE_UPLOAD_PATH" property="imageUploadPath" jdbcType="VARCHAR"/>
+    <result column="MEDIA_UPLOAD_PATH" property="mediaUploadPath" jdbcType="VARCHAR"/>
+    <result column="FILE_UPLOAD_PATH" property="fileUploadPath" jdbcType="VARCHAR"/>
+    <result column="SMTP_HOST" property="smtpHost" jdbcType="VARCHAR"/>
+    <result column="SMTP_PORT" property="smtpPort" jdbcType="INTEGER"/>
+    <result column="SMTP_USERNAME" property="smtpUsername" jdbcType="VARCHAR"/>
+    <result column="SMTP_PASSWORD" property="smtpPassword" jdbcType="VARCHAR"/>
+    <result column="SMTP_SSL_ENABLED" property="smtpSSLEnabled" jdbcType="TINYINT"/>
+    <result column="SMTP_ANONYMOUS_ENABLED" property="smtpAnonymousEnabled" jdbcType="TINYINT"/>
+    <result column="SMTP_TIMEOUT" property="smtpTimeout" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="long" >
+   SELECT ID, NAME, SITE_URL, LOGO, SHORT_NAME, KEYWORDS, DESCRIPTION, COMPANY, ADDRESS, 
+		  PHONE, ZIP_CODE, EMAIL, CERTTEXT, IS_SITE_ENABLED, SITE_CLOSE_MESSAGE, LOCALE, 
+		  WATERMARK_ALPHA, WATERMARK_IMAGE_FILE, WATERMARK_POSITION, IS_REGISTER_ENABLED, DISABLED_USERNAME, USERNAME_MIN_LENGTH, USERNAME_MAX_LENGTH, 
+		  PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH, REGISTER_POINT, REGISTER_AGREEMENT, IS_MULTI_LOGIN, ACCOUNT_LOCK_COUNT, ACCOUNT_LOCK_TIME, 
+		  SAFE_KEY_EXPIRY_TIME, UPLOAD_IMAGE_MAX_SIZE, UPLOAD_MEDIA_MAX_SIZE, UPLOAD_FILE_MAX_SIZE, UPLOAD_IMAGE_EXTENSION, UPLOAD_MEDIA_EXTENSION, UPLOAD_FILE_EXTENSION, IMAGE_UPLOAD_PATH, MEDIA_UPLOAD_PATH, 
+		  FILE_UPLOAD_PATH, SMTP_HOST, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD, SMTP_SSL_ENABLED, SMTP_ANONYMOUS_ENABLED, SMTP_TIMEOUT
+     FROM SYS_SITE
+    WHERE ID = #{id}
+  </select>
+  
+  <update id="updateBase" parameterType="com.tmt.system.entity.Site" >
+   UPDATE SYS_SITE
+      SET NAME = #{name},
+		  SITE_URL = #{siteUrl},
+		  LOGO = #{logo},
+		  SHORT_NAME = #{shortName},
+		  KEYWORDS = #{keywords},
+		  DESCRIPTION = #{description},
+		  COMPANY = #{company},
+		  ADDRESS = #{address},
+		  PHONE = #{phone},
+		  ZIP_CODE = #{zipCode},
+		  EMAIL = #{email},
+		  CERTTEXT = #{certtext},
+		  IS_SITE_ENABLED = #{isSiteEnabled},
+		  SITE_CLOSE_MESSAGE = #{siteCloseMessage},
+		  LOCALE = #{locale},
+		  WATERMARK_ALPHA = #{watermarkAlpha},
+		  WATERMARK_IMAGE_FILE = #{watermarkImageFile},
+		  WATERMARK_POSITION = #{watermarkPosition}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateSafe" parameterType="com.tmt.system.entity.Site" >
+   UPDATE SYS_SITE
+      SET IS_REGISTER_ENABLED = #{isRegisterEnabled},
+		  DISABLED_USERNAME = #{disabledUsername},
+		  USERNAME_MIN_LENGTH = #{usernameMinLength},
+		  USERNAME_MAX_LENGTH = #{usernameMaxLength},
+		  PASSWORD_MIN_LENGTH = #{passwordMinLength},
+		  PASSWORD_MAX_LENGTH = #{passwordMaxLength},
+		  REGISTER_POINT = #{registerPoint},
+		  REGISTER_AGREEMENT = #{registerAgreement},
+		  IS_MULTI_LOGIN = #{isMultiLogin},
+		  ACCOUNT_LOCK_COUNT = #{accountLockCount},
+		  ACCOUNT_LOCK_TIME = #{accountLockTime},
+		  SAFE_KEY_EXPIRY_TIME = #{safeKeyExpiryTime},
+		  UPLOAD_IMAGE_MAX_SIZE = #{uploadImageMaxSize},
+		  UPLOAD_MEDIA_MAX_SIZE = #{uploadMediaMaxSize},
+		  UPLOAD_FILE_MAX_SIZE = #{uploadFileMaxSize},
+		  UPLOAD_IMAGE_EXTENSION = #{uploadImageExtension},
+		  UPLOAD_MEDIA_EXTENSION = #{uploadMediaExtension},
+		  UPLOAD_FILE_EXTENSION = #{uploadFileExtension},
+		  IMAGE_UPLOAD_PATH = #{imageUploadPath},
+		  MEDIA_UPLOAD_PATH = #{mediaUploadPath},
+		  FILE_UPLOAD_PATH = #{fileUploadPath}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateEmail" parameterType="com.tmt.system.entity.Site" >
+   UPDATE SYS_SITE
+      SET SMTP_HOST = #{smtpHost},
+		  SMTP_PORT = #{smtpPort},
+		  SMTP_USERNAME = #{smtpUsername},
+		  SMTP_PASSWORD = #{smtpPassword},
+		  SMTP_SSL_ENABLED = #{smtpSSLEnabled},
+		  SMTP_ANONYMOUS_ENABLED = #{smtpAnonymousEnabled},
+		  SMTP_TIMEOUT = #{smtpTimeout}
+    WHERE ID = #{id}
+  </update>
+</mapper>

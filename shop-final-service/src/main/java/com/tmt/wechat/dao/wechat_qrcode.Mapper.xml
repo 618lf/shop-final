@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.wechat.dao.QrcodeDao" >
+  <resultMap id="BaseResult" type="com.tmt.wechat.entity.Qrcode"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="APP_ID" property="appId" jdbcType="VARCHAR"/>
+    <result column="ACTION_NAME" property="actionName" jdbcType="VARCHAR"/>
+    <result column="SCENE_STR" property="sceneStr" jdbcType="VARCHAR"/>
+    <result column="IMAGE" property="image" jdbcType="VARCHAR"/>
+    <result column="TICKET" property="ticket" jdbcType="VARCHAR"/>
+    <result column="REMARKS" property="remarks" jdbcType="VARCHAR"/>
+    <result column="TYPE" property="type" jdbcType="TINYINT"/>
+    <result column="CONFIG" property="config" jdbcType="VARCHAR"/>
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT"/>
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, APP_ID, ACTION_NAME, SCENE_STR, IMAGE, REMARKS, CREATE_ID, CREATE_NAME, 
+		  CREATE_DATE, UPDATE_DATE, TYPE, CONFIG, TICKET
+     FROM WECHAT_QRCODE
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="getBySceneStr" resultMap="BaseResult" parameterType="String">
+   SELECT ID, APP_ID, ACTION_NAME, SCENE_STR, IMAGE, REMARKS, CREATE_ID, CREATE_NAME, 
+		  CREATE_DATE, UPDATE_DATE, TYPE, CONFIG, TICKET
+     FROM WECHAT_QRCODE
+    WHERE SCENE_STR = #{sceneStr}
+  </select>
+  
+  <select id="checkSceneStr" resultType="int" parameterType="com.tmt.wechat.entity.Qrcode" >
+    SELECT COUNT(1) FROM WECHAT_QRCODE U 
+     WHERE U.SCENE_STR = #{sceneStr} AND U.ID != #{id}
+  </select>
+  
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT ID, APP_ID, ACTION_NAME, SCENE_STR, IMAGE, REMARKS, CREATE_ID, CREATE_NAME, 
+		  CREATE_DATE, UPDATE_DATE, TYPE, CONFIG, TICKET
+     FROM WECHAT_QRCODE
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition">
+   SELECT ID, APP_ID, ACTION_NAME, SCENE_STR, IMAGE, REMARKS, CREATE_ID, CREATE_NAME, 
+		  CREATE_DATE, UPDATE_DATE, TYPE, CONFIG, TICKET
+     FROM WECHAT_QRCODE
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="java.lang.Integer">
+    SELECT COUNT(1) C FROM WECHAT_QRCODE
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.wechat.entity.Qrcode">
+   DELETE FROM WECHAT_QRCODE WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.wechat.entity.Qrcode">
+   INSERT INTO WECHAT_QRCODE (ID, APP_ID, ACTION_NAME, SCENE_STR, IMAGE, REMARKS, CREATE_ID, CREATE_NAME, 
+		  CREATE_DATE, UPDATE_DATE, TYPE, CONFIG, TICKET)
+   VALUES (#{id}, #{appId}, #{actionName}, #{sceneStr}, #{image}, #{remarks}, #{createId}, #{createName}, 
+		  #{createDate}, #{updateDate}, #{type}, #{config}, #{ticket})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO WECHAT_QRCODE (ID, APP_ID, ACTION_NAME, SCENE_STR, IMAGE, REMARKS, CREATE_ID, CREATE_NAME, 
+		  CREATE_DATE, UPDATE_DATE, TYPE, CONFIG, TICKET)
+    VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.id}, #{item.appId}, #{item.actionName}, #{item.sceneStr}, #{item.image}, #{item.remarks}, #{item.createId}, #{item.createName}, 
+		  #{item.createDate}, #{item.updateDate}, #{item.type}, #{item.config}, #{ticket})
+   </foreach> 
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.wechat.entity.Qrcode">
+   UPDATE WECHAT_QRCODE
+      SET REMARKS = #{remarks},
+		  TYPE = #{type},
+		  CONFIG = #{config},
+		  UPDATE_DATE = #{updateDate}
+    WHERE ID = #{id}
+  </update>
+  
+</mapper>

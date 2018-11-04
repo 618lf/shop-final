@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.system.dao.UserRunasDao" >
+  <resultMap id="BaseResult" type="com.tmt.system.entity.UserRunas"> 
+    <result column="USER_ID" property="userId" jdbcType="BIGINT"/>
+    <result column="USER_NAME" property="userName" jdbcType="VARCHAR"/>
+    <result column="GRANT_USER_ID" property="grantUserId" jdbcType="BIGINT"/>
+  </resultMap>
+  
+  <select id="findGrantUsers" resultMap="BaseResult" parameterType="long" >
+   SELECT UR.USER_ID, UR.GRANT_USER_ID, U.NAME USER_NAME
+     FROM SYS_USER_RUNAS UR, SYS_USER U
+    WHERE UR.GRANT_USER_ID = U.ID AND U.STATUS = 4 AND UR.USER_ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT UR.USER_ID, UR.GRANT_USER_ID, U.NAME USER_NAME
+     FROM SYS_USER_RUNAS UR, SYS_USER U
+    WHERE UR.GRANT_USER_ID = U.ID AND U.STATUS = 4 
+    ORDER BY GRANT_USER_ID
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition" >
+   SELECT * FROM (SELECT UR.USER_ID, UR.GRANT_USER_ID, U.NAME USER_NAME
+     FROM SYS_USER_RUNAS UR, SYS_USER U
+    WHERE UR.GRANT_USER_ID = U.ID AND U.STATUS = 4) UR
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="int" >
+    SELECT * FROM (SELECT COUNT(1)
+     FROM SYS_USER_RUNAS UR, SYS_USER U
+    WHERE UR.GRANT_USER_ID = U.ID AND U.STATUS = 4) UR
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <select id="findCanRunasUsers" resultMap="BaseResult" parameterType="long" >
+   SELECT UR.USER_ID, UR.GRANT_USER_ID, U.NAME USER_NAME
+     FROM SYS_USER_RUNAS UR, SYS_USER U
+    WHERE UR.USER_ID = U.ID AND U.STATUS = 4 AND UR.GRANT_USER_ID = #{id}
+  </select>
+  
+  <select id="exists" resultType="int" parameterType="com.tmt.system.entity.UserRunas">
+   SELECT COUNT(1) C
+     FROM SYS_USER_RUNAS UR, SYS_USER U
+    WHERE UR.USER_ID = U.ID AND U.STATUS = 4 
+      AND UR.USER_ID = #{userId} AND UR.GRANT_USER_ID = #{grantUserId}
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.system.entity.UserRunas" >
+   DELETE FROM SYS_USER_RUNAS WHERE USER_ID = #{userId} AND GRANT_USER_ID = #{grantUserId}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.system.entity.UserRunas" >
+   INSERT INTO SYS_USER_RUNAS (USER_ID, GRANT_USER_ID) VALUES (#{userId}, #{grantUserId})
+  </insert>
+  
+</mapper>

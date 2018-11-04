@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.system.dao.OfficeDao">
+  <resultMap id="BaseResult" type="com.tmt.system.entity.Office" >
+    <result column="ID" property="id" jdbcType="BIGINT" />
+    <result column="PARENT_ID" property="parentId" jdbcType="BIGINT" />
+    <result column="PARENT_IDS" property="parentIds" jdbcType="VARCHAR" />
+    <result column="AREA_ID" property="areaId" jdbcType="VARCHAR" />
+    <result column="AREA_NAME" property="areaName" jdbcType="VARCHAR" />
+    <result column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="TINYINT" />
+    <result column="ADDRESS" property="address" jdbcType="VARCHAR" />
+    <result column="ZIP_CODE" property="zipCode" jdbcType="VARCHAR" />
+    <result column="MASTER" property="master" jdbcType="VARCHAR" />
+    <result column="PHONE" property="phone" jdbcType="VARCHAR" />
+    <result column="FAX" property="fax" jdbcType="VARCHAR" />
+    <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+    <result column="LEVEL" property="level" jdbcType="INTEGER" />
+    <result column="PATH" property="path" jdbcType="VARCHAR" />
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT" />
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_ID" property="updateId" jdbcType="BIGINT" />
+    <result column="UPDATE_NAME" property="updateName" jdbcType="VARCHAR" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="REMARKS" property="remarks" jdbcType="VARCHAR" />
+    <result column="DEL_FLAG" property="delFlag" jdbcType="TINYINT" />
+  </resultMap> 
+  <select id="get" resultMap="BaseResult" parameterType="long" >
+    SELECT ID, PARENT_ID, PARENT_IDS, AREA_ID, AREA_NAME, CODE, NAME, TYPE, ADDRESS, ZIP_CODE, MASTER,
+           PHONE, FAX, EMAIL, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID, UPDATE_NAME, UPDATE_DATE,
+           REMARKS, DEL_FLAG, LEVEL,PATH
+      FROM SYS_OFFICE
+     WHERE ID = #{id}
+  </select>
+  <select id="findByCode" resultMap="BaseResult" parameterType="string" >
+    SELECT ID, PARENT_ID, PARENT_IDS, AREA_ID, AREA_NAME, CODE, NAME, TYPE, ADDRESS, ZIP_CODE, MASTER,
+           PHONE, FAX, EMAIL, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID, UPDATE_NAME, UPDATE_DATE,
+           REMARKS, DEL_FLAG, LEVEL,PATH
+      FROM SYS_OFFICE
+     WHERE CODE = #{code}
+  </select>
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition" >
+    SELECT ID, PARENT_ID, PARENT_IDS, AREA_ID, AREA_NAME, CODE, NAME, TYPE, ADDRESS, ZIP_CODE, MASTER,
+           PHONE, FAX, EMAIL, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID, UPDATE_NAME, UPDATE_DATE,
+           REMARKS, DEL_FLAG, LEVEL,PATH
+      FROM SYS_OFFICE
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findTreeList" resultMap="COMMON.BaseTreeResult" parameterType="java.util.Map">
+     SELECT * FROM (
+	 SELECT O.ID ID,O.PARENT_ID PARENT,O.PARENT_IDS PARENT_IDS,
+	        O.NAME TREE_NAME,
+	        O.CODE TREE_CODE,
+	        O.TYPE TREE_TYPE,
+	        O.LEVEL TREE_LEVEL,O.PATH TREE_PATH, '' TREE_DESC, 1 SORT
+	   FROM SYS_OFFICE O
+	  WHERE 1 = 1
+	  <if test="ORG_IDS != null">AND #{ORG_IDS} LIKE CONCAT(CONCAT('%,',O.ID),',%')</if> 
+	  <if test="ORG_NAME != null">AND O.NAME = #{ORG_NAME}</if> 
+	  <if test="CASCADE_WITH_PARENT_ID != null">AND (O.PARENT_IDS LIKE CONCAT(CONCAT('%,',#{CASCADE_WITH_PARENT_ID}),',%') OR O.ID = #{CASCADE_WITH_PARENT_ID})</if> 
+	  <if test="CASCADE_PARENT_ID != null">AND O.PARENT_IDS LIKE CONCAT(CONCAT('%,',#{CASCADE_PARENT_ID}),',%')</if> 
+	  <if test="PARENT_ID != null">AND O.PARENT_ID = #{PARENT_ID}</if> 
+	  )A
+  </select>
+  <delete id="delete" parameterType="com.tmt.system.entity.Office" >
+    DELETE FROM SYS_OFFICE WHERE ID = #{id}
+  </delete>
+  <insert id="insert" parameterType="com.tmt.system.entity.Office" >
+    INSERT INTO SYS_OFFICE (ID, PARENT_ID, PARENT_IDS, AREA_ID, AREA_NAME, CODE, NAME, TYPE, ADDRESS,
+      ZIP_CODE, MASTER, PHONE, FAX, EMAIL, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID,
+      UPDATE_NAME, UPDATE_DATE, REMARKS, DEL_FLAG, LEVEL, PATH)
+    VALUES (#{id}, #{parentId}, #{parentIds}, #{areaId}, #{areaName}, #{code}, #{name}, #{type}, #{address}, #{zipCode},
+      #{master}, #{phone}, #{fax}, #{email}, #{createId}, #{createName}, #{createDate}, #{updateId}, #{updateName},
+      #{updateDate}, #{remarks}, #{delFlag}, #{level}, #{path})
+  </insert>
+  <update id="update" parameterType="com.tmt.system.entity.Office" >
+   UPDATE SYS_OFFICE
+      SET PARENT_ID = #{parentId},
+	      PARENT_IDS = #{parentIds},
+	      AREA_ID = #{areaId},
+	      AREA_NAME = #{areaName},
+	      CODE = #{code},
+	      NAME = #{name},
+	      TYPE = #{type},
+	      ADDRESS = #{address},
+	      ZIP_CODE = #{zipCode},
+	      MASTER = #{master},
+	      PHONE = #{phone},
+	      FAX = #{fax},
+	      EMAIL = #{email},
+	      LEVEL = #{level},
+	      PATH = #{path},
+	      UPDATE_ID = #{updateId},
+	      UPDATE_NAME = #{updateName},
+	      UPDATE_DATE = #{updateDate},
+	      REMARKS = #{remarks},
+	      DEL_FLAG = #{delFlag}
+    WHERE ID = #{id}
+  </update>
+  <select id="findByConditionStat" parameterType="com.tmt.system.entity.Office" resultType="int" >
+    SELECT COUNT(1) FROM SYS_OFFICE
+    <include refid="COMMON.whereClause" />
+  </select>
+  <select id="deleteOfficeCheck" parameterType="com.tmt.system.entity.Office" resultType="int" >
+    SELECT COUNT(1) FROM (
+	    SELECT 1 FROM SYS_DUAL
+	     WHERE EXISTS (SELECT 1 FROM SYS_USER A WHERE A.OFFICE_ID=#{id})
+		UNION ALL
+		SELECT 1 FROM SYS_DUAL
+		 WHERE EXISTS (SELECT 1 FROM SYS_OFFICE B WHERE B.PARENT_ID=#{id})
+    )A
+  </select>
+  <select id="findAllChildrenByParent" resultMap="BaseResult" parameterType="long" >
+    SELECT ID, PARENT_ID, PARENT_IDS, AREA_ID, AREA_NAME, CODE, NAME, TYPE, ADDRESS, ZIP_CODE, MASTER,
+           PHONE, FAX, EMAIL, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID, UPDATE_NAME, UPDATE_DATE,
+           REMARKS, DEL_FLAG, LEVEL,PATH
+      FROM SYS_OFFICE O
+     WHERE O.PARENT_IDS LIKE CONCAT(CONCAT('%,',#{VALUE}),',%')
+  </select>
+</mapper>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.system.dao.UserAccountDao" >
+  <resultMap id="BaseResult" type="com.tmt.system.entity.UserAccount"> 
+    <result column="ID" property="id" jdbcType="VARCHAR"/>
+    <result column="USER_ID" property="userId" jdbcType="BIGINT"/>
+    <result column="TYPE" property="type" jdbcType="TINYINT"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="String">
+   SELECT ID, USER_ID, TYPE
+     FROM SYS_USER_ACCOUNT
+    WHERE ID = #{id}
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.system.entity.UserAccount">
+   DELETE FROM SYS_USER_ACCOUNT WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.system.entity.UserAccount">
+   INSERT INTO SYS_USER_ACCOUNT (ID, USER_ID, TYPE)
+   VALUES (#{id}, #{userId}, #{type})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO SYS_USER_ACCOUNT (ID, USER_ID, TYPE)
+    VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.id}, #{item.userId}, #{item.type})
+   </foreach> 
+  </insert>
+  
+  <select id="checkUserAccount" resultType="int" parameterType="com.tmt.system.entity.UserAccount">
+    SELECT COUNT(1) FROM SYS_USER_ACCOUNT U 
+     WHERE U.ID = #{id} AND U.USER_ID != #{userId}
+  </select>
+  
+  <select id="checkAccountByRegister" parameterType="string" resultType="int" >
+    SELECT COUNT(1) FROM SYS_USER U WHERE  ID = #{id}
+  </select>
+  
+</mapper>

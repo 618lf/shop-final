@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.system.dao.LogDao" >
+  <resultMap id="BaseResult" type="com.tmt.system.entity.Log" >
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="TYPE" property="type" jdbcType="TINYINT"/>
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT"/>
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="REMOTE_ADDR" property="remoteAddr" jdbcType="VARCHAR" />
+    <result column="USER_AGENT" property="userAgent" jdbcType="VARCHAR" />
+    <result column="REQUEST_URI" property="requestUri" jdbcType="VARCHAR" />
+    <result column="METHOD" property="method" jdbcType="VARCHAR" />
+    <result column="DEAL_TIME" property="dealTime" jdbcType="INTEGER" />
+    <result column="EXCEPTION" property="exception" jdbcType="VARCHAR" />
+    <result column="CLIENT_TYPE" property="clientType" jdbcType="VARCHAR" />
+    <result column="REFERER" property="referer" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="long" >
+    SELECT ID, TYPE, CREATE_ID, CREATE_NAME, CREATE_DATE, REMOTE_ADDR, USER_AGENT, REQUEST_URI,
+           METHOD, DEAL_TIME, EXCEPTION, CLIENT_TYPE, REFERER
+      FROM SYS_LOG
+     WHERE ID = #{id}
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition" >
+    SELECT ID, TYPE, CREATE_ID, CREATE_NAME, CREATE_DATE, REMOTE_ADDR, USER_AGENT, REQUEST_URI,
+           METHOD, DEAL_TIME, EXCEPTION, CLIENT_TYPE, REFERER
+      FROM SYS_LOG
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="int" >
+    SELECT COUNT(1) FROM SYS_LOG
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <insert id="insert" parameterType="com.tmt.system.entity.Log" >
+    INSERT INTO SYS_LOG (ID, TYPE, CREATE_ID, CREATE_NAME, CREATE_DATE, REMOTE_ADDR, USER_AGENT, REQUEST_URI,
+           METHOD, DEAL_TIME, EXCEPTION, CLIENT_TYPE, REFERER)
+    VALUES (#{id}, #{type}, #{createId}, #{createName}, #{createDate}, #{remoteAddr}, #{userAgent}, #{requestUri},
+      #{method}, #{dealTime}, #{exception}, #{clientType}, #{referer})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+   INSERT INTO SYS_LOG (ID, TYPE, CREATE_ID, CREATE_NAME, CREATE_DATE, REMOTE_ADDR, USER_AGENT, REQUEST_URI,
+          METHOD, DEAL_TIME, EXCEPTION, CLIENT_TYPE, REFERER)
+   VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+   (#{item.id}, #{item.type}, #{item.createId}, #{item.createName},  #{item.createDate}, #{item.remoteAddr}, #{item.userAgent}, #{item.requestUri},
+    #{item.method}, #{item.dealTime}, #{item.exception},#{item.clientType}, #{item.referer})
+   </foreach> 
+  </insert>
+  
+  <!-- 获取执行时间之后的日志信息 -->
+  <select id="countLogsAfterDate" resultType="java.lang.Integer" parameterType="java.util.Map">
+   SELECT COUNT(1) C FROM SYS_LOG WHERE CREATE_DATE &gt;= #{start} AND CREATE_DATE &lt; #{end}
+  </select>
+  <select id="countUserAfterDate" resultType="java.lang.Integer" parameterType="java.util.Map">
+   SELECT COUNT(1) C FROM(SELECT 1 FROM SYS_LOG 
+    WHERE CREATE_DATE &gt;= #{start} AND CREATE_DATE &lt; #{end} 
+    GROUP BY (CASE WHEN CREATE_ID IS NULL THEN REMOTE_ADDR ELSE CREATE_ID END)) A
+  </select>
+</mapper>
