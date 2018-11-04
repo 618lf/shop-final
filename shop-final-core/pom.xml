@@ -160,7 +160,7 @@
 			<artifactId>freemarker</artifactId>
 			<version>${freemarker.version}</version>
 		</dependency>
-		
+
 		<!-- 搜索 -->
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
@@ -186,7 +186,7 @@
 			<version>${lucene.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<!-- 数据库相关 -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -212,7 +212,7 @@
 			<version>${jdbc.driver.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<!-- web 服务 -->
 		<dependency>
 			<groupId>org.springframework</groupId>

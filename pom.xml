@@ -50,9 +50,6 @@
 		<jsoup.version>1.9.2</jsoup.version>
 		<jedis.version>2.9.0</jedis.version>
 		<lucene.version>5.5.4</lucene.version>
-		<analyzer.version>5.0</analyzer.version>
-		<mmseg4j.version>1.10.0</mmseg4j.version>
-		<mmseg4j.analyzer.version>1.9.1</mmseg4j.analyzer.version>
 		<ansj.version>3.7.6</ansj.version>
 		<nlp.version>1.7.2</nlp.version>
 		<fst.version>2.48</fst.version>
