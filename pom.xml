@@ -12,6 +12,7 @@
 		<module>shop-final-web</module>
 		<module>shop-starter</module>
 		<module>shop-sample</module>
+		<module>shop-gen</module>
 	</modules>
 	<properties>
 		<springboot.version>2.0.3.RELEASE</springboot.version>

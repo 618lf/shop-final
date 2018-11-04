@@ -1,0 +1,398 @@
+package com.tmt.gen.utils;
+
+import java.io.File;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.tmt.common.utils.ContextHolderUtils;
+import com.tmt.common.utils.DateUtil3;
+import com.tmt.common.utils.FileUtils;
+import com.tmt.common.utils.FreemarkerUtils;
+import com.tmt.common.utils.JaxbMapper;
+import com.tmt.common.utils.Lists;
+import com.tmt.common.utils.Maps;
+import com.tmt.common.utils.SpringContextHolder;
+import com.tmt.common.utils.StringUtil3;
+import com.tmt.gen.entity.Category;
+import com.tmt.gen.entity.Config;
+import com.tmt.gen.entity.Scheme;
+import com.tmt.gen.entity.Table;
+import com.tmt.gen.entity.TableColumn;
+import com.tmt.gen.entity.Template;
+import com.tmt.gen.service.TableService;
+import com.tmt.system.utils.UserUtils;
+
+public class GenUtils {
+
+	private static String REMOVE = "_RM_";//需要删除的代码
+	private static String srcFilePath = null;
+	private static String viewFilePath = null;
+	private static TableService tableService = SpringContextHolder.getBean(TableService.class);
+	private static Logger logger = LoggerFactory.getLogger(GenUtils.class);
+	
+	private static Config config = null;
+	
+	//读取文件
+	private static String readFile(String fileName) {
+		try {
+			InputStream is = GenUtils.class.getResourceAsStream(fileName);
+			List<String> lines = IOUtils.readLines(is, "UTF-8");
+			StringBuilder sb = new StringBuilder();  
+			for(String line: lines) {
+				sb.append(line).append("\r\n");
+			}
+			if (is != null) {is.close();}
+			return sb.toString();
+		} catch (Exception e) {
+			logger.warn("Error file convert: {}", e.getMessage());
+		}
+		return null;
+	}
+	
+	//读取文件并转为对象
+	private static <T> T file2Object(String fileName, Class<T> clazz) {
+		String lines = readFile(fileName);
+		return (T)JaxbMapper.fromXml(lines, clazz);
+	}
+	
+	/**
+	 * 获取代码生成配置对象
+	 * @return
+	 */
+	public static Config getConfig(){
+		if (config == null) {
+			config = file2Object("config.xml", Config.class);
+		}
+		return config;
+	}
+	
+	/**
+	 * 将字段名转为属性名
+	 * @param property  USER_NAME --- > userName
+	 * @return
+	 */
+	public static void convertDbType2JavaTypes(TableColumn column) {
+		String _dbtype = StringUtil3.upperCase(StringUtil3.substringBefore(column.getDbType(), "("));
+		String _javaType = "";
+		String _jdbcType = "";
+		if ("ARRAY".equals(_dbtype)) {
+			_jdbcType = "ARRAY";
+			_javaType = StringUtil3.substringAfterLast(Object.class.getName(),".");
+		} else if("BIGINT".equals(_dbtype)) {
+			_jdbcType = "BIGINT";
+			_javaType = StringUtil3.substringAfterLast(Long.class.getName(),".");
+		} else if("BINARY".equals(_dbtype)) {
+			_jdbcType = "BINARY";
+			_javaType = "byte[]";
+		} else if("BIT".equals(_dbtype)) {
+			_jdbcType = "BIT";
+			_javaType = StringUtil3.substringAfterLast(Boolean.class.getName(),".");
+		} else if("BLOB".equals(_dbtype)) {
+			_jdbcType = "BLOB";
+			_javaType = "byte[]";
+		} else if("TEXT".equals(_dbtype)) {
+			_jdbcType = "LONGVARCHAR";
+			_javaType = StringUtil3.substringAfterLast(String.class.getName(),".");
+		} else if("LONGTEXT".equals(_dbtype)) {
+			_jdbcType = "LONGVARCHAR";
+			_javaType = StringUtil3.substringAfterLast(String.class.getName(),".");
+		} else if("MEDIUMTEXT".equals(_dbtype)) {
+			_jdbcType = "LONGVARCHAR";
+			_javaType = StringUtil3.substringAfterLast(String.class.getName(),".");
+		} else if("BOOLEAN".equals(_dbtype)) {
+			_jdbcType = "BOOLEAN";
+			_javaType = StringUtil3.substringAfterLast(Boolean.class.getName(),".");
+		} else if("CHAR".equals(_dbtype)) {
+			_jdbcType = "CHAR";
+			_javaType = StringUtil3.substringAfterLast(String.class.getName(),".");
+		} else if("CLOB".equals(_dbtype)) {
+			_jdbcType = "CLOB";
+			_javaType = StringUtil3.substringAfterLast(String.class.getName(),".");
+		} else if("DATALINK".equals(_dbtype)) {
+			_jdbcType = "DATALINK";
+			_javaType = StringUtil3.substringAfterLast(Object.class.getName(),".");
+		} else if("DATE".equals(_dbtype)) {
+			_jdbcType = "DATE";
+			_javaType = Date.class.getName();
+		} else if("DATETIME".equals(_dbtype)) {
+			_jdbcType = "TIMESTAMP";
+			_javaType = Date.class.getName();
+		} else if("DECIMAL".equals(_dbtype)) { //需要获取长度,小数点数
+			_jdbcType = "DECIMAL";
+			_javaType = BigDecimal.class.getName();
+		} else if("DISTINCT".equals(_dbtype)) {
+			_jdbcType = "DISTINCT";
+			_javaType = StringUtil3.substringAfterLast(Object.class.getName(),".");
+		} else if("DOUBLE".equals(_dbtype)) {
+			_jdbcType = "DOUBLE";
+			_javaType = StringUtil3.substringAfterLast(Double.class.getName(),".");
+		} else if("FLOAT".equals(_dbtype)) {
+			_jdbcType = "FLOAT";
+			_javaType = StringUtil3.substringAfterLast(Double.class.getName(),".");
+		} else if("INTEGER".equals(_dbtype)) {
+			_jdbcType = "INTEGER";
+			_javaType = StringUtil3.substringAfterLast(Integer.class.getName(),".");
+		} else if("LONGVARBINARY".equals(_dbtype)) {
+			_jdbcType = "LONGVARBINARY";
+			_javaType = "byte[]";
+		} else if("LONGVARCHAR".equals(_dbtype)) {
+			_jdbcType = "LONGVARCHAR";
+			_javaType = StringUtil3.substringAfterLast(String.class.getName(),".");
+		} else if("NULL".equals(_dbtype)) {
+			_jdbcType = "NULL";
+			_javaType = StringUtil3.substringAfterLast(Object.class.getName(),".");
+		} else if("NUMERIC".equals(_dbtype)) { //需要获取长度,小数点数
+			_jdbcType = "NUMERIC";
+			_javaType = BigDecimal.class.getName();
+		} else if("REAL".equals(_dbtype)) {
+			_jdbcType = "REAL";
+			_javaType = StringUtil3.substringAfterLast(Double.class.getName(),".");
+		} else if("REF".equals(_dbtype)) {
+			_jdbcType = "REF";
+			_javaType = StringUtil3.substringAfterLast(Object.class.getName(),".");
+		} else if("SMALLINT".equals(_dbtype)) {
+			_jdbcType = "SMALLINT";
+			_javaType = StringUtil3.substringAfterLast(Short.class.getName(),".");
+		} else if("STRUCT".equals(_dbtype)) {
+			_jdbcType = "STRUCT";
+			_javaType = StringUtil3.substringAfterLast(Object.class.getName(),".");
+		} else if("TIME".equals(_dbtype)) {
+			_jdbcType = "TIME";
+			_javaType = Date.class.getName();
+		} else if("TIMESTAMP".equals(_dbtype)) {
+			_jdbcType = "TIMESTAMP";
+			_javaType = Date.class.getName();
+		} else if("TINYINT".equals(_dbtype)) {
+			_jdbcType = "TINYINT";
+			_javaType = StringUtil3.substringAfterLast(Byte.class.getName(),".");
+		} else if("VARBINARY".equals(_dbtype)) {
+			_jdbcType = "VARBINARY";
+			_javaType = "byte[]";
+		} else if("VARCHAR".equals(_dbtype)) {
+			_jdbcType = "VARCHAR";
+			_javaType = StringUtil3.substringAfterLast(String.class.getName(),".");
+		}  else if("MEDIUMINT".equals(_dbtype)) {
+			_jdbcType = "MEDIUMINT";
+			_javaType = StringUtil3.substringAfterLast(Integer.class.getName(),".");
+		} else if("INT".equals(_dbtype)) {
+			_jdbcType = "INTEGER";
+			_javaType = StringUtil3.substringAfterLast(Integer.class.getName(),".");
+		}
+		
+		//设置对应的类型
+		column.setJdbcType(_jdbcType);
+		column.setJavaType(_javaType);
+	}
+	
+	//设置默认的显示类型和校验类型
+	public static void convertDbType2ShowTypes(TableColumn column) {
+		String _dbtype = StringUtil3.upperCase(StringUtil3.substringBefore(column.getDbType(), "("));
+		String _showType = "";
+		String _checkType = "";
+		if ("TINYINT".equals(_dbtype)) {
+			_showType = "y_n_r";
+		} else if("DATE".equals(_dbtype)) {
+			_showType = "date";
+			_checkType = "date";
+		} else if("DATETIME".equals(_dbtype)) {
+			_showType = "date";
+			_checkType = "date";
+		}
+		
+		String javaField = column.getJavaField();
+		if (StringUtil3.endsWith(javaField, "userId")
+				|| StringUtil3.endsWith(javaField, "officeId") 
+				|| StringUtil3.endsWith(javaField, "areaId")) {
+			_showType = "treeselect";
+		}else if(StringUtil3.endsWith(javaField, "userIds")
+				|| StringUtil3.endsWith(javaField, "officeIds") 
+				|| StringUtil3.endsWith(javaField, "areaIds") 
+				|| StringUtil3.endsWith(javaField, "parentId") ) {
+			_showType = "tanselect";
+		}else if(StringUtil3.indexOf(javaField, "icon") != -1) {
+			_showType = "iconselect";
+		}else if(StringUtil3.indexOf(javaField, "images") != -1) {
+			_showType = "mutilimg";
+		}else if(StringUtil3.indexOf(javaField, "image") != -1){
+			_showType = "singleimg";
+		}
+		column.setShowType(_showType);
+		column.setCheckType(_checkType);
+	}
+	
+	/**
+	 * 获取所有的模版
+	 * @param config
+	 * @param category
+	 * @return
+	 */
+	public static List<Template> getTemplateList(String category) {
+		config = GenUtils.getConfig();
+		List<Template> templates = Lists.newArrayList();
+		if (config !=null && config.getCategoryList() != null && category !=  null){
+			for (Category e : config.getCategoryList()){
+				if (category.equals(e.getValue())){
+					List<String> list = e.getTemplate();
+					if (list != null){
+						for (String s : list){
+							if (StringUtil3.startsWith(s, Category.CATEGORY_REF)){
+								templates.addAll(getTemplateList(StringUtil3.replace(s, Category.CATEGORY_REF, "")));
+							}else{
+								Template template = file2Object(s, Template.class);
+								if (template != null){
+									template.setContent(readFile(template.getTemplatePath()));
+									templates.add(template);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return templates;
+	}
+	
+	/**
+	 * 获取要生成的表
+	 * @param scheme
+	 * @return
+	 */
+	private static Table getTableWithColumns(Scheme scheme) {
+		return tableService.getWithColumns(scheme.getGenTableId());
+	}
+	
+	/**
+	 * 生成代码
+	 * @param scheme
+	 * @return
+	 */
+	public static Boolean genCode(Scheme scheme) {
+		//要生成的表的配置
+		Table table = GenUtils.getTableWithColumns(scheme);
+		scheme.setTable(table);
+		
+		//获取模型数据
+		Map<String,Object> model = GenUtils.getDataModel(scheme);
+		
+		//对应的模版
+		List<Template> templates = GenUtils.getTemplateList(scheme.getCategory());
+		for(Template template: templates) {
+			if(!"viewTableSelect".equals(template.getName())){
+				GenUtils.genToFile(template, model);
+			} else if(scheme.getTableSelect() != null && Scheme.YES == scheme.getTableSelect()) {
+				GenUtils.genToFile(template, model);
+			}
+		}
+		return Boolean.TRUE;
+	}
+	//生成模型数据
+	private static Map<String, Object> getDataModel(Scheme scheme) {
+		Map<String,Object> model = Maps.newHashMap();
+		model.put("schemeCategory", scheme.getCategory());
+		model.put("packageName", scheme.getPackageName());
+		model.put("moduleName", scheme.getModuleName());
+		model.put("subModuleName", scheme.getSubModuleName());
+		model.put("functionName", StringUtil3.lowerCaseFirstOne(scheme.getFunctionName()));
+		model.put("functionNameSimple", scheme.getFunctionNameSimple());
+		model.put("functionAuthor", scheme.getFunctionAuthor());
+		model.put("functionVersion", DateUtil3.getTodayStr());
+		
+		//功能名的大小
+		model.put("className", StringUtil3.upperCaseFirstOne(scheme.getFunctionName()));
+		model.put("tableName", StringUtil3.upperCase(scheme.getTable().getName()));
+		model.put("pk", scheme.getTable().getPkJavaType());
+		
+		//增强功能
+		model.put("isImport", scheme.getIsImport());
+		model.put("isExport", scheme.getIsExport());
+		model.put("isExport_Import", (scheme.getIsImport() != null && scheme.getIsExport() != null && scheme.getIsImport() == 1 && scheme.getIsExport() == 1)?"1":"0");
+		model.put("treeSelect", scheme.getTreeSelect());
+		model.put("tableSelect", scheme.getTableSelect());
+		
+		//table数据
+		model.put("table", scheme.getTable());
+		model.put("firstStringField", scheme.getTable().getFisrtStringField());
+		
+		//日期
+		model.put("date", DateUtil3.getTodayStr());
+		model.put("author", UserUtils.getUser().getName());
+		
+		//纠正相关问题
+		if(scheme.getModuleName().equals(scheme.getSubModuleName())
+				|| StringUtil3.isBlank(scheme.getSubModuleName())) {
+		   model.put("subModuleName", REMOVE);
+		}
+		
+		//模块对象前缀
+		if(REMOVE.equals(model.get("subModuleName"))) {
+		   model.put("prefix", model.get("moduleName"));
+		} else {
+		   model.put("prefix", model.get("subModuleName"));
+		}
+		return model;
+	}
+	
+	//得到src目录
+	private static File getSrcFolder(Template template) {
+		if( srcFilePath == null ) {
+			String webInf = "WEB-INF";
+			String webInfPath = ContextHolderUtils.getWebInfPath();
+			String parentpath = StringUtil3.remove(webInfPath, webInf);
+			File parentFile = new File(parentpath);
+			if(parentFile != null && parentFile.exists()) {
+				parentFile = parentFile.getParentFile();
+			}
+			File srcFile = new File(parentFile, "src");//普通工程
+			if(!srcFile.exists()) {
+				srcFile = new File(parentFile, "java");//maven工程
+			}
+			srcFilePath = srcFile.getAbsolutePath();
+		}
+		if( viewFilePath == null) {
+			String webInfPath = ContextHolderUtils.getWebInfPath();
+			viewFilePath = new File(webInfPath, "views").getAbsolutePath();
+		}
+		if(StringUtil3.contains(template.getName(), "view")) {
+			return new File(viewFilePath);
+		}
+		return new File(srcFilePath);
+	}
+	
+	//生成具体的代码
+	private static String genToFile(Template template, Map<String,Object> model) {
+		try{
+			File srcFile = getSrcFolder(template);
+			String fileName = new StringBuilder(srcFile.getAbsolutePath())
+			                .append(StringUtil3.replaceEach(FreemarkerUtils.processNoTemplate(template.getFilePath(), model),
+			                		new String[]{"//", "/", "."}, new String[]{File.separator, File.separator, File.separator}))
+			                .append(FreemarkerUtils.processNoTemplate(template.getFileName(), model)).toString();
+			fileName = StringUtil3.replace(fileName, File.separator + REMOVE, "");
+			logger.debug(" fileName === " + fileName);
+			
+			String content = FreemarkerUtils.processNoTemplate(template.getContent(), model);
+			
+			//处理问题
+			content = StringUtil3.replaceEach(content, new String[]{"/" + REMOVE, "." + REMOVE}, new String[]{"", ""});
+			FileUtils.deleteFile(fileName);
+			
+			if (FileUtils.createFile(fileName)){
+				FileUtils.write(new File(fileName), content, "UTF-8");
+				logger.debug(" file create === " + fileName);
+				return fileName;
+			}else{
+				logger.debug(" file extents === " + fileName);
+				return fileName;
+			}
+		}catch(Exception e) {
+			logger.error("生成文件出错: ", e);
+			return null;
+		}
+	}
+}
