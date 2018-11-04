@@ -155,6 +155,11 @@
 			<artifactId>commons-beanutils</artifactId>
 			<version>${commons-beanutils.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>${freemarker.version}</version>
+		</dependency>
 		
 		<!-- 数据库相关 -->
 		<dependency>
@@ -175,7 +180,5 @@
 			<version>${mybatis-spring.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		
-		<!-- 前台相关 -->
 	</dependencies>
 </project>
