@@ -10,10 +10,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.tmt</groupId>
-			<artifactId>shop-final-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.tmt</groupId>
 			<artifactId>shop-final-facade</artifactId>
 		</dependency>
 		<dependency>
