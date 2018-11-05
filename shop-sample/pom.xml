@@ -12,5 +12,13 @@
 			<groupId>com.tmt</groupId>
 			<artifactId>shop-starter</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.tmt</groupId>
+			<artifactId>shop-final-service</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.tmt</groupId>
+			<artifactId>shop-final-web</artifactId>
+		</dependency>
 	</dependencies>
 </project>

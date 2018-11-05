@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<ehcache updateCheck="false" name="ehcache">
+	<diskStore path="/home/lifeng/resource/cache"/>
+    <cache name="authorization" maxElementsInMemory="500" timeToLiveSeconds="0" timeToIdleSeconds="1800" eternal="false" overflowToDisk="true"/>
+    <cache name="sys" maxElementsInMemory="1000" eternal="true" overflowToDisk="true"></cache>
+    <cache name="dict" maxElementsInMemory="1000" eternal="true" overflowToDisk="true"></cache>
+    <cache name="sess" maxElementsInMemory="1000" timeToLiveSeconds="0" timeToIdleSeconds="1800" eternal="false" overflowToDisk="true"></cache>
+</ehcache>
