@@ -53,7 +53,6 @@ import org.apache.lucene.search.vectorhighlight.ScoreOrderFragmentsBuilder;
 import org.apache.lucene.search.vectorhighlight.SimpleFragListBuilder;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import com.tmt.common.entity.IdEntity;
 import com.tmt.common.persistence.ScorePage;
@@ -61,7 +60,6 @@ import com.tmt.common.utils.Lists;
 import com.tmt.common.utils.Maps;
 import com.tmt.common.utils.PropertiesLoader;
 import com.tmt.common.utils.RegexpUtil;
-import com.tmt.common.utils.SpringContextHolder;
 import com.tmt.common.utils.StringUtil3;
 
 /**
@@ -126,7 +124,6 @@ public abstract class BaseSearcher<T extends IdEntity<Long>> {
 	public final String HL_FRAGMENT_DIVIDE = "#\\.";
 	public final String ID = "id";
 	public final String CREATE_DATE = "createDate";
-	public ThreadPoolTaskExecutor taskExecutor = SpringContextHolder.getBean(ThreadPoolTaskExecutor.class);
 	private Analyzer analyzer;
 	private Directory directory;
 	private volatile DirectoryReader reader = null; // 可以不用关闭
@@ -730,7 +727,7 @@ public abstract class BaseSearcher<T extends IdEntity<Long>> {
 	 */
 	private IndexSearcher getSearcher() throws IOException {
 		IndexReader reader = this.getIndexReader();
-		return new IndexSearcher(reader, taskExecutor.getThreadPoolExecutor());
+		return new IndexSearcher(reader);
 	}
 	
 	/**

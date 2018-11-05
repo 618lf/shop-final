@@ -15,7 +15,7 @@ import com.tmt.common.utils.Maps;
  */
 public class SecurityConfigurationSupport {
 
-	private Map<String, Filter> filters;
+	private Map<String, Filter> filters = Maps.newOrderMap();
 	private Realm realm;
 	private Map<String, String> chains;
 	private String loginUrl;
@@ -69,9 +69,6 @@ public class SecurityConfigurationSupport {
 	 * @return
 	 */
 	public SecurityConfigurationSupport addFilter(String name, Filter filter) {
-		if (filters == null) {
-			filters = Maps.newHashMap();
-		}
 		filters.put(name, filter);
 		return this;
 	}

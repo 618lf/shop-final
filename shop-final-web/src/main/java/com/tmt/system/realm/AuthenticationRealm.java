@@ -5,9 +5,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.task.TaskExecutor;
-
 import com.tmt.common.config.Globals;
 import com.tmt.common.exception.CaptchaException;
 import com.tmt.common.exception.ErrorCode;
@@ -40,10 +37,6 @@ import com.tmt.system.utils.UserUtils;
  */
 public class AuthenticationRealm extends CachedRealm {
 
-	// 可以异步执行一些
-	@Autowired
-	private TaskExecutor taskExecutor;
-	
 	/**
 	 * 自己做验证
 	 */
@@ -129,20 +122,14 @@ public class AuthenticationRealm extends CachedRealm {
 	    String _remoteAddr = WebUtils.getRemoteAddr(request);
 	    String _sessionId = subject.getSessionId();
 	    Byte isMultiLogin = SiteUtils.getSite().getIsMultiLogin();
-	    taskExecutor.execute(new Runnable() {
-			@Override
-			public void run() {
-				String sessionId = UserUtils.userLogin(user, _sessionId, _remoteAddr);
-			    
-				// 是否允许同时在线
-				if (0 == isMultiLogin) {
-					// 将此 sessionId 失效
-					String reason = StringUtil3.format("您的帐号于%s在其他设备上登录，如果问题请及时联系管理员。设备IP【%s】", 
-							DateUtil3.getTodayStr("yyyy-MM-dd HH:mm"), _remoteAddr);
-					SecurityUtils.getSecurityManager().invalidate(sessionId, reason);
-				}
-			}
-		});
+	    String sessionId = UserUtils.userLogin(user, _sessionId, _remoteAddr);
+		// 是否允许同时在线
+		if (0 == isMultiLogin) {
+			// 将此 sessionId 失效
+			String reason = StringUtil3.format("您的帐号于%s在其他设备上登录，如果问题请及时联系管理员。设备IP【%s】", 
+					DateUtil3.getTodayStr("yyyy-MM-dd HH:mm"), _remoteAddr);
+			SecurityUtils.getSecurityManager().invalidate(sessionId, reason);
+		}
 	}
 
 	/**

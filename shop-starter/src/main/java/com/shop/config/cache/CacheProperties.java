@@ -9,14 +9,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "spring.cache")
 public class CacheProperties {
 
-	private Integer maxTotal;
-	private Integer maxIdle;
-	private Integer maxWaitMillis;
-	private Boolean testOnBorrow;
-	private Integer timeout;
-	
-	private String hosts;
-	private String password;
+	private Integer maxTotal = 5000;
+	private Integer maxIdle = 3000;
+	private Integer maxWaitMillis = -1;
+	private Boolean testOnBorrow = false;
+	private Integer timeout = 10000;
+	private String hosts = "127.0.0.1:6379";
+	private String password = "12345678....";
 	
 	public Integer getMaxTotal() {
 		return maxTotal;

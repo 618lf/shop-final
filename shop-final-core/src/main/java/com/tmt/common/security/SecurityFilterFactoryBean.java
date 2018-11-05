@@ -1,15 +1,12 @@
 package com.tmt.common.security;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Scanner;
 
 import javax.servlet.Filter;
 
 import org.apache.commons.io.IOUtils;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.FactoryBean;
-import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.util.CollectionUtils;
 
 import com.tmt.common.security.filter.AccessControllerFilter;
@@ -32,7 +29,7 @@ import com.tmt.common.utils.Maps;
  * 
  * @author lifeng
  */
-public class SecurityFilterFactoryBean implements FactoryBean<SecurityFilter>, BeanPostProcessor {
+public class SecurityFilterFactoryBean implements FactoryBean<SecurityFilter> {
 
 	private SecurityManager securityManager;
 	private Map<String, Filter> filters;
@@ -42,27 +39,6 @@ public class SecurityFilterFactoryBean implements FactoryBean<SecurityFilter>, B
 	private String unauthorizedUrl;
 	private SecurityFilter instance;
 	
-	public SecurityFilterFactoryBean() {
-		 this.filters = new LinkedHashMap<String, Filter>();
-	     this.filterChainDefinitionMap = new LinkedHashMap<String, String>();
-	}
-
-	@Override
-	public Object postProcessBeforeInitialization(Object bean, String beanName)
-			throws BeansException {
-		if (bean instanceof Filter) {
-            Filter filter = (Filter) bean;
-            getFilters().put(beanName, filter);
-        } 
-        return bean;
-	}
-
-	@Override
-	public Object postProcessAfterInitialization(Object bean, String beanName)
-			throws BeansException {
-		return bean;
-	}
-
 	@Override
 	public SecurityFilter getObject() throws Exception {
 		if (instance == null) {

@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 
+import com.tmt.common.cache.Cache;
 import com.tmt.common.cache.redis.RedisCache;
 import com.tmt.common.cache.redis.RedisCacheManager;
 import com.tmt.common.cache.redis.factory.RedisConnectionFactory;
@@ -27,7 +28,7 @@ import redis.clients.jedis.JedisPoolConfig;
 @AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @EnableConfigurationProperties(CacheProperties.class)
-@ConditionalOnProperty(prefix = "spring.cache", name = "enableRedis", matchIfMissing = false)
+@ConditionalOnProperty(prefix = "spring.cache", name = "enableRedis", matchIfMissing = true)
 public class RedisAutoConfiguration {
 
 	@Autowired
@@ -88,11 +89,12 @@ public class RedisAutoConfiguration {
 	@Bean
 	public RedisCacheManager cacheManager() {
 		RedisCacheManager cacheManager = new RedisCacheManager();
-		List<RedisCache> caches = Lists.newArrayList();
+		List<Cache> caches = Lists.newArrayList();
 		caches.add(authCache());
 		caches.add(sysCache());
 		caches.add(dictCache());
 		caches.add(sessionCache());
+		cacheManager.setCaches(caches);
 		return cacheManager;
 	}
 }

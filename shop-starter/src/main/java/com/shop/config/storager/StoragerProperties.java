@@ -1,10 +1,13 @@
 package com.shop.config.storager;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
 /**
  * 存储的属性
  * 
  * @author lifeng
  */
+@ConfigurationProperties("spring.storager")
 public class StoragerProperties {
 
 	private String storagePath;
