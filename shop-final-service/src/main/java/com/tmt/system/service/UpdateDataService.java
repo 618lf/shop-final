@@ -3,6 +3,7 @@ package com.tmt.system.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tmt.system.dao.UpdateDataDao;
@@ -14,6 +15,7 @@ import com.tmt.update.UpdateServiceFacade;
  * @author 超级管理员
  * @date 2016-09-09
  */
+@Service
 public class UpdateDataService implements UpdateDataServiceFacade, UpdateServiceFacade{
 	
 	@Autowired
