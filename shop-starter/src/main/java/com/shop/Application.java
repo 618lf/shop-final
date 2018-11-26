@@ -26,7 +26,7 @@ public class Application extends SpringApplication {
 	/**
 	 * 全局的 context
 	 */
-	private static ConfigurableApplicationContext applicationContext;
+	public static ConfigurableApplicationContext CONTEXT;
 
 	/**
 	 * 初始化
@@ -46,7 +46,7 @@ public class Application extends SpringApplication {
 		long start = System.currentTimeMillis();
 		ConfigurableApplicationContext context = (ConfigurableApplicationContext) new Application(primarySource)
 				.run(args);
-		applicationContext = context;
+		CONTEXT = context;
 		long end = System.currentTimeMillis();
 		APP_LOGGER.debug("Server start success in " + (end - start) / 1000 + "s, Listen on [" + getAddresses() + "]");
 		return context;
@@ -58,7 +58,7 @@ public class Application extends SpringApplication {
 	 * @return
 	 */
 	public static String getAddresses() {
-		ServerProperties properties = applicationContext.getBean(ServerProperties.class);
+		ServerProperties properties = CONTEXT.getBean(ServerProperties.class);
 		StringBuilder address = new StringBuilder();
 		if (properties.getSsl() != null) {
 			address.append("https");
@@ -81,9 +81,9 @@ public class Application extends SpringApplication {
 	 * 停止服务
 	 */
 	public static void stop() {
-		if (applicationContext != null) {
-			exit(applicationContext, new ExitCodeGenerator[] {});
-			applicationContext = null;
+		if (CONTEXT != null) {
+			exit(CONTEXT, new ExitCodeGenerator[] {});
+			CONTEXT = null;
 		}
 	}
 }
