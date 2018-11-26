@@ -121,7 +121,7 @@ public class MetaImageController extends BaseController{
 		this.metaImageService.save(metaImage);
 		addMessage(redirectAttributes, StringUtil3.format("%s'%s'%s", "修改图片", metaImage.getKeyword(), "成功"));
 		redirectAttributes.addAttribute("id", metaImage.getId());
-		return WebUtils.redirectTo(Globals.getAdminPath(), "/wechat/meta/image/form");
+		return WebUtils.redirectTo(Globals.adminPath, "/wechat/meta/image/form");
 	}
 	
 	/**

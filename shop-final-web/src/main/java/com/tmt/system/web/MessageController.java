@@ -117,7 +117,7 @@ public class MessageController extends BaseMessageController{
 		message.setSendTime(DateUtil3.getTimeStampNow());
 		this.messageService.save(message);
 		redirectAttributes.addAttribute("id", message.getId());
-		return WebUtils.redirectTo(new StringBuilder(Globals.getAdminPath()).append("/system/message/form").toString());
+		return WebUtils.redirectTo(new StringBuilder(Globals.adminPath).append("/system/message/form").toString());
 	}
 	
 	/**
@@ -164,7 +164,7 @@ public class MessageController extends BaseMessageController{
 		message.setSendUserName(from.getName());
 		this.messageService.send(message);
 		addMessage(redirectAttributes, StringUtil3.format("%s'%s'%s", "发送站内信", message.getTitle(), "成功"));
-		return WebUtils.redirectTo(new StringBuilder(Globals.getAdminPath()).append("/system/message/outBox").toString());
+		return WebUtils.redirectTo(new StringBuilder(Globals.adminPath).append("/system/message/outBox").toString());
 	}
 	
 	/**

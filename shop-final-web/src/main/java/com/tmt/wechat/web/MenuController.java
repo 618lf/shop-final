@@ -157,7 +157,7 @@ public class MenuController extends BaseController{
 	private String menuUrl(App account, Menu menu) {
 		String domain = account.getDomain();
 		if (StringUtil3.isBlank(domain)) {
-			domain = Globals.getDomain();
+			domain = Globals.domain;
 		} else{
 			domain = new StringBuilder("http://").append(domain).toString();
 		}

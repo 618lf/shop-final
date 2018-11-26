@@ -25,7 +25,7 @@ public class StaticUtils {
    public static StringBuilder staticDomain(DomainSer ser) {
 	   String domain = ser.getDomain();
 	   if (StringUtil3.isBlank(domain)) {
-		   return new StringBuilder(Globals.getDomain());
+		   return new StringBuilder(Globals.domain);
 	   }
 	   return new StringBuilder("http://").append(domain);
    }

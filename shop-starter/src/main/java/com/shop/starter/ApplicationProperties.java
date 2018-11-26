@@ -64,8 +64,44 @@ public class ApplicationProperties {
 
 	public static class Web {
 
+		private String index = "/admin/";
+		private String admin = "/admin";
+		private String front = "/f";
+		private String domain = "";
 		private Integer maxUploadSize = 52428800;
 		private Integer maxInMemorySize = 4096;
+
+		public String getDomain() {
+			return domain;
+		}
+
+		public void setDomain(String domain) {
+			this.domain = domain;
+		}
+
+		public String getIndex() {
+			return index;
+		}
+
+		public void setIndex(String index) {
+			this.index = index;
+		}
+
+		public String getAdmin() {
+			return admin;
+		}
+
+		public void setAdmin(String admin) {
+			this.admin = admin;
+		}
+
+		public String getFront() {
+			return front;
+		}
+
+		public void setFront(String front) {
+			this.front = front;
+		}
 
 		public Integer getMaxUploadSize() {
 			return maxUploadSize;

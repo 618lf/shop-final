@@ -169,7 +169,7 @@ public class OfficeController extends BaseController{
 		Long Id = this.officeService.save(office);
 		addMessage(redirectAttributes, "保存菜单'" + office.getName() + "'成功");
 		redirectAttributes.addAttribute("Id", Id);
-		return WebUtils.redirectTo(new StringBuilder(Globals.getAdminPath()).append("/system/office/form").toString());
+		return WebUtils.redirectTo(new StringBuilder(Globals.adminPath).append("/system/office/form").toString());
 	}
 	
 	/**

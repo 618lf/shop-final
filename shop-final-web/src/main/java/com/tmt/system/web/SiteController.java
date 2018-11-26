@@ -77,7 +77,7 @@ public class SiteController extends BaseController{
 		this.siteService.baseSave(site);
 		addMessage(redirectAttributes, StringUtil3.format("%s'%s'%s", "修改站点设置", site.getName(), "成功"));
 		redirectAttributes.addAttribute("id", site.getId());
-		return WebUtils.redirectTo(new StringBuilder(Globals.getAdminPath()).append("/system/site/form/base").toString());
+		return WebUtils.redirectTo(new StringBuilder(Globals.adminPath).append("/system/site/form/base").toString());
 	}
 	
 	/**
@@ -92,7 +92,7 @@ public class SiteController extends BaseController{
 		this.siteService.safeSave(site);
 		addMessage(redirectAttributes, StringUtil3.format("%s'%s'%s", "修改站点设置", site.getName(), "成功"));
 		redirectAttributes.addAttribute("id", site.getId());
-		return WebUtils.redirectTo(new StringBuilder(Globals.getAdminPath()).append("/system/site/form/safe").toString()); 
+		return WebUtils.redirectTo(new StringBuilder(Globals.adminPath).append("/system/site/form/safe").toString()); 
 	}
 	
 	/**
@@ -107,7 +107,7 @@ public class SiteController extends BaseController{
 		this.siteService.emailSave(site);
 		addMessage(redirectAttributes, StringUtil3.format("%s'%s'%s", "修改站点设置", site.getName(), "成功"));
 		redirectAttributes.addAttribute("id", site.getId());
-		return WebUtils.redirectTo(new StringBuilder(Globals.getAdminPath()).append("/system/site/form/email").toString()); 
+		return WebUtils.redirectTo(new StringBuilder(Globals.adminPath).append("/system/site/form/email").toString()); 
 	}
 	
 	/**

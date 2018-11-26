@@ -101,7 +101,7 @@ public class AppController extends BaseController{
 		WechatUtils.clearCache();
 		addMessage(redirectAttributes, StringUtil3.format("%s'%s'%s", "修改微信公众号", app.getName(), "成功"));
 		redirectAttributes.addAttribute("id", app.getId());
-		return WebUtils.redirectTo(Globals.getAdminPath(), "/wechat/app/form");
+		return WebUtils.redirectTo(Globals.adminPath, "/wechat/app/form");
 	}
 	
 	/**

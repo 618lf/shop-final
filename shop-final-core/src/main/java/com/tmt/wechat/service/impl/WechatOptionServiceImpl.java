@@ -116,7 +116,7 @@ public class WechatOptionServiceImpl implements WechatOptionService{
 	public String getAuthorizeURL(String domain, String url) {
 		try {
 			WechatConfig app = RESOURCES.get();
-			String redirectUri = new StringBuilder("http://").append(domain).append(Globals.getFrontPath()).append("/oauth/wechat/oAuth.rt").toString();
+			String redirectUri = new StringBuilder("http://").append(domain).append(Globals.frontPath).append("/oauth/wechat/oAuth.rt").toString();
 			try {
 				if (url != null) {
 					redirectUri = new StringBuilder(redirectUri).append("?to=").append(url).toString();

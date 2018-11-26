@@ -109,7 +109,7 @@ public class MetaRichController extends BaseController{
 		this.metaRichService.save(metaRich);
 		addMessage(redirectAttributes, StringUtil3.format("%s'%s'%s", "修改图文回复", metaRich.getKeyword(), "成功"));
 		redirectAttributes.addAttribute("id", metaRich.getId());
-		return WebUtils.redirectTo(Globals.getAdminPath(), "/wechat/meta/rich/form");
+		return WebUtils.redirectTo(Globals.adminPath, "/wechat/meta/rich/form");
 	}
 	
 	/**

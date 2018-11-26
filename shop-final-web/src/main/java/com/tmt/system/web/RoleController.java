@@ -138,7 +138,7 @@ public class RoleController extends BaseController {
 		UserUtils.removeAllCache();
 		addMessage(redirectAttributes, "保存角色'" + role.getName() + "'成功");
 		redirectAttributes.addAttribute("id", role.getId());
-		return WebUtils.redirectTo(new StringBuilder(Globals.getAdminPath()).append("/system/role/form").toString());
+		return WebUtils.redirectTo(new StringBuilder(Globals.adminPath).append("/system/role/form").toString());
 	}
 	
 	/**

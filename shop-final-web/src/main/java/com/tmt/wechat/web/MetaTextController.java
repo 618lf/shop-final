@@ -99,7 +99,7 @@ public class MetaTextController extends BaseController{
 		this.metaTextService.save(metaText);
 		addMessage(redirectAttributes, StringUtil3.format("%s'%s'%s", "修改文本回复", metaText.getKeyword(), "成功"));
 		redirectAttributes.addAttribute("id", metaText.getId());
-		return WebUtils.redirectTo(Globals.getAdminPath(), "/wechat/meta/text/form");
+		return WebUtils.redirectTo(Globals.adminPath, "/wechat/meta/text/form");
 	}
 	
 	/**

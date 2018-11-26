@@ -88,7 +88,7 @@ public class SchemeController extends BaseController{
 		this.schemeService.save(scheme);
 		addMessage(redirectAttributes, StringUtil3.format("%s'%s'%s", "保存方案", scheme.getName(), "成功"));
 		redirectAttributes.addAttribute("id", scheme.getId()); 
-		return "redirect:"+Globals.getAdminPath()+"/gen/scheme/form";
+		return "redirect:"+Globals.adminPath+"/gen/scheme/form";
 	}
 	
 	/**

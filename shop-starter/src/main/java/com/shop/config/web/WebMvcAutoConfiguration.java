@@ -112,6 +112,16 @@ public class WebMvcAutoConfiguration {
 		commonsMultipartResolver.setMaxInMemorySize(properties.getWeb().getMaxInMemorySize());
 		return commonsMultipartResolver;
 	}
+	
+	/**
+	 * 异常处理
+	 * 
+	 * @return
+	 */
+	@Bean(name = DispatcherServlet.HANDLER_EXCEPTION_RESOLVER_BEAN_NAME)
+	public DefaultExceptionHandler exceptionHandler() {
+		return new DefaultExceptionHandler();
+	}
 
 	/**
 	 * 配置了一个默认的 WebMvcConfigurer
@@ -199,12 +209,6 @@ public class WebMvcAutoConfiguration {
 		public void addInterceptors(InterceptorRegistry registry) {
 			TokenInterceptor interceptor = new TokenInterceptor();
 			registry.addInterceptor(interceptor).addPathPatterns("/admin/**").excludePathPatterns("/admin/login/**");
-		}
-
-		@Override
-		public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
-			DefaultExceptionHandler exceptionHandler = new DefaultExceptionHandler();
-			resolvers.add(exceptionHandler);
 		}
 	}
 

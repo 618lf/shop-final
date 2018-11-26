@@ -91,7 +91,7 @@ public class ExcelController extends BaseImpExportController<ExcelTemplate>{
 		this.templateService.save(template);
 		addMessage(redirectAttributes, "保存模版'" + template.getName() + "'成功");
 		redirectAttributes.addAttribute("id", template.getId());
-		return "redirect:"+Globals.getAdminPath()+"/system/excel/form";
+		return "redirect:"+Globals.adminPath+"/system/excel/form";
 	}
 	
 	/**

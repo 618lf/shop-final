@@ -125,13 +125,13 @@ public class QrcodeController extends BaseController{
 			String msg = sendQrcode(qrcode);
 			if (msg != null) {
 				addMessage(redirectAttributes, StringUtil3.format("%s'%s'%s", "创建二维码", qrcode.getAppId(), "失败"));
-				return WebUtils.redirectTo(Globals.getAdminPath(), "/wechat/qrcode/form");
+				return WebUtils.redirectTo(Globals.adminPath, "/wechat/qrcode/form");
 			}
 		} 
 		this.qrcodeService.save(qrcode);
 		addMessage(redirectAttributes, StringUtil3.format("%s'%s'%s", "创建二维码", qrcode.getAppId(), "成功"));
 		redirectAttributes.addAttribute("id", qrcode.getId());
-		return WebUtils.redirectTo(Globals.getAdminPath(), "/wechat/qrcode/form");
+		return WebUtils.redirectTo(Globals.adminPath, "/wechat/qrcode/form");
 	}
 	
 	/**

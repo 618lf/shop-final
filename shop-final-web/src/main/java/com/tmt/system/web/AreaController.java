@@ -106,7 +106,7 @@ public class AreaController extends BaseController{
 		Long id = this.areaService.save(area);
 		addMessage(redirectAttributes, "保存区域'" + area.getName() + "'成功");
 		redirectAttributes.addAttribute("id", id);
-		return WebUtils.redirectTo(new StringBuilder(Globals.getAdminPath()).append("/system/area/form").toString());
+		return WebUtils.redirectTo(new StringBuilder(Globals.adminPath).append("/system/area/form").toString());
 	}
 	
 	/**

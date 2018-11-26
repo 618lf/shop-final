@@ -99,7 +99,7 @@ public class TableController extends BaseController{
 		this.tableService.save(table);
 		addMessage(redirectAttributes, StringUtil3.format("%s'%s'%s", "保存业务表配置", table.getName(), "成功"));
 		redirectAttributes.addAttribute("id", table.getId()); 
-		return "redirect:"+Globals.getAdminPath()+"/gen/table/form";
+		return "redirect:"+Globals.adminPath+"/gen/table/form";
 	}
 	
 	/**

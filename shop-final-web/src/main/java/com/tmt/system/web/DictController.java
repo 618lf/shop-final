@@ -69,7 +69,7 @@ public class DictController extends BaseController {
 		this.dictService.save(dict);
 		addMessage(redirectAttributes, "保存字典项'" + dict.getName() + "'成功");
 		redirectAttributes.addAttribute("id", dict.getId());
-		return WebUtils.redirectTo(new StringBuilder(Globals.getAdminPath()).append("/system/dict/form").toString());
+		return WebUtils.redirectTo(new StringBuilder(Globals.adminPath).append("/system/dict/form").toString());
 	}
 	
 	/**

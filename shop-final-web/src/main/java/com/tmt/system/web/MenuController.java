@@ -210,7 +210,7 @@ public class MenuController extends BaseController {
 		UserUtils.removeAllCache();
 		addMessage(redirectAttributes, "保存菜单'" + menu.getName() + "'成功");
 		redirectAttributes.addAttribute("id", id);
-		return WebUtils.redirectTo(new StringBuilder(Globals.getAdminPath()).append("/system/menu/form").toString());
+		return WebUtils.redirectTo(new StringBuilder(Globals.adminPath).append("/system/menu/form").toString());
 	}
 	
 	/**

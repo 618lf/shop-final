@@ -40,7 +40,7 @@ public class LoginController extends BaseController {
 	@RequestMapping("")
 	public String index(HttpServletRequest request, HttpServletResponse response){
 		if (!UserUtils.isAuthenticated() && !UserUtils.isRemembered()) {
-			return "redirect:"+Globals.getAdminPath()+"/login";
+			return "redirect:"+Globals.adminPath+"/login";
 		}
 		return "system/SysIndex";
 	}

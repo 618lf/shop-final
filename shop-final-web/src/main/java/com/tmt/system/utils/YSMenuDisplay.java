@@ -140,8 +140,8 @@ public class YSMenuDisplay {
 		if (menu.getType() == 2) {
 			href = menu.getHref();
 			if (!StringUtil3.startsWithAny(href, new String[]{"http://","https://"})) {
-				if(!StringUtil3.startsWithAny(href, new String[]{"http://","https://"}) && !StringUtil3.startsWith(href, Globals.getAdminPath())) {
-					href = Globals.getAdminPath() + href;
+				if(!StringUtil3.startsWithAny(href, new String[]{"http://","https://"}) && !StringUtil3.startsWith(href, Globals.adminPath)) {
+					href = Globals.adminPath + href;
 					menu.setHref(href);
 				}
 				href = ContextHolderUtils.getWebRoot() + href;

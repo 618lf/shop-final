@@ -46,13 +46,6 @@
 		<function-signature>java.lang.String getFrontUrlSuffix()</function-signature>
 		<example>${fns:getFrontUrlSuffix()}</example>
 	</function>
-	<function>
-		<description>获取配置</description>
-		<name>getConfig</name>
-		<function-class>com.tmt.common.web.tld.functions.Functions</function-class>
-		<function-signature>java.lang.String getConfig(java.lang.String)</function-signature>
-		<example>${fns:getConfig(key)}</example>
-	</function>
 
 	<function>
 		<description>获取字典对象列表</description>

@@ -113,7 +113,7 @@ public class SelfController extends BaseController {
 		UserUtils.removeUserCache(user.getId());
 		addMessage(redirectAttributes, StringUtil3.format("%s'%s'%s", "修改用户", user.getName(), "成功"));
 		redirectAttributes.addAttribute("id", user.getId());
-		return WebUtils.redirectTo(new StringBuilder(Globals.getAdminPath()).append("/system/self/info").toString());
+		return WebUtils.redirectTo(new StringBuilder(Globals.adminPath).append("/system/self/info").toString());
 	}
 	
 	/**

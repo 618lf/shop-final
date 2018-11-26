@@ -9,6 +9,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 
 import com.shop.starter.ApplicationProperties;
+import com.tmt.common.config.Globals;
 import com.tmt.common.persistence.incrementer.IdGen;
 import com.tmt.common.utils.XSpringContextHolder;
 import com.tmt.common.utils.serializer.JavaSerializer;
@@ -64,5 +65,18 @@ public class ApplicationAutoConfiguration {
 
 		// 公共引用
 		SerializationUtils.g_ser = g_ser;
+	}
+	
+	/**
+	 * 全局参数
+	 * 
+	 * @return
+	 */
+	public void globals(ApplicationProperties properties) {
+		Globals.adminPath = properties.getWeb().getAdmin();
+		Globals.frontPath = properties.getWeb().getFront();
+		Globals.index = properties.getWeb().getIndex();
+		Globals.version = properties.getVersion();
+		Globals.domain = properties.getWeb().getDomain();
 	}
 }

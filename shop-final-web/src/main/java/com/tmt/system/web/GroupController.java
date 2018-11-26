@@ -119,7 +119,7 @@ public class GroupController extends BaseController{
 		UserUtils.removeAllCache();
 		addMessage(redirectAttributes, StringUtil3.format("%s'%s'%s", "修改用户组", group.getName(), "成功"));
 		redirectAttributes.addAttribute("id", group.getId());
-		return WebUtils.redirectTo(new StringBuilder(Globals.getAdminPath()).append("/system/group/form").toString());
+		return WebUtils.redirectTo(new StringBuilder(Globals.adminPath).append("/system/group/form").toString());
 	}
 	
 	/**

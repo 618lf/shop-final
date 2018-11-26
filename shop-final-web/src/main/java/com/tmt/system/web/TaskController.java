@@ -94,7 +94,7 @@ public class TaskController extends BaseController{
 		this.taskService.save(task);
 		addMessage(redirectAttributes, "保存定时任务'" + task.getName() + "'成功");
 		redirectAttributes.addAttribute("id", task.getId());
-		return "redirect:"+Globals.getAdminPath()+"/system/task/form";
+		return "redirect:"+Globals.adminPath+"/system/task/form";
 	}
 	
 	/**
