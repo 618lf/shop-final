@@ -38,7 +38,7 @@ import com.tmt.system.utils.UserUtils;
  *
  */
 @Controller
-@RequestMapping(value = "${adminPath}/system/role")
+@RequestMapping(value = "${spring.application.web.admin}/system/role")
 public class RoleController extends BaseController {
 
 	@Autowired

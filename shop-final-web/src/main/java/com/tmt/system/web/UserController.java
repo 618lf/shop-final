@@ -46,7 +46,7 @@ import com.tmt.system.utils.UserUtils;
  * @author root
  */
 @Controller
-@RequestMapping(value = "${adminPath}/system/user")
+@RequestMapping(value = "${spring.application.web.admin}/system/user")
 public class UserController extends BaseController {
 	
 	@Autowired

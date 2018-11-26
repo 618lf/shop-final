@@ -41,7 +41,7 @@ import com.tmt.system.utils.UserUtils;
  * @author root
  */
 @Controller
-@RequestMapping(value = "${adminPath}/system/attachment")
+@RequestMapping(value = "${spring.application.web.admin}/system/attachment")
 public class AttachmentController extends BaseUploadController {
 	
 	/**

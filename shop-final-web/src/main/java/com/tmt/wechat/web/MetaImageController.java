@@ -40,7 +40,7 @@ import com.tmt.wechat.utils.WechatUtils;
  * @date 2017-01-12
  */
 @Controller("wechatMetaImageController")
-@RequestMapping(value = "${adminPath}/wechat/meta/image")
+@RequestMapping(value = "${spring.application.web.admin}/wechat/meta/image")
 public class MetaImageController extends BaseController{
 	
 	@Autowired

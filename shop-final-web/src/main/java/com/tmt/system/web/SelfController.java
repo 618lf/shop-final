@@ -36,7 +36,7 @@ import com.tmt.system.utils.YSMenuDisplay;
  * @author root
  */
 @Controller
-@RequestMapping(value = "${adminPath}/system/self")
+@RequestMapping(value = "${spring.application.web.admin}/system/self")
 public class SelfController extends BaseController {
 
 	@Autowired

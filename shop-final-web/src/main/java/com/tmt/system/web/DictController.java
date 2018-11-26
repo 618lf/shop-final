@@ -30,7 +30,7 @@ import com.tmt.system.utils.UserUtils;
  * @author root
  */
 @Controller
-@RequestMapping(value = "${adminPath}/system/dict")
+@RequestMapping(value = "${spring.application.web.admin}/system/dict")
 public class DictController extends BaseController {
 	
 	@Autowired

@@ -32,7 +32,7 @@ import com.tmt.system.service.TaskServiceFacade;
  *
  */
 @Controller
-@RequestMapping(value = "${adminPath}/system/task")
+@RequestMapping(value = "${spring.application.web.admin}/system/task")
 public class TaskController extends BaseController{
 
 	@Autowired

@@ -27,7 +27,7 @@ import com.tmt.system.utils.UserUtils;
  *
  */
 @Controller
-@RequestMapping(value = "${adminPath}")
+@RequestMapping(value = "${spring.application.web.admin}")
 public class LoginController extends BaseController {
 	
 	/**

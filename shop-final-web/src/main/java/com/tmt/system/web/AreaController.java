@@ -43,7 +43,7 @@ import com.tmt.system.utils.UserUtils;
  * @author root
  */
 @Controller
-@RequestMapping(value = "${adminPath}/system/area")
+@RequestMapping(value = "${spring.application.web.admin}/system/area")
 public class AreaController extends BaseController{
 
 	@Autowired

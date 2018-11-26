@@ -32,7 +32,7 @@ import com.tmt.system.utils.UserUtils;
  * @author root
  */
 @Controller
-@RequestMapping(value = "${adminPath}/system/tag")
+@RequestMapping(value = "${spring.application.web.admin}/system/tag")
 public class TagController extends BaseController{
 
 	//-------------基础功能-------------------

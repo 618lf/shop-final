@@ -24,7 +24,7 @@ import com.tmt.system.utils.UserUtils;
  * @author root
  */
 @Controller
-@RequestMapping(value = "${adminPath}/system/todo")
+@RequestMapping(value = "${spring.application.web.admin}/system/todo")
 public class TodoController extends BaseController {
 
 	/**

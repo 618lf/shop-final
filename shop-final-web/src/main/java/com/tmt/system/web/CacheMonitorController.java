@@ -28,7 +28,7 @@ import com.tmt.common.utils.StringUtil3;
  * @author lifeng
  */
 @Controller
-@RequestMapping(value = "${adminPath}/system/cache")
+@RequestMapping(value = "${spring.application.web.admin}/system/cache")
 public class CacheMonitorController {
 
 	@Autowired(required=false)

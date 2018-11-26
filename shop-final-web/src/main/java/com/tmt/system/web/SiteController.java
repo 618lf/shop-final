@@ -23,7 +23,7 @@ import com.tmt.system.service.SiteServiceFacade;
  * @date 2016-01-18
  */
 @Controller("systemSiteController")
-@RequestMapping(value = "${adminPath}/system/site")
+@RequestMapping(value = "${spring.application.web.admin}/system/site")
 public class SiteController extends BaseController{
 	
 	@Autowired

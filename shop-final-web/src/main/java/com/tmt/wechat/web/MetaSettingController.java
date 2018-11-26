@@ -24,7 +24,7 @@ import com.tmt.wechat.service.MetaSettingServiceFacade;
  * @date 2016-09-27
  */
 @Controller("wechatMetaSettingController")
-@RequestMapping(value = "${adminPath}/wechat/meta/setting")
+@RequestMapping(value = "${spring.application.web.admin}/wechat/meta/setting")
 public class MetaSettingController extends BaseController{
 	
 	@Autowired

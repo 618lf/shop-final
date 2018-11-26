@@ -38,7 +38,7 @@ import com.tmt.wechat.utils.WechatUtils;
  * @date 2016-09-30
  */
 @Controller("wechatMetaRichController")
-@RequestMapping(value = "${adminPath}/wechat/meta/rich")
+@RequestMapping(value = "${spring.application.web.admin}/wechat/meta/rich")
 public class MetaRichController extends BaseController{
 	
 	@Autowired

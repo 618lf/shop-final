@@ -34,7 +34,7 @@ import com.tmt.system.utils.UserUtils;
  * @author lifeng
  */
 @Controller
-@RequestMapping(value = "${adminPath}/system/message")
+@RequestMapping(value = "${spring.application.web.admin}/system/message")
 public class MessageController extends BaseMessageController{
 	
 	/**

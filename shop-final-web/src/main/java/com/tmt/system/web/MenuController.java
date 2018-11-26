@@ -36,7 +36,7 @@ import com.tmt.system.utils.UserUtils;
  * @author root
  */
 @Controller
-@RequestMapping(value = "${adminPath}/system/menu")
+@RequestMapping(value = "${spring.application.web.admin}/system/menu")
 public class MenuController extends BaseController {
 
 	@Autowired

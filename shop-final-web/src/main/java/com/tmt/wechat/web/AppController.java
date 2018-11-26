@@ -36,7 +36,7 @@ import com.tmt.wechat.utils.WechatUtils;
  * @date 2016-09-04
  */
 @Controller("wechatAppController")
-@RequestMapping(value = "${adminPath}/wechat/app")
+@RequestMapping(value = "${spring.application.web.admin}/wechat/app")
 public class AppController extends BaseController{
 	
 	@Autowired

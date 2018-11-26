@@ -31,7 +31,7 @@ import com.tmt.gen.utils.GenUtils;
  *
  */
 @Controller
-@RequestMapping(value = "${adminPath}/gen/table")
+@RequestMapping(value = "${spring.application.web.admin}/gen/table")
 public class TableController extends BaseController{
 	
 	@Autowired

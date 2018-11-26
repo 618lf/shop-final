@@ -37,7 +37,7 @@ import com.tmt.system.utils.UserUtils;
  * @author lifeng
  */
 @Controller
-@RequestMapping(value = "${adminPath}/system/group")
+@RequestMapping(value = "${spring.application.web.admin}/system/group")
 public class GroupController extends BaseController{
 
 	@Autowired

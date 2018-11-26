@@ -21,7 +21,7 @@ import com.tmt.system.service.LogServiceFacade;
  *
  */
 @Controller
-@RequestMapping(value = "${adminPath}/system/log")
+@RequestMapping(value = "${spring.application.web.admin}/system/log")
 public class LogController extends BaseController{
 
 	@Autowired

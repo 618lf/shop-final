@@ -27,7 +27,7 @@ import com.tmt.gen.utils.GenUtils;
  * @author lifeng
  */
 @Controller
-@RequestMapping(value = "${adminPath}/gen/scheme")
+@RequestMapping(value = "${spring.application.web.admin}/gen/scheme")
 public class SchemeController extends BaseController{
 
 	@Autowired

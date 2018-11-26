@@ -21,7 +21,7 @@ import com.tmt.system.utils.UserUtils;
  * @date 2016-02-19
  */
 @Controller("systemUserRunasController")
-@RequestMapping(value = "${adminPath}/system/user/runas")
+@RequestMapping(value = "${spring.application.web.admin}/system/user/runas")
 public class UserRunasController extends BaseController{
 	
 	@Autowired

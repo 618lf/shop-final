@@ -20,7 +20,7 @@ import com.tmt.gen.service.TableColumnService;
  *
  */
 @Controller
-@RequestMapping(value = "${adminPath}/gen/table/column")
+@RequestMapping(value = "${spring.application.web.admin}/gen/table/column")
 public class TableColumnController extends BaseController{
 
 	@Autowired

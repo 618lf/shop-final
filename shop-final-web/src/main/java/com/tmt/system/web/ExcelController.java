@@ -31,7 +31,7 @@ import com.tmt.system.service.ExcelTemplateServiceFacade;
 import com.tmt.system.utils.ExcelImpUtil;
 
 @Controller
-@RequestMapping(value = "${adminPath}/system/excel")
+@RequestMapping(value = "${spring.application.web.admin}/system/excel")
 public class ExcelController extends BaseImpExportController<ExcelTemplate>{
 	
 	@Autowired

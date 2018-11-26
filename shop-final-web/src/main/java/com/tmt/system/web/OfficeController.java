@@ -36,7 +36,7 @@ import com.tmt.system.utils.UserUtils;
  *
  */
 @Controller
-@RequestMapping(value = "${adminPath}/system/office")
+@RequestMapping(value = "${spring.application.web.admin}/system/office")
 public class OfficeController extends BaseController{
 
 	@Autowired

@@ -35,7 +35,7 @@ import com.tmt.wechat.service.WechatOptionService;
  * @date 2016-09-13
  */
 @Controller("wechatMenuController")
-@RequestMapping(value = "${adminPath}/wechat/menu")
+@RequestMapping(value = "${spring.application.web.admin}/wechat/menu")
 public class MenuController extends BaseController{
 	
 	@Autowired

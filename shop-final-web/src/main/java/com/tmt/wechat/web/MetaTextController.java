@@ -32,7 +32,7 @@ import com.tmt.wechat.service.MetaTextServiceFacade;
  * @date 2016-09-30
  */
 @Controller("wechatMetaTextController")
-@RequestMapping(value = "${adminPath}/wechat/meta/text")
+@RequestMapping(value = "${spring.application.web.admin}/wechat/meta/text")
 public class MetaTextController extends BaseController{
 	
 	@Autowired

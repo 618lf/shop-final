@@ -16,7 +16,7 @@ import com.tmt.wechat.service.MetaKeywordServiceFacade;
  * @author root
  */
 @Controller("wechatMetaKeywordController")
-@RequestMapping(value = "${adminPath}/wechat/meta/keyword")
+@RequestMapping(value = "${spring.application.web.admin}/wechat/meta/keyword")
 public class MetaKeywordController {
 
 	@Autowired

@@ -36,7 +36,7 @@ import com.tmt.wechat.service.WechatOptionService;
  * @date 2016-10-01
  */
 @Controller("wechatQrcodeController")
-@RequestMapping(value = "${adminPath}/wechat/qrcode")
+@RequestMapping(value = "${spring.application.web.admin}/wechat/qrcode")
 public class QrcodeController extends BaseController{
 	
 	@Autowired
