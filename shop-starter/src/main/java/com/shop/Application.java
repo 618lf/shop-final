@@ -1,7 +1,5 @@
 package com.shop;
 
-import java.net.InetAddress;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ExitCodeGenerator;
@@ -9,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import com.tmt.OS;
 import com.tmt.common.utils.StringUtil3;
 
 /**
@@ -73,18 +72,9 @@ public class Application extends SpringApplication {
 		}
 		String hostName = null;
 		if (properties.getAddress() == null || !"127.0.0.1".equals(properties.getAddress().getHostAddress())) {
-			hostName = getLocalHost();
+			hostName = OS.ip();
 		}
 		return StringUtil3.format(address.toString(), hostName);
-	}
-
-	private static String getLocalHost() {
-		try {
-			InetAddress addr = InetAddress.getLocalHost();
-			return addr.getHostAddress().toString();
-		} catch (Exception e) {
-			return "127.0.0.1";
-		}
 	}
 
 	/**
