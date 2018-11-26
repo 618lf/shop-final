@@ -31,6 +31,7 @@ public class ApplicationAutoConfiguration {
 	
 	public ApplicationAutoConfiguration(ApplicationProperties properties) {
 		serializer(properties);
+		globals(properties);
 	}
 
 	@Bean

@@ -40,11 +40,11 @@
 		<example>${fns:getFrontPath()}</example>
 	</function>
 	<function>
-		<description>获取前台扩展</description>
-		<name>getFrontUrlSuffix</name>
+		<description>获取当前版本</description>
+		<name>getVersion</name>
 		<function-class>com.tmt.common.web.tld.functions.Functions</function-class>
-		<function-signature>java.lang.String getFrontUrlSuffix()</function-signature>
-		<example>${fns:getFrontUrlSuffix()}</example>
+		<function-signature>java.lang.String getVersion()</function-signature>
+		<example>${fns:getVersion()}</example>
 	</function>
 
 	<function>

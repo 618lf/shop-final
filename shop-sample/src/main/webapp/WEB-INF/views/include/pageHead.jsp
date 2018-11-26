@@ -5,7 +5,7 @@
 <%@ taglib prefix="fns" uri="/WEB-INF/tld/fns.tld"%>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags"%>
 <c:set var="base" value="${fns:getBasePath()}"/>
-<c:set var="version" value="${fns:getConfig('server.version')}"/>
+<c:set var="version" value="${fns:getVersion()}"/>
 <c:set var="webRoot" value="${fns:getWebRoot()}"/>
 <c:set var="ctx" value="${fns:getWebRoot()}${fns:getAdminPath()}"/>
 <c:set var="ctxStatic" value="${fns:getWebRoot()}/static"/>

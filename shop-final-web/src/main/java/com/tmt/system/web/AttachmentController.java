@@ -43,8 +43,6 @@ import com.tmt.system.utils.UserUtils;
 @Controller
 @RequestMapping(value = "${adminPath}/system/attachment")
 public class AttachmentController extends BaseUploadController {
-
-	private static String COOKIE_PATH = new StringBuilder(Globals.adminPath).append("/system/attachment").toString();
 	
 	/**
 	 * 弹出上传控件
@@ -82,7 +80,7 @@ public class AttachmentController extends BaseUploadController {
 		AttachmentDir target = copys.get(copys.size()-1);
 		model.addAttribute("paths", copys);
 		model.addAttribute("dir", target);
-		CookieUtils.setCookie(response, COOKIE_NAME, target.getId().toString(), COOKIE_AGE, COOKIE_PATH, Globals.domain, Boolean.FALSE);
+		CookieUtils.setCookie(response, COOKIE_NAME, target.getId().toString(), COOKIE_AGE, new StringBuilder(Globals.adminPath).append("/system/attachment").toString(), Globals.domain, Boolean.FALSE);
 		return "/system/AttachmentList";
 	}
 	
