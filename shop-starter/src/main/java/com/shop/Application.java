@@ -46,7 +46,7 @@ public class Application extends SpringApplication {
 	public static ConfigurableApplicationContext run(Class<?> primarySource, String... args) {
 		long start = System.currentTimeMillis();
 		Application application = new Application(primarySource);
-		application.setBannerMode(Banner.Mode.LOG);
+		application.setBannerMode(Banner.Mode.OFF);
 		CONTEXT = (ConfigurableApplicationContext) application.run(args);
 		long end = System.currentTimeMillis();
 		APP_LOGGER.debug("Server start success in " + (end - start) / 1000 + "s, Listen on [" + getAddresses() + "]");
