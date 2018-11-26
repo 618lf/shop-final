@@ -22,7 +22,10 @@ public class AppConfiguration {
 	public SecurityConfigurationSupport securityConfiguration() {
 		SecurityConfigurationSupport securityConfiguration = new SecurityConfigurationSupport();
 		securityConfiguration.definition("/admin/validate/code = anon")
-		.definition("/admin/login = authc");
+		.definition("/admin/login = authc")
+		.loginUrl("/admin/login")
+		.successUrl("/admin/")
+		.unauthorizedUrl("/admin/login");
 		return securityConfiguration;
 	}
 }
