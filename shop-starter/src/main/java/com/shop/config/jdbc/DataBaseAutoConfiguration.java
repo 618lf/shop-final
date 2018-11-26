@@ -40,14 +40,21 @@ import org.springframework.util.ObjectUtils;
 
 import com.shop.config.jdbc.database.ConfigurationCustomizer;
 import com.shop.config.jdbc.database.DataSourceProperties;
+import com.shop.config.jdbc.database.Database;
 import com.shop.config.jdbc.database.DruidDataSourceAutoConfiguration;
 import com.shop.config.jdbc.database.SpringBootVFS;
+import com.shop.config.jdbc.database.SqlLiteDataSourceAutoConfiguration;
 import com.shop.config.jdbc.mybatis.MybatisProperties;
 import com.shop.config.jdbc.transaction.DataSourceTransactionManagerAutoConfiguration;
 import com.shop.config.jdbc.transaction.TransactionAutoConfiguration;
+import com.shop.config.jdbc.database.HikariDataSourceAutoConfiguration;
 import com.tmt.common.persistence.JdbcSqlExecutor;
 import com.tmt.common.persistence.QueryCondition;
+import com.tmt.common.persistence.dialect.Dialect;
+import com.tmt.common.persistence.dialect.H2Dialect;
 import com.tmt.common.persistence.dialect.MySQLDialect;
+import com.tmt.common.persistence.dialect.OracleDialect;
+import com.tmt.common.persistence.dialect.SqlLiteDialect;
 import com.tmt.common.persistence.mybatis.ExecutorInterceptor;
 import com.tmt.common.security.utils.StringUtils;
 
@@ -74,7 +81,9 @@ public class DataBaseAutoConfiguration {
 	@ConditionalOnMissingBean(DataSource.class)
 	@EnableConfigurationProperties(DataSourceProperties.class)
 	@Import({
-		DruidDataSourceAutoConfiguration.class
+		SqlLiteDataSourceAutoConfiguration.class,
+		DruidDataSourceAutoConfiguration.class,
+		HikariDataSourceAutoConfiguration.class
 	})
 	public static class DataSourceAutoConfiguration {}
 
@@ -163,6 +172,7 @@ public class DataBaseAutoConfiguration {
 	@AutoConfigureAfter(DataSourceAutoConfiguration.class)
 	@ConditionalOnProperty(prefix = "spring.application", name = "enableMybatis", matchIfMissing = true)
 	public static class MybatisAutoConfiguration {
+		private final DataSourceProperties dbProperties;
 		private final MybatisProperties properties;
 		private final Interceptor[] interceptors;
 		private final ResourceLoader resourceLoader;
@@ -170,10 +180,12 @@ public class DataBaseAutoConfiguration {
 		private final List<ConfigurationCustomizer> configurationCustomizers;
 		
 		public MybatisAutoConfiguration(MybatisProperties properties,
+				DataSourceProperties dbProperties, 
 				ObjectProvider<Interceptor[]> interceptorsProvider, ResourceLoader resourceLoader,
 				ObjectProvider<DatabaseIdProvider> databaseIdProvider,
 				ObjectProvider<List<ConfigurationCustomizer>> configurationCustomizersProvider) {
 			this.properties = properties;
+			this.dbProperties = dbProperties;
 			this.interceptors = interceptorsProvider.getIfAvailable();
 			this.resourceLoader = resourceLoader;
 			this.databaseIdProvider = databaseIdProvider.getIfAvailable();
@@ -236,11 +248,25 @@ public class DataBaseAutoConfiguration {
 
 			// 默认的拦截器
 			ExecutorInterceptor interceptor = new ExecutorInterceptor();
-			interceptor.setDialect(new MySQLDialect());
+			interceptor.setDialect(getDialect());
 			configuration.addInterceptor(interceptor);
 
 			// 默认的别名
 			configuration.getTypeAliasRegistry().registerAlias("queryCondition", QueryCondition.class);
+		}
+		
+		private Dialect getDialect() {
+			Database db = this.dbProperties.getDb();
+			if (db == Database.h2) {
+				return new H2Dialect();
+			} else if (db == Database.mysql) {
+				return new MySQLDialect();
+			} else if (db == Database.oracle) {
+				return new OracleDialect();
+			} else if (db == Database.sqlite) {
+				return new SqlLiteDialect();
+			}
+			return new MySQLDialect();
 		}
 
 		@Bean

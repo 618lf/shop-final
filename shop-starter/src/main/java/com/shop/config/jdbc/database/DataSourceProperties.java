@@ -10,6 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class DataSourceProperties {
 	
 	private String name = "SHOP - DB";
+	private Database db = Database.mysql;
 	private String url;
     private String username;
     private String password;
@@ -32,6 +33,12 @@ public class DataSourceProperties {
     private Integer prepStmtCacheSqlLimit = 2048;
     private Integer maxLifetime = 1800000; // 一个连接的生命时长（毫秒），超时而且没被使用则被释放（retired），缺省:30分钟，建议设置比数据库超时时长少30秒
     
+	public Database getDb() {
+		return db;
+	}
+	public void setDb(Database db) {
+		this.db = db;
+	}
 	public Integer getMaxLifetime() {
 		return maxLifetime;
 	}
