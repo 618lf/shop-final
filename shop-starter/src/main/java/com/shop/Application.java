@@ -2,6 +2,7 @@ package com.shop;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.Banner;
 import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
@@ -21,7 +22,7 @@ public class Application extends SpringApplication {
 	/**
 	 * 系统启动的日志
 	 */
-	public final static Logger APP_LOGGER = LoggerFactory.getLogger(Application.class);
+	public final static Logger APP_LOGGER = LoggerFactory.getLogger(SpringApplication.class);
 
 	/**
 	 * 全局的 context
@@ -44,12 +45,12 @@ public class Application extends SpringApplication {
 	 */
 	public static ConfigurableApplicationContext run(Class<?> primarySource, String... args) {
 		long start = System.currentTimeMillis();
-		ConfigurableApplicationContext context = (ConfigurableApplicationContext) new Application(primarySource)
-				.run(args);
-		CONTEXT = context;
+		Application application = new Application(primarySource);
+		application.setBannerMode(Banner.Mode.LOG);
+		CONTEXT = (ConfigurableApplicationContext) application.run(args);
 		long end = System.currentTimeMillis();
 		APP_LOGGER.debug("Server start success in " + (end - start) / 1000 + "s, Listen on [" + getAddresses() + "]");
-		return context;
+		return CONTEXT;
 	}
 
 	/**
