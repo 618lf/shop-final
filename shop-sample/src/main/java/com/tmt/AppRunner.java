@@ -1,8 +1,8 @@
 package com.tmt;
 
-import org.springframework.boot.SpringApplication;
 import org.springframework.context.annotation.ComponentScan;
 
+import com.shop.Application;
 import com.shop.starter.ApplicationBoot;
 
 /**
@@ -16,6 +16,6 @@ import com.shop.starter.ApplicationBoot;
 public class AppRunner {
 	
 	public static void main(String[] args) {
-		SpringApplication.run(AppRunner.class, args);
+		Application.run(AppRunner.class, args);
 	}
 }

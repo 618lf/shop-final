@@ -46,4 +46,6 @@
 	    <appender-ref ref="STDOUT"/>
 	</root>
 	
+	<!-- 常用的应用程序的日志 -->
+	<logger name="com.shop.Application" level="DEBUG"/>
 </configuration>

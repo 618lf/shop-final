@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<taglib version="2.0" xmlns="http://java.sun.com/xml/ns/j2ee"
+	    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<tlib-version>1.0</tlib-version>
+	<short-name>Sys</short-name>
+	<uri>http://www.ssi.com/tags</uri>
+	
+	<!-- 站点 -->
+	<tag>
+		<name>site</name>
+		<tagclass>com.tmt.common.web.tld.jsp.SiteTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<description>站点信息</description>
+		<attribute>
+			<name>property</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<!-- 用户信息替代shiro -->
+	<tag>
+		<name>user</name>
+		<tagclass>com.tmt.common.web.tld.jsp.UserTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<description>用户信息</description>
+		<attribute>
+			<name>property</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	
+	<!-- 用户是否拥有指定的角色 -->
+	<tag>
+		<name>hasRole</name>
+		<tagclass>com.tmt.common.web.tld.jsp.HasRoleTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<description>是否具有指定的角色</description>
+		<attribute>
+			<name>name</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+    <!-- 用户是否拥有指定的权限 -->
+	<tag>
+		<name>hasPermission</name>
+		<tagclass>com.tmt.common.web.tld.jsp.HasPermissionTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<description>是否具有指定的权限</description>
+		<attribute>
+			<name>name</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	
+	<!-- 用户是否不拥有指定的权限 -->
+	<tag>
+		<name>lacksPermission</name>
+		<tagclass>com.tmt.common.web.tld.jsp.LacksPermissionTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<description>是否不具有指定的权限</description>
+		<attribute>
+			<name>name</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	
+	<!-- 登录用户 -->
+	<tag>
+		<name>authenticated</name>
+		<tagclass>com.tmt.common.web.tld.jsp.AuthenticatedTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<description>登录用户 </description>
+	</tag>
+	
+	<!-- 超级管理员（登录或记住我） -->
+	<tag>
+		<name>isRoot</name>
+		<tagclass>com.tmt.common.web.tld.jsp.IsRoot</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<description>超级管理员 </description>
+	</tag>
+	
+	<!-- 用户（登录或记住我） -->
+	<tag>
+		<name>isUser</name>
+		<tagclass>com.tmt.common.web.tld.jsp.IsUser</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<description>登录或记住我用户 </description>
+	</tag>
+	
+	<!-- 用户（记住我） -->
+	<tag>
+		<name>rememberMe</name>
+		<tagclass>com.tmt.common.web.tld.jsp.RememberMeTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<description>记住我用户 </description>
+	</tag>
+	
+	<!-- 不是登录用户 (未登录或记住我)-->
+	<tag>
+		<name>notAuthenticated</name>
+		<tagclass>com.tmt.common.web.tld.jsp.NotAuthenticatedTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<description>不是登录用户 </description>
+	</tag>
+	
+	<!-- 游客（登录或记住我） -->
+	<tag>
+		<name>isGuest</name>
+		<tagclass>com.tmt.common.web.tld.jsp.IsGuest</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<description>游客 </description>
+	</tag>
+	
+	<!-- RUN AS -->
+	<tag>
+		<name>isRunAs</name>
+		<tagclass>com.tmt.common.web.tld.jsp.IsRunAs</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<description>RUN AS</description>
+	</tag>
+</taglib>

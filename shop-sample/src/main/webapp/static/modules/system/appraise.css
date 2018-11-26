@@ -1,0 +1,208 @@
+.mappraise-container {
+  overflow: hidden;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  position: relative;
+}
+.mappraise-container *{
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.mappraise-appraises {
+  overflow:  auto;
+}
+.mappraise-container .product-appraise {
+  max-width: 320px;
+  float: left;
+  position: relative;
+  min-width: 320px;
+}
+.mappraise-appraises:AFTER {
+  content: "";
+  display: block;
+  clear: both;
+}
+.product-appraise .ops {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: none;
+}
+.product-appraise:HOVER .ops {
+  display: block;
+}
+.product-appraise .ops .edit{
+  display: block;
+  background-color: #fff;
+}
+.product-appraise .edit i{
+  color: #0099CC;
+  font-size: 28px;
+}
+.mappraise-container .mappraise-edit {
+  position: fixed;
+  width: 500px;
+  height: 100%;
+  top: 0;
+  right: 0;
+  background-color: #fff;
+  display: none;
+  overflow: auto;
+}
+.mappraise-container.edit_mode .mappraise-edit {
+  display: block;
+}
+.mappraise-container.edit_mode {
+  margin-right: 500px;
+}
+.mappraise-edit {
+  padding: 30px 10px 10px 10px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.mappraise-edit .enclosure-form {
+  padding: 0;
+}
+.no-scroll {
+  overflow: hidden;
+}
+.mappraise-edit .ops {
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  bottom: 15px;
+  right: 20px;
+  background-color: #FF6666;
+  color: #fff;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 40px;
+}
+.mappraise-edit .ops i {
+  font-size: 30px;
+}
+.weui-uploader_file_status:BEFORE {
+  display: none;
+}
+.weui-uploader_file_status .weui-uploader_file-content {
+  display: none;
+}
+.weui-uploader_file_status:HOVER .weui-uploader_file-content, .weui-uploader_file_status:HOVER:BEFORE{
+  display: block;
+}
+.weui-uploader_file_status .del {
+  cursor: pointer;
+}
+.mappraise-container.list {
+  padding-top: 60px;
+} 
+.product-appraise .tags {
+  padding: 0 15px;
+  color: #999;
+}
+.mappraise-ops {
+  height: 50px;
+  background-color: #fff;
+  position: absolute;
+  width: 100%;
+  top: 0;
+  z-index: 3;
+  padding: 5px 20px;
+  display: flex;
+}
+.mappraise-ops .mappraise-ops_primary {
+  flex: 1;
+}
+.mappraise-ops .-title {
+  padding: 5px;
+  display: inline-block;
+  margin: 5px 0;
+  color: #999;
+  font-size: 16px;
+}
+.mappraise-ops .-tag {
+  display: inline-block;
+  padding: 5px 10px;
+  margin: 5px 0;
+  margin-right: 5px;
+  background-color: #FFCC99;
+  color: #666;
+}
+.mappraise-ops .-tag.cur {
+  background-color: #99CCCC;
+  color: #fff;
+}
+.mappraise-ops .-more {
+  padding: 10px;
+  display: inline-block;
+  color: #999;
+  font-size: 16px;
+}
+.mappraise-ops_ft {
+  position: relative;
+}
+.mappraise-ops_ft .dropdown {
+  position: absolute;
+  width: 360px;
+  right: 0px;
+  background-color: #fff;
+  border: 2px solid #0099CC;
+  padding: 20px;
+  margin-right: 0;
+  display: none;
+}
+.mappraise-ops_ft:HOVER .-more {
+  background-color: #0099CC;
+  color: #fff;
+  border-radius: 4px 4px;
+}
+.mappraise-ops_ft.open .-more{
+  background-color: #0099CC;
+  color: #fff;
+  border-radius: 4px 4px 0 0;
+}
+.mappraise-ops_ft.open .dropdown{
+  display: block;
+}
+.mappraise-ops_ft .dropdown input[type="text"], .mappraise-ops_ft .dropdown select{
+  height: 32px;
+  width: 220px;
+}
+.mappraise-ops_ft .ui-btn-menu .ui-btns {
+  height: 50px;
+}
+.wrapper, .wrapper * {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.wrapper {
+  max-width: 850px;
+  padding: 20px;
+}
+.wrapper .bills{
+  width: 100%;
+  float: none;
+  margin: 0;
+}
+.points-wrap .points {
+  width: 100px;
+  height: 30px;
+  margin: 0;
+}
+.points-wrap .points-ops {
+  float: right;
+}
+.points-wrap .points-ops .ui-switch-label {
+  margin-right: 0;
+}
+.appraise-grade .list-hd {
+  line-height: 25px;
+}
+.points-wrap .list-hd {
+  background-color: #0099CC;
+  color: #fff;
+}

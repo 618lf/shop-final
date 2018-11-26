@@ -1,0 +1,70 @@
+body {
+	background-color: #fff;
+}
+.wrapper-dialog {
+  padding: 20px;
+}
+.mtemplate-wrap {
+  float: left;
+  margin: 0 30px 15px 0;
+}
+.mtemplate {
+  width: 260px;
+  height: 340px;
+  border: 2px solid #eee;
+  align-items: flex-end;
+  justify-content: center;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.mtemplate, .mtemplate * {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.mtemplate .title {
+  font-weight: normal;
+  text-align: center;
+  height: 40px;
+  line-height: 40px;
+  color: #666;
+}
+.mtemplate .image {
+  width: 214px;
+  height: 327px;
+  background: url(/static/img/phone.png) no-repeat center center;
+  overflow: hidden;
+  padding: 53px 10px 0 10px;
+  margin: 0 auto;
+}
+.mtemplate .bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  background-color: #000;
+  opacity: 0.2;
+  display: none;
+}
+.mtemplate .ops {
+  position: absolute;
+  width: 100%;
+  bottom: 30px;
+  text-align: center;
+   z-index: 101;
+   display: none;
+}
+.mtemplate .ops > a {
+  display: block;
+  width: 100px;
+  margin: 0 auto;
+  color: #fff;
+  background-color: #3071a9;
+  border-color: #285e8e;
+}
+.mtemplate:HOVER > .bg, .mtemplate:HOVER > .ops{
+  display: block;
+}

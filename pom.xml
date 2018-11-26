@@ -135,19 +135,24 @@
 					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
 				<includes>
-					<include>**/*.properties</include>
-					<include>**/*.xml</include>
-					<include>**/*.tld</include>
-					<include>**/*.ftl</include>
-					<include>**/*.dic</include>
-					<include>**/*.conf</include>
-					<include>**/*.groovy</include>
-					<include>**/*.png</include>
+					<include>**/*</include>
 				</includes>
 				<filtering>false</filtering>
 			</resource>
@@ -164,6 +169,9 @@
 					<include>**/*.conf</include>
 					<include>**/*.groovy</include>
 					<include>**/*.png</include>
+					<include>**/*.factories</include>
+					<include>**/*.db</include>
+					<include>**/*.jceks</include>
 				</includes>
 				<filtering>false</filtering>
 			</resource>

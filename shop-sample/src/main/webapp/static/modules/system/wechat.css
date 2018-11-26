@@ -1,0 +1,399 @@
+.form-horizontal .select2-container, .form-horizontal .select2-container .select2-choice, .form-horizontal .uneditable-input, .form-horizontal input[type=datetime], .form-horizontal input[type=datetime-local], .form-horizontal input[type=date], .form-horizontal input[type=month], .form-horizontal input[type=time], .form-horizontal input[type=week], .form-horizontal input[type=number], .form-horizontal input[type=email], .form-horizontal input[type=url], .form-horizontal input[type=search], .form-horizontal input[type=tel], .form-horizontal input[type=color], .form-horizontal input[type=text], .form-horizontal input[type=password], .form-horizontal select, .form-horizontal textarea {
+  width: 360px;
+}
+.wrapper-dialog .form-horizontal .select2-container, .wrapper-dialog .form-horizontal .select2-container .select2-choice, .wrapper-dialog .form-horizontal .uneditable-input, .wrapper-dialog .form-horizontal input[type=datetime], .wrapper-dialog .form-horizontal input[type=datetime-local], .wrapper-dialog .form-horizontal input[type=date], .wrapper-dialog .form-horizontal input[type=month], .wrapper-dialog .form-horizontal input[type=time], .wrapper-dialog .form-horizontal input[type=week], .wrapper-dialog .form-horizontal input[type=number],.wrapper-dialog  .form-horizontal input[type=email], .wrapper-dialog .form-horizontal input[type=url], .wrapper-dialog .form-horizontal input[type=search], .wrapper-dialog .form-horizontal input[type=tel], .wrapper-dialog .form-horizontal input[type=color], .wrapper-dialog .form-horizontal input[type=text], .wrapper-dialog .form-horizontal input[type=password], .wrapper-dialog .form-horizontal select, .wrapper-dialog .form-horizontal textarea {
+  width: 240px;
+}
+.wechat-menu {
+   margin: 20px 20px 0px 16px;
+   position: relative;
+}
+.wechat-menu .menu-left {
+   position: absolute;
+   top: 10px;
+   left: 0;
+}
+.wechat-menu .tabs-left > .nav-tabs > li > a {
+   background-color:  #fff;
+} 
+.wechat-menu .tabs-left > .nav-tabs > li.active > a {
+   background-color: #f4f4f4;
+}
+.wechat-menu .menu-main {
+   margin-left: 100px;
+   min-height: 500px;
+   padding: 10px;
+   padding-left: 20px;
+}
+.wechat-menu .menu-main .btns {
+   margin-bottom: 15px; 
+}
+.menu-tabs .menu-tab {
+   background-color: #fff;
+   min-height: 350px;
+   border: 1px solid #ddd;
+   -webkit-box-sizing: border-box;
+   -moz-box-sizing: border-box;
+   box-sizing: border-box;
+}
+.menu-tabs .left-tab { 
+   width: 400px;
+   position: absolute;
+   border-right: 0;
+}
+.menu-tabs .right-tab {
+   margin-left: 400px;
+   min-height: 350px;
+}
+.menu-tab > h4 {
+   background-color: #f5f5f5;
+   height: 34px;
+   line-height: 34px;
+   font-size: 14px;
+   font-weight: normal;
+   padding: 5px 10px;
+   border-bottom: 1px solid #ddd;
+}
+.menu-tab > h4 > a {
+   float: right;
+   display: block;
+   background-color: #fff;
+   padding: 4px 7px;
+   line-height: 24px;
+   border: 1px solid #ddd;
+}
+.list-group-item {
+   display: block;
+   padding: 5px 10px;
+   line-height: 38px;
+   height: 38px;
+   color: #666;
+}
+.list-group-item:HOVER, .list-group-item.cur {
+   background-color: #f5f5f5;
+}
+.list-group-item > i {
+   margin: 0 4px;
+}
+.list-group-item > input {
+   margin-bottom: 0;	
+   vertical-align: middle;
+   -webkit-box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0);
+   -moz-box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0);
+   box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0);
+}
+.list-group-item.-menu > input{
+   width: 229px;
+}
+.list-group-item > .ops {
+   display: block;
+   float: right;
+}
+.list-group-item > .ops > i {
+   padding: 0 3px;
+   cursor: pointer;
+   vertical-align: middle;
+   height: auto;
+   display: inline-block;
+}
+.list-group-item.-submenu {
+   padding-left: 35px;
+}
+.list-group-item .tree-line {
+   display: inline-block;
+   width: 18px;
+   height: 20px;
+   border:1px solid #ddd;
+   vertical-align: top;
+   margin-right: 3px;
+   border-right: 0;
+   border-top: 0;
+}
+.menuConfig {
+   padding: 10px 20px;
+   margin-bottom: 20px;
+}
+.menuConfig .nav-tabs {
+   display: inline-block;
+}
+.menuConfig .nav-tabs > li {
+   position: relative;
+}
+.menuConfig .nav-tabs > li:AFTER {
+   width: 16px;
+   height: 16px;
+   border-top: 1px solid #c5d0dc;
+   border-left: 1px solid #c5d0dc;
+   content: "";
+   position: absolute;
+   -moz-transform:rotate(45deg);
+   -webkit-transform:rotate(45deg);
+   -o-transform:rotate(45deg);
+   transform:rotate(45deg); 
+   filter:progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+   left: 50%;
+   margin-left: -8px;
+   top: 50px;
+   background-color: #fff;
+   z-index: 100;
+   display: none;
+}
+.menuConfig .nav-tabs > li.active:AFTER {
+   display: block;
+}
+.menuConfig .nav-tabs > li.active a{
+   border-top: 1px solid #c5d0dc;
+   margin-top: 0;
+   border-bottom-color: #c5d0dc;
+   box-shadow: 0 0px 0px 0px rgba(0,0,0,0);
+}
+.menuConfig .tab-content {
+   margin-top: 20px;
+   border: 1px solid #c5d0dc;
+   position: relative;
+   background-color: #fff;
+}
+.menuConfig .tab-pane {
+   padding: 20px;
+}
+.menuConfig input[type='text'] {
+   display: block;
+   width: 400px;
+}
+.settings  {
+   width: 800px;
+}
+.settings .title {
+   height: 40px;
+   line-height: 40px;
+   font-size: 16px;
+}
+.settings .menuConfig {
+  padding: 0;
+}
+.config-content {
+  width: 400px;
+  border: 1px solid #ccc;
+  padding: 0;
+  border-radius: 2px;
+} 
+.config-content .config-content-textarea {
+  border: 0;
+  -webkit-box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.075);
+  -moz-box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.075);
+   box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.075);
+	-webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+	-o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  width: 100%;
+  display: block;
+  resize: none;
+}
+.config-content .config-content-bar {
+  background-color: #ccc;
+  background-image: linear-gradient(to bottom, #F3F3F3 0px, #E3E3E3 100%);
+  border-top: 1px solid #ccc;
+  padding: 3px 9px;
+}
+.config-content .config-content-bar:AFTER {
+  content: "";
+  display: block;
+  clear: both;
+}
+.config-content .config-content-bar .word-num {
+  color: #999;
+  line-height: 25px;
+}
+.config-content .config-content-bar .-tools {
+  color: #777;
+  cursor: pointer;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  text-align: center;
+  margin-right: 4px;
+}
+.config-content .config-content-bar .-tools:HOVER {
+  background-color: rgba(255,255,255,0.4);
+  border-radius: 2px;
+  color: #444;
+}
+.popover-bar-pop {
+  max-width: none;
+}
+.popover-bar-pop > .popover-content {
+  padding: 10px;
+}
+.keyword {
+  background-color: rgba(4,190,2,.8);
+  color: #fff !important;
+  padding: 4px 5px;
+  cursor: help;
+  margin-right: 4px;
+}
+.multi-meta {
+  width: 360px;
+}
+.multi-meta .add-ops {
+  padding: 15px;
+  display: block;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+.multi-meta .item {
+  padding: 15px;
+  display: block;
+  border: 1px solid #ddd;
+  border-top: 0;
+}
+.multi-meta .item > .ops {
+  display: block;
+  float: right;
+}
+.multi-meta .item > .ops > i {
+  margin: 0 4px;
+  cursor: pointer;
+}
+.multi-meta .item > .ops > i:HOVER {
+  background-color: #f4f4f4;
+  border-radius: 2px;
+  color: #444;
+}
+.tab-pane .metas {
+  margin-bottom: 15px;
+}
+.tab-pane .metas * {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.tab-pane .metas > .item{
+  border-top: 1px solid #ddd;
+  padding: 4px;
+  margin-bottom: -1px;
+  position: relative;
+  display: block;
+}
+.tab-pane .metas > .item > .title {
+  height: 45px;
+  padding-left: 4px;
+  display: table-cell;
+  vertical-align: middle;
+}
+.tab-pane .metas > .item > .image-wrap {
+  width: 60px;
+  height: 45px;
+  line-height: 45px;
+  float: right;
+  text-align: center;
+}
+.tab-pane .metas > .top-item > .image-wrap{
+  height: 120px;
+  line-height: 120px;
+  overflow: hidden;
+  text-align: center;
+  background-color: #ccc;
+  font-size: 0;
+  float: none;
+  width: auto;
+  display: block;
+}
+.tab-pane .metas > .top-item > .title {
+  display: block;
+  position: absolute;
+  width: 100%;
+  bottom:4px;
+  height: auto;
+  left: 0;
+  padding: 0;
+  color: #fff;
+  z-index: 2;
+}
+.tab-pane .metas > .top-item > .title >.bg {
+  display: block;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: #666;
+  opacity: 0.5;  
+  z-index: 1;
+}
+.tab-pane .metas > .top-item > .title >.-title {
+  position: relative;
+  z-index: 3;
+  padding: 8px;
+}
+.tab-pane .metas > .top-item > .remarks, .tab-pane .metas > .top-item > .date {
+  display: none;
+}
+.tab-pane .metas > .single-item {
+  padding: 10px;
+}
+.tab-pane .metas > .single-item > .title {
+  position: relative;
+  color: #333;
+  font-size: 16px;
+  display: block;
+  margin-bottom: 5px;
+}
+.tab-pane .metas > .single-item > .title >.-title {
+  padding: 0;
+}
+.tab-pane .metas > .single-item > .title > .bg {
+  display: none;
+}
+.tab-pane .metas > .single-item > .image-wrap {
+  margin-bottom: 10px;
+}
+.tab-pane .metas > .single-item > .date {
+  color: #999;
+  display: block;
+  margin-bottom: 5px;
+}
+.tab-pane .metas > .single-item > .remarks {
+  color: #999;
+  display: block;
+}
+.controls.menuConfig {
+  padding: 0;
+}
+.qrcode-image .image-wrap {
+  width: 230px;
+}
+.keyword-wrap {
+  position: relative;
+  width: 360px;
+}
+.keyword-wrap, .keyword-wrap * {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.keyword-wrap .keyword-input {
+  width: 100% !important;
+  height: 32px;
+}
+.keyword-wrap .keyword-dropdown {
+  position: fixed;
+  border: 1px solid #ddd;
+  width: 360px;
+  display: none;
+}
+.keyword-wrap .keyword {
+  display: block;
+  background-color: #fff;
+  color: #666 !important;
+  cursor: pointer;
+  margin: 0;
+}
+.keyword-wrap .keyword:HOVER {
+  background-color: #f4f4f4;
+}
+.config-pic .image-wrap {
+  width: 220px;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+}
+.config-pic .ops .btn {
+  margin-right: 10px;
+}

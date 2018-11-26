@@ -1,0 +1,31 @@
+/*====================================================
+  通知设置
+====================================================*/
+.notice-setting {
+  padding: 40px 40px 0 16px;
+}
+.notice-setting .setting-title {
+  line-height: 40px;
+}
+.notice-setting .setting-title > small {
+  padding-left: 15px;
+}
+.notice-setting .settings {
+  border: 1px solid #ddd;
+  background-color: #fff;
+}
+.notice-setting .setting {
+  padding: 10px;
+  border-bottom: 1px dotted #ddd;
+  margin-bottom: -1px;
+}
+.notice-setting .setting-label {
+  font-size: 14px;
+  float: left;
+  height: 32px;
+  line-height: 32px;
+}
+.notice-setting .setting-config {
+  min-height: 32px;
+  margin-left: 180px;
+}

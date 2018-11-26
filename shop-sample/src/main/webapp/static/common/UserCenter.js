@@ -1,0 +1,84 @@
+﻿/**
+ * 提供用户异步登录一系列操作,判断当前用户等 --- 后台
+ * version:1.0
+ */
+var User = User || {
+	dialog : null,
+};
+
+/**
+ * 锁屏幕
+ */
+User.lockScreen = function() {
+	Public.confirmx('锁屏会退出系统，用密码解锁之后会回到当前工作页面', function() {
+		Public.postAjax(webRoot + '/admin/logout', {}, function(){
+			User.loginDialog();
+		}, false);
+	});
+};
+
+/**
+ * 展示login对话框
+ */
+User.loginDialog = function(){
+	if (User.dialog == null) {
+		User.dialog = Public.openInnerUrlWindow('登录', webRoot+'/admin/login?isDialog=1', 440, 500, null, function(){
+			return false;
+		}, null, function(){
+			User.dialog = null;
+	   });
+	}
+};
+
+/**
+ * 断言登录
+ */
+User.assertLogin = function(data) {
+	if (!!data && !data.success && !!data.obj && !!data.obj.code && data.obj['code'] == 40005) {
+	    User.loginDialog();
+	    return true;
+	}
+	return false;
+};
+
+/**
+ * 刷新用户状态
+ */
+User.refreshUserBar = function() {
+	Public.close(User.dialog);
+	Public.close();
+};
+
+/*
+ * 系统待办
+ */
+$(function() {
+	
+	var timer = null;
+	
+	// 加载待办
+	var count_unread_msg = function(tip) {
+		Public.postAjax(webRoot + '/admin/system/todo/count_unread_msg', {}, function(data) {
+		   var target = $('#messageInfo').find('b');
+		   var old = target.text();
+		       old = parseInt(old);
+		   var num = data;
+		   if (!!tip && old < data) {
+			   // 新消息提醒
+			   var nNum = data - old;
+			   Public.toast('收到' + nNum + '条新消息');
+		   }
+		   
+		   // 显示数据
+		   target.text(data); 
+	    });
+	};
+	
+	//50 秒查询一次
+	timer = Public.setInterval(function() {
+		count_unread_msg(true);
+	}, 50000); 
+	
+	// 加载时需要查询一次
+	count_unread_msg(false);
+});

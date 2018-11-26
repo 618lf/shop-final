@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 
+                系统相关：common、system
+ -->
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+	version="2.0">
+
+	<description>JSTL 1.1 functions library</description>
+	<display-name>JSTL functions sys</display-name>
+	<tlib-version>1.1</tlib-version>
+	<short-name>fns</short-name>
+	<uri>http://java.sun.com/jsp/jstl/functionss</uri>
+	<function>
+		<description>获取网站基础路径</description>
+		<name>getBasePath</name>
+		<function-class>com.tmt.common.web.tld.functions.Functions</function-class>
+		<function-signature>java.lang.String getBasePath()</function-signature>
+		<example>${fns:getBasePath()}</example>
+	</function>
+    <function>
+		<description>获取网站上下文</description>
+		<name>getWebRoot</name>
+		<function-class>com.tmt.common.web.tld.functions.Functions</function-class>
+		<function-signature>java.lang.String getWebRoot()</function-signature>
+		<example>${fns:getWebRoot()}</example>
+	</function>
+	<function>
+		<description>获取后台管理路径</description>
+		<name>getAdminPath</name>
+		<function-class>com.tmt.common.web.tld.functions.Functions</function-class>
+		<function-signature>java.lang.String getAdminPath()</function-signature>
+		<example>${fns:getAdminPath()}</example>
+	</function>
+	<function>
+		<description>获取前台管理路径</description>
+		<name>getFrontPath</name>
+		<function-class>com.tmt.common.web.tld.functions.Functions</function-class>
+		<function-signature>java.lang.String getFrontPath()</function-signature>
+		<example>${fns:getFrontPath()}</example>
+	</function>
+	<function>
+		<description>获取前台扩展</description>
+		<name>getFrontUrlSuffix</name>
+		<function-class>com.tmt.common.web.tld.functions.Functions</function-class>
+		<function-signature>java.lang.String getFrontUrlSuffix()</function-signature>
+		<example>${fns:getFrontUrlSuffix()}</example>
+	</function>
+	<function>
+		<description>获取配置</description>
+		<name>getConfig</name>
+		<function-class>com.tmt.common.web.tld.functions.Functions</function-class>
+		<function-signature>java.lang.String getConfig(java.lang.String)</function-signature>
+		<example>${fns:getConfig(key)}</example>
+	</function>
+
+	<function>
+		<description>获取字典对象列表</description>
+		<name>getDictList</name>
+		<function-class>com.tmt.common.web.tld.functions.Functions</function-class>
+		<function-signature>java.util.List getDicts(java.lang.String)</function-signature>
+		<example>${fns:getDicts(type)}</example>
+	</function>
+	<function>
+		<description>判断是否为空串</description>
+		<name>length</name>
+		<function-class>com.tmt.common.web.tld.functions.Functions</function-class>
+		<function-signature>int length(java.lang.Object)</function-signature>
+		<example>${fns:length(str)}</example>
+	</function>
+	<function>
+		<description>判断是否为空串</description>
+		<name>isNotBlank</name>
+		<function-class>com.tmt.common.web.tld.functions.Functions</function-class>
+		<function-signature>boolean isNotBlank(java.lang.String)</function-signature>
+		<example>${fns:isNotBlank(str)}</example>
+	</function>
+	<function>
+		<description>判断字符串是否以某某开头</description>
+		<name>startsWith</name>
+		<function-class>com.tmt.common.web.tld.functions.Functions</function-class>
+		<function-signature>boolean startsWith(java.lang.String, java.lang.String)</function-signature>
+		<example>${fns:startsWith(str,prefix)}</example>
+	</function>
+	<function>
+		<description>判断字符串是否以某某结尾</description>
+		<name>endsWith</name>
+		<function-class>com.tmt.common.web.tld.functions.Functions</function-class>
+		<function-signature>boolean endsWith(java.lang.String, java.lang.String)</function-signature>
+		<example>${fns:endsWith(str,suffix)}</example>
+	</function>
+	<function>
+		<description>缩写字符串，超过最大宽度用“...”表示</description>
+		<name>abbr</name>
+		<function-class>com.tmt.common.web.tld.functions.Functions</function-class>
+		<function-signature>java.lang.String abbr(java.lang.String, int)</function-signature>
+		<example>${fns:abbr(str,length)}</example>
+	</function>
+	<function>
+		<description>查找字符串的位置</description>
+		<name>indexOf</name>
+		<function-class>com.tmt.common.web.tld.functions.Functions</function-class>
+		<function-signature>int indexOf(java.lang.String, java.lang.String)</function-signature>
+		<example>${fns:indexOf(seq, searchSeq)}</example>
+	</function>
+	<function>
+		<description>是否包含指定字符串</description>
+		<name>contains</name>
+		<function-class>com.tmt.common.web.tld.functions.Functions</function-class>
+		<function-signature>boolean contains(java.lang.String, java.lang.String)</function-signature>
+		<example>${fns:contains(seq, searchSeq)}</example>
+	</function>
+	<function>
+		<description>格式化日期</description>
+		<name>formatDate</name>
+		<function-class>com.tmt.common.web.tld.functions.Functions</function-class>
+		<function-signature>java.lang.String formatDate(java.util.Date, java.lang.String)</function-signature>
+		<example>${fns:formatDate(date, pattern)}</example>
+	</function>
+</taglib>

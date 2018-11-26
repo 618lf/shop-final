@@ -1,0 +1,6 @@
+#dataGrid .icon-message.unread {
+  color: #E69900;
+}
+#dataGrid .icon-message.readed {
+  color: #999;
+}

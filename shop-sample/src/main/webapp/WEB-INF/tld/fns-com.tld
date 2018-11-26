@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 
+                组件相关：component
+ -->
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+	version="2.0">
+
+	<description>JSTL 1.1 functions library</description>
+	<display-name>JSTL functions sys</display-name>
+	<tlib-version>1.1</tlib-version>
+	<short-name>fnc</short-name>
+	<uri>http://java.sun.com/jsp/jstl/functionss</uri>
+
+	<!-- Excel 相关 -->
+    <function>
+		<description>获取Excel列序号</description>
+		<name>getExcelColumns</name>
+		<function-class>com.tmt.common.utils.ExcelUtils</function-class>
+		<function-signature>java.util.List getExcelColumns(int)</function-signature>
+		<example>${fnc:getExcelColumns(int)}</example>
+	</function>
+
+    <function>
+		<description>获取Excel列数据类型</description>
+		<name>getDataTypes</name>
+		<function-class>com.tmt.common.utils.ExcelUtils</function-class>
+		<function-signature>java.util.List getDataTypes()</function-signature>
+		<example>${fnc:getDataTypes()}</example>
+	</function>
+	
+	<function>
+		<description>获取Excel列验证类型</description>
+		<name>getVerifyTypes</name>
+		<function-class>com.tmt.common.utils.ExcelUtils</function-class>
+		<function-signature>java.util.List getVerifyTypes()</function-signature>
+		<example>${fnc:getVerifyTypes()}</example>
+	</function>
+</taglib>
