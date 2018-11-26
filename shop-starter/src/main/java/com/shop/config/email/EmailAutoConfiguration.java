@@ -1,11 +1,8 @@
 package com.shop.config.email;
 
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 
 import com.tmt.common.config.Globals;
 import com.tmt.common.email.JavaMailSender;
@@ -17,8 +14,6 @@ import com.tmt.common.email.MimeMailService;
  * @author lifeng
  */
 @Configuration
-@AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
-@Order(Ordered.HIGHEST_PRECEDENCE)
 @ConditionalOnProperty(prefix = "spring.application", name = "enableEmail", matchIfMissing = true)
 public class EmailAutoConfiguration {
 

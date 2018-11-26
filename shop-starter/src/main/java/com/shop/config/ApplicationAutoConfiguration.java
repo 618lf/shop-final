@@ -1,12 +1,9 @@
 package com.shop.config;
 
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 
 import com.shop.starter.ApplicationProperties;
 import com.tmt.common.config.Globals;
@@ -24,8 +21,6 @@ import com.tmt.common.utils.serializer.Serializer;
  * @author lifeng
  */
 @Configuration
-@AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE + 150)
-@Order(Ordered.HIGHEST_PRECEDENCE + 150)
 @EnableConfigurationProperties(ApplicationProperties.class)
 public class ApplicationAutoConfiguration {
 	

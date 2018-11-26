@@ -13,7 +13,6 @@ import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -64,6 +63,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import com.shop.config.jdbc.DataBaseAutoConfiguration;
 import com.shop.starter.ApplicationProperties;
 import com.tmt.common.converter.DateConverter;
 import com.tmt.common.converter.StringEscapeConverter;
@@ -81,9 +81,7 @@ import com.tmt.common.web.security.interceptor.TokenInterceptor;
 @ConditionalOnWebApplication(type = Type.SERVLET)
 @ConditionalOnClass({ Servlet.class, DispatcherServlet.class, WebMvcConfigurer.class })
 @ConditionalOnMissingBean(WebMvcConfigurationSupport.class)
-@AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
-@Order(Ordered.HIGHEST_PRECEDENCE)
-@AutoConfigureAfter({ DispatcherServletAutoConfiguration.class })
+@AutoConfigureAfter({ DispatcherServletAutoConfiguration.class, DataBaseAutoConfiguration.class })
 @EnableConfigurationProperties({ WebMvcProperties.class, ResourceProperties.class, ApplicationProperties.class })
 public class WebMvcAutoConfiguration {
 
@@ -102,6 +100,7 @@ public class WebMvcAutoConfiguration {
 
 	/**
 	 * 附件
+	 * 
 	 * @return
 	 */
 	@Bean(name = DispatcherServlet.MULTIPART_RESOLVER_BEAN_NAME)
@@ -112,7 +111,7 @@ public class WebMvcAutoConfiguration {
 		commonsMultipartResolver.setMaxInMemorySize(properties.getWeb().getMaxInMemorySize());
 		return commonsMultipartResolver;
 	}
-	
+
 	/**
 	 * 异常处理
 	 * 

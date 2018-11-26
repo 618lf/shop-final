@@ -4,13 +4,10 @@ import java.util.List;
 import java.util.Properties;
 
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
 import com.tmt.system.service.TaskBoot;
@@ -23,8 +20,6 @@ import com.tmt.system.service.TaskExecutor;
  * @author lifeng
  */
 @Configuration
-@AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
-@Order(Ordered.HIGHEST_PRECEDENCE)
 @EnableConfigurationProperties(ScheduleProperties.class)
 @ConditionalOnProperty(prefix = "spring.application", name = "enableSchedule", matchIfMissing = true)
 public class ScheduleAutoConfiguration {

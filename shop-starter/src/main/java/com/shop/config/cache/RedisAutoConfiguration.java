@@ -3,13 +3,10 @@ package com.shop.config.cache;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 
 import com.tmt.common.cache.Cache;
 import com.tmt.common.cache.redis.RedisCache;
@@ -25,8 +22,6 @@ import redis.clients.jedis.JedisPoolConfig;
  * @author lifeng
  */
 @Configuration
-@AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
-@Order(Ordered.HIGHEST_PRECEDENCE)
 @EnableConfigurationProperties(CacheProperties.class)
 @ConditionalOnProperty(prefix = "spring.cache", name = "enableRedis", matchIfMissing = true)
 public class RedisAutoConfiguration {

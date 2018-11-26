@@ -1,15 +1,12 @@
 package com.shop.config.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 
 import com.shop.starter.ApplicationProperties;
 import com.tmt.common.cache.CacheManager;
@@ -32,8 +29,6 @@ import com.tmt.system.realm.AuthenticationRealm;
  * @author lifeng
  */
 @Configuration
-@AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
-@Order(Ordered.HIGHEST_PRECEDENCE)
 @ConditionalOnBean({ SecurityConfigurationSupport.class })
 @EnableConfigurationProperties({ ApplicationProperties.class })
 @ConditionalOnProperty(prefix = "spring.application", name = "enableSecurity", matchIfMissing = true)
