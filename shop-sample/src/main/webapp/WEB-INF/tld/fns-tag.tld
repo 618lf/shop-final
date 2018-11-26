@@ -9,7 +9,7 @@
 	<!-- 站点 -->
 	<tag>
 		<name>site</name>
-		<tagclass>com.tmt.common.web.tld.jsp.SiteTag</tagclass>
+		<tagclass>com.tmt.system.tld.jsp.SiteTag</tagclass>
 		<bodycontent>JSP</bodycontent>
 		<description>站点信息</description>
 		<attribute>
@@ -22,7 +22,7 @@
 	<!-- 用户信息替代shiro -->
 	<tag>
 		<name>user</name>
-		<tagclass>com.tmt.common.web.tld.jsp.UserTag</tagclass>
+		<tagclass>com.tmt.system.tld.jsp.UserTag</tagclass>
 		<bodycontent>JSP</bodycontent>
 		<description>用户信息</description>
 		<attribute>
@@ -82,7 +82,7 @@
 	<!-- 超级管理员（登录或记住我） -->
 	<tag>
 		<name>isRoot</name>
-		<tagclass>com.tmt.common.web.tld.jsp.IsRoot</tagclass>
+		<tagclass>com.tmt.system.tld.jsp.IsRoot</tagclass>
 		<bodycontent>JSP</bodycontent>
 		<description>超级管理员 </description>
 	</tag>
