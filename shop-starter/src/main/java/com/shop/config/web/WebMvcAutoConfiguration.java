@@ -26,7 +26,6 @@ import org.springframework.boot.autoconfigure.web.servlet.DispatcherServletAutoC
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcRegistrations;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.web.servlet.filter.OrderedRequestContextFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -48,8 +47,6 @@ import org.springframework.web.accept.PathExtensionContentNegotiationStrategy;
 import org.springframework.web.bind.support.ConfigurableWebBindingInitializer;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextListener;
-import org.springframework.web.filter.RequestContextFilter;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.HandlerExceptionResolver;
@@ -92,17 +89,6 @@ public class WebMvcAutoConfiguration {
 
 	private static Logger logger = LoggerFactory.getLogger(WebMvcAutoConfiguration.class);
 	private static final String[] SERVLET_LOCATIONS = { "/" };
-
-	/**
-	 * 设置请求到当前线程
-	 * 
-	 * @return
-	 */
-	@Bean
-	@ConditionalOnMissingBean({ RequestContextListener.class, RequestContextFilter.class })
-	public RequestContextFilter requestContextFilter() {
-		return new OrderedRequestContextFilter();
-	}
 
 	/**
 	 * flashMapManager

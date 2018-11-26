@@ -23,6 +23,7 @@ import com.tmt.common.security.principal.Session;
 import com.tmt.common.security.principal.SessionRepository;
 import com.tmt.common.security.principal.support.CookiePrincipalStrategy;
 import com.tmt.common.security.principal.support.SessionRespositoryFactoryBean;
+import com.tmt.common.web.filter.EncodingConvertFilter;
 import com.tmt.system.realm.AuthenticationRealm;
 
 /**
@@ -86,6 +87,29 @@ public class SecurityAutoConfiguration {
 		return securityManager;
 	}
 	
+	/**
+	 * 字符过滤
+	 * 
+	 * @return
+	 */
+	@Bean
+	public FilterRegistrationBean<EncodingConvertFilter> encodingConvertFilter() {
+		EncodingConvertFilter encodingConvertFilter = new EncodingConvertFilter();
+		FilterRegistrationBean<EncodingConvertFilter> registrationBean = new FilterRegistrationBean<EncodingConvertFilter>();
+		registrationBean.setFilter(encodingConvertFilter);
+		registrationBean.setUrlPatterns(properties.getSecurity().getUrlPatterns());
+		registrationBean.setName("encodingConvertFilter");
+		registrationBean.setOrder(FilterRegistrationBean.REQUEST_WRAPPER_FILTER_MAX_ORDER - 1);
+		return registrationBean; 
+	}
+	
+	/**
+	 * 安全的配置
+	 * 
+	 * @param securityManager
+	 * @return
+	 * @throws Exception
+	 */
 	@Bean
 	public FilterRegistrationBean<SecurityFilter> securityFilter(DefaultSecurityManager securityManager) throws Exception {
 		SecurityFilterFactoryBean securityFilter = new SecurityFilterFactoryBean();
@@ -99,6 +123,7 @@ public class SecurityAutoConfiguration {
 		securityFilterBean.setFilter(securityFilter.getObject());
 		securityFilterBean.setUrlPatterns(properties.getSecurity().getUrlPatterns());
 		securityFilterBean.setName("securityFilter");
+		securityFilterBean.setOrder(FilterRegistrationBean.REQUEST_WRAPPER_FILTER_MAX_ORDER);
 		return securityFilterBean;
 	}
 }

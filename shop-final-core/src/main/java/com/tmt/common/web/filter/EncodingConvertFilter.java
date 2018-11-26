@@ -18,42 +18,40 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.tmt.common.utils.StringUtil3;
 
 /**
- * GET参数编码格式转换
- * 合并了POST参数编码的转换
- * @author liFeng
- * 2014年8月17日
+ * GET参数编码格式转换 合并了POST参数编码的转换
+ * 
+ * @author liFeng 2014年8月17日
  */
-public class EncodingConvertFilter extends OncePerRequestFilter{
+public class EncodingConvertFilter extends OncePerRequestFilter {
 
 	protected static Logger logger = LoggerFactory.getLogger(EncodingConvertFilter.class);
-	
+
 	private String fromEncoding = "ISO-8859-1";
 	private String toEncoding = "UTF-8";
 	private boolean forceEncoding = true;
 	private boolean forceGetEncoding = true;
-	
+
 	/**
 	 * 处理get 参数的编码转换，Tomcat 等服务器中不需要配置编码转换
 	 */
 	@Override
-	protected void doFilterInternal(HttpServletRequest request,
-			HttpServletResponse response, FilterChain filterChain)
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		HttpServletRequest _request = request;
-		//默认处理POST
-		if(this.toEncoding != null && (this.forceEncoding || request.getCharacterEncoding() == null)) {
+		// 默认处理POST
+		if (this.toEncoding != null && (this.forceEncoding || request.getCharacterEncoding() == null)) {
 			request.setCharacterEncoding(this.toEncoding);
 			if (this.forceEncoding) {
 				response.setCharacterEncoding(this.toEncoding);
 			}
 		}
-		//GET参数处理
-		if(this.toEncoding != null && this.forceGetEncoding && "GET".equalsIgnoreCase(request.getMethod())) {
+		// GET参数处理
+		if (this.toEncoding != null && this.forceGetEncoding && "GET".equalsIgnoreCase(request.getMethod())) {
 			_request = new GetHttpServletRequest(request);
 		}
 		filterChain.doFilter(_request, response);
 	}
-	
+
 	public String getFromEncoding() {
 		return fromEncoding;
 	}
@@ -77,7 +75,7 @@ public class EncodingConvertFilter extends OncePerRequestFilter{
 	public void setForceEncoding(boolean forceEncoding) {
 		this.forceEncoding = forceEncoding;
 	}
-	
+
 	public boolean isForceGetEncoding() {
 		return forceGetEncoding;
 	}
@@ -86,15 +84,15 @@ public class EncodingConvertFilter extends OncePerRequestFilter{
 		this.forceGetEncoding = forceGetEncoding;
 	}
 
-
 	/**
 	 * 封装
+	 * 
 	 * @author lifeng
 	 */
-	public class GetHttpServletRequest extends HttpServletRequestWrapper{
-		
+	public class GetHttpServletRequest extends HttpServletRequestWrapper {
+
 		HttpServletRequest request;
-		
+
 		public GetHttpServletRequest(HttpServletRequest request) {
 			super(request);
 			this.request = request;
@@ -102,14 +100,14 @@ public class EncodingConvertFilter extends OncePerRequestFilter{
 
 		@Override
 		public String getParameter(String name) {
-			//默认解码ISO-8859-1
+			// 默认解码ISO-8859-1
 			String value = this.request.getParameter(name);
 			if (value == null) {
 				return null;
 			}
 			try {
-				//1.value.getBytes(fromEncoding) 重新编码
-				//2.new String 重新解码
+				// 1.value.getBytes(fromEncoding) 重新编码
+				// 2.new String 重新解码
 				value = new String(value.getBytes(fromEncoding), toEncoding);
 				value = StringUtil3.mb4Replace(value, null);
 			} catch (UnsupportedEncodingException e) {
@@ -122,11 +120,12 @@ public class EncodingConvertFilter extends OncePerRequestFilter{
 		@Override
 		public Map getParameterMap() {
 			Iterator<String[]> localIterator = this.request.getParameterMap().values().iterator();
-			while (localIterator.hasNext()){
+			while (localIterator.hasNext()) {
 				String[] arrayOfString = localIterator.next();
 				for (int i = 0; i < arrayOfString.length; i++) {
 					try {
-						arrayOfString[i] = StringUtil3.mb4Replace(new String( arrayOfString[i].getBytes(fromEncoding), toEncoding), null);
+						arrayOfString[i] = StringUtil3
+								.mb4Replace(new String(arrayOfString[i].getBytes(fromEncoding), toEncoding), null);
 					} catch (UnsupportedEncodingException localUnsupportedEncodingException) {
 						localUnsupportedEncodingException.printStackTrace();
 					}
@@ -143,12 +142,12 @@ public class EncodingConvertFilter extends OncePerRequestFilter{
 			}
 			try {
 				for (int i = 0; i < values.length; i++) {
-					values[i] = StringUtil3.mb4Replace(new String(values[i].getBytes(fromEncoding), toEncoding),null);
+					values[i] = StringUtil3.mb4Replace(new String(values[i].getBytes(fromEncoding), toEncoding), null);
 				}
 			} catch (UnsupportedEncodingException e) {
 				throw new RuntimeException(e);
 			}
-			
+
 			return values;
 		}
 	}
