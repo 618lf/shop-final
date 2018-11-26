@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.Ordered;
 
 import com.tmt.common.persistence.incrementer.IdGen;
 import com.tmt.common.security.filter.OncePerRequestFilter;
@@ -25,7 +26,7 @@ import com.tmt.common.utils.WebUtils;
  * 安全过滤器
  * @author lifeng
  */
-public class SecurityFilter extends OncePerRequestFilter {
+public class SecurityFilter extends OncePerRequestFilter implements Ordered {
 
 	// 访问日志记录
 	private Logger ERROR_LOG = LoggerFactory.getLogger(SecurityFilter.class);
@@ -36,6 +37,11 @@ public class SecurityFilter extends OncePerRequestFilter {
 	public SecurityFilter(SecurityManager securityManager, FilterChainResolver filterChainResolver) {
 		this.securityManager = securityManager;
 		this.filterChainResolver = filterChainResolver;
+	}
+	
+	@Override
+	public int getOrder() {
+		return 0;
 	}
 	
 	/**

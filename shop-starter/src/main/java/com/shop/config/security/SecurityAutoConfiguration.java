@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -12,6 +13,7 @@ import org.springframework.core.annotation.Order;
 
 import com.shop.starter.ApplicationProperties;
 import com.tmt.common.cache.CacheManager;
+import com.tmt.common.security.SecurityFilter;
 import com.tmt.common.security.SecurityFilterFactoryBean;
 import com.tmt.common.security.mgt.RememberMeManager;
 import com.tmt.common.security.mgt.support.DefaultRememberMeManager;
@@ -85,7 +87,7 @@ public class SecurityAutoConfiguration {
 	}
 	
 	@Bean
-	public SecurityFilterFactoryBean securityFilter(DefaultSecurityManager securityManager) {
+	public FilterRegistrationBean<SecurityFilter> securityFilter(DefaultSecurityManager securityManager) throws Exception {
 		SecurityFilterFactoryBean securityFilter = new SecurityFilterFactoryBean();
 		securityFilter.setSecurityManager(securityManager);
 		securityFilter.setFilterChainDefinitionMap(securityConfig.getChains());
@@ -93,6 +95,10 @@ public class SecurityAutoConfiguration {
 		securityFilter.setLoginUrl(securityConfig.getLoginUrl());
 		securityFilter.setSuccessUrl(securityConfig.getSuccessUrl());
 		securityFilter.setUnauthorizedUrl(securityConfig.getUnauthorizedUrl());
-		return securityFilter;
+		FilterRegistrationBean<SecurityFilter> securityFilterBean = new FilterRegistrationBean<SecurityFilter>();
+		securityFilterBean.setFilter(securityFilter.getObject());
+		securityFilterBean.setUrlPatterns(properties.getSecurity().getUrlPatterns());
+		securityFilterBean.setName("securityFilter");
+		return securityFilterBean;
 	}
 }
