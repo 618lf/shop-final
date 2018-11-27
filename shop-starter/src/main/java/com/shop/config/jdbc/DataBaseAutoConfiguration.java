@@ -14,6 +14,7 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -24,6 +25,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.Ordered;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.core.JdbcOperations;
@@ -65,10 +67,11 @@ import com.tmt.common.security.utils.StringUtils;
 public class DataBaseAutoConfiguration {
 
 	/**
-	 * Druid 数据源
+	 * 数据源
 	 * 
 	 * @author lifeng
 	 */
+	@AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
 	@org.springframework.context.annotation.Configuration
 	@ConditionalOnClass(JdbcTemplate.class)
 	@ConditionalOnMissingBean(DataSource.class)
@@ -140,6 +143,7 @@ public class DataBaseAutoConfiguration {
 	 * 
 	 * @author lifeng
 	 */
+	@AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
 	@org.springframework.context.annotation.Configuration
 	@ConditionalOnClass({ JdbcTemplate.class, PlatformTransactionManager.class })
 	@ConditionalOnSingleCandidate(DataSource.class)
