@@ -21,8 +21,11 @@ public class AppConfiguration {
 	@Bean
 	public SecurityConfigurationSupport securityConfiguration() {
 		SecurityConfigurationSupport securityConfiguration = new SecurityConfigurationSupport();
-		securityConfiguration.definition("/admin/validate/code = anon").definition("/admin/login = authc")
-				.loginUrl("/admin/login").successUrl("/admin/").unauthorizedUrl("/admin/login");
+		securityConfiguration.definition("/admin/validate/code = anon")
+		.definition("/admin/login = authc")
+		.loginUrl("/admin/login")
+		.successUrl("/admin/")
+		.unauthorizedUrl("/admin/login");
 		return securityConfiguration;
 	}
 }

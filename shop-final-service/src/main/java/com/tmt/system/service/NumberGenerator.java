@@ -1,10 +1,9 @@
 package com.tmt.system.service;
 
-import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -16,91 +15,107 @@ import com.tmt.common.persistence.datasource.DataSourceHolder;
 
 /**
  * 自增长服务
+ * 
  * @author root
  */
 @Service
-public class NumberGenerator implements NumberGeneratorFacade{
+public class NumberGenerator implements NumberGeneratorFacade {
 
-	private HashMap<String,LinkedList<Long>> KEY_CACHE = new HashMap<String,LinkedList<Long>>();
-	private final String VALUE_SQL = "{? = call F_NEXT_VALUE(?) }";
-	private final String VALUE_INIT_SQL = "INSERT INTO SYS_ID_STORE(TABLE_NAME,MIN_VALUE,CURRENT_VALUE,MAX_VALUE,STEP,REMARK) VALUES(?,?,?,?,?,?)";
-	private final String STEP_SEQ_SEPARATOR = "-";
-	
+	private HashMap<String, LinkedList<Long>> KEY_CACHE = new HashMap<String, LinkedList<Long>>();
+	private final String UPDATE_SQL = "UPDATE SYS_ID_STORE SET CURRENT_VALUE = GREATEST(CURRENT_VALUE, MIN_VALUE) + STEP WHERE TABLE_NAME = ?";
+	private final String VALUE_SQL = "SELECT CURRENT_VALUE + 1, STEP FROM SYS_ID_STORE WHERE TABLE_NAME = ?";
+	private final String VALUE_INIT_SQL = "INSERT INTO SYS_ID_STORE(TABLE_NAME, MIN_VALUE, CURRENT_VALUE, MAX_VALUE, STEP, REMARK) VALUES(?,?,?,?,?,?)";
+
 	@Override
 	public Long generateNumber(String key) {
 		return getNextKey(key);
 	}
-	
+
 	private synchronized Long getNextKey(String tableName) {
 		String mapKey = tableName.toUpperCase();
 		if (!KEY_CACHE.containsKey(mapKey) || KEY_CACHE.get(mapKey).isEmpty()) {
 			LinkedList<Long> keyList = KEY_CACHE.get(mapKey);
-			if(keyList== null || keyList.size() == 0) {
+			if (keyList == null || keyList.size() == 0) {
 				loadFromDB(mapKey);
 			}
 		}
 		return KEY_CACHE.get(mapKey).remove(0);
 	}
-	
-	private void loadFromDB(String tableName){
+
+	private void loadFromDB(String tableName) {
 		Connection con = DataSourceHolder.getConnection();
-		CallableStatement stmt = null;
 		try {
 			Boolean autoCommit = con.getAutoCommit();
 			con.setAutoCommit(Boolean.FALSE);
-			stmt = con.prepareCall(VALUE_SQL);
-			stmt.registerOutParameter(1, Types.VARCHAR);
-			stmt.setString(2, tableName);
-			stmt.execute();
-			String keyAndStep = stmt.getString(1);
-			if( keyAndStep != null ) {
-				initKeyCache(tableName,keyAndStep);
-			} else {
-				initTableKey(con, tableName);
-				stmt.execute();
-				keyAndStep = stmt.getString(1);
-				initKeyCache(tableName,keyAndStep);
+			long[] keyAndStep = this.fetchKeyAndStep(con, tableName);
+			if (keyAndStep != null) {
+				initKeyCache(tableName, keyAndStep);
 			}
 			con.setAutoCommit(autoCommit);
-		}catch (SQLException ex) {
-			throw new DataAccessException("Could not call function F_NEXT_VALUE", ex);
-		}finally {
-			JdbcUtils.closeStatement(stmt);
+		} catch (SQLException ex) {
+			throw new DataAccessException("Could not call function SYS_ID_STORE", ex);
+		} finally {
 			DataSourceHolder.releaseConnection(con);
 		}
 	}
-	
-	private void initTableKey(Connection con, String tableName){
-		PreparedStatement  stmt = null;
+
+	// 获取数据
+	private long[] fetchKeyAndStep(Connection con, String tableName) {
+		PreparedStatement stmt = null;
+		ResultSet result = null;
+		try {
+			stmt = con.prepareStatement(UPDATE_SQL);
+			stmt.setString(1, tableName);
+			int row = stmt.executeUpdate();
+			if (row == 0) {
+				initTableKey(con, tableName);
+			}
+			JdbcUtils.closeStatement(stmt);
+			stmt = con.prepareStatement(VALUE_SQL);
+			stmt.setString(1, tableName);
+			result = stmt.executeQuery();
+			result.next();
+			long value = result.getLong(1);
+			long step = result.getInt(2);
+			return new long[] { value, step };
+		} catch (SQLException ex) {
+			throw new DataAccessException("Could Not Query SYS_ID_STORE ,tableName:" + tableName, ex);
+		} finally {
+			JdbcUtils.closeResultSet(result);
+			JdbcUtils.closeStatement(stmt);
+		}
+	}
+
+	// 初始化表数据
+	private void initTableKey(Connection con, String tableName) {
+		PreparedStatement stmt = null;
 		try {
 			stmt = con.prepareStatement(VALUE_INIT_SQL);
 			stmt.setString(1, tableName);
 			stmt.setLong(2, 1L);
-			stmt.setLong(3, 0L);
+			stmt.setLong(3, 1L + 20); // min + step
 			stmt.setLong(4, 99999999999L);
 			stmt.setInt(5, 20);
 			stmt.setString(6, "TABLE " + tableName + " ID");
 			stmt.executeUpdate();
 		} catch (SQLException ex) {
-			throw new DataAccessException("Could not insert EM_ID_STORE ,tableName:" + tableName, ex);
+			throw new DataAccessException("Could not Insert SYS_ID_STORE ,tableName:" + tableName, ex);
 		} finally {
 			JdbcUtils.closeStatement(stmt);
 		}
 	}
-	
-	private void initKeyCache( String keyName, String keyAndStep) {
-		String[] seqAndStep = keyAndStep.split(STEP_SEQ_SEPARATOR);
-		if (seqAndStep != null && seqAndStep.length == 2) {
-			long seq = Long.parseLong(seqAndStep[0]);
-			int step = Integer.parseInt(seqAndStep[1]);
-			LinkedList<Long> keyList = (LinkedList<Long>) KEY_CACHE.get(keyName);
-			if (keyList == null) {
-				keyList = new LinkedList<Long>();
-			}
-			for (int i = 0; i < step; i++) {
-				keyList.add(seq + i);
-			}
-			KEY_CACHE.put(keyName, keyList);
+
+	// 初始化缓存
+	private void initKeyCache(String keyName, long[] keyAndStep) {
+		long seq = keyAndStep[0];
+		long step = keyAndStep[1];
+		LinkedList<Long> keyList = (LinkedList<Long>) KEY_CACHE.get(keyName);
+		if (keyList == null) {
+			keyList = new LinkedList<Long>();
 		}
+		for (int i = 0; i < step; i++) {
+			keyList.add(seq + i);
+		}
+		KEY_CACHE.put(keyName, keyList);
 	}
 }
