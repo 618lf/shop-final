@@ -196,10 +196,12 @@ public class User extends BaseEntity<Long> implements Serializable{
 	}
 	/**
 	 * 账户是否锁定,除了正常的之前其他
+	 * 修改待修改密码状态为不锁定状态 add by syd 2018-11-30
 	 * @return
 	 */
 	public Boolean isLocked(){ 
-		return (status != null && (User.YES == this.getDelFlag() ||  this.getStatus() != UserStatus.NARMAL.getValue()));
+		return (status != null && (User.YES == this.getDelFlag() ||  
+				(this.getStatus() != UserStatus.NARMAL.getValue() && this.getStatus() != UserStatus.MD_P.getValue())));
 	}
 	
 	/**

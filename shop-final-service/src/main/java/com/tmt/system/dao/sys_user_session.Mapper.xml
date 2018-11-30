@@ -14,8 +14,7 @@
   </select>
   
   <insert id="insert" parameterType="com.tmt.system.entity.UserSession">
-   INSERT INTO SYS_USER_SESSION (USER_ID, SESSION_ID, UPDATE_TIME) VALUES (#{userId}, #{sessionId}, #{updateTime})
-   ON DUPLICATE KEY UPDATE SESSION_ID = #{sessionId}, UPDATE_TIME = #{updateTime}
+   MERGE INTO SYS_USER_SESSION KEY(USER_ID) VALUES (#{userId}, #{sessionId}, #{updateTime})
   </insert>
   
   <delete id="delete" parameterType="com.tmt.system.entity.UserSession">

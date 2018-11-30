@@ -96,8 +96,10 @@ public class RoleController extends BaseController {
 			role = this.roleService.get(role.getId());
 			//组织结构
 			Office office = officeService.get(role.getOfficeId());
-			role.setOfficeId(office.getId());
-			role.setOfficeName(office.getName());
+			if (office != null) {
+				role.setOfficeId(office.getId());
+				role.setOfficeName(office.getName());
+			}
 		}else {
 			if(role == null) {
 				role = new Role();

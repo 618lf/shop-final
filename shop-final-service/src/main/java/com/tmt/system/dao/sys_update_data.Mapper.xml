@@ -24,7 +24,7 @@
   </delete>
   
   <insert id="insert" parameterType="com.tmt.system.entity.UpdateData">
-   INSERT INTO SYS_UPDATE_DATA(ID, MSG, MODULE, OPT) VALUES(#{id}, #{msg}, #{module}, #{opt}) ON DUPLICATE KEY UPDATE STATE = 0
+   MERGE INTO SYS_UPDATE_DATA KEY(ID) VALUES (#{id}, #{msg}, #{module}, #{opt}, 0)
   </insert>
   
   <update id="update" parameterType="java.util.List">
