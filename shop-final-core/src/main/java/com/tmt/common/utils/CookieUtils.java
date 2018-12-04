@@ -39,7 +39,7 @@ public class CookieUtils {
 	 *            值
 	 */
 	public static void setCookie(HttpServletResponse response, String name, String value, Integer maxAge) {
-		setCookie(response, name, value, maxAge, null, Globals.domain, null);
+		setCookie(response, name, value, maxAge, "/", Globals.domain, null);
 	}
 
 	/**
