@@ -16,7 +16,14 @@ public class CacheProperties {
 	private Integer timeout = 10000;
 	private String hosts = "127.0.0.1:6379";
 	private String password = "12345678....";
+	private String configLocation = "classpath:ehcache.xml";
 	
+	public String getConfigLocation() {
+		return configLocation;
+	}
+	public void setConfigLocation(String configLocation) {
+		this.configLocation = configLocation;
+	}
 	public Integer getMaxTotal() {
 		return maxTotal;
 	}
