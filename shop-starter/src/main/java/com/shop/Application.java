@@ -22,7 +22,7 @@ public class Application extends SpringApplication {
 	/**
 	 * 系统启动的日志
 	 */
-	public final static Logger APP_LOGGER = LoggerFactory.getLogger(SpringApplication.class);
+	public final static Logger APP_LOGGER = LoggerFactory.getLogger(Application.class);
 
 	/**
 	 * 全局的 context
