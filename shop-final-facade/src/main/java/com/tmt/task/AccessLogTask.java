@@ -29,7 +29,7 @@ import com.tmt.system.service.TaskExecutor;
  */
 public class AccessLogTask implements TaskExecutor {
 
-	private String logPath; // 日志文件路径
+	private final String logPath; // 日志文件路径
 	private byte offsetMinute = -2; // 分钟偏移量
 	private byte logNum = 3; // 同时处理的文件数
 
@@ -38,6 +38,15 @@ public class AccessLogTask implements TaskExecutor {
 	 */
 	@Autowired
 	private Dialect dialect;
+	
+	/**
+	 * 日志文件的路径
+	 * 
+	 * @param logPath
+	 */
+	public AccessLogTask(String logPath) {
+		this.logPath = logPath;
+	}
 
 	@Override
 	public Boolean doTask(Task task) {

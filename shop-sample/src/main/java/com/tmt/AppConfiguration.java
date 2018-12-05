@@ -1,7 +1,9 @@
 package com.tmt;
 
+import java.io.File;
 import java.util.List;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +19,12 @@ import com.tmt.task.UpdateHandlerTask;
 import com.tmt.update.UpdateHandler;
 import com.tmt.update.UserOpsHandler;
 import com.tmt.update.WechatOpsHandler;
+
+import ch.qos.logback.classic.AsyncAppender;
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.Appender;
+import ch.qos.logback.core.FileAppender;
 
 /**
  * 项目配置
@@ -51,11 +59,20 @@ public class AppConfiguration {
 	@Bean
 	public List<TaskExecutor> tasks(List<UpdateHandler> handlers) {
 		List<TaskExecutor> tasks = Lists.newArrayList();
-		tasks.add(new AccessLogTask());
+		tasks.add(new AccessLogTask(getLogPath()));
 		tasks.add(new SendEmailTask());
 		tasks.add(new UpdateHandlerTask(handlers));
 		this.autowireBeans(tasks);
 		return tasks;
+	}
+
+	// log path
+	private String getLogPath() {
+		LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+		Appender<ILoggingEvent> appender = loggerContext.getLogger(Constants.SYS_ACCESS).getAppender("ASYNC_ACCESS");
+		AsyncAppender asyncAppender = (AsyncAppender) appender;
+		FileAppender<ILoggingEvent> fileAppender = (FileAppender<ILoggingEvent>) asyncAppender.getAppender("ACCESS");
+		return new File(fileAppender.getFile()).getParent();
 	}
 
 	// 自动添加依赖

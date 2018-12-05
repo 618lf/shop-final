@@ -58,7 +58,6 @@ import com.tmt.common.entity.IdEntity;
 import com.tmt.common.persistence.ScorePage;
 import com.tmt.common.utils.Lists;
 import com.tmt.common.utils.Maps;
-import com.tmt.common.utils.PropertiesLoader;
 import com.tmt.common.utils.RegexpUtil;
 import com.tmt.common.utils.StringUtil3;
 
@@ -75,24 +74,17 @@ import com.tmt.common.utils.StringUtil3;
  * 3. 关闭没有使用的功能
  * 4. 关闭不查询的字段
  * 5. IndexWriterConfig maxBufferedDeleteTerms 设置为48M 如果有可能设置更多
- * 6. 
  * @author root
  */
 public abstract class BaseSearcher<T extends IdEntity<Long>> {
 	
 	// 定义几种使用场景
-	public static final byte scene_ONE = 1; // 列表
-	public static final byte scene_TWO = 2; // 详情
+	protected static final byte scene_ONE = 1; // 列表
+	protected static final byte scene_TWO = 2; // 详情
+	protected static final TermQuery QUERY_ALL_TERM = new TermQuery(new Term("_A", "*"));
 	
 	// 存储路径
-	public static final String LUCENE_INDEX_PATH;
-	public static final TermQuery QUERY_ALL_TERM;
-	static {
-		PropertiesLoader propertiesLoader = new PropertiesLoader("/searcher/lucene-store.properties");
-		LUCENE_INDEX_PATH = propertiesLoader.getProperty("lucene.diskStore");
-		
-		QUERY_ALL_TERM = new TermQuery(new Term("_A", "*"));
-	}
+	private String LUCENE_INDEX_PATH;
 	
 	public final String[] COLORED_PRE_TAGS = {
 		    "<b class=\"HL-null\">",
@@ -875,7 +867,12 @@ public abstract class BaseSearcher<T extends IdEntity<Long>> {
 		}
 		return StringUtil3.format(",%s,", value);
 	}
-	
+	public String getLUCENE_INDEX_PATH() {
+		return LUCENE_INDEX_PATH;
+	}
+	public void setLUCENE_INDEX_PATH(String lUCENE_INDEX_PATH) {
+		LUCENE_INDEX_PATH = lUCENE_INDEX_PATH;
+	}
 	/**
 	 * 返回需要高亮显示的字段
 	 * @return

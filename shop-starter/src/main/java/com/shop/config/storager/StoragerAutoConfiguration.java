@@ -1,11 +1,13 @@
 package com.shop.config.storager;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.tmt.common.utils.storager.LocalStorager;
+import com.tmt.common.utils.storager.Storager;
 
 /**
  * 存储的配置
@@ -23,6 +25,7 @@ public class StoragerAutoConfiguration {
 	 * @return
 	 */
 	@Bean
+	@ConditionalOnMissingBean(Storager.class)
 	public LocalStorager storager(StoragerProperties properties) {
 		LocalStorager storager = new LocalStorager();
 		storager.setStoragePath(properties.getStoragePath());

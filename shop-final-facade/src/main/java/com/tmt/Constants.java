@@ -33,6 +33,9 @@ public interface Constants {
 	// 任务
 	String TASK_PREFIX = "TASK-";
 	String RUNNING_ABLE_TASKS = "SYS-TASKS";
+	
+	// 日志
+	String SYS_ACCESS = "sys-access";
 
 	// 用户
 	String CACHE_USER = "U#";
