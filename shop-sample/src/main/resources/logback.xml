@@ -47,5 +47,5 @@
 	</root>
 	
 	<!-- 常用的应用程序的日志 -->
-	<logger name="org.springframework.boot.SpringApplication" level="DEBUG"/>
+	<logger name="com.shop.Application" level="DEBUG"/>
 </configuration>

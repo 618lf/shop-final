@@ -5,6 +5,7 @@
 com.shop.starter.ApplicationBoot=\
 org.springframework.boot.autoconfigure.web.embedded.EmbeddedWebServerFactoryCustomizerAutoConfiguration,\
 org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactoryAutoConfiguration,\
+com.shop.config.server.ServletWebServerFactoryAutoConfiguration,\
 org.springframework.boot.autoconfigure.web.servlet.DispatcherServletAutoConfiguration,\
 com.shop.config.web.WebMvcAutoConfiguration,\
 com.shop.config.web.HttpMessageConvertersAutoConfiguration,\
