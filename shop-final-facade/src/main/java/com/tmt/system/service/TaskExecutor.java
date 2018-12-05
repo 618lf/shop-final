@@ -3,13 +3,14 @@ package com.tmt.system.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.tmt.common.entity.AutowireBean;
 import com.tmt.system.entity.Task;
 
 /**
  * 定时任务任务执行器
  * @author lifeng
  */
-public interface TaskExecutor {
+public interface TaskExecutor extends AutowireBean{
     
 	/**
 	 * 日志记录

@@ -38,6 +38,7 @@ public class UpdateHandlerTask implements TaskExecutor {
 	 */
 	@Override
 	public Boolean doTask(Task task) {
+		System.out.println("任务执行");
 		List<UpdateData> datas = updateDataService.queryUpdateAbles(500);
 		Map<Byte, List<UpdateData>> _updates = Maps.newHashMap();
 		for (UpdateData data : datas) {

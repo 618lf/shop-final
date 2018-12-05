@@ -2,13 +2,14 @@ package com.tmt.update;
 
 import java.util.List;
 
+import com.tmt.common.entity.AutowireBean;
 import com.tmt.system.entity.UpdateData;
 
 /**
  * 更新事件处理器
  * @author lifeng
  */
-public interface UpdateHandler {
+public interface UpdateHandler extends AutowireBean {
 	
 	/**
 	 * 处理数据
