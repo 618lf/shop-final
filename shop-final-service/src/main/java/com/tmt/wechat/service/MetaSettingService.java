@@ -13,20 +13,21 @@ import com.tmt.wechat.utils.WechatUtils;
 
 /**
  * 回复配置 管理
+ * 
  * @author 超级管理员
  * @date 2016-09-27
  */
 @Service("wechatMetaSettingService")
-public class MetaSettingService extends BaseService<MetaSetting,Long> implements MetaSettingServiceFacade {
-	
+public class MetaSettingService extends BaseService<MetaSetting, Long> implements MetaSettingServiceFacade {
+
 	@Autowired
 	private MetaSettingDao metaSettingDao;
-	
+
 	@Override
 	protected BaseDao<MetaSetting, Long> getBaseDao() {
 		return metaSettingDao;
 	}
-	
+
 	/**
 	 * 保存
 	 */
@@ -37,13 +38,14 @@ public class MetaSettingService extends BaseService<MetaSetting,Long> implements
 		} else {
 			this.update(metaSetting);
 		}
-		
+
 		// 删除缓存
 		WechatUtils.clearCache();
 	}
-	
+
 	/**
 	 * 根据APP_ID 获取配置
+	 * 
 	 * @param appId
 	 * @return
 	 */

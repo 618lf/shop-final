@@ -31,31 +31,33 @@ import com.tmt.system.service.GroupServiceFacade;
 import com.tmt.system.service.RoleServiceFacade;
 import com.tmt.system.utils.UserUtils;
 
-
 /**
  * 用户组管理
+ * 
  * @author lifeng
  */
 @Controller
 @RequestMapping(value = "${spring.application.web.admin}/system/group")
-public class GroupController extends BaseController{
+public class GroupController extends BaseController {
 
 	@Autowired
 	private GroupServiceFacade groupService;
 	@Autowired
 	private RoleServiceFacade roleService;
-	
+
 	/**
 	 * 用户组初始化
+	 * 
 	 * @return
 	 */
 	@RequestMapping("list")
-	public String list(){
+	public String list() {
 		return "/system/GroupList";
 	}
-	
+
 	/**
 	 * 用户组数据
+	 * 
 	 * @param group
 	 * @param model
 	 * @param page
@@ -63,32 +65,33 @@ public class GroupController extends BaseController{
 	 */
 	@ResponseBody
 	@RequestMapping("page")
-	public Page page(Group group, Model model, Page page){
+	public Page page(Group group, Model model, Page page) {
 		QueryCondition qc = new QueryCondition();
 		PageParameters param = page.getParam();
 		Criteria c = qc.getCriteria();
-		if(StringUtil3.isNotBlank(group.getName())) {
-		   c.andEqualTo("NAME", group.getName());
+		if (StringUtil3.isNotBlank(group.getName())) {
+			c.andEqualTo("NAME", group.getName());
 		}
 		page = this.groupService.queryForPage(qc, param);
 		return page;
 	}
-	
+
 	/**
 	 * 用户组编辑
+	 * 
 	 * @param group
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping("form")
 	public String form(Group group, Model model) {
-		if( group != null && !IdGen.isInvalidId(group.getId())) {
+		if (group != null && !IdGen.isInvalidId(group.getId())) {
 			group = this.groupService.get(group.getId());
 			List<Role> roles = roleService.findByGroupId(group.getId());
-			if( roles != null && roles.size() != 0) {
+			if (roles != null && roles.size() != 0) {
 				StringBuffer roleIds = new StringBuffer();
 				StringBuffer roleNames = new StringBuffer();
-				for( Role r:roles ) {
+				for (Role r : roles) {
 					roleIds.append(r.getId()).append(",");
 					roleNames.append(r.getName()).append(",");
 				}
@@ -96,7 +99,7 @@ public class GroupController extends BaseController{
 				group.setRoleNames(roleNames.toString());
 			}
 		} else {
-			if( group == null) {
+			if (group == null) {
 				group = new Group();
 			}
 			group.setId(IdGen.INVALID_ID);
@@ -104,16 +107,17 @@ public class GroupController extends BaseController{
 		model.addAttribute("group", group);
 		return "/system/GroupForm";
 	}
-	
+
 	/**
 	 * 保存
+	 * 
 	 * @param group
 	 * @param model
 	 * @param redirectAttributes
 	 * @return
 	 */
 	@RequestMapping("save")
-	public String save(Group group,Model model, RedirectAttributes redirectAttributes){
+	public String save(Group group, Model model, RedirectAttributes redirectAttributes) {
 		group.userOptions(UserUtils.getUser());
 		this.groupService.save(group);
 		UserUtils.removeAllCache();
@@ -121,9 +125,10 @@ public class GroupController extends BaseController{
 		redirectAttributes.addAttribute("id", group.getId());
 		return WebUtils.redirectTo(new StringBuilder(Globals.adminPath).append("/system/group/form").toString());
 	}
-	
+
 	/**
 	 * 删除用户组，删除所有的权限和关联用户
+	 * 
 	 * @param idList
 	 * @param model
 	 * @param response
@@ -131,10 +136,10 @@ public class GroupController extends BaseController{
 	 */
 	@ResponseBody
 	@RequestMapping("delete")
-	public AjaxResult delete(Long[] idList , Model model, HttpServletResponse response){
+	public AjaxResult delete(Long[] idList, Model model, HttpServletResponse response) {
 		List<Group> groups = Lists.newArrayList();
-		if(idList != null && idList.length != 0) {
-			for(Long id: idList) {
+		if (idList != null && idList.length != 0) {
+			for (Long id : idList) {
 				Group group = new Group();
 				group.setId(id);
 				groups.add(group);
@@ -144,19 +149,21 @@ public class GroupController extends BaseController{
 		}
 		return AjaxResult.success();
 	}
-	
+
 	/**
 	 * 用户组树形选择
+	 * 
 	 * @param extId
 	 * @param response
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping("treeSelect")
-	public List<Map<String, Object>> treeSelect(@RequestParam(required=false)String extId, HttpServletResponse response){
+	public List<Map<String, Object>> treeSelect(@RequestParam(required = false) String extId,
+			HttpServletResponse response) {
 		List<Map<String, Object>> mapList = Lists.newArrayList();
 		List<Group> groups = this.groupService.getAll();
-		for( int i= 0; i< groups.size(); i++ ) {
+		for (int i = 0; i < groups.size(); i++) {
 			Group group = groups.get(i);
 			Map<String, Object> map = Maps.newHashMap();
 			map.put("id", group.getId());
@@ -164,7 +171,7 @@ public class GroupController extends BaseController{
 			map.put("name", group.getName());
 			mapList.add(map);
 		}
-		if(mapList.size() != 0) {
+		if (mapList.size() != 0) {
 			Map<String, Object> map = Maps.newHashMap();
 			map.put("id", "O_-1");
 			map.put("pId", "O_-2");

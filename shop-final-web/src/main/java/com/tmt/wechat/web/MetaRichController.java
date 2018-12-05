@@ -34,29 +34,32 @@ import com.tmt.wechat.utils.WechatUtils;
 
 /**
  * 图文回复 管理
+ * 
  * @author 超级管理员
  * @date 2016-09-30
  */
 @Controller("wechatMetaRichController")
 @RequestMapping(value = "${spring.application.web.admin}/wechat/meta/rich")
-public class MetaRichController extends BaseController{
-	
+public class MetaRichController extends BaseController {
+
 	@Autowired
 	private MetaRichServiceFacade metaRichService;
 	@Autowired
 	private AppServiceFacade appService;
-	
+
 	/**
 	 * 进入初始化页面
+	 * 
 	 * @param model
 	 */
 	@RequestMapping("list")
-	public String list(MetaRich metaRich, Model model){
+	public String list(MetaRich metaRich, Model model) {
 		return "/wechat/MetaRichList";
 	}
-	
+
 	/**
-	 * 初始化页面的数据 
+	 * 初始化页面的数据
+	 * 
 	 * @param metaRich
 	 * @param model
 	 * @param page
@@ -64,38 +67,40 @@ public class MetaRichController extends BaseController{
 	 */
 	@ResponseBody
 	@RequestMapping("page")
-	public Page page(MetaRich metaRich, Page page){
-        QueryCondition qc = new QueryCondition();
+	public Page page(MetaRich metaRich, Page page) {
+		QueryCondition qc = new QueryCondition();
 		PageParameters param = page.getParam();
 		Criteria c = qc.getCriteria();
-		             this.initQc(metaRich, c);
+		this.initQc(metaRich, c);
 		qc.setOrderByClause(param.orderBy("CREATE_DATE DESC"));
 		return metaRichService.queryForPage(qc, param);
 	}
-	
+
 	/**
 	 * 表单
+	 * 
 	 * @param metaRich
 	 * @param model
 	 */
 	@RequestMapping("form")
 	public String form(MetaRich metaRich, Model model) {
-	    if(metaRich != null && !IdGen.isInvalidId(metaRich.getId())) {
-		   metaRich = this.metaRichService.getWithRelas(metaRich.getId());
+		if (metaRich != null && !IdGen.isInvalidId(metaRich.getId())) {
+			metaRich = this.metaRichService.getWithRelas(metaRich.getId());
 		} else {
-		   if(metaRich == null) {
-			  metaRich = new MetaRich();
-		   }
-		   metaRich.setId(IdGen.INVALID_ID);
-		   metaRich.setTopImage(MetaRich.YES);
+			if (metaRich == null) {
+				metaRich = new MetaRich();
+			}
+			metaRich.setId(IdGen.INVALID_ID);
+			metaRich.setTopImage(MetaRich.YES);
 		}
 		model.addAttribute("metaRich", metaRich);
 		model.addAttribute("apps", appService.getAll());
 		return "/wechat/MetaRichForm";
 	}
-	
+
 	/**
 	 * 保存
+	 * 
 	 * @param category
 	 * @param model
 	 * @param redirectAttributes
@@ -111,9 +116,10 @@ public class MetaRichController extends BaseController{
 		redirectAttributes.addAttribute("id", metaRich.getId());
 		return WebUtils.redirectTo(Globals.adminPath, "/wechat/meta/rich/form");
 	}
-	
+
 	/**
 	 * 删除
+	 * 
 	 * @param idList
 	 * @param model
 	 * @param redirectAttributes
@@ -121,9 +127,9 @@ public class MetaRichController extends BaseController{
 	 */
 	@ResponseBody
 	@RequestMapping("delete")
-	public AjaxResult delete(Long[] idList , Model model, HttpServletResponse response) {
+	public AjaxResult delete(Long[] idList, Model model, HttpServletResponse response) {
 		List<MetaRich> metaRichs = Lists.newArrayList();
-		for(Long id: idList) {
+		for (Long id : idList) {
 			MetaRich metaRich = new MetaRich();
 			metaRich.setId(id);
 			metaRichs.add(metaRich);
@@ -131,31 +137,29 @@ public class MetaRichController extends BaseController{
 		this.metaRichService.delete(metaRichs);
 		return AjaxResult.success();
 	}
-	
 
-
-	//查询条件
+	// 查询条件
 	private void initQc(MetaRich metaRich, Criteria c) {
-        if(StringUtil3.isNotBlank(metaRich.getKeyword())) {
-           c.andEqualTo("KEYWORD", metaRich.getKeyword());
-        }
-        if(StringUtil3.isNotBlank(metaRich.getTitle())) {
-           c.andEqualTo("TITLE", metaRich.getTitle());
-        }
+		if (StringUtil3.isNotBlank(metaRich.getKeyword())) {
+			c.andEqualTo("KEYWORD", metaRich.getKeyword());
+		}
+		if (StringUtil3.isNotBlank(metaRich.getTitle())) {
+			c.andEqualTo("TITLE", metaRich.getTitle());
+		}
 	}
-	
+
 	/**
-	 * 表组件支持
-	 * 需要排除的ID
+	 * 表组件支持 需要排除的ID
 	 */
 	@RequestMapping("tableSelect")
 	public String tableSelect(Long extId, Model model) {
-	   model.addAttribute("extId", extId);
-	   return "/wechat/MetaRichTableSelect";
+		model.addAttribute("extId", extId);
+		return "/wechat/MetaRichTableSelect";
 	}
-	
+
 	/**
 	 * 选择的数据
+	 * 
 	 * @param metaRich
 	 * @param model
 	 * @param page
@@ -163,20 +167,21 @@ public class MetaRichController extends BaseController{
 	 */
 	@ResponseBody
 	@RequestMapping("tableSelect/data")
-	public Page tableSelect_data(MetaRich metaRich, Long extId, Page page){
-        QueryCondition qc = new QueryCondition();
+	public Page tableSelect_data(MetaRich metaRich, Long extId, Page page) {
+		QueryCondition qc = new QueryCondition();
 		PageParameters param = page.getParam();
 		Criteria c = qc.getCriteria();
-		             this.initQc(metaRich, c);
+		this.initQc(metaRich, c);
 		if (extId != null && !IdGen.isInvalidId(extId)) {
 			c.andNotEqualTo("ID", extId);
 		}
 		qc.setOrderByClause(param.orderBy("CREATE_DATE DESC"));
 		return metaRichService.queryForPage(qc, param);
 	}
-	
+
 	/**
 	 * 阅览地址
+	 * 
 	 * @param id
 	 * @return
 	 */
@@ -184,14 +189,15 @@ public class MetaRichController extends BaseController{
 	@RequestMapping("view/{id}")
 	public AjaxResult view(@PathVariable Long id) {
 		MetaRich metaRich = this.metaRichService.getWithRelas(id);
-    	App app = WechatUtils.get(metaRich.getAppId());
-    	metaRich.setApp(app);
+		App app = WechatUtils.get(metaRich.getAppId());
+		metaRich.setApp(app);
 		String url = StaticUtils.touchStaticizePage(app, "metaRich", metaRich);
 		return AjaxResult.success(url);
 	}
-	
+
 	/**
 	 * 获取图文
+	 * 
 	 * @return
 	 */
 	@ResponseBody

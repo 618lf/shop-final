@@ -19,18 +19,20 @@ import com.tmt.system.service.SiteServiceFacade;
 
 /**
  * 站点设置 管理
+ * 
  * @author 超级管理员
  * @date 2016-01-18
  */
 @Controller("systemSiteController")
 @RequestMapping(value = "${spring.application.web.admin}/system/site")
-public class SiteController extends BaseController{
-	
+public class SiteController extends BaseController {
+
 	@Autowired
 	private SiteServiceFacade siteService;
-	
+
 	/**
 	 * 表单 -- 只有一个站点
+	 * 
 	 * @param site
 	 * @param model
 	 */
@@ -40,9 +42,10 @@ public class SiteController extends BaseController{
 		model.addAttribute("site", site);
 		return "/system/SiteBaseForm";
 	}
-	
+
 	/**
 	 * 表单 -- 只有一个站点
+	 * 
 	 * @param site
 	 * @param model
 	 */
@@ -52,9 +55,10 @@ public class SiteController extends BaseController{
 		model.addAttribute("site", site);
 		return "/system/SiteSafeForm";
 	}
-	
+
 	/**
 	 * 表单 -- 只有一个站点
+	 * 
 	 * @param site
 	 * @param model
 	 */
@@ -64,9 +68,10 @@ public class SiteController extends BaseController{
 		model.addAttribute("site", site);
 		return "/system/SiteEmailForm";
 	}
-	
+
 	/**
 	 * 保存
+	 * 
 	 * @param category
 	 * @param model
 	 * @param redirectAttributes
@@ -79,9 +84,10 @@ public class SiteController extends BaseController{
 		redirectAttributes.addAttribute("id", site.getId());
 		return WebUtils.redirectTo(new StringBuilder(Globals.adminPath).append("/system/site/form/base").toString());
 	}
-	
+
 	/**
 	 * 保存
+	 * 
 	 * @param category
 	 * @param model
 	 * @param redirectAttributes
@@ -92,11 +98,12 @@ public class SiteController extends BaseController{
 		this.siteService.safeSave(site);
 		addMessage(redirectAttributes, StringUtil3.format("%s'%s'%s", "修改站点设置", site.getName(), "成功"));
 		redirectAttributes.addAttribute("id", site.getId());
-		return WebUtils.redirectTo(new StringBuilder(Globals.adminPath).append("/system/site/form/safe").toString()); 
+		return WebUtils.redirectTo(new StringBuilder(Globals.adminPath).append("/system/site/form/safe").toString());
 	}
-	
+
 	/**
 	 * 保存
+	 * 
 	 * @param category
 	 * @param model
 	 * @param redirectAttributes
@@ -107,12 +114,12 @@ public class SiteController extends BaseController{
 		this.siteService.emailSave(site);
 		addMessage(redirectAttributes, StringUtil3.format("%s'%s'%s", "修改站点设置", site.getName(), "成功"));
 		redirectAttributes.addAttribute("id", site.getId());
-		return WebUtils.redirectTo(new StringBuilder(Globals.adminPath).append("/system/site/form/email").toString()); 
+		return WebUtils.redirectTo(new StringBuilder(Globals.adminPath).append("/system/site/form/email").toString());
 	}
-	
+
 	/**
-	 * 测试一封邮件
-	 * 不能包含测试的字符
+	 * 测试一封邮件 不能包含测试的字符
+	 * 
 	 * @return
 	 */
 	@ResponseBody
@@ -120,7 +127,7 @@ public class SiteController extends BaseController{
 	public AjaxResult test(String to) {
 		Site site = siteService.getSite();
 		String subject = StringUtil3.format("%s", site.getName());
-		String[] toArray = new String[]{to};
+		String[] toArray = new String[] { to };
 		String[] ccArray = null;
 		String content = "如果您收到这封邮件，说明邮件服务是正常！";
 		Boolean bFlag = SendEmailUtils.sendNotificationMail(subject, toArray, ccArray, content);

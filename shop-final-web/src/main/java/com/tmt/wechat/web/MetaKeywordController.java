@@ -13,6 +13,7 @@ import com.tmt.wechat.service.MetaKeywordServiceFacade;
 
 /**
  * 关键词查询
+ * 
  * @author root
  */
 @Controller("wechatMetaKeywordController")
@@ -21,9 +22,10 @@ public class MetaKeywordController {
 
 	@Autowired
 	private MetaKeywordServiceFacade keywordService;
-	
+
 	/**
 	 * 只显示前10个
+	 * 
 	 * @param idList
 	 * @param model
 	 * @param response

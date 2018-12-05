@@ -13,10 +13,11 @@ import com.tmt.system.entity.User;
 
 /**
  * 用户管理
+ * 
  * @author root
  */
 @Service
-public class SystemService implements SystemServiceFacade{
+public class SystemService implements SystemServiceFacade {
 
 	@Autowired
 	private UserService userService;
@@ -26,12 +27,12 @@ public class SystemService implements SystemServiceFacade{
 	private RoleService roleService;
 	@Autowired
 	private GroupService groupService;
-	
+
 	@Override
 	public User getUserById(Long id) {
 		return userService.get(id);
 	}
-	
+
 	@Override
 	public User getUserByNo(String no) {
 		return userService.findUserByNo(no);
@@ -46,7 +47,7 @@ public class SystemService implements SystemServiceFacade{
 	public String getUserHeadimgById(Long userId) {
 		return userService.findUserHeadimgById(userId);
 	}
-	
+
 	@Override
 	public String getUserWechatOpenId(User user, String appId) {
 		return userService.getUserWechatOpenId(user, appId);
@@ -65,7 +66,7 @@ public class SystemService implements SystemServiceFacade{
 		}
 		return menuList;
 	}
-	
+
 	/**
 	 * 所有的角色(单独或通过用户组分配)
 	 */
@@ -79,34 +80,35 @@ public class SystemService implements SystemServiceFacade{
 		}
 		return roles;
 	}
-	
+
 	private List<Menu> findByAuthority(Long userId) {
-		//用户组权限集合，并分别存于公用缓存
+		// 用户组权限集合，并分别存于公用缓存
 		List<Group> groups = this.groupService.findByUserId(userId);
 		List<Menu> groupMenus = Lists.newArrayList();
-		if(groups != null && groups.size() != 0) {
-			for(Group group: groups) {
-				//一般会从缓存中取数据
+		if (groups != null && groups.size() != 0) {
+			for (Group group : groups) {
+				// 一般会从缓存中取数据
 				List<Menu> temps = this.menuService.findAuthorityByGroupId(group.getId());
 				groupMenus.addAll(temps);
 			}
 		}
-		//个人权限集合
+		// 个人权限集合
 		List<Menu> userMenus = this.menuService.findAuthorityByUserId(userId);
-		if(userMenus != null && userMenus.size() != 0) {
+		if (userMenus != null && userMenus.size() != 0) {
 			groupMenus.addAll(userMenus);
 		}
-		//过滤重复的
-		if(groupMenus != null && groupMenus.size() != 0) {
+		// 过滤重复的
+		if (groupMenus != null && groupMenus.size() != 0) {
 			List<Menu> menus = Lists.newArrayList();
-			for(Menu group: groupMenus ) {
+			for (Menu group : groupMenus) {
 				Boolean bFound = Boolean.FALSE;
-				for(Menu menu: menus) {
-					if(group.getId().equals(menu.getId())) {
-						bFound = Boolean.TRUE; break;
+				for (Menu menu : menus) {
+					if (group.getId().equals(menu.getId())) {
+						bFound = Boolean.TRUE;
+						break;
 					}
 				}
-				if(!bFound) {
+				if (!bFound) {
 					menus.add(group);
 				}
 			}
@@ -114,18 +116,22 @@ public class SystemService implements SystemServiceFacade{
 		}
 		return groupMenus;
 	}
+
 	@Override
 	public List<Role> findByMenuPermission(User user, String permissions) {
 		return this.roleService.findByMenuPermission(user, permissions);
 	}
+
 	@Override
 	public List<User> findOfficeUsers(Long officeId) {
 		return this.userService.findOfficeUsers(officeId);
 	}
+
 	@Override
 	public List<User> findDepartUsers(Long officeId) {
 		return this.userService.findDepartUsers(officeId);
 	}
+
 	@Override
 	public String userLogin(User user, String sessionId, String loginIp) {
 		return this.userService.userLogin(user, sessionId, loginIp);

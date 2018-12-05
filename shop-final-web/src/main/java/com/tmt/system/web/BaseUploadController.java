@@ -35,22 +35,24 @@ import com.tmt.system.web.UploadConfig.Action;
 
 /**
  * 基础的上传服务
+ * 
  * @author root
  */
 public class BaseUploadController {
 
-	protected static String  COOKIE_NAME = "A_D";
-	protected static Integer COOKIE_AGE = 7*24*60*60;
-	protected static String  DIR_HOME = "D_HOME";
-		
+	protected static String COOKIE_NAME = "A_D";
+	protected static Integer COOKIE_AGE = 7 * 24 * 60 * 60;
+	protected static String DIR_HOME = "D_HOME";
+
 	@Autowired
 	protected AttachmentServiceFacade attachmentService;
 	@Autowired
 	protected AttachmentDirServiceFacade dirService;
 	protected UploadConfig config = UploadConfig.getInstance();
-	
+
 	/**
 	 * 分片上传之后的合并服务
+	 * 
 	 * @param request
 	 * @return
 	 */
@@ -58,74 +60,81 @@ public class BaseUploadController {
 	@RequestMapping("doMerge")
 	@SuppressWarnings("unchecked")
 	public AjaxResult doMerge(String guid, String fileName, long size, HttpServletRequest request) {
-		if(UserUtils.isUser()) {
-		   Action _action = Action.valueBy("uploadfile");
-		   Map<String, Object> config = this.getConfig(_action);
-		   String suffix = StringUtil3.substringAfterLast(fileName, ".").toLowerCase();
-			      suffix = "." + StringUtil3.defaultString(StringUtil3.trimToNull(suffix), "jpg").toLowerCase();
-	       if(!((List<String>) config.get("allowFiles")).contains(suffix)) {
-			  return AjaxResult.error("不允许的文件类型");
-		   }
-		   String path = this.pathFormat((String)config.get("pathFormat"), suffix);
-		   Long dir = Long.parseLong(request.getParameter("dirId"));
-		   AttachmentDir _dir = this.getUserSpaceDir(dir);
-		   String url = attachmentService.mergeChunks(guid, path, _dir, fileName, size, UserUtils.getUser());
-		   Map<String, String> rMap = Maps.newHashMap();
-		   rMap.put("url", url);
-		   rMap.put("title", StringUtil3.substringAfterLast(url, "/"));
-		   return AjaxResult.success(rMap);
+		if (UserUtils.isUser()) {
+			Action _action = Action.valueBy("uploadfile");
+			Map<String, Object> config = this.getConfig(_action);
+			String suffix = StringUtil3.substringAfterLast(fileName, ".").toLowerCase();
+			suffix = "." + StringUtil3.defaultString(StringUtil3.trimToNull(suffix), "jpg").toLowerCase();
+			if (!((List<String>) config.get("allowFiles")).contains(suffix)) {
+				return AjaxResult.error("不允许的文件类型");
+			}
+			String path = this.pathFormat((String) config.get("pathFormat"), suffix);
+			Long dir = Long.parseLong(request.getParameter("dirId"));
+			AttachmentDir _dir = this.getUserSpaceDir(dir);
+			String url = attachmentService.mergeChunks(guid, path, _dir, fileName, size, UserUtils.getUser());
+			Map<String, String> rMap = Maps.newHashMap();
+			rMap.put("url", url);
+			rMap.put("title", StringUtil3.substringAfterLast(url, "/"));
+			return AjaxResult.success(rMap);
 		}
 		return AjaxResult.error("无操作权限");
-	} 
-	
+	}
+
 	/**
 	 * 新版的上传服务
+	 * 
 	 * @param request
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping("doUpload")
 	public String doUpload(String action, String callback, HttpServletRequest request) {
-		if(UserUtils.isUser()) {
+		if (UserUtils.isUser()) {
 			AjaxResult result = this.doAction(action, request);
-			Map<String,Object> _r = result.getObj();
-			if(_r == null) { _r = Maps.newHashMap();}
-			if(result.getSuccess()) {
-			   _r.put("state", "SUCCESS");
+			Map<String, Object> _r = result.getObj();
+			if (_r == null) {
+				_r = Maps.newHashMap();
+			}
+			if (result.getSuccess()) {
+				_r.put("state", "SUCCESS");
 			} else {
-			   _r.put("state", result.getMsg());
+				_r.put("state", result.getMsg());
 			}
 			return JsonMapper.toJson(_r);
 		}
 		Map<String, Object> _r = Maps.newHashMap();
-		 _r.put("state", "权限不足");
+		_r.put("state", "权限不足");
 		return JsonMapper.toJson(_r);
-	} 
-	
+	}
+
 	/**
 	 * 提供服务
+	 * 
 	 * @param action
 	 * @return
 	 */
 	public AjaxResult doAction(String action, HttpServletRequest request) {
 		Action _action = Action.valueBy(action);
-		if( _action == null ) {
+		if (_action == null) {
 			return AjaxResult.error("无效的请求");
 		}
 		switch (_action) {
-		    case config: return AjaxResult.success(this.getConfig());
-		    case uploadimage:
-			case uploadscrawl:
-			case uploadvideo:
-			case uploadfile:
-		    	return this.doUpload(_action, request);
-			default:break;
+		case config:
+			return AjaxResult.success(this.getConfig());
+		case uploadimage:
+		case uploadscrawl:
+		case uploadvideo:
+		case uploadfile:
+			return this.doUpload(_action, request);
+		default:
+			break;
 		}
 		return AjaxResult.error("不支持的操作");
 	}
-	
+
 	/**
 	 * 上传文件
+	 * 
 	 * @param request
 	 * @return
 	 */
@@ -137,9 +146,10 @@ public class BaseUploadController {
 			return this.uploadFile(action, request);
 		}
 	}
-	
+
 	/**
 	 * 传内容
+	 * 
 	 * @param action
 	 * @param request
 	 * @return
@@ -149,18 +159,18 @@ public class BaseUploadController {
 		String filename = (String) config.get("filename");
 		String fieldName = (String) config.get("fieldName");
 		String content = request.getParameter(fieldName);
-		if(StringUtil3.isNotBlank(content)) {
+		if (StringUtil3.isNotBlank(content)) {
 			String suffix = WebUtils.getCleanParam("suffix");
-			       suffix = StringUtil3.isBlank(suffix)?".jpg":suffix;
+			suffix = StringUtil3.isBlank(suffix) ? ".jpg" : suffix;
 			String original = WebUtils.getCleanParam(filename);
-			       original = StringUtil3.isBlank(original)?"截图":original;
+			original = StringUtil3.isBlank(original) ? "截图" : original;
 			byte[] data = Base64.decodeBase64(content);
 			long maxSize = ((Integer) config.get("maxSize")).longValue();
 			long length = data.length;
-			if ( length > maxSize) {
+			if (length > maxSize) {
 				return AjaxResult.error("文件大小超出限制");
 			}
-			String path = this.pathFormat((String)config.get("pathFormat"), suffix);
+			String path = this.pathFormat((String) config.get("pathFormat"), suffix);
 			Long dir = Long.parseLong(request.getParameter("dirId"));
 			AttachmentDir _dir = this.getUserSpaceDir(dir);
 			String url = attachmentService.storage(data, path, _dir, original, length, UserUtils.getUser());
@@ -173,13 +183,14 @@ public class BaseUploadController {
 			result.put("original", original);
 			result.put("size", length);
 			result.put("title", StringUtil3.substringAfterLast(url, "/"));
-		    return AjaxResult.success(result);
+			return AjaxResult.success(result);
 		}
 		return AjaxResult.error("没有找到数据");
 	}
-	
+
 	/**
 	 * 传文件
+	 * 
 	 * @param action
 	 * @param request
 	 * @return
@@ -187,26 +198,26 @@ public class BaseUploadController {
 	private AjaxResult uploadFile(Action action, HttpServletRequest request) {
 		Map<String, Object> config = this.getConfig(action);
 		MultipartFile[] files = WebUtils.uploadFile(request);
-		if(files == null || files.length == 0) {
-		   return AjaxResult.error("没找到上传的数据");
+		if (files == null || files.length == 0) {
+			return AjaxResult.error("没找到上传的数据");
 		}
 		MultipartFile file = files[0];
-	    if(request.getParameter("chunk") != null) {
-	    	return this.uploadChunkFile(config, file, request);
-	    } else {
-	    	return this.uploadSingleFile(config, file, request);
-	    }
+		if (request.getParameter("chunk") != null) {
+			return this.uploadChunkFile(config, file, request);
+		} else {
+			return this.uploadSingleFile(config, file, request);
+		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private AjaxResult uploadSingleFile(Map<String, Object> config, MultipartFile file, HttpServletRequest request) {
 		File tmpFile = null;
 		try {
 			String originFileName = file.getOriginalFilename();
 			String suffix = StringUtil3.substringAfterLast(originFileName, ".").toLowerCase();
-			       suffix = "." + StringUtil3.defaultString(StringUtil3.trimToNull(suffix), "jpg").toLowerCase();
-			if(!((List<String>) config.get("allowFiles")).contains(suffix)) {
-			   return AjaxResult.error("不允许的文件类型");
+			suffix = "." + StringUtil3.defaultString(StringUtil3.trimToNull(suffix), "jpg").toLowerCase();
+			if (!((List<String>) config.get("allowFiles")).contains(suffix)) {
+				return AjaxResult.error("不允许的文件类型");
 			}
 			tmpFile = ContextHolderUtils.getTempFile(file.getInputStream());
 			long maxSize = ((Integer) config.get("maxSize")).longValue();
@@ -215,7 +226,7 @@ public class BaseUploadController {
 				return AjaxResult.error("文件大小超出限制");
 			}
 			byte[] datas = FileUtils.readFileToByteArray(tmpFile);
-			String path = this.pathFormat((String)config.get("pathFormat"), suffix);
+			String path = this.pathFormat((String) config.get("pathFormat"), suffix);
 			Long dir = Long.parseLong(request.getParameter("dirId"));
 			AttachmentDir _dir = this.getUserSpaceDir(dir);
 			String url = attachmentService.storage(datas, path, _dir, originFileName, length, UserUtils.getUser());
@@ -228,15 +239,19 @@ public class BaseUploadController {
 			result.put("original", originFileName);
 			result.put("size", length);
 			result.put("title", StringUtil3.substringAfterLast(url, "/"));
-		    return AjaxResult.success(result);
-		} catch (IOException e) {}finally {
-			if(tmpFile != null ) {tmpFile.delete();}
+			return AjaxResult.success(result);
+		} catch (IOException e) {
+		} finally {
+			if (tmpFile != null) {
+				tmpFile.delete();
+			}
 		}
 		return AjaxResult.error("权限不足， 多指写权限");
 	}
-	
+
 	/**
 	 * 分片上传文件
+	 * 
 	 * @param file
 	 * @param request
 	 * @return
@@ -245,7 +260,7 @@ public class BaseUploadController {
 		try {
 			String originFileName = file.getOriginalFilename();
 			String suffix = StringUtil3.substringAfterLast(originFileName, ".").toLowerCase();
-			       suffix = "." + StringUtil3.defaultString(StringUtil3.trimToNull(suffix), "jpg").toLowerCase();
+			suffix = "." + StringUtil3.defaultString(StringUtil3.trimToNull(suffix), "jpg").toLowerCase();
 			String uuid = request.getParameter("guid");
 			String chunks = request.getParameter("chunks");
 			String chunk = request.getParameter("chunk");
@@ -258,30 +273,32 @@ public class BaseUploadController {
 			result.put("size", file.getSize());
 			result.put("title", originFileName);
 			return AjaxResult.success(result);
-		} catch (IOException e) {}
+		} catch (IOException e) {
+		}
 		return AjaxResult.error("权限不足， 多指写权限");
 	}
-	
+
 	/**
-	 * 获得相应的配置项
-	 * --- 每次会读取site中的配置（只配置文件修改的）
+	 * 获得相应的配置项 --- 每次会读取site中的配置（只配置文件修改的）
+	 * 
 	 * @param type
 	 * @return
 	 */
-	private Map<String, Object> getConfig(Action type) { 
+	private Map<String, Object> getConfig(Action type) {
 		Site site = SiteUtils.getSite();
 		return this.config.getConfig(site, type);
 	}
-	
+
 	/**
 	 * 实例化后初始化的方法
 	 */
 	protected Map<String, Object> getConfig() {
 		return this.config.getConfig();
 	}
-	
+
 	/**
 	 * 文件格式化
+	 * 
 	 * @param pathFormat
 	 * @param suffix
 	 * @return
@@ -292,7 +309,7 @@ public class BaseUploadController {
 		root.put("type", this.getFileType(suffix));
 		return FreemarkerUtils.processNoTemplate(pathFormat, root);
 	}
-	
+
 	private Map<String, Object> getRootMap() {
 		Map<String, Object> root = Maps.newHashMap();
 		root.put("data", DateUtil3.getTodayStr("yyyy-MM-dd"));
@@ -300,38 +317,42 @@ public class BaseUploadController {
 		root.put("rand", IdGen.stringKey());
 		return root;
 	}
+
 	@SuppressWarnings("unchecked")
 	private FileType getFileType(String suffix) {
 		String _suffix = StringUtil3.lowerCase(suffix);
-		List<String> files = (List<String>)config.get("imageAllowFiles");
-		if(files.contains(_suffix)) {
-		   return FileType.IMAGE;
+		List<String> files = (List<String>) config.get("imageAllowFiles");
+		if (files.contains(_suffix)) {
+			return FileType.IMAGE;
 		}
-		files = (List<String>)config.get("videoAllowFiles");
-		if(files.contains(_suffix)) {
-		   return FileType.VIDEO;
+		files = (List<String>) config.get("videoAllowFiles");
+		if (files.contains(_suffix)) {
+			return FileType.VIDEO;
 		}
 		return FileType.FILE;
 	}
+
 	public static enum FileType {
 		IMAGE, FILE, VIDEO;
 	}
-	
+
 	/**
 	 * 用户空间(有个缓存支持)
+	 * 
 	 * @return
 	 */
 	public AttachmentDir getUserSpaceDir(User user) {
 		AttachmentDir dir = UserUtils.getAttribute(DIR_HOME);
-		if (dir == null ) {
-		    dir = dirService.getUserSpaceDir(user);
-		    UserUtils.setAttribute(DIR_HOME, dir);
+		if (dir == null) {
+			dir = dirService.getUserSpaceDir(user);
+			UserUtils.setAttribute(DIR_HOME, dir);
 		}
 		return dir;
 	}
-	
+
 	/**
 	 * 用户空间
+	 * 
 	 * @param dir
 	 * @return
 	 */
@@ -339,14 +360,14 @@ public class BaseUploadController {
 		User user = UserUtils.getUser();
 		AttachmentDir dirObj = dirService.get(dir);
 		if (user.isRoot()) {
-		    if (dirObj == null) {
-			    dirObj = AttachmentDir.getRootDir();
-		    }
+			if (dirObj == null) {
+				dirObj = AttachmentDir.getRootDir();
+			}
 		} else {
-			//如果是home下的目录才能访问
+			// 如果是home下的目录才能访问
 			AttachmentDir home = getUserSpaceDir(user);
-			if(dirObj == null || !StringUtil3.contains(dirObj.getParentIds(), home.getId().toString())) {
-			   dirObj = home;
+			if (dirObj == null || !StringUtil3.contains(dirObj.getParentIds(), home.getId().toString())) {
+				dirObj = home;
 			}
 		}
 		return dirObj;

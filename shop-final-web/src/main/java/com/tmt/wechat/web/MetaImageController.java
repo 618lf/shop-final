@@ -36,31 +36,34 @@ import com.tmt.wechat.utils.WechatUtils;
 
 /**
  * 图片 管理
+ * 
  * @author 超级管理员
  * @date 2017-01-12
  */
 @Controller("wechatMetaImageController")
 @RequestMapping(value = "${spring.application.web.admin}/wechat/meta/image")
-public class MetaImageController extends BaseController{
-	
+public class MetaImageController extends BaseController {
+
 	@Autowired
 	private MetaImageServiceFacade metaImageService;
 	@Autowired
 	private AppServiceFacade appService;
 	@Autowired
 	private WechatOptionService wechatService;
-	
+
 	/**
 	 * 列表初始化页面
+	 * 
 	 * @param model
 	 */
 	@RequestMapping("list")
-	public String list(MetaImage metaImage, Model model){
+	public String list(MetaImage metaImage, Model model) {
 		return "/wechat/MetaImageList";
 	}
-	
+
 	/**
-	 * 列表页面的数据 
+	 * 列表页面的数据
+	 * 
 	 * @param metaImage
 	 * @param model
 	 * @param page
@@ -68,41 +71,43 @@ public class MetaImageController extends BaseController{
 	 */
 	@ResponseBody
 	@RequestMapping("page")
-	public Page page(MetaImage metaImage, Page page){
-        QueryCondition qc = new QueryCondition();
+	public Page page(MetaImage metaImage, Page page) {
+		QueryCondition qc = new QueryCondition();
 		PageParameters param = page.getParam();
 		Criteria c = qc.getCriteria();
-		             this.initQc(metaImage, c);
+		this.initQc(metaImage, c);
 		return metaImageService.queryForPage(qc, param);
 	}
-	
+
 	/**
 	 * 表单
+	 * 
 	 * @param metaImage
 	 * @param model
 	 */
 	@RequestMapping("form")
 	public String form(MetaImage metaImage, Model model) {
-	    if (metaImage != null && !IdGen.isInvalidId(metaImage.getId())) {
-		    metaImage = this.metaImageService.get(metaImage.getId());
+		if (metaImage != null && !IdGen.isInvalidId(metaImage.getId())) {
+			metaImage = this.metaImageService.get(metaImage.getId());
 		} else {
-		    if(metaImage == null) {
-			   metaImage = new MetaImage();
-		    }
-		    metaImage.setId(IdGen.INVALID_ID);
+			if (metaImage == null) {
+				metaImage = new MetaImage();
+			}
+			metaImage.setId(IdGen.INVALID_ID);
 		}
-	    MaterialUploadResult material = JsonMapper.fromJson(metaImage.getContent(), MaterialUploadResult.class);
-	    if (material == null) {
-	    	material = new MaterialUploadResult();
-	    }
-	    metaImage.setMaterial(material);
+		MaterialUploadResult material = JsonMapper.fromJson(metaImage.getContent(), MaterialUploadResult.class);
+		if (material == null) {
+			material = new MaterialUploadResult();
+		}
+		metaImage.setMaterial(material);
 		model.addAttribute("metaImage", metaImage);
 		model.addAttribute("apps", appService.getAll());
 		return "/wechat/MetaImageForm";
 	}
-	
+
 	/**
 	 * 保存
+	 * 
 	 * @param category
 	 * @param model
 	 * @param redirectAttributes
@@ -112,20 +117,21 @@ public class MetaImageController extends BaseController{
 	public String save(MetaImage metaImage, Model model, RedirectAttributes redirectAttributes) {
 		// 判断是否修改图片
 		if ((IdGen.isInvalidId(metaImage.getId()) && StringUtil3.isNotBlank(metaImage.getImage()))
-				|| (metaImage.getIsUpdate() != null 
-				&& metaImage.getIsUpdate() == 1 && StringUtil3.isNotBlank(metaImage.getImage()))) {
+				|| (metaImage.getIsUpdate() != null && metaImage.getIsUpdate() == 1
+						&& StringUtil3.isNotBlank(metaImage.getImage()))) {
 			App app = WechatUtils.get(metaImage.getAppId());
 			AjaxResult result = this.upload(app.getId(), metaImage.getImage());
-			metaImage.setContent((String)result.getObj());
+			metaImage.setContent((String) result.getObj());
 		}
 		this.metaImageService.save(metaImage);
 		addMessage(redirectAttributes, StringUtil3.format("%s'%s'%s", "修改图片", metaImage.getKeyword(), "成功"));
 		redirectAttributes.addAttribute("id", metaImage.getId());
 		return WebUtils.redirectTo(Globals.adminPath, "/wechat/meta/image/form");
 	}
-	
+
 	/**
 	 * 删除
+	 * 
 	 * @param idList
 	 * @param model
 	 * @param redirectAttributes
@@ -135,7 +141,7 @@ public class MetaImageController extends BaseController{
 	@RequestMapping("delete")
 	public AjaxResult delete(Long[] idList) {
 		List<MetaImage> metaImages = Lists.newArrayList();
-		for(Long id: idList) {
+		for (Long id : idList) {
 			MetaImage metaImage = new MetaImage();
 			metaImage.setId(id);
 			metaImages.add(metaImage);
@@ -143,11 +149,10 @@ public class MetaImageController extends BaseController{
 		this.metaImageService.delete(metaImages);
 		return AjaxResult.success();
 	}
-	
+
 	/**
-	 * 默认是临时
-	 * 上传图片到服务器
-	 * 返回上传的结果
+	 * 默认是临时 上传图片到服务器 返回上传的结果
+	 * 
 	 * @return
 	 */
 	@ResponseBody
@@ -157,21 +162,22 @@ public class MetaImageController extends BaseController{
 			return AjaxResult.error("请选择图片");
 		}
 		InputStream is = StorageUtils.download(img);
-		try{
+		try {
 			App app = WechatUtils.get(appId);
-			Material material = new Material(); material.setUpload(is);
+			Material material = new Material();
+			material.setUpload(is);
 			MaterialUploadResult media = wechatService.bind(app).materialUpload(MediaType.image, material);
 			media.setUrl(img);
 			return AjaxResult.success(JsonMapper.toJson(media));
-		}finally {
+		} finally {
 			IOUtils.closeQuietly(is);
 		}
 	}
 
-	//查询条件
+	// 查询条件
 	private void initQc(MetaImage metaImage, Criteria c) {
-		if(StringUtil3.isNotBlank(metaImage.getKeyword())) {
-           c.andEqualTo("KEYWORD", metaImage.getKeyword());
-        }
+		if (StringUtil3.isNotBlank(metaImage.getKeyword())) {
+			c.andEqualTo("KEYWORD", metaImage.getKeyword());
+		}
 	}
 }

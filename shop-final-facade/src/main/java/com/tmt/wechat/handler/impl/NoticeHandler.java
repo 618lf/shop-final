@@ -1,5 +1,6 @@
 package com.tmt.wechat.handler.impl;
 
+import com.tmt.Constants;
 import com.tmt.common.persistence.incrementer.IdGen;
 import com.tmt.common.utils.JsonMapper;
 import com.tmt.common.utils.SpringContextHolder;
@@ -9,7 +10,6 @@ import com.tmt.wechat.bean.base.WechatConfig;
 import com.tmt.wechat.bean.message.MsgHead;
 import com.tmt.wechat.bean.message.RespMsg;
 import com.tmt.wechat.handler.Handler;
-import com.tmt.wechat.update.WechatModule;
 
 /**
  * 消息通知
@@ -39,7 +39,7 @@ public class NoticeHandler implements Handler{
 			UpdateData updateData = new UpdateData();
 			updateData.setId((Long)IdGen.key());
 			updateData.setMsg(JsonMapper.toJson(_req));
-			updateData.setModule(WechatModule.USER_OPS);
+			updateData.setModule(Constants.USER_OPS);
 			updateData.setOpt((byte)0);
 			updateService.save(updateData);
 		}catch (Exception e) {}

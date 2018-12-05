@@ -34,10 +34,11 @@ import com.tmt.wechat.service.MetaTextServiceFacade;
 
 /**
  * 关键词查找
+ * 
  * @author root
  */
 @Service
-public class MetaKeywordSearcher extends BaseSearcher<MetaKeyword> implements MetaKeywordServiceFacade{
+public class MetaKeywordSearcher extends BaseSearcher<MetaKeyword> implements MetaKeywordServiceFacade {
 
 	@Autowired
 	private MetaRichServiceFacade metaRichService;
@@ -45,7 +46,7 @@ public class MetaKeywordSearcher extends BaseSearcher<MetaKeyword> implements Me
 	private MetaTextServiceFacade metaTextService;
 	@Autowired
 	private MetaImageServiceFacade metaImageService;
-	
+
 	@Override
 	protected String getModule() {
 		return "meta_keyword";
@@ -53,7 +54,7 @@ public class MetaKeywordSearcher extends BaseSearcher<MetaKeyword> implements Me
 
 	@Override
 	protected Document createDocument(MetaKeyword t) {
-		Document document = new Document(); 
+		Document document = new Document();
 		document.add(new Field(ID, t.getId().toString(), StringField.TYPE_STORED));
 		document.add(new Field("appId", t.getAppId(), StringField.TYPE_STORED));
 		document.add(new Field("keyword", t.getKeyword(), StringField.TYPE_STORED));
@@ -61,8 +62,8 @@ public class MetaKeywordSearcher extends BaseSearcher<MetaKeyword> implements Me
 		document.add(new IntField("type", t.getType(), IntField.TYPE_STORED));
 		document.add(new Field("config", t.getConfig(), StringField.TYPE_STORED));
 		document.add(new Field("metaId", t.getMetaId(), StringField.TYPE_STORED));
-		
-		//专用排序字段 按照关键词的长度排序
+
+		// 专用排序字段 按照关键词的长度排序
 		int size = StringUtil3.length(t.getKeyword());
 		document.add(new IntField("size", size, IntField.TYPE_NOT_STORED));
 		document.add(new NumericDocValuesField("size", size));
@@ -89,24 +90,25 @@ public class MetaKeywordSearcher extends BaseSearcher<MetaKeyword> implements Me
 	}
 
 	@Override
-	protected void refresh(List<Long> updates) {}
-	
-	
+	protected void refresh(List<Long> updates) {
+	}
+
 	// 默认的排序方式
-	Sort sort = new Sort(new SortField[]{ new SortField("size", SortField.Type.INT, false), SortField.FIELD_SCORE});
-	String[] hfields = new String[]{"hkeyword"};
-			
+	Sort sort = new Sort(new SortField[] { new SortField("size", SortField.Type.INT, false), SortField.FIELD_SCORE });
+	String[] hfields = new String[] { "hkeyword" };
+
 	/**
-	 * 匹配一个关键词
-	 * 如果多APP，则要区分关键词是哪个APP的
+	 * 匹配一个关键词 如果多APP，则要区分关键词是哪个APP的
 	 */
 	@Override
 	public MetaKeyword searchOne(String keyword, String appId) {
 		BooleanQuery.Builder builder = new BooleanQuery.Builder();
-		builder.add(new WildcardQuery(new Term("keyword", new StringBuilder("*").append(keyword).append("*").toString())), Occur.MUST);
+		builder.add(
+				new WildcardQuery(new Term("keyword", new StringBuilder("*").append(keyword).append("*").toString())),
+				Occur.MUST);
 		builder.add(new TermQuery(new Term("appId", appId)), Occur.MUST);
 		List<MetaKeyword> metas = this.searchList(builder, sort, 1, null, BaseSearcher.scene_ONE);
-		return metas != null && metas.size() != 0?metas.get(0): null;
+		return metas != null && metas.size() != 0 ? metas.get(0) : null;
 	}
 
 	/**
@@ -115,7 +117,7 @@ public class MetaKeywordSearcher extends BaseSearcher<MetaKeyword> implements Me
 	@Override
 	public void deleteMetas(List<Long> deletes) {
 		List<MetaKeyword> metas = Lists.newArrayList();
-		for(Long metaId: deletes) {
+		for (Long metaId : deletes) {
 			BooleanQuery.Builder builder = new BooleanQuery.Builder();
 			TermQuery q = new TermQuery(new Term("metaId", metaId.toString()));
 			builder.add(q, BooleanClause.Occur.MUST);
@@ -123,9 +125,9 @@ public class MetaKeywordSearcher extends BaseSearcher<MetaKeyword> implements Me
 			metas.addAll(keys);
 		}
 		this.delete(metas);
-		
+
 		// ID删除
-		//this._delete(deletes);
+		// this._delete(deletes);
 	}
 
 	@Override
@@ -133,7 +135,7 @@ public class MetaKeywordSearcher extends BaseSearcher<MetaKeyword> implements Me
 		this.deleteMetas(updates);
 		// 保存为索引
 		List<MetaKeyword> metas = Lists.newArrayList();
-		for(Long metaId: updates) {
+		for (Long metaId : updates) {
 			MetaRich rich = metaRichService.get(metaId);
 			metas.addAll(rich.fetchMetaKeywords());
 		}
@@ -145,19 +147,19 @@ public class MetaKeywordSearcher extends BaseSearcher<MetaKeyword> implements Me
 		this.deleteMetas(updates);
 		// 保存为索引
 		List<MetaKeyword> metas = Lists.newArrayList();
-		for(Long metaId: updates) {
+		for (Long metaId : updates) {
 			MetaText rich = metaTextService.get(metaId);
 			metas.addAll(rich.fetchMetaKeywords());
 		}
 		this.save(metas);
 	}
-	
+
 	@Override
 	public void refresh_image(List<Long> updates) {
 		this.deleteMetas(updates);
 		// 保存为索引
 		List<MetaKeyword> metas = Lists.newArrayList();
-		for(Long metaId: updates) {
+		for (Long metaId : updates) {
 			MetaImage rich = metaImageService.get(metaId);
 			metas.addAll(rich.fetchMetaKeywords());
 		}
@@ -170,9 +172,11 @@ public class MetaKeywordSearcher extends BaseSearcher<MetaKeyword> implements Me
 	@Override
 	public List<MetaKeyword> searchList(String keyword, String appId) {
 		BooleanQuery.Builder builder = new BooleanQuery.Builder();
-		
+
 		// 只能通过这种方式
-		builder.add(new WildcardQuery(new Term("keyword", new StringBuilder("*").append(keyword).append("*").toString())), Occur.MUST);
+		builder.add(
+				new WildcardQuery(new Term("keyword", new StringBuilder("*").append(keyword).append("*").toString())),
+				Occur.MUST);
 		builder.add(new TermQuery(new Term("appId", appId)), Occur.MUST);
 		return this.searchList(builder, sort, 10, hfields, BaseSearcher.scene_ONE);
 	}
@@ -204,7 +208,7 @@ public class MetaKeywordSearcher extends BaseSearcher<MetaKeyword> implements Me
 		MetaText rich = metaTextService.get(id);
 		this.save(rich.fetchMetaKeywords());
 	}
-	
+
 	@Override
 	public void refresh_image(Long id) {
 		this.deleteMetas(id);

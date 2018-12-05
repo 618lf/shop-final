@@ -29,7 +29,7 @@ public class ScheduleAutoConfiguration {
 	public ScheduleAutoConfiguration(ObjectProvider<List<TaskExecutor>> tasks) {
 		this.tasks = tasks.getIfAvailable();
 	}
-
+	
 	/**
 	 * 本地配置
 	 * 

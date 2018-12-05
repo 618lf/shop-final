@@ -38,38 +38,42 @@ import com.tmt.system.utils.UserUtils;
 
 /**
  * 附件管理
+ * 
  * @author root
  */
 @Controller
 @RequestMapping(value = "${spring.application.web.admin}/system/attachment")
 public class AttachmentController extends BaseUploadController {
-	
+
 	/**
 	 * 弹出上传控件
+	 * 
 	 * @return
 	 */
 	@RequestMapping("uploader")
 	public String initUploader(String dirId, Model model) {
 		User user = UserUtils.getUser();
-		model.addAttribute("dirId", StringUtil3.isBlank(dirId)?this.getUserSpaceDir(user).getId():dirId);
+		model.addAttribute("dirId", StringUtil3.isBlank(dirId) ? this.getUserSpaceDir(user).getId() : dirId);
 		return "/system/AttachmentUploader";
 	}
-	
+
 	/**
 	 * 列表
+	 * 
 	 * @return
 	 */
-	@RequestMapping(value = {"list", ""})
+	@RequestMapping(value = { "list", "" })
 	public String list(Model model, HttpServletRequest request, HttpServletResponse response) {
 		String cookie = CookieUtils.getCookie(request, COOKIE_NAME);
 		if (cookie != null && RegexpUtil.isNumber(cookie)) {
-		    return this.list(Long.parseLong(cookie), model, response);
+			return this.list(Long.parseLong(cookie), model, response);
 		}
 		return this.list(null, model, response);
 	}
-	
+
 	/**
 	 * 列表
+	 * 
 	 * @return
 	 */
 	@RequestMapping("list/{dir}")
@@ -77,15 +81,18 @@ public class AttachmentController extends BaseUploadController {
 		User user = UserUtils.getUser();
 		AttachmentDir _target = this.getUserSpaceDir(dir);
 		List<AttachmentDir> copys = this.dirService.getUserPaths(user, _target);
-		AttachmentDir target = copys.get(copys.size()-1);
+		AttachmentDir target = copys.get(copys.size() - 1);
 		model.addAttribute("paths", copys);
 		model.addAttribute("dir", target);
-		CookieUtils.setCookie(response, COOKIE_NAME, target.getId().toString(), COOKIE_AGE, new StringBuilder(Globals.adminPath).append("/system/attachment").toString(), Globals.domain, Boolean.FALSE);
+		CookieUtils.setCookie(response, COOKIE_NAME, target.getId().toString(), COOKIE_AGE,
+				new StringBuilder(Globals.adminPath).append("/system/attachment").toString(), Globals.domain,
+				Boolean.FALSE);
 		return "/system/AttachmentList";
 	}
-	
+
 	/**
 	 * 数据
+	 * 
 	 * @return
 	 */
 	@ResponseBody
@@ -93,9 +100,10 @@ public class AttachmentController extends BaseUploadController {
 	public Page page(Model model) {
 		return this.page(1, model);
 	}
-	
+
 	/**
 	 * 数据
+	 * 
 	 * @return
 	 */
 	@ResponseBody
@@ -104,26 +112,27 @@ public class AttachmentController extends BaseUploadController {
 		QueryCondition qc = new QueryCondition();
 		qc.setOrderByClause("A.TYPE, A.CREATE_DATE, A.NAME");
 		Long dirId = Long.parseLong(WebUtils.getCleanParam("dirId"));
-		     dirId = dirId == null?IdGen.ROOT_ID:dirId;
+		dirId = dirId == null ? IdGen.ROOT_ID : dirId;
 		String name = WebUtils.getSafeParameter("name");
 		Criteria c = qc.getCriteria();
 		c.andEqualTo("DIR_ID", dirId);
-		if(StringUtil3.isNotBlank(name)) {c.andLike("NAME", name);}
+		if (StringUtil3.isNotBlank(name)) {
+			c.andLike("NAME", name);
+		}
 		PageParameters param = new PageParameters();
 		param.setPageIndex(pageNo);
 		param.setPageSize(40);
 		Page page = this.attachmentService.queryForPage(qc, param);
 		List<Attachment> attachments = page.getData();
-		for(Attachment attachment: attachments) {
+		for (Attachment attachment : attachments) {
 			attachment.setStorageUrl(StorageUtils.getShowUrl(attachment.getStorageUrl()));
 		}
 		return page;
 	}
-	
+
 	/**
-	 * 新建文件夹 -- 两个比选条件
-	 * name
-	 * parentId
+	 * 新建文件夹 -- 两个比选条件 name parentId
+	 * 
 	 * @return
 	 */
 	@ResponseBody
@@ -132,18 +141,20 @@ public class AttachmentController extends BaseUploadController {
 		dirService.save(dir);
 		return AjaxResult.success();
 	}
-	
+
 	/**
 	 * 查看
+	 * 
 	 * @return
 	 */
 	@RequestMapping("detail/{id}")
 	public String detail(@PathVariable String id) {
 		return "/system/AttachmentDetail";
 	}
-	
+
 	/**
 	 * 删除文件
+	 * 
 	 * @param id
 	 * @return
 	 */
@@ -152,11 +163,11 @@ public class AttachmentController extends BaseUploadController {
 	public AjaxResult delete(Long[] idList) {
 		List<AttachmentDir> dirs = Lists.newArrayList();
 		List<Attachment> attachments = Lists.newArrayList();
-		for(Long id: idList) {
+		for (Long id : idList) {
 			AttachmentDir dir = this.dirService.get(id);
-			if(dir != null ) {
-				if(dir.isSystemDir()) {
-				   return AjaxResult.error("不能删除系统目录（用户目录等）！");
+			if (dir != null) {
+				if (dir.isSystemDir()) {
+					return AjaxResult.error("不能删除系统目录（用户目录等）！");
 				}
 				dirs.add(dir);
 			} else {
@@ -166,14 +177,15 @@ public class AttachmentController extends BaseUploadController {
 		}
 		Boolean bFlag = this.dirService.delete(dirs);
 		this.attachmentService.delete(attachments);
-		if(bFlag) {
-		   return AjaxResult.success();
+		if (bFlag) {
+			return AjaxResult.success();
 		}
 		return AjaxResult.error("要删除的文件夹包含子文件夹或文件或不能删除系统目录（用户目录）！");
 	}
-	
+
 	/**
 	 * 删除文件
+	 * 
 	 * @param id
 	 * @return
 	 */
@@ -181,42 +193,43 @@ public class AttachmentController extends BaseUploadController {
 	@RequestMapping("rename/{id}")
 	public AjaxResult rename(@PathVariable Long id, String name) {
 		AttachmentDir dir = this.dirService.get(id);
-		if(dir != null ) {
-			if( dir.isSystemDir() ) {
+		if (dir != null) {
+			if (dir.isSystemDir()) {
 				return AjaxResult.error("不能修改系统目录(用户目录等)");
 			}
 			this.dirService.rename(dir, name);
 			return AjaxResult.success();
-		} 
+		}
 		Attachment attachment = this.attachmentService.get(id);
-		if(attachment != null) {
+		if (attachment != null) {
 			attachment.setName(name);
 			this.attachmentService.rename(attachment);
 			return AjaxResult.success();
 		}
 		return AjaxResult.success();
 	}
-	
+
 	/**
 	 * 删除文件
+	 * 
 	 * @param id
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping("move")
 	public AjaxResult move(Long[] idList, Long moveto) {
-		AttachmentDir dir = IdGen.ROOT_ID == moveto?AttachmentDir.getRootDir():this.dirService.get(moveto); 
-		if(dir != null) {
-			for(Long id: idList) {
+		AttachmentDir dir = IdGen.ROOT_ID == moveto ? AttachmentDir.getRootDir() : this.dirService.get(moveto);
+		if (dir != null) {
+			for (Long id : idList) {
 				Attachment attachment = this.attachmentService.get(id);
-				if(attachment != null) {
+				if (attachment != null) {
 					this.attachmentService.moveto(attachment, dir);
-				} else if(!moveto.equals(id) && dir.getParentIds().indexOf(","+id+",") ==-1 ){
+				} else if (!moveto.equals(id) && dir.getParentIds().indexOf("," + id + ",") == -1) {
 					AttachmentDir _dir = this.dirService.get(id);
-					if(_dir != null && _dir.isSystemDir()) {
+					if (_dir != null && _dir.isSystemDir()) {
 						return AjaxResult.error("不能移动系统目录(用户目录)");
 					}
-					if( dir != null && !_dir.isSystemDir()) {
+					if (dir != null && !_dir.isSystemDir()) {
 						this.dirService.moveto(_dir, dir);
 					}
 				} else {
@@ -227,25 +240,28 @@ public class AttachmentController extends BaseUploadController {
 		}
 		return AjaxResult.error("选择的文件夹不存在！");
 	}
-	
+
 	/**
 	 * 文件夹树
+	 * 
 	 * @param extId
 	 * @param response
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping("treeSelect")
-	public List<Map<String, Object>> treeSelect(@RequestParam(required=false)String extId, HttpServletResponse response) {
+	public List<Map<String, Object>> treeSelect(@RequestParam(required = false) String extId,
+			HttpServletResponse response) {
 		User user = UserUtils.getUser();
 		List<Map<String, Object>> mapList = Lists.newArrayList();
 		List<TreeVO> trees = this.dirService.findTreeList(user);
-		for (int i=0; i<trees.size(); i++){
+		for (int i = 0; i < trees.size(); i++) {
 			TreeVO e = trees.get(i);
-			if( i == 0 && !UserUtils.getUser().isRoot()) {
+			if (i == 0 && !UserUtils.getUser().isRoot()) {
 				e.setTreeName("我的空间");
 			}
-			if (extId == null || (extId!=null && !extId.equals(e.getId().toString()) && e.getParentIds().indexOf(","+extId+",")==-1)){
+			if (extId == null || (extId != null && !extId.equals(e.getId().toString())
+					&& e.getParentIds().indexOf("," + extId + ",") == -1)) {
 				Map<String, Object> map = Maps.newHashMap();
 				map.put("id", e.getId());
 				map.put("pId", e.getParent());
@@ -255,11 +271,10 @@ public class AttachmentController extends BaseUploadController {
 		}
 		return mapList;
 	}
-	
+
 	/**
 	 * 
-	 * 下载（只能下载文件，不支持下载文件夹）
-	 * 先阶段智支持下载第一个文件
+	 * 下载（只能下载文件，不支持下载文件夹） 先阶段智支持下载第一个文件
 	 * 
 	 * @param idList
 	 * @param request
@@ -267,30 +282,33 @@ public class AttachmentController extends BaseUploadController {
 	 */
 	@RequestMapping(value = "download")
 	public void download(HttpServletRequest request, HttpServletResponse response) {
-		List<Attachment> attachments = WebUtils.fetchItemsFromRequest(request, Attachment.class, WebUtils.DEFAULT_EXPORT_PARAM);
-		if(attachments != null && !attachments.isEmpty()) {
-		   Attachment attachment = this.attachmentService.get(attachments.get(0).getId());
-			if(attachment != null ) {
+		List<Attachment> attachments = WebUtils.fetchItemsFromRequest(request, Attachment.class,
+				WebUtils.DEFAULT_EXPORT_PARAM);
+		if (attachments != null && !attachments.isEmpty()) {
+			Attachment attachment = this.attachmentService.get(attachments.get(0).getId());
+			if (attachment != null) {
 				File tempfile = ContextHolderUtils.getTempFile(StorageUtils.download(attachment.getStorageUrl()));
-				if(tempfile != null) {
-				   ExportUtils.downloadFile(tempfile, attachment.getName(), response, Globals.DEFAULT_ENCODING, Boolean.TRUE);
+				if (tempfile != null) {
+					ExportUtils.downloadFile(tempfile, attachment.getName(), response, Globals.DEFAULT_ENCODING,
+							Boolean.TRUE);
 				}
 			}
 		}
 	}
-	
-	//-----------------在线选择------------------------
+
+	// -----------------在线选择------------------------
 	@RequestMapping(value = "select")
 	public String select(Model model, HttpServletRequest request, HttpServletResponse response) {
 		String cookie = CookieUtils.getCookie(request, COOKIE_NAME);
 		if (cookie != null && RegexpUtil.isNumber(cookie)) {
-		   return this.select(Long.parseLong(cookie), model, response);
+			return this.select(Long.parseLong(cookie), model, response);
 		}
 		return this.select(null, model, response);
 	}
-	
+
 	/**
 	 * 列表
+	 * 
 	 * @return
 	 */
 	@RequestMapping("select/{dir}")
@@ -298,17 +316,18 @@ public class AttachmentController extends BaseUploadController {
 		this.list(dir, model, response);
 		return "/system/AttachmentSelect";
 	}
-	
+
 	/**
 	 * 返回分享的地址
+	 * 
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping(value = "share")
 	public AjaxResult share(Long id) {
 		Attachment attachment = this.attachmentService.get(id);
-		if(attachment != null) {
-		   return AjaxResult.success(attachment.getStorageUrl());
+		if (attachment != null) {
+			return AjaxResult.success(attachment.getStorageUrl());
 		}
 		return AjaxResult.error("资源已被删除！");
 	}

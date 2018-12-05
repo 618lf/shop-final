@@ -12,6 +12,7 @@ com.shop.config.web.HttpMessageConvertersAutoConfiguration,\
 com.shop.config.cache.CacheAutoConfiguration,\
 com.shop.config.security.SecurityAutoConfiguration,\
 com.shop.config.jdbc.DataBaseAutoConfiguration,\
+com.shop.config.update.UpdateAutoConfiguration,\
 com.shop.config.email.EmailAutoConfiguration,\
 com.shop.config.schedule.ScheduleAutoConfiguration,\
 com.shop.config.wechat.WechatAutoConfiguration,\

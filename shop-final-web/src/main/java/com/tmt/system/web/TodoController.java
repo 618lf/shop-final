@@ -21,6 +21,7 @@ import com.tmt.system.utils.UserUtils;
 
 /**
  * 系统代办
+ * 
  * @author root
  */
 @Controller
@@ -29,6 +30,7 @@ public class TodoController extends BaseController {
 
 	/**
 	 * 待办列表
+	 * 
 	 * @return
 	 */
 	@ResponseBody
@@ -45,14 +47,15 @@ public class TodoController extends BaseController {
 		Collections.sort(todos);
 		return AjaxResult.success(todos);
 	}
-	
+
 	/**
 	 * 未处理的消息数
+	 * 
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping("count_unread_msg")
-	public Integer unreadMsg() { 
+	public Integer unreadMsg() {
 		User user = UserUtils.getUser();
 		MessageServiceFacade messageService = SpringContextHolder.getBean(MessageServiceFacade.class);
 		return messageService.getUnreadCount(user);

@@ -28,29 +28,32 @@ import com.tmt.wechat.service.MetaTextServiceFacade;
 
 /**
  * 文本回复 管理
+ * 
  * @author 超级管理员
  * @date 2016-09-30
  */
 @Controller("wechatMetaTextController")
 @RequestMapping(value = "${spring.application.web.admin}/wechat/meta/text")
-public class MetaTextController extends BaseController{
-	
+public class MetaTextController extends BaseController {
+
 	@Autowired
 	private MetaTextServiceFacade metaTextService;
 	@Autowired
 	private AppServiceFacade appService;
-	
+
 	/**
 	 * 进入初始化页面
+	 * 
 	 * @param model
 	 */
 	@RequestMapping("list")
-	public String list(MetaText metaText, Model model){
+	public String list(MetaText metaText, Model model) {
 		return "/wechat/MetaTextList";
 	}
-	
+
 	/**
-	 * 初始化页面的数据 
+	 * 初始化页面的数据
+	 * 
 	 * @param metaText
 	 * @param model
 	 * @param page
@@ -58,37 +61,39 @@ public class MetaTextController extends BaseController{
 	 */
 	@ResponseBody
 	@RequestMapping("page")
-	public Page page(MetaText metaText, Page page){
-        QueryCondition qc = new QueryCondition();
+	public Page page(MetaText metaText, Page page) {
+		QueryCondition qc = new QueryCondition();
 		PageParameters param = page.getParam();
 		Criteria c = qc.getCriteria();
-		             this.initQc(metaText, c);
+		this.initQc(metaText, c);
 		qc.setOrderByClause(param.orderBy("CREATE_DATE DESC"));
 		return metaTextService.queryForPage(qc, param);
 	}
-	
+
 	/**
 	 * 表单
+	 * 
 	 * @param metaText
 	 * @param model
 	 */
 	@RequestMapping("form")
 	public String form(MetaText metaText, Model model) {
-	    if(metaText != null && !IdGen.isInvalidId(metaText.getId())) {
-		   metaText = this.metaTextService.get(metaText.getId());
+		if (metaText != null && !IdGen.isInvalidId(metaText.getId())) {
+			metaText = this.metaTextService.get(metaText.getId());
 		} else {
-		   if(metaText == null) {
-			  metaText = new MetaText();
-		   }
-		   metaText.setId(IdGen.INVALID_ID);
+			if (metaText == null) {
+				metaText = new MetaText();
+			}
+			metaText.setId(IdGen.INVALID_ID);
 		}
 		model.addAttribute("metaText", metaText);
 		model.addAttribute("apps", appService.getAll());
 		return "/wechat/MetaTextForm";
 	}
-	
+
 	/**
 	 * 保存
+	 * 
 	 * @param category
 	 * @param model
 	 * @param redirectAttributes
@@ -101,9 +106,10 @@ public class MetaTextController extends BaseController{
 		redirectAttributes.addAttribute("id", metaText.getId());
 		return WebUtils.redirectTo(Globals.adminPath, "/wechat/meta/text/form");
 	}
-	
+
 	/**
 	 * 删除
+	 * 
 	 * @param idList
 	 * @param model
 	 * @param redirectAttributes
@@ -111,9 +117,9 @@ public class MetaTextController extends BaseController{
 	 */
 	@ResponseBody
 	@RequestMapping("delete")
-	public AjaxResult delete(Long[] idList , Model model, HttpServletResponse response) {
+	public AjaxResult delete(Long[] idList, Model model, HttpServletResponse response) {
 		List<MetaText> metaTexts = Lists.newArrayList();
-		for(Long id: idList) {
+		for (Long id : idList) {
 			MetaText metaText = new MetaText();
 			metaText.setId(id);
 			metaTexts.add(metaText);
@@ -121,13 +127,11 @@ public class MetaTextController extends BaseController{
 		this.metaTextService.delete(metaTexts);
 		return AjaxResult.success();
 	}
-	
 
-
-	//查询条件
+	// 查询条件
 	private void initQc(MetaText metaText, Criteria c) {
-        if(StringUtil3.isNotBlank(metaText.getKeyword())) {
-           c.andEqualTo("KEYWORD", metaText.getKeyword());
-        }
+		if (StringUtil3.isNotBlank(metaText.getKeyword())) {
+			c.andEqualTo("KEYWORD", metaText.getKeyword());
+		}
 	}
 }

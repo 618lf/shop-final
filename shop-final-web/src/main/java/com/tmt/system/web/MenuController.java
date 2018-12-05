@@ -33,6 +33,7 @@ import com.tmt.system.utils.UserUtils;
 
 /**
  * 系统菜单
+ * 
  * @author root
  */
 @Controller
@@ -41,9 +42,10 @@ public class MenuController extends BaseController {
 
 	@Autowired
 	private MenuServiceFacade menuService;
-	
+
 	/**
 	 * 列表
+	 * 
 	 * @param menu
 	 * @param model
 	 * @return
@@ -55,75 +57,78 @@ public class MenuController extends BaseController {
 		}
 		return "/system/MenuList";
 	}
-	
+
 	/**
 	 * 列表数据
+	 * 
 	 * @param menu
 	 * @param model
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping("page")
-	public Page page(Menu menu,Model model) {
-		Map<String,Object> params = new HashMap<String,Object>();
-		if(menu!=null && !StringUtil3.isBlank(menu.getName())) {
+	public Page page(Menu menu, Model model) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		if (menu != null && !StringUtil3.isBlank(menu.getName())) {
 			params.put("MENU_NAME", menu.getName());
 		}
-		if(menu!=null && !StringUtil3.isBlank(menu.getHref())) {
+		if (menu != null && !StringUtil3.isBlank(menu.getHref())) {
 			params.put("MENU_HREF", menu.getHref());
 		}
-		if(!params.isEmpty()) {
+		if (!params.isEmpty()) {
 			List<Menu> menus = this.menuService.findByCondition(params);
 			if (menus != null && menus.size() != 0) {
 				StringBuffer sb = new StringBuffer(100);
-				for( Menu menuItem: menus ) {
-					 sb.append(menuItem.getParentIds());
-					 sb.append(menuItem.getId()).append(",");
+				for (Menu menuItem : menus) {
+					sb.append(menuItem.getParentIds());
+					sb.append(menuItem.getId()).append(",");
 				}
 				sb.append("-1");
 				params.clear();
 				params.put("MENU_IDS", sb.toString());
 			}
 		}
-		if (menu!=null && menu.getId() != null){
+		if (menu != null && menu.getId() != null) {
 			menu = this.menuService.get(menu.getId());
 		}
 		List<Menu> menus = this.menuService.findByCondition(params);
 		if (menus != null) {
-		   for(Menu menuItem: menus ) {
-			   menuItem.setId(menuItem.getId());
-			   menuItem.setParent(menuItem.getParentId());
-			   menuItem.setLevel(menuItem.getLevel());
-			   menuItem.setExpanded(Boolean.FALSE);
-			   menuItem.setLoaded(Boolean.TRUE);
-			   menuItem.setIsLeaf(Boolean.TRUE);
-			   if(menu!=null && menu.getId() != null && ( (","+menu.getParentIds()+",").indexOf(","+menuItem.getId()+",") != -1)) {
-				  menuItem.setExpanded(Boolean.TRUE);
-			   }
-		   }
+			for (Menu menuItem : menus) {
+				menuItem.setId(menuItem.getId());
+				menuItem.setParent(menuItem.getParentId());
+				menuItem.setLevel(menuItem.getLevel());
+				menuItem.setExpanded(Boolean.FALSE);
+				menuItem.setLoaded(Boolean.TRUE);
+				menuItem.setIsLeaf(Boolean.TRUE);
+				if (menu != null && menu.getId() != null
+						&& (("," + menu.getParentIds() + ",").indexOf("," + menuItem.getId() + ",") != -1)) {
+					menuItem.setExpanded(Boolean.TRUE);
+				}
+			}
 		}
 		List<Menu> copyMenus = TreeEntityUtils.sort(menus);
-		if (copyMenus != null && copyMenus.size() != 0 && !(menu!=null && menu.getId() != null)) {
-		    copyMenus.get(0).setExpanded(Boolean.TRUE);
+		if (copyMenus != null && copyMenus.size() != 0 && !(menu != null && menu.getId() != null)) {
+			copyMenus.get(0).setExpanded(Boolean.TRUE);
 		}
 		Page pageList = new Page();
 		pageList.setData(copyMenus);
 		return pageList;
 	}
-	
+
 	/**
 	 * 表单页面
+	 * 
 	 * @param menu
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping("form")
-	public String form(Menu menu , Model model) {
+	public String form(Menu menu, Model model) {
 		if (menu != null && menu.getId() != null) {
 			menu = this.menuService.get(menu.getId());
 		} else {
-			menu.setId(IdGen.INVALID_ID); 
-			if(menu.getParentId() == null){
+			menu.setId(IdGen.INVALID_ID);
+			if (menu.getParentId() == null) {
 				menu.setParentId(IdGen.ROOT_ID);
 			}
 		}
@@ -132,72 +137,76 @@ public class MenuController extends BaseController {
 		model.addAttribute("menu", menu);
 		return "/system/MenuForm";
 	}
-	
+
 	/**
 	 * 选择页面
+	 * 
 	 * @param extId
 	 * @param response
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping("treeSelect")
-	public List<Map<String, Object>> treeSelect(@RequestParam(required=false)String extId) {
+	public List<Map<String, Object>> treeSelect(@RequestParam(required = false) String extId) {
 		List<Map<String, Object>> mapList = Lists.newArrayList();
 		List<Menu> list = this.menuService.findAllWithRoot();
-		for (int i=0; i<list.size(); i++){
+		for (int i = 0; i < list.size(); i++) {
 			Menu e = list.get(i);
-			if (extId == null || (extId!=null && !extId.equals(e.getId().toString()) && e.getParentIds().indexOf(","+extId+",")==-1)
-				&& e.getType() != 3){
+			if (extId == null || (extId != null && !extId.equals(e.getId().toString())
+					&& e.getParentIds().indexOf("," + extId + ",") == -1) && e.getType() != 3) {
 				Map<String, Object> map = Maps.newHashMap();
 				map.put("id", e.getId());
 				map.put("pId", e.getParentId());
 				map.put("name", e.getName());
-				if(e.getType() == 1) {//目录判断是否可以选择
+				if (e.getType() == 1) {// 目录判断是否可以选择
 					map.put("chkDisabled", Boolean.TRUE);
 					int iCount = this.menuService.treeMenuCheck(e.getId());
-				    if(iCount >0) {
-				    	map.put("chkDisabled", Boolean.FALSE);
-				    }
+					if (iCount > 0) {
+						map.put("chkDisabled", Boolean.FALSE);
+					}
 				}
 				mapList.add(map);
 			}
 		}
 		return mapList;
 	}
-	
+
 	/**
 	 * 菜单 细分权限的选择
+	 * 
 	 * @param extId
 	 * @param response
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping("treeSelect/option")
-	public List<Map<String, Object>> treeSelect4Option(@RequestParam(required=false)String extId) {
+	public List<Map<String, Object>> treeSelect4Option(@RequestParam(required = false) String extId) {
 		List<Map<String, Object>> mapList = Lists.newArrayList();
 		List<Menu> list = this.menuService.findAllWithRoot();
-		for (int i=0; i<list.size(); i++){
+		for (int i = 0; i < list.size(); i++) {
 			Menu e = list.get(i);
-			if (extId == null || (extId!=null && !extId.equals(e.getId().toString()) && e.getParentIds().indexOf(","+extId+",")==-1)){
+			if (extId == null || (extId != null && !extId.equals(e.getId().toString())
+					&& e.getParentIds().indexOf("," + extId + ",") == -1)) {
 				Map<String, Object> map = Maps.newHashMap();
 				map.put("id", e.getId());
 				map.put("pId", e.getParentId());
 				map.put("name", e.getName());
-				if(e.getType() == 1 || e.getType() == 2) {//目录判断是否可以选择
+				if (e.getType() == 1 || e.getType() == 2) {// 目录判断是否可以选择
 					map.put("chkDisabled", Boolean.TRUE);
 					int iCount = this.menuService.treeMenuCheck(e.getId());
-				    if(iCount >0) {
-				    	map.put("chkDisabled", Boolean.FALSE);
-				    }
+					if (iCount > 0) {
+						map.put("chkDisabled", Boolean.FALSE);
+					}
 				}
 				mapList.add(map);
 			}
 		}
 		return mapList;
 	}
-	
+
 	/**
 	 * 保存
+	 * 
 	 * @param menu
 	 * @param model
 	 * @param redirectAttributes
@@ -212,9 +221,10 @@ public class MenuController extends BaseController {
 		redirectAttributes.addAttribute("id", id);
 		return WebUtils.redirectTo(new StringBuilder(Globals.adminPath).append("/system/menu/form").toString());
 	}
-	
+
 	/**
 	 * 删除
+	 * 
 	 * @param idList
 	 * @param model
 	 * @param response
@@ -222,23 +232,24 @@ public class MenuController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping("delete")
-	public AjaxResult delete(Long[] idList , Model model,HttpServletResponse response) {
+	public AjaxResult delete(Long[] idList, Model model, HttpServletResponse response) {
 		List<Menu> menus = Lists.newArrayList();
-		for(Long id: idList) {
+		for (Long id : idList) {
 			Menu menu = new Menu();
 			menu.setId(id);
 			menus.add(menu);
 		}
 		Boolean bFalg = this.menuService.delete(menus);
-		if(bFalg) {
-		   UserUtils.removeAllCache();
-		   return AjaxResult.success();
+		if (bFalg) {
+			UserUtils.removeAllCache();
+			return AjaxResult.success();
 		}
 		return AjaxResult.error("要删除的菜单中存在子菜单，或分配了用户,不能删除");
 	}
-	
+
 	/**
 	 * 排序
+	 * 
 	 * @param model
 	 * @param request
 	 * @param response
@@ -249,10 +260,10 @@ public class MenuController extends BaseController {
 	@RequestMapping("sort")
 	public AjaxResult sort(Model model, HttpServletRequest request, HttpServletResponse response) {
 		String postData = request.getParameter("postData");
-		List<Map<String,String>> maps = JsonMapper.fromJson(postData, ArrayList.class);
-		if(maps != null && maps.size() != 0){
+		List<Map<String, String>> maps = JsonMapper.fromJson(postData, ArrayList.class);
+		if (maps != null && maps.size() != 0) {
 			List<Menu> menus = new ArrayList<Menu>();
-			for(Map<String,String> map: maps) {
+			for (Map<String, String> map : maps) {
 				Menu menu = new Menu();
 				menu.setId(Long.parseLong(map.get("id")));
 				menu.setSort(Integer.parseInt(map.get("sort")));

@@ -15,35 +15,36 @@ import com.tmt.wechat.utils.WechatUtils;
 
 /**
  * 二维码 管理
+ * 
  * @author 超级管理员
  * @date 2016-10-01
  */
 @Service("wechatQrcodeService")
-public class QrcodeService extends BaseService<Qrcode,Long> implements QrcodeServiceFacade{
-	
+public class QrcodeService extends BaseService<Qrcode, Long> implements QrcodeServiceFacade {
+
 	@Autowired
 	private QrcodeDao qrcodeDao;
-	
+
 	@Override
 	protected BaseDao<Qrcode, Long> getBaseDao() {
 		return qrcodeDao;
 	}
-	
+
 	/**
 	 * 保存
 	 */
 	@Transactional
 	public void save(Qrcode qrcode) {
-		if(IdGen.isInvalidId(qrcode.getId())) {
+		if (IdGen.isInvalidId(qrcode.getId())) {
 			this.insert(qrcode);
 		} else {
 			this.update(qrcode);
 		}
-		
+
 		// 删除缓存
 		WechatUtils.clearQrcode(qrcode.getSceneStr());
 	}
-	
+
 	/**
 	 * 删除
 	 */
@@ -62,6 +63,6 @@ public class QrcodeService extends BaseService<Qrcode,Long> implements QrcodeSer
 
 	@Override
 	public int checkSceneStr(Qrcode qrcode) {
-		return this.qrcodeDao.countByCondition("checkSceneStr",qrcode);
+		return this.qrcodeDao.countByCondition("checkSceneStr", qrcode);
 	}
 }

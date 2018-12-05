@@ -28,8 +28,8 @@ import com.tmt.system.entity.User;
 import com.tmt.system.service.RoleServiceFacade;
 
 @Service
-public class RoleService extends BaseService<Role,Long> implements RoleServiceFacade{
-	
+public class RoleService extends BaseService<Role, Long> implements RoleServiceFacade {
+
 	@Autowired
 	private RoleDao roleDao;
 	@Autowired
@@ -44,26 +44,26 @@ public class RoleService extends BaseService<Role,Long> implements RoleServiceFa
 	private GroupService groupService;
 	@Autowired
 	private OfficeService officeService;
-	
+
 	@Override
 	protected BaseDao<Role, Long> getBaseDao() {
 		return this.roleDao;
 	}
-	
+
 	@Override
 	public Role get(Long id) {
 		Role role = super.get(id);
 		List<Menu> RoleMenus = menuService.findMenusByRoleId(id);
-		if( RoleMenus != null) {
+		if (RoleMenus != null) {
 			StringBuilder sbMenuIds = new StringBuilder(100);
 			StringBuilder sbMenuNames = new StringBuilder(100);
 			StringBuilder sbOptionIds = new StringBuilder(100);
 			StringBuilder sbOptionNames = new StringBuilder(100);
-			for(Menu m :RoleMenus) {
-				if( m.getType() == 2) {
+			for (Menu m : RoleMenus) {
+				if (m.getType() == 2) {
 					sbMenuIds.append(m.getId()).append(",");
 					sbMenuNames.append(m.getName()).append(",");
-				} else if(m.getType() == 3){
+				} else if (m.getType() == 3) {
 					sbOptionIds.append(m.getId()).append(",");
 					sbOptionNames.append(m.getName()).append(",");
 				}
@@ -75,10 +75,10 @@ public class RoleService extends BaseService<Role,Long> implements RoleServiceFa
 		}
 		return role;
 	}
-	
+
 	@Transactional
-	public Long save(Role role){
-		if( IdGen.isInvalidId(role.getId())) {
+	public Long save(Role role) {
+		if (IdGen.isInvalidId(role.getId())) {
 			this.insert(role);
 		} else {
 			this.update(role);
@@ -86,14 +86,14 @@ public class RoleService extends BaseService<Role,Long> implements RoleServiceFa
 		Long Id = role.getId();
 		List<RoleMenu> roleMenus = this.roleMenuDao.findByRoleId(role.getId());
 		this.roleMenuDao.batchDelete(roleMenus);
-		//存储新权限
+		// 存储新权限
 		roleMenus = Lists.newArrayList();
-		//菜单
-		if( StringUtil3.isNotEmpty( role.getMenuIds()) ) {
+		// 菜单
+		if (StringUtil3.isNotEmpty(role.getMenuIds())) {
 			String[] menuIds = role.getMenuIds().split(",");
 			RoleMenu roleMenu = null;
-			for(String menuId :menuIds) {
-				if(StringUtil3.isNotEmpty(menuId)) {
+			for (String menuId : menuIds) {
+				if (StringUtil3.isNotEmpty(menuId)) {
 					roleMenu = new RoleMenu();
 					roleMenu.setMenuId(Long.parseLong(menuId));
 					roleMenu.setRoleId(Id);
@@ -101,12 +101,12 @@ public class RoleService extends BaseService<Role,Long> implements RoleServiceFa
 				}
 			}
 		}
-		//操作
-		if( StringUtil3.isNotEmpty(role.getOptionIds())) {
+		// 操作
+		if (StringUtil3.isNotEmpty(role.getOptionIds())) {
 			String[] menuIds = role.getOptionIds().split(",");
 			RoleMenu roleMenu = null;
-			for(String menuId :menuIds) {
-				if(StringUtil3.isNotEmpty(menuId)) {
+			for (String menuId : menuIds) {
+				if (StringUtil3.isNotEmpty(menuId)) {
 					roleMenu = new RoleMenu();
 					roleMenu.setMenuId(Long.parseLong(menuId));
 					roleMenu.setRoleId(Id);
@@ -118,10 +118,10 @@ public class RoleService extends BaseService<Role,Long> implements RoleServiceFa
 		groupService.removeGroupMenus();
 		return role.getId();
 	}
-	
+
 	@Transactional
 	public void delete(List<Role> roles) {
-		for( Role role: roles ) {
+		for (Role role : roles) {
 			List<RoleUser> roleUsers = this.roleUserDao.findByRoleId(role.getId());
 			List<RoleMenu> roleMenus = this.roleMenuDao.findByRoleId(role.getId());
 			List<GroupRole> roleGroups = this.groupRoleDao.findByRoleId(role.getId());
@@ -132,65 +132,67 @@ public class RoleService extends BaseService<Role,Long> implements RoleServiceFa
 		groupService.removeGroupMenus();
 		super.batchDelete(roles);
 	}
-	
+
 	/**
 	 * 查询所有的权限，包括用户单独分配的和所属用户组分配的
+	 * 
 	 * @param userId
 	 * @return
 	 */
-	public List<Role> findAllByUserId(Long userId){
+	public List<Role> findAllByUserId(Long userId) {
 		return this.queryForList("findAllByUserId", userId);
 	}
-	
-	public List<Role> findByUserId(Long userId){
+
+	public List<Role> findByUserId(Long userId) {
 		return this.queryForList("findByUserId", userId);
 	}
-	
-	public List<Role> findByGroupId(Long groupId){
+
+	public List<Role> findByGroupId(Long groupId) {
 		return this.queryForList("findByGroupId", groupId);
 	}
-	
+
 	/**
-	 * 根据权限获取用户的权限集合 --
-	 * 不一定要对应到菜单上（可以是权限 -- 也可以是角色）
+	 * 根据权限获取用户的权限集合 -- 不一定要对应到菜单上（可以是权限 -- 也可以是角色）
+	 * 
 	 * @param permissions
 	 * @return
 	 */
-	public List<Role> findByMenuPermission(User user, String permissions){
-		Map<String,Object> param = Maps.newHashMap();
+	public List<Role> findByMenuPermission(User user, String permissions) {
+		Map<String, Object> param = Maps.newHashMap();
 		param.put("permissions", permissions);
 		param.put("userId", user.getId());
 		return this.queryForList("findByMenuPermission", param);
 	}
-	
+
 	/**
 	 * 树形结构
+	 * 
 	 * @return
 	 */
 	public List<Map<String, Object>> roleTreeSelect() {
 		List<Map<String, Object>> mapList = Lists.newArrayList();
-		//组织结构树
-		List<TreeVO> orgTrees = this.officeService.findTreeList(new HashMap<String,Object>());
-		//角色树
-		List<TreeVO> userTrees = this.queryForGenericsList("findTreeList", new HashMap<String,Object>());
-		for(int i=0; i<orgTrees.size(); i++){
+		// 组织结构树
+		List<TreeVO> orgTrees = this.officeService.findTreeList(new HashMap<String, Object>());
+		// 角色树
+		List<TreeVO> userTrees = this.queryForGenericsList("findTreeList", new HashMap<String, Object>());
+		for (int i = 0; i < orgTrees.size(); i++) {
 			TreeVO e = orgTrees.get(i);
 			Map<String, Object> map = Maps.newHashMap();
-			map.put("id", "O_"+e.getId());
-			map.put("pId", "O_"+e.getParent());
+			map.put("id", "O_" + e.getId());
+			map.put("pId", "O_" + e.getParent());
 			map.put("name", e.getTreeName());
 			map.put("chkDisabled", Boolean.TRUE);
-			int iCount = this.countByCondition("officeSelectCheck",e.getId());
-			if( iCount > 0 ) {
+			int iCount = this.countByCondition("officeSelectCheck", e.getId());
+			if (iCount > 0) {
 				map.put("chkDisabled", Boolean.FALSE);
 			}
 			mapList.add(map);
 		}
-		for(int i=0; i<userTrees.size(); i++){
+		for (int i = 0; i < userTrees.size(); i++) {
 			TreeVO e = userTrees.get(i);
 			Map<String, Object> map = Maps.newHashMap();
 			map.put("id", e.getId());
-			map.put("pId", "O_"+e.getParent());
+			map.put("pId", "O_" + e.getParent());
 			map.put("name", e.getTreeName());
 			map.put("type", 1);
 			mapList.add(map);

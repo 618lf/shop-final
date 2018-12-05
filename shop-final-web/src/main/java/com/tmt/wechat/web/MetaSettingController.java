@@ -20,31 +20,34 @@ import com.tmt.wechat.service.MetaSettingServiceFacade;
 
 /**
  * 回复配置 管理
+ * 
  * @author 超级管理员
  * @date 2016-09-27
  */
 @Controller("wechatMetaSettingController")
 @RequestMapping(value = "${spring.application.web.admin}/wechat/meta/setting")
-public class MetaSettingController extends BaseController{
-	
+public class MetaSettingController extends BaseController {
+
 	@Autowired
 	private MetaSettingServiceFacade metaSettingService;
 	@Autowired
 	private AppServiceFacade appService;
-	
+
 	/**
 	 * 进入初始化页面
+	 * 
 	 * @param model
 	 */
 	@RequestMapping("")
-	public String def(Model model){
+	public String def(Model model) {
 		List<App> apps = appService.getAll();
 		model.addAttribute("apps", apps);
 		return "/wechat/MetaSettingList";
 	}
-	
+
 	/**
-	 * 初始化页面的数据 
+	 * 初始化页面的数据
+	 * 
 	 * @param menu
 	 * @param model
 	 * @param page
@@ -52,7 +55,7 @@ public class MetaSettingController extends BaseController{
 	 */
 	@ResponseBody
 	@RequestMapping("load")
-	public AjaxResult load(MetaSetting setting){
+	public AjaxResult load(MetaSetting setting) {
 		setting = this.metaSettingService.getByAppId(setting.getAppId());
 		if (setting == null) {
 			setting = new MetaSetting();
@@ -61,9 +64,10 @@ public class MetaSettingController extends BaseController{
 		}
 		return AjaxResult.success(setting);
 	}
-	
+
 	/**
 	 * 保存
+	 * 
 	 * @param category
 	 * @param model
 	 * @param redirectAttributes

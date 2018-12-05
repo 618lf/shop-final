@@ -32,28 +32,30 @@ import com.tmt.wechat.utils.WechatUtils;
 
 /**
  * 微信公众号 管理
+ * 
  * @author 超级管理员
  * @date 2016-09-04
  */
 @Controller("wechatAppController")
 @RequestMapping(value = "${spring.application.web.admin}/wechat/app")
-public class AppController extends BaseController{
-	
+public class AppController extends BaseController {
+
 	@Autowired
 	private AppServiceFacade appService;
-	
-	
+
 	/**
 	 * 进入初始化页面
+	 * 
 	 * @param model
 	 */
 	@RequestMapping("list")
-	public String list(App app, Model model){
+	public String list(App app, Model model) {
 		return "/wechat/AppList";
 	}
-	
+
 	/**
-	 * 初始化页面的数据 
+	 * 初始化页面的数据
+	 * 
 	 * @param app
 	 * @param model
 	 * @param page
@@ -61,34 +63,36 @@ public class AppController extends BaseController{
 	 */
 	@ResponseBody
 	@RequestMapping("page")
-	public Page page(App app, Page page){
-        QueryCondition qc = new QueryCondition();
+	public Page page(App app, Page page) {
+		QueryCondition qc = new QueryCondition();
 		PageParameters param = page.getParam();
 		Criteria c = qc.getCriteria();
-		             this.initQc(app, c);
+		this.initQc(app, c);
 		return appService.queryForPage(qc, param);
 	}
-	
+
 	/**
 	 * 表单
+	 * 
 	 * @param app
 	 * @param model
 	 */
 	@RequestMapping("form")
 	public String form(App app, Model model) {
-	    if(app != null && !IdGen.isInvalidId(app.getId())) {
-		   app = this.appService.get(app.getId());
+		if (app != null && !IdGen.isInvalidId(app.getId())) {
+			app = this.appService.get(app.getId());
 		} else {
-		   if(app == null) {
-			  app = new App();
-		   }
+			if (app == null) {
+				app = new App();
+			}
 		}
 		model.addAttribute("app", app);
 		return "/wechat/AppForm";
 	}
-	
+
 	/**
 	 * 保存
+	 * 
 	 * @param category
 	 * @param model
 	 * @param redirectAttributes
@@ -103,9 +107,10 @@ public class AppController extends BaseController{
 		redirectAttributes.addAttribute("id", app.getId());
 		return WebUtils.redirectTo(Globals.adminPath, "/wechat/app/form");
 	}
-	
+
 	/**
 	 * 删除
+	 * 
 	 * @param idList
 	 * @param model
 	 * @param redirectAttributes
@@ -113,9 +118,9 @@ public class AppController extends BaseController{
 	 */
 	@ResponseBody
 	@RequestMapping("delete")
-	public AjaxResult delete(String[] idList , Model model, HttpServletResponse response) {
+	public AjaxResult delete(String[] idList, Model model, HttpServletResponse response) {
 		List<App> apps = Lists.newArrayList();
-		for(String id: idList) {
+		for (String id : idList) {
 			App app = new App();
 			app.setId(id);
 			apps.add(app);
@@ -124,16 +129,17 @@ public class AppController extends BaseController{
 		WechatUtils.clearCache();
 		return AjaxResult.success();
 	}
-	
+
 	/**
 	 * 树组件支持
 	 */
 	@ResponseBody
 	@RequestMapping("treeSelect")
-	public List<Map<String, Object>> treeSelect(@RequestParam(required=false)String extId, HttpServletResponse response) {
+	public List<Map<String, Object>> treeSelect(@RequestParam(required = false) String extId,
+			HttpServletResponse response) {
 		List<Map<String, Object>> mapList = Lists.newArrayList();
 		List<App> trees = this.appService.getAll();
-		for (int i=0; i<trees.size(); i++){
+		for (int i = 0; i < trees.size(); i++) {
 			App e = trees.get(i);
 			Map<String, Object> map = Maps.newHashMap();
 			map.put("id", e.getId());
@@ -141,7 +147,7 @@ public class AppController extends BaseController{
 			map.put("name", e.getName());
 			mapList.add(map);
 		}
-		
+
 		// 根目录
 		Map<String, Object> map = Maps.newHashMap();
 		map.put("id", "O_-1");
@@ -149,12 +155,12 @@ public class AppController extends BaseController{
 		map.put("name", "微信公众号");
 		mapList.add(map);
 		return mapList;
-	} 
+	}
 
-	//查询条件
+	// 查询条件
 	private void initQc(App app, Criteria c) {
-        if(StringUtil3.isNotBlank(app.getName())) {
-           c.andEqualTo("NAME", app.getName());
-        }
+		if (StringUtil3.isNotBlank(app.getName())) {
+			c.andEqualTo("NAME", app.getName());
+		}
 	}
 }

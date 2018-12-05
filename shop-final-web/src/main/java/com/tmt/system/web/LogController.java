@@ -17,16 +17,17 @@ import com.tmt.system.service.LogServiceFacade;
 
 /**
  * 日志记录
+ * 
  * @author root
  *
  */
 @Controller
 @RequestMapping(value = "${spring.application.web.admin}/system/log")
-public class LogController extends BaseController{
+public class LogController extends BaseController {
 
 	@Autowired
 	private LogServiceFacade logService;
-	
+
 	/**
 	 * 列表页面
 	 */
@@ -34,9 +35,10 @@ public class LogController extends BaseController{
 	public String list() {
 		return "/system/LogList";
 	}
-	
+
 	/**
 	 * 列表数据
+	 * 
 	 * @param log
 	 * @param model
 	 * @param page
@@ -49,34 +51,35 @@ public class LogController extends BaseController{
 		PageParameters param = page.getParam();
 		qc.setOrderByClause(" CREATE_DATE DESC ");
 		Criteria c = qc.getCriteria();
-		if(StringUtil3.isNotBlank(log.getCreateName())) {
-		   c.andEqualTo("CREATE_ID", log.getCreateName());
+		if (StringUtil3.isNotBlank(log.getCreateName())) {
+			c.andEqualTo("CREATE_ID", log.getCreateName());
 		}
-		if(log.getType() != null) {
-		   c.andEqualTo("TYPE", log.getType());
+		if (log.getType() != null) {
+			c.andEqualTo("TYPE", log.getType());
 		}
-		if(StringUtil3.isNotBlank(log.getRemoteAddr())) {
-		   c.andEqualTo("REMOTE_ADDR", log.getRemoteAddr());
+		if (StringUtil3.isNotBlank(log.getRemoteAddr())) {
+			c.andEqualTo("REMOTE_ADDR", log.getRemoteAddr());
 		}
-		if(StringUtil3.isNotBlank(log.getRequestUri())) {
-		   c.andEqualTo("REQUEST_URI", log.getRequestUri());
+		if (StringUtil3.isNotBlank(log.getRequestUri())) {
+			c.andEqualTo("REQUEST_URI", log.getRequestUri());
 		}
-		if(StringUtil3.isNotBlank(log.getUserAgent())) {
-		   c.andEqualTo("USER_AGENT", log.getUserAgent());
+		if (StringUtil3.isNotBlank(log.getUserAgent())) {
+			c.andEqualTo("USER_AGENT", log.getUserAgent());
 		}
-		page  = this.logService.queryForPage(qc, param);
+		page = this.logService.queryForPage(qc, param);
 		return page;
 	}
-	
+
 	/**
 	 * 表单页面
+	 * 
 	 * @param log
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping("form")
-	public String form(Log log, Model model){
-		if( log != null && log.getId() != null ) {
+	public String form(Log log, Model model) {
+		if (log != null && log.getId() != null) {
 			log = this.logService.get(log.getId());
 		}
 		model.addAttribute("log", log);

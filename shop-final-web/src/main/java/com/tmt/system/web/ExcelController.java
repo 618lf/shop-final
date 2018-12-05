@@ -32,18 +32,19 @@ import com.tmt.system.utils.ExcelImpUtil;
 
 @Controller
 @RequestMapping(value = "${spring.application.web.admin}/system/excel")
-public class ExcelController extends BaseImpExportController<ExcelTemplate>{
-	
+public class ExcelController extends BaseImpExportController<ExcelTemplate> {
+
 	@Autowired
 	private ExcelTemplateServiceFacade templateService;
-	
+
 	@RequestMapping("list")
-	public String list(){
+	public String list() {
 		return "/system/ExcelList";
 	}
-	
+
 	/**
 	 * 列表数据
+	 * 
 	 * @param model
 	 * @param page
 	 * @param response
@@ -54,19 +55,20 @@ public class ExcelController extends BaseImpExportController<ExcelTemplate>{
 	public Page page(Model model, Page page, HttpServletResponse response) {
 		QueryCondition qc = new QueryCondition();
 		PageParameters param = page.getParam();
-		page  = this.templateService.queryForPage(qc, param);
+		page = this.templateService.queryForPage(qc, param);
 		return page;
 	}
-	
+
 	/**
 	 * 表单
+	 * 
 	 * @param template
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping("form")
-	public String form(ExcelTemplate template,Model model) {
-		if( template != null && template.getId() != null) {
+	public String form(ExcelTemplate template, Model model) {
+		if (template != null && template.getId() != null) {
 			template = this.templateService.getWithItems(template.getId());
 		} else {
 			template = new ExcelTemplate();
@@ -75,9 +77,10 @@ public class ExcelController extends BaseImpExportController<ExcelTemplate>{
 		model.addAttribute("template", template);
 		return "/system/ExcelForm";
 	}
-	
+
 	/**
 	 * 保存
+	 * 
 	 * @param template
 	 * @param model
 	 * @param request
@@ -85,17 +88,19 @@ public class ExcelController extends BaseImpExportController<ExcelTemplate>{
 	 * @return
 	 */
 	@RequestMapping("save")
-	public String save(ExcelTemplate template, Model model, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+	public String save(ExcelTemplate template, Model model, HttpServletRequest request,
+			RedirectAttributes redirectAttributes) {
 		List<ExcelItem> items = WebUtils.fetchItemsFromRequest(request, ExcelItem.class, "items.");
 		template.setItems(items);
 		this.templateService.save(template);
 		addMessage(redirectAttributes, "保存模版'" + template.getName() + "'成功");
 		redirectAttributes.addAttribute("id", template.getId());
-		return "redirect:"+Globals.adminPath+"/system/excel/form";
+		return "redirect:" + Globals.adminPath + "/system/excel/form";
 	}
-	
+
 	/**
 	 * 删除
+	 * 
 	 * @param idList
 	 * @param model
 	 * @param response
@@ -105,7 +110,7 @@ public class ExcelController extends BaseImpExportController<ExcelTemplate>{
 	@RequestMapping("delete")
 	public AjaxResult delete(Long[] idList, Model model, HttpServletResponse response) {
 		List<ExcelTemplate> templates = Lists.newArrayList();
-		for(Long id: idList) {
+		for (Long id : idList) {
 			ExcelTemplate template = new ExcelTemplate();
 			template.setId(id);
 			templates.add(template);
@@ -113,6 +118,7 @@ public class ExcelController extends BaseImpExportController<ExcelTemplate>{
 		this.templateService.delete(templates);
 		return AjaxResult.success();
 	}
+
 	/**
 	 * 导出数据封装
 	 */
@@ -120,7 +126,7 @@ public class ExcelController extends BaseImpExportController<ExcelTemplate>{
 	public Map<String, Object> doExport(ExcelTemplate param, HttpServletRequest request) {
 		Map<String, Object> datas = Maps.newHashMap();
 		param = this.templateService.getWithItems(param.getId());
-		if( param != null ) {
+		if (param != null) {
 			datas = ExcelExpUtils.buildExpParams(param.getName(), param.getName(), param.getItemsMapper(), null);
 		}
 		return datas;
@@ -133,14 +139,15 @@ public class ExcelController extends BaseImpExportController<ExcelTemplate>{
 	protected Class<ExcelTemplate> getTargetClass() {
 		return ExcelTemplate.class;
 	}
-	
+
 	/**
 	 * 导入验证
+	 * 
 	 * @param templateId
 	 * @param file
 	 * @return
 	 */
-	protected  AjaxResult doImport(Long templateId, HttpServletRequest request, MultipartFile file) {
+	protected AjaxResult doImport(Long templateId, HttpServletRequest request, MultipartFile file) {
 		AjaxResult result = ExcelImpUtil.fetchObjectFromTemplate(templateId, file);
 		return result;
 	}

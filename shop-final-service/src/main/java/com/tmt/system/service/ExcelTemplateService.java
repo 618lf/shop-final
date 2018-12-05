@@ -18,21 +18,21 @@ import com.tmt.system.entity.ExcelTemplate;
 import com.tmt.system.service.ExcelTemplateServiceFacade;
 
 @Service
-public class ExcelTemplateService extends BaseService<ExcelTemplate,Long> implements ExcelTemplateServiceFacade{
+public class ExcelTemplateService extends BaseService<ExcelTemplate, Long> implements ExcelTemplateServiceFacade {
 
 	@Autowired
 	private ExcelTemplateDao excelTemplateDao;
 	@Autowired
 	private ExcelItemService excelItemService;
-	
+
 	@Override
-	public BaseDao<ExcelTemplate,Long> getBaseDao() {
+	public BaseDao<ExcelTemplate, Long> getBaseDao() {
 		return this.excelTemplateDao;
 	}
-	
+
 	@Transactional(readOnly = false)
 	public Long save(ExcelTemplate template) {
-		if(IdGen.isInvalidId(template.getId())) {
+		if (IdGen.isInvalidId(template.getId())) {
 			this.insert(template);
 		} else {
 			this.update(template);
@@ -40,46 +40,49 @@ public class ExcelTemplateService extends BaseService<ExcelTemplate,Long> implem
 		this.excelItemService.save(template);
 		return template.getId();
 	}
-	
+
 	@Transactional(readOnly = false)
-	public void delete(List<ExcelTemplate> templates){
-		List<ExcelItem> allItems  = Lists.newArrayList();
-		for( ExcelTemplate template: templates){
+	public void delete(List<ExcelTemplate> templates) {
+		List<ExcelItem> allItems = Lists.newArrayList();
+		for (ExcelTemplate template : templates) {
 			List<ExcelItem> oldItems = excelItemService.findByTempleteId(template.getId());
 			allItems.addAll(oldItems);
 		}
 		this.batchDelete(templates);
 		this.excelItemService.delete(allItems);
 	}
-	
+
 	/**
 	 * 查询模版和详情
+	 * 
 	 * @param templateId
 	 * @return
 	 */
-	public ExcelTemplate getWithItems(Long templateId){
+	public ExcelTemplate getWithItems(Long templateId) {
 		ExcelTemplate template = this.get(templateId);
-		if(template != null) {
-		   List<ExcelItem> items = excelItemService.findByTempleteId(templateId);
-		   template.setItems(items);
- 		}
+		if (template != null) {
+			List<ExcelItem> items = excelItemService.findByTempleteId(templateId);
+			template.setItems(items);
+		}
 		return template;
 	}
-	
+
 	/**
 	 * 通过目标类,查询模版列表
+	 * 
 	 * @param className
 	 * @return
 	 */
-	public List<ExcelTemplate> queryByTargetClass(String className){
+	public List<ExcelTemplate> queryByTargetClass(String className) {
 		QueryCondition qc = new QueryCondition();
 		Criteria c = qc.getCriteria();
 		c.andEqualTo("ET.TARGET_CLASS", className);
 		return this.queryByCondition(qc);
 	}
-	
+
 	/**
 	 * 通过类型，查询模板列表
+	 * 
 	 * @param className
 	 * @return
 	 */

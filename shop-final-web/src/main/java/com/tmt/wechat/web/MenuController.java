@@ -31,33 +31,36 @@ import com.tmt.wechat.service.WechatOptionService;
 
 /**
  * 自定义菜单 管理
+ * 
  * @author 超级管理员
  * @date 2016-09-13
  */
 @Controller("wechatMenuController")
 @RequestMapping(value = "${spring.application.web.admin}/wechat/menu")
-public class MenuController extends BaseController{
-	
+public class MenuController extends BaseController {
+
 	@Autowired
 	private MenuServiceFacade menuService;
 	@Autowired
 	private AppServiceFacade appService;
 	@Autowired
 	private WechatOptionService wechatService;
-	
+
 	/**
 	 * 进入初始化页面
+	 * 
 	 * @param model
 	 */
 	@RequestMapping("list")
-	public String list(Model model){
+	public String list(Model model) {
 		List<App> apps = appService.getAll();
 		model.addAttribute("apps", apps);
 		return "/wechat/MenuList";
 	}
-	
+
 	/**
-	 * 初始化页面的数据 
+	 * 初始化页面的数据
+	 * 
 	 * @param menu
 	 * @param model
 	 * @param page
@@ -65,19 +68,20 @@ public class MenuController extends BaseController{
 	 */
 	@ResponseBody
 	@RequestMapping("page")
-	public AjaxResult page(Menu menu, Page page){
-        List<Menu> menus = this.menuService.queryMenusByAppId(menu.getAppId());
-        if (menus.size() == 0) {
-        	Menu item = new Menu();
-        	item.setId(IdGen.INVALID_ID);
-        	item.setParentId(IdGen.ROOT_ID);
-        	menus.add(item);
-        }
+	public AjaxResult page(Menu menu, Page page) {
+		List<Menu> menus = this.menuService.queryMenusByAppId(menu.getAppId());
+		if (menus.size() == 0) {
+			Menu item = new Menu();
+			item.setId(IdGen.INVALID_ID);
+			item.setParentId(IdGen.ROOT_ID);
+			menus.add(item);
+		}
 		return AjaxResult.success(menus);
 	}
-	
+
 	/**
 	 * 保存
+	 * 
 	 * @param category
 	 * @param model
 	 * @param redirectAttributes
@@ -89,9 +93,9 @@ public class MenuController extends BaseController{
 		template.userOptions(UserUtils.getUser());
 		String postData = request.getParameter("postData");
 		List<Menu> menus = JsonMapper.fromJsonToList(postData, Menu.class);
-		if (menus != null && menus.size() != 0){
+		if (menus != null && menus.size() != 0) {
 			this.menuService.save(template, menus);
-			
+
 			// 是否发布
 			if (template.getPublish() != null && Menu.YES == template.getPublish()) {
 				return this.send(template, menus);
@@ -100,28 +104,28 @@ public class MenuController extends BaseController{
 		}
 		return AjaxResult.error("没有需要保存的数据");
 	}
-	
+
 	// 发布微信自定义菜单
 	private AjaxResult send(Menu template, List<Menu> menus) {
-		
+
 		// 对应公众号
 		App account = appService.get(template.getAppId());
-		
+
 		// 拼接消息(menus是两层结构)
 		MenuButtons menuItem = new MenuButtons();
 		List<Button> firstMenus = Lists.newArrayList();
-		for(Menu menu: menus) {
+		for (Menu menu : menus) {
 			Button first = new Button();
 			first.setName(menu.getName());
 			first.setKey(menu.getId().toString());
 			first.setType(menuType(menu));
 			first.setUrl(menuUrl(account, menu));
 			firstMenus.add(first);
-			
+
 			// 第二层
 			List<Menu> children = menu.getMenus();
 			List<Button> secondMenus = Lists.newArrayList();
-			for(Menu child: children) {
+			for (Menu child : children) {
 				Button second = new Button();
 				second.setName(child.getName());
 				second.setKey(child.getId().toString());
@@ -135,8 +139,8 @@ public class MenuController extends BaseController{
 				first.setSub_button(secondMenus);
 			}
 		}
-		menuItem.setButton(firstMenus.toArray(new Button[]{}));
-		
+		menuItem.setButton(firstMenus.toArray(new Button[] {}));
+
 		// 发布
 		boolean result = wechatService.bind(account).menuCreate(menuItem);
 		if (!result) {
@@ -144,7 +148,7 @@ public class MenuController extends BaseController{
 		}
 		return AjaxResult.success();
 	}
-	
+
 	// 菜单类型，跳转或拉取数据
 	private String menuType(Menu menu) {
 		if (menu.getType() == WechatConstants.HANDLER_view || menu.getType() == WechatConstants.HANDLER_site_view) {
@@ -152,18 +156,18 @@ public class MenuController extends BaseController{
 		}
 		return "click";
 	}
-	
+
 	// 封装菜单URL
 	private String menuUrl(App account, Menu menu) {
 		String domain = account.getDomain();
 		if (StringUtil3.isBlank(domain)) {
 			domain = Globals.domain;
-		} else{
+		} else {
 			domain = new StringBuilder("http://").append(domain).toString();
 		}
 		if (menu.getType() == 5 || menu.getType() == 6) {
 			return WebUtils.preAppendScheme(domain, menu.getConfig());
-			//return new StringBuilder(domain).append(menu.getConfig()).toString();
+			// return new StringBuilder(domain).append(menu.getConfig()).toString();
 		}
 		// 默认首页
 		return null;

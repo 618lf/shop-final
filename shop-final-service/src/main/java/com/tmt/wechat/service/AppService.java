@@ -13,20 +13,21 @@ import com.tmt.wechat.entity.App;
 
 /**
  * 微信公众号 管理
+ * 
  * @author 超级管理员
  * @date 2016-09-04
  */
 @Service("wechatAppService")
-public class AppService extends BaseService<App,String> implements AppServiceFacade{
-	
+public class AppService extends BaseService<App, String> implements AppServiceFacade {
+
 	@Autowired
 	private AppDao appDao;
-	
+
 	@Override
 	protected BaseDao<App, String> getBaseDao() {
 		return appDao;
 	}
-	
+
 	/**
 	 * 保存(ID不能修改)
 	 */
@@ -39,7 +40,7 @@ public class AppService extends BaseService<App,String> implements AppServiceFac
 			this.insert(app);
 		}
 	}
-	
+
 	/**
 	 * 删除
 	 */
@@ -47,7 +48,7 @@ public class AppService extends BaseService<App,String> implements AppServiceFac
 	public void delete(List<App> apps) {
 		this.batchDelete(apps);
 	}
-	
+
 	/**
 	 * 根据域名获取
 	 */

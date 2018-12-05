@@ -22,25 +22,25 @@ import com.tmt.common.utils.Sets;
 import com.tmt.common.utils.StringUtil3;
 
 /**
- * 缓存监控的服务,内部缓存不同，监控也不一定相同
- * 只能出缓存统计信息，其他的信息不能给出
- * 系统主要提供了四大缓存，见 CacheUtil + shiro
+ * 缓存监控的服务,内部缓存不同，监控也不一定相同 只能出缓存统计信息，其他的信息不能给出 系统主要提供了四大缓存，见 CacheUtil + shiro
+ * 
  * @author lifeng
  */
 @Controller
 @RequestMapping(value = "${spring.application.web.admin}/system/cache")
 public class CacheMonitorController {
 
-	@Autowired(required=false)
+	@Autowired(required = false)
 	private RedisLocalCache localCache;
-	
+
 	@RequestMapping("monitor")
 	public String monitor(Model model) {
 		return "system/CacheMonitor";
 	}
-	
+
 	/**
 	 * 查询
+	 * 
 	 * @param name
 	 * @param model
 	 * @return
@@ -49,43 +49,44 @@ public class CacheMonitorController {
 	@RequestMapping("search")
 	public List<LabelVO> search(String name, Model model) {
 		List<LabelVO> keys = Lists.newArrayList();
-		
+
 		if (StringUtil3.isNotBlank(name)) {
 			Cache cache = CacheUtils.getSysCache();
 			List<Object> _keys = cache.keys(name + "*");
-			for(Object object : _keys) {
+			for (Object object : _keys) {
 				keys.add(LabelVO.newLabel("sys", object.toString()));
 			}
 		}
-		
+
 		if (StringUtil3.isNotBlank(name)) {
 			Cache cache = CacheUtils.getSessCache();
 			List<Object> _keys = cache.keys(name + "*");
-			for(Object object : _keys) {
+			for (Object object : _keys) {
 				keys.add(LabelVO.newLabel("sess", object.toString()));
 			}
 		}
-		
+
 		if (StringUtil3.isNotBlank(name)) {
 			Cache cache = CacheUtils.getDictCache();
 			List<Object> _keys = cache.keys(name + "*");
-			for(Object object : _keys) {
+			for (Object object : _keys) {
 				keys.add(LabelVO.newLabel("dict", object.toString()));
 			}
 		}
-		
+
 		if (StringUtil3.isNotBlank(name)) {
 			Cache cache = CacheUtils.getCache("authorization");
 			List<Object> _keys = cache.keys(name + "*");
-			for(Object object : _keys) {
+			for (Object object : _keys) {
 				keys.add(LabelVO.newLabel("authorization", object.toString()));
 			}
 		}
 		return keys;
 	}
-	
+
 	/**
 	 * 缓存详情
+	 * 
 	 * @param type
 	 * @param name
 	 * @return
@@ -94,9 +95,11 @@ public class CacheMonitorController {
 	@RequestMapping("detail")
 	public AjaxResult detail(String type, String name) {
 		Set<String> caches = Sets.newHashSet();
-		caches.add("sys");caches.add("sess");caches.add("dict");caches.add("authorization");
-		if (StringUtil3.isNotBlank(type) && caches.contains(type)
-				&& StringUtil3.isNotBlank(name)) {
+		caches.add("sys");
+		caches.add("sess");
+		caches.add("dict");
+		caches.add("authorization");
+		if (StringUtil3.isNotBlank(type) && caches.contains(type) && StringUtil3.isNotBlank(name)) {
 			Cache cache = CacheUtils.getCache(type);
 			Object o = cache.get(name);
 			if (o != null) {
@@ -104,7 +107,7 @@ public class CacheMonitorController {
 				values.put("key", type + "#" + name);
 				values.put("_ttl", cache.ttl(name));
 				values.put("json", JsonMapper.toJson(o));
-				
+
 				// 二级缓存
 				if (localCache != null) {
 					values.put("local", localCache.exists(type.toUpperCase() + "#" + name));
@@ -115,18 +118,21 @@ public class CacheMonitorController {
 		}
 		return AjaxResult.error("查询失败");
 	}
-	
+
 	/**
 	 * 删除
+	 * 
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping("delete")
 	public AjaxResult delete(String type, String name) {
 		Set<String> caches = Sets.newHashSet();
-		caches.add("sys");caches.add("sess");caches.add("dict");caches.add("authorization");
-		if (StringUtil3.isNotBlank(type) && caches.contains(type)
-				&& StringUtil3.isNotBlank(name)) {
+		caches.add("sys");
+		caches.add("sess");
+		caches.add("dict");
+		caches.add("authorization");
+		if (StringUtil3.isNotBlank(type) && caches.contains(type) && StringUtil3.isNotBlank(name)) {
 			Cache cache = CacheUtils.getCache(type);
 			cache.delete(name);
 			return AjaxResult.success();

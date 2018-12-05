@@ -15,29 +15,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.tmt.Constants;
 import com.tmt.common.utils.SpringContextHolder;
 import com.tmt.common.utils.StringUtil3;
 import com.tmt.system.dao.TaskDao;
-import com.tmt.system.entity.SystemConstant;
 import com.tmt.system.entity.Task;
 import com.tmt.system.entity.Task.TaskStatus;
 
 /**
  * 真实的任务执行命令
+ * 
  * @author lifeng
  */
 @Service
-public class TaskCommandService implements TaskCommandServiceFacade {
+public class TaskCommandService {
 
 	@Autowired
 	private Scheduler scheduler;
 	@Autowired
 	private TaskDao taskDao;
-	
+
 	/**
 	 * 删除任务
 	 */
-	@Override
 	@Transactional
 	public void remove(Long id) {
 		Task task = this.taskDao.get(id);
@@ -48,28 +48,28 @@ public class TaskCommandService implements TaskCommandServiceFacade {
 			this.taskDao.update("updateOps", task);
 		}
 	}
-	
+
 	/**
 	 * 启动任务
 	 */
-	@Override
+	@Transactional
 	public void start(Long id) {
 		Task task = this.taskDao.get(id);
 		task.setTaskStatus(TaskStatus.FINISH);
 		task.setOps("任务启动失败");
-        if (isValidExpression(task)) {
-        	if (this.jobRunable(task)) {
-    			task.setTaskStatus(TaskStatus.RUNABLE);
-    			task.setOps("任务启动成功");
-    		}
+		if (isValidExpression(task)) {
+			if (this.jobRunable(task)) {
+				task.setTaskStatus(TaskStatus.RUNABLE);
+				task.setOps("任务启动成功");
+			}
 		}
-        this.taskDao.update("updateStatus", task);
+		this.taskDao.update("updateStatus", task);
 	}
 
 	/**
 	 * 停止任务
 	 */
-	@Override
+	@Transactional
 	public void stop(Long id) {
 		Task task = this.taskDao.get(id);
 		task.setOps("任务停止失败");
@@ -83,7 +83,7 @@ public class TaskCommandService implements TaskCommandServiceFacade {
 	/**
 	 * 暂停
 	 */
-	@Override
+	@Transactional
 	public void pause(Long id) {
 		Task task = this.taskDao.get(id);
 		task.setOps("任务暂停失败");
@@ -97,7 +97,7 @@ public class TaskCommandService implements TaskCommandServiceFacade {
 	/**
 	 * 执行中
 	 */
-	@Override
+	@Transactional
 	public void execute(Long id) {
 		Task task = this.taskDao.get(id);
 		task.setOps("任务执行失败");
@@ -107,94 +107,109 @@ public class TaskCommandService implements TaskCommandServiceFacade {
 		}
 		this.taskDao.update("updateOps", task);
 	}
-	
+
 	/**
 	 * 任务可执行(等待执行)
+	 * 
 	 * @param task
 	 */
 	public boolean jobRunable(Task task) {
-		 try {
-			CronTriggerImpl trigger = (CronTriggerImpl) this.scheduler.getTrigger(TriggerKey.triggerKey(SystemConstant.TASK_PREFIX + task.getId()));
+		try {
+			CronTriggerImpl trigger = (CronTriggerImpl) this.scheduler
+					.getTrigger(TriggerKey.triggerKey(Constants.TASK_PREFIX + task.getId()));
 			if (null == trigger) {
 				JobDetail jobDetail = this.getJobDetail(task, false);
-				if(jobDetail != null) {
-				   trigger = this.getCronTrigger(jobDetail, task);
-				   scheduler.scheduleJob(jobDetail, trigger);
-				   return true;
+				if (jobDetail != null) {
+					trigger = this.getCronTrigger(jobDetail, task);
+					scheduler.scheduleJob(jobDetail, trigger);
+					return true;
 				}
 			} else {
 				trigger.setCronExpression(task.getCronExpression());
 				scheduler.rescheduleJob(trigger.getKey(), trigger);
 				return true;
 			}
-		} catch (Exception e) {return false;}
+		} catch (Exception e) {
+			return false;
+		}
 		return false;
 	}
-	
+
 	/**
 	 * 任务不可执行（暂停）
+	 * 
 	 * @param task
 	 */
 	public boolean jobPause(Task task) {
 		try {
-			CronTriggerImpl trigger = (CronTriggerImpl) this.scheduler.getTrigger(TriggerKey.triggerKey(SystemConstant.TASK_PREFIX + task.getId()));
-			if(null == trigger) {
+			CronTriggerImpl trigger = (CronTriggerImpl) this.scheduler
+					.getTrigger(TriggerKey.triggerKey(Constants.TASK_PREFIX + task.getId()));
+			if (null == trigger) {
 				return true;
 			} else {
 				scheduler.pauseTrigger(trigger.getKey());
 				return true;
 			}
-		} catch (Exception e) {return false;}
+		} catch (Exception e) {
+			return false;
+		}
 	}
-	
+
 	/**
 	 * 删除
+	 * 
 	 * @return
 	 */
 	public boolean jobShutdown(Task task) {
 		try {
-			CronTriggerImpl trigger = (CronTriggerImpl) this.scheduler.getTrigger(TriggerKey.triggerKey(SystemConstant.TASK_PREFIX + task.getId()));
-			if(null == trigger) {
+			CronTriggerImpl trigger = (CronTriggerImpl) this.scheduler
+					.getTrigger(TriggerKey.triggerKey(Constants.TASK_PREFIX + task.getId()));
+			if (null == trigger) {
 				return true;
 			} else {
 				scheduler.deleteJob(trigger.getJobKey());
 				return true;
 			}
-		} catch (Exception e) {return false;}
+		} catch (Exception e) {
+			return false;
+		}
 	}
-	
+
 	/**
-	 * 立即执行
-	 * 1. 如果之没任务，则创建之后执行一次，然后删除 
+	 * 立即执行 1. 如果之没任务，则创建之后执行一次，然后删除
+	 * 
 	 * @param task
 	 * @return
 	 */
 	public boolean jobExecute(Task task) {
 		try {
-			CronTriggerImpl trigger = (CronTriggerImpl) this.scheduler.getTrigger(TriggerKey.triggerKey(SystemConstant.TASK_PREFIX + task.getId()));
+			CronTriggerImpl trigger = (CronTriggerImpl) this.scheduler
+					.getTrigger(TriggerKey.triggerKey(Constants.TASK_PREFIX + task.getId()));
 			if (null == trigger) {
-				JobDetail jobDetail = this.getJobDetail(task, true); 
-				if(jobDetail != null) {
-				   scheduler.addJob(jobDetail, true);
-				   scheduler.triggerJob(jobDetail.getKey());
-				   scheduler.deleteJob(jobDetail.getKey());
-				   return true;
+				JobDetail jobDetail = this.getJobDetail(task, true);
+				if (jobDetail != null) {
+					scheduler.addJob(jobDetail, true);
+					scheduler.triggerJob(jobDetail.getKey());
+					scheduler.deleteJob(jobDetail.getKey());
+					return true;
 				}
 			} else {
 				scheduler.triggerJob(trigger.getJobKey());
 				return true;
 			}
-		} catch (Exception e) {return false;}
+		} catch (Exception e) {
+			return false;
+		}
 		return false;
 	}
-	
-	//构建执行器
+
+	// 构建执行器
 	private CronTriggerImpl getCronTrigger(JobDetail jobDetail, Task task) throws ParseException {
 		JobDataMap jobDataMap = new JobDataMap();
 		Date startTime = new Date(System.currentTimeMillis());
 		jobDataMap.put("jobDetail", jobDetail); // 固定写法
 		CronTriggerImpl cti = new CronTriggerImpl();
-		cti.setName(SystemConstant.TASK_PREFIX + task.getId());
+		cti.setName(Constants.TASK_PREFIX + task.getId());
 		cti.setGroup(Scheduler.DEFAULT_GROUP);
 		cti.setJobKey(jobDetail.getKey());
 		cti.setJobDataMap(jobDataMap);
@@ -204,8 +219,8 @@ public class TaskCommandService implements TaskCommandServiceFacade {
 		cti.setPriority(1); // 优先级别
 		return cti;
 	}
-	
-	//构建任务
+
+	// 构建任务
 	private JobDetail getJobDetail(Task task, boolean storeDurably) {
 		if (StringUtil3.isBlank(task.getBusinessObject()) || (this.getExecutor(task)) == null
 				|| !this.isValidExpression(task)) {
@@ -213,26 +228,27 @@ public class TaskCommandService implements TaskCommandServiceFacade {
 		}
 		JobDataMap jobDataMap = new JobDataMap();
 		jobDataMap.put(TaskExecutorAdapter.JOB_TASK_KEY, task.getId());
-		Class<? extends TaskExecutorAdapter> jobClass = task.getConcurrent() ? TaskExecutorAdapter.class : StatefulTaskExecutorAdapter.class;
+		Class<? extends TaskExecutorAdapter> jobClass = task.getConcurrent() ? TaskExecutorAdapter.class
+				: StatefulTaskExecutorAdapter.class;
 		JobBuilder builder = JobBuilder.newJob(jobClass);
 		builder.usingJobData(jobDataMap);
-		builder.withIdentity(new StringBuilder(SystemConstant.TASK_PREFIX).append(task.getId()).toString());
+		builder.withIdentity(new StringBuilder(Constants.TASK_PREFIX).append(task.getId()).toString());
 		if (storeDurably) {
-		    builder.storeDurably();
+			builder.storeDurably();
 		}
 		return builder.build();
 	}
-	
-    //下一次执行的时间点(主要校验执行时间是否填写正确)
+
+	// 下一次执行的时间点(主要校验执行时间是否填写正确)
 	public boolean isValidExpression(Task task) {
 		return CronExpression.isValidExpression(task.getCronExpression());
 	}
-	
+
 	// 具体的任务执行器
-	public TaskExecutor getExecutor(Task task){
-		try{
+	public TaskExecutor getExecutor(Task task) {
+		try {
 			return SpringContextHolder.getBean(task.getBusinessObject());
-		}catch(Exception e) {
+		} catch (Exception e) {
 			return null;
 		}
 	}
