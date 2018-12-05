@@ -29,14 +29,6 @@ public class LogService extends BaseService<Log, Long> implements LogServiceFaca
 	}
 
 	/**
-	 * 高效的大数据保存
-	 */
-	@Override
-	public int bulkSave(String sql, byte[] bytes) {
-		return logDao.bulkSave(sql, bytes);
-	}
-
-	/**
 	 * 指定分钟之前的数据
 	 * 
 	 * @param second

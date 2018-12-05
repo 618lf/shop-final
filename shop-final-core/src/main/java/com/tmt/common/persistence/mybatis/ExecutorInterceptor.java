@@ -1,7 +1,5 @@
 package com.tmt.common.persistence.mybatis;
 
-import java.util.Properties;
-
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -23,12 +21,14 @@ import com.tmt.common.persistence.dialect.Dialect;
  * <li>Copyright: www.gzzyzz.com</li>
  * <li>Company:</li>
  * </ul>
+ * 
  * @author Hill
  * @version 2014-10-13
  */
-@Intercepts({@Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class})})
+@Intercepts({ @Signature(type = Executor.class, method = "query", args = { MappedStatement.class, Object.class,
+		RowBounds.class, ResultHandler.class }) })
 public class ExecutorInterceptor extends AbstractInterceptor {
-	
+
 	private final static Logger logger = LoggerFactory.getLogger(ExecutorInterceptor.class);
 	private static int MAPPED_STATEMENT_INDEX = 0;
 	private static int PARAMETER_INDEX = 1;
@@ -49,46 +49,34 @@ public class ExecutorInterceptor extends AbstractInterceptor {
 		final RowBounds rowBounds = (RowBounds) queryArgs[ROWBOUNDS_INDEX];
 		int offset = rowBounds.getOffset();
 		int limit = rowBounds.getLimit();
-		//分页
-		if((offset != RowBounds.NO_ROW_OFFSET || limit != RowBounds.NO_ROW_LIMIT) && dialect.supportsLimit()) {
-		   MappedStatement ms = (MappedStatement) queryArgs[MAPPED_STATEMENT_INDEX];
-		   Object parameter = queryArgs[PARAMETER_INDEX];
-		   BoundSql boundSql = ms.getBoundSql(parameter);
-		   String sql = boundSql.getSql().replaceAll("\\s{2,}", " ").trim();
-		   sql = dialect.getLimitString(sql, offset, limit);
-		   offset = RowBounds.NO_ROW_OFFSET; limit = RowBounds.NO_ROW_LIMIT;
-		   queryArgs[ROWBOUNDS_INDEX] = new RowBounds(offset, limit);
-		   BoundSql newBoundSql = copyFromBoundSql(ms, boundSql, sql);
-		   MappedStatement newMs = copyFromMappedStatement(ms, new BoundSqlSqlSource(newBoundSql));
-		   queryArgs[MAPPED_STATEMENT_INDEX] = newMs;
-		   logger.debug("PAGE SQL:%s", sql);
+		// 分页
+		if ((offset != RowBounds.NO_ROW_OFFSET || limit != RowBounds.NO_ROW_LIMIT) && dialect.supportsLimit()) {
+			MappedStatement ms = (MappedStatement) queryArgs[MAPPED_STATEMENT_INDEX];
+			Object parameter = queryArgs[PARAMETER_INDEX];
+			BoundSql boundSql = ms.getBoundSql(parameter);
+			String sql = boundSql.getSql().replaceAll("\\s{2,}", " ").trim();
+			sql = dialect.getLimitString(sql, offset, limit);
+			offset = RowBounds.NO_ROW_OFFSET;
+			limit = RowBounds.NO_ROW_LIMIT;
+			queryArgs[ROWBOUNDS_INDEX] = new RowBounds(offset, limit);
+			BoundSql newBoundSql = copyFromBoundSql(ms, boundSql, sql);
+			MappedStatement newMs = copyFromMappedStatement(ms, new BoundSqlSqlSource(newBoundSql));
+			queryArgs[MAPPED_STATEMENT_INDEX] = newMs;
+			logger.debug("PAGE SQL:%s", sql);
 		}
 	}
-	
+
 	/**
 	 * 是否拦截
 	 */
 	@Override
-	public Object plugin(Object target) {  
-	  if(target instanceof Executor) {
-		 return Plugin.wrap(target, this);
-	  }
-      return target;
-    }
-	
-	/**
-	 * 初始化属性
-	 */
-	@Override
-	public void setProperties(Properties properties) {
-		String dialectClass = properties.getProperty("dialectClass");
-		try {
-			dialect = (Dialect) Class.forName(dialectClass).newInstance();
-		} catch (Exception e) {
-			throw new RuntimeException("cannot create dialect instance by dialectClass:" + dialectClass, e);
+	public Object plugin(Object target) {
+		if (target instanceof Executor) {
+			return Plugin.wrap(target, this);
 		}
+		return target;
 	}
-	
+
 	/**
 	 * 初始化属性
 	 */

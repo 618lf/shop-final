@@ -1,8 +1,9 @@
 package com.tmt.common.persistence.dialect;
 
 /**
- * h2 数据库操作 感觉和 Oracle 的一样
+ * h2 数据库操作
  * 
  * @author lifeng
  */
-public class H2Dialect extends OracleDialect {}
+public class H2Dialect extends OracleDialect {
+}

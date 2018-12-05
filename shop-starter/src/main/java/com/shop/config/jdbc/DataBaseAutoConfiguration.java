@@ -59,6 +59,7 @@ import com.tmt.common.security.utils.StringUtils;
 
 /**
  * 会判断是否引入了数据库组件
+ * 
  * @author lifeng
  */
 @org.springframework.context.annotation.Configuration
@@ -76,12 +77,10 @@ public class DataBaseAutoConfiguration {
 	@ConditionalOnClass(JdbcTemplate.class)
 	@ConditionalOnMissingBean(DataSource.class)
 	@EnableConfigurationProperties(DataSourceProperties.class)
-	@Import({
-		SqlLiteDataSourceAutoConfiguration.class,
-		DruidDataSourceAutoConfiguration.class,
-		HikariDataSourceAutoConfiguration.class
-	})
-	public static class DataSourceAutoConfiguration {}
+	@Import({ SqlLiteDataSourceAutoConfiguration.class, DruidDataSourceAutoConfiguration.class,
+			HikariDataSourceAutoConfiguration.class })
+	public static class DataSourceAutoConfiguration {
+	}
 
 	/**
 	 * JDBC 操作模板
@@ -156,7 +155,6 @@ public class DataBaseAutoConfiguration {
 	 * Mybatis
 	 * 
 	 * @author lifeng
-	 *
 	 */
 	@org.springframework.context.annotation.Configuration
 	@ConditionalOnClass({ SqlSessionFactory.class, SqlSessionFactoryBean.class })
@@ -171,9 +169,8 @@ public class DataBaseAutoConfiguration {
 		private final ResourceLoader resourceLoader;
 		private final DatabaseIdProvider databaseIdProvider;
 		private final List<ConfigurationCustomizer> configurationCustomizers;
-		
-		public MybatisAutoConfiguration(MybatisProperties properties,
-				DataSourceProperties dbProperties, 
+
+		public MybatisAutoConfiguration(MybatisProperties properties, DataSourceProperties dbProperties,
 				ObjectProvider<Interceptor[]> interceptorsProvider, ResourceLoader resourceLoader,
 				ObjectProvider<DatabaseIdProvider> databaseIdProvider,
 				ObjectProvider<List<ConfigurationCustomizer>> configurationCustomizersProvider) {
@@ -194,9 +191,29 @@ public class DataBaseAutoConfiguration {
 			}
 		}
 
+		/**
+		 * 数据库的方言
+		 * 
+		 * @return
+		 */
+		@Bean
+		public Dialect getDialect() {
+			Database db = this.dbProperties.getDb();
+			if (db == Database.h2) {
+				return new H2Dialect();
+			} else if (db == Database.mysql) {
+				return new MySQLDialect();
+			} else if (db == Database.oracle) {
+				return new OracleDialect();
+			} else if (db == Database.sqlite) {
+				return new SqlLiteDialect();
+			}
+			return new MySQLDialect();
+		}
+
 		@Bean
 		@ConditionalOnMissingBean
-		public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
+		public SqlSessionFactory sqlSessionFactory(DataSource dataSource, Dialect dialect) throws Exception {
 			SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
 			factory.setDataSource(dataSource);
 			factory.setVfs(SpringBootVFS.class);
@@ -233,33 +250,11 @@ public class DataBaseAutoConfiguration {
 			}
 
 			// 默认配置
-			this.defaultConfiguration(configuration);
-			return factory.getObject();
-		}
-
-		private void defaultConfiguration(Configuration configuration) {
-
-			// 默认的拦截器
 			ExecutorInterceptor interceptor = new ExecutorInterceptor();
-			interceptor.setDialect(getDialect());
+			interceptor.setDialect(dialect);
 			configuration.addInterceptor(interceptor);
-
-			// 默认的别名
 			configuration.getTypeAliasRegistry().registerAlias("queryCondition", QueryCondition.class);
-		}
-		
-		private Dialect getDialect() {
-			Database db = this.dbProperties.getDb();
-			if (db == Database.h2) {
-				return new H2Dialect();
-			} else if (db == Database.mysql) {
-				return new MySQLDialect();
-			} else if (db == Database.oracle) {
-				return new OracleDialect();
-			} else if (db == Database.sqlite) {
-				return new SqlLiteDialect();
-			}
-			return new MySQLDialect();
+			return factory.getObject();
 		}
 
 		@Bean

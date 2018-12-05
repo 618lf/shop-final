@@ -3349,366 +3349,913 @@ SELECT M.*,ROWNUM NUM from (select * from sys_id_store) M) where rownum <=1 [420
 2018-11-28 17:54:29 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "SELECT M.*,ROWNUM NUM FROM (SELECT * FROM SYS_ID_STORE) M)[*] WHERE ROWNUM <=1 "; SQL statement:
 SELECT M.*,ROWNUM NUM from (select * from sys_id_store) M) where rownum <=1 [42000-197]
-2018-11-29 11:05:02 jdbc[12]: exception
-org.h2.jdbc.JdbcSQLException: Invalid parameter count for "LAST_INSERT_ID", expected count: "0"; SQL statement:
-UPDATE SYS_ID_STORE SET CURRENT_VALUE = LAST_INSERT_ID(GREATEST(CURRENT_VALUE, MIN_VALUE) + STEP) WHERE TABLE_NAME = ? [7001-197]
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:357)
-	at org.h2.message.DbException.get(DbException.java:179)
-	at org.h2.expression.Function.setParameter(Function.java:558)
-	at org.h2.command.Parser.readFunction(Parser.java:2908)
-	at org.h2.command.Parser.readTerm(Parser.java:3102)
-	at org.h2.command.Parser.readFactor(Parser.java:2587)
-	at org.h2.command.Parser.readSum(Parser.java:2574)
-	at org.h2.command.Parser.readConcat(Parser.java:2544)
-	at org.h2.command.Parser.readCondition(Parser.java:2370)
-	at org.h2.command.Parser.readAnd(Parser.java:2342)
-	at org.h2.command.Parser.readExpression(Parser.java:2334)
-	at org.h2.command.Parser.parseUpdateSetClause(Parser.java:815)
-	at org.h2.command.Parser.parseUpdate(Parser.java:780)
-	at org.h2.command.Parser.parsePrepared(Parser.java:485)
-	at org.h2.command.Parser.parse(Parser.java:335)
-	at org.h2.command.Parser.parse(Parser.java:307)
-	at org.h2.command.Parser.prepareCommand(Parser.java:278)
-	at org.h2.engine.Session.prepareLocal(Session.java:611)
-	at org.h2.engine.Session.prepareCommand(Session.java:549)
-	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1247)
-	at org.h2.jdbc.JdbcPreparedStatement.<init>(JdbcPreparedStatement.java:76)
-	at org.h2.jdbc.JdbcConnection.prepareStatement(JdbcConnection.java:304)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_prepareStatement(FilterChainImpl.java:476)
-	at com.alibaba.druid.filter.FilterAdapter.connection_prepareStatement(FilterAdapter.java:929)
-	at com.alibaba.druid.filter.FilterEventAdapter.connection_prepareStatement(FilterEventAdapter.java:122)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_prepareStatement(FilterChainImpl.java:473)
-	at com.alibaba.druid.filter.FilterAdapter.connection_prepareStatement(FilterAdapter.java:929)
-	at com.alibaba.druid.filter.FilterEventAdapter.connection_prepareStatement(FilterEventAdapter.java:122)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_prepareStatement(FilterChainImpl.java:473)
-	at com.alibaba.druid.proxy.jdbc.ConnectionProxyImpl.prepareStatement(ConnectionProxyImpl.java:342)
-	at com.alibaba.druid.pool.DruidPooledConnection.prepareStatement(DruidPooledConnection.java:349)
-	at com.tmt.system.service.NumberGenerator.fetchKeyAndStep(NumberGenerator.java:67)
-	at com.tmt.system.service.NumberGenerator.loadFromDB(NumberGenerator.java:50)
-	at com.tmt.system.service.NumberGenerator.getNextKey(NumberGenerator.java:39)
-	at com.tmt.system.service.NumberGenerator.generateNumber(NumberGenerator.java:31)
-	at com.tmt.web.TestNumberController.num(TestNumberController.java:29)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:497)
-	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:209)
-	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:136)
-	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:102)
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:877)
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:783)
-	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
-	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:991)
-	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:925)
-	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:974)
-	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:866)
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:635)
-	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:851)
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:742)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at com.tmt.common.security.SecurityFilter.executeChain(SecurityFilter.java:159)
-	at com.tmt.common.security.SecurityFilter$1.call(SecurityFilter.java:66)
-	at com.tmt.common.security.context.SubjectCallable.call(SubjectCallable.java:25)
-	at com.tmt.common.security.subjct.support.DefaultSubject.execute(DefaultSubject.java:165)
-	at com.tmt.common.security.SecurityFilter.doFilterInternal(SecurityFilter.java:63)
-	at com.tmt.common.security.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:68)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at com.tmt.common.web.filter.EncodingConvertFilter.doFilterInternal(EncodingConvertFilter.java:52)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:198)
-	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
-	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:496)
-	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:140)
-	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:81)
-	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
-	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:803)
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:790)
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1468)
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
-	at java.lang.Thread.run(Thread.java:745)
-2018-11-29 11:06:44 jdbc[12]: exception
-org.h2.jdbc.JdbcSQLException: Parameter "#1" is not set; SQL statement:
-SELECT CURRENT_VALUE + 1, STEP FROM SYS_ID_STORE WHERE TABLE_NAME = ? [90012-197]
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:357)
-	at org.h2.message.DbException.get(DbException.java:179)
-	at org.h2.message.DbException.get(DbException.java:155)
-	at org.h2.expression.Parameter.checkSet(Parameter.java:81)
-	at org.h2.command.Prepared.checkParameters(Prepared.java:170)
-	at org.h2.command.CommandContainer.query(CommandContainer.java:113)
-	at org.h2.command.Command.executeQuery(Command.java:202)
-	at org.h2.jdbc.JdbcPreparedStatement.executeQuery(JdbcPreparedStatement.java:114)
-	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:2830)
-	at com.alibaba.druid.filter.FilterEventAdapter.preparedStatement_executeQuery(FilterEventAdapter.java:465)
-	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:2827)
-	at com.alibaba.druid.filter.FilterEventAdapter.preparedStatement_executeQuery(FilterEventAdapter.java:465)
-	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:2827)
-	at com.alibaba.druid.proxy.jdbc.PreparedStatementProxyImpl.executeQuery(PreparedStatementProxyImpl.java:181)
-	at com.alibaba.druid.pool.DruidPooledPreparedStatement.executeQuery(DruidPooledPreparedStatement.java:228)
-	at com.tmt.system.service.NumberGenerator.fetchKeyAndStep(NumberGenerator.java:75)
-	at com.tmt.system.service.NumberGenerator.loadFromDB(NumberGenerator.java:50)
-	at com.tmt.system.service.NumberGenerator.getNextKey(NumberGenerator.java:39)
-	at com.tmt.system.service.NumberGenerator.generateNumber(NumberGenerator.java:31)
-	at com.tmt.web.TestNumberController.num(TestNumberController.java:29)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:497)
-	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:209)
-	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:136)
-	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:102)
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:877)
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:783)
-	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
-	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:991)
-	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:925)
-	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:974)
-	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:866)
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:635)
-	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:851)
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:742)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at com.tmt.common.security.SecurityFilter.executeChain(SecurityFilter.java:159)
-	at com.tmt.common.security.SecurityFilter$1.call(SecurityFilter.java:66)
-	at com.tmt.common.security.context.SubjectCallable.call(SubjectCallable.java:25)
-	at com.tmt.common.security.subjct.support.DefaultSubject.execute(DefaultSubject.java:165)
-	at com.tmt.common.security.SecurityFilter.doFilterInternal(SecurityFilter.java:63)
-	at com.tmt.common.security.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:68)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at com.tmt.common.web.filter.EncodingConvertFilter.doFilterInternal(EncodingConvertFilter.java:52)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:198)
-	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
-	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:496)
-	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:140)
-	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:81)
-	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
-	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:803)
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:790)
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1468)
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
-	at java.lang.Thread.run(Thread.java:745)
-2018-11-29 11:07:52 jdbc[12]: exception
-org.h2.jdbc.JdbcSQLException: Parameter "#1" is not set; SQL statement:
-SELECT CURRENT_VALUE + 1, STEP FROM SYS_ID_STORE WHERE TABLE_NAME = ? [90012-197]
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:357)
-	at org.h2.message.DbException.get(DbException.java:179)
-	at org.h2.message.DbException.get(DbException.java:155)
-	at org.h2.expression.Parameter.checkSet(Parameter.java:81)
-	at org.h2.command.Prepared.checkParameters(Prepared.java:170)
-	at org.h2.command.CommandContainer.query(CommandContainer.java:113)
-	at org.h2.command.Command.executeQuery(Command.java:202)
-	at org.h2.jdbc.JdbcPreparedStatement.executeQuery(JdbcPreparedStatement.java:114)
-	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:2830)
-	at com.alibaba.druid.filter.FilterEventAdapter.preparedStatement_executeQuery(FilterEventAdapter.java:465)
-	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:2827)
-	at com.alibaba.druid.filter.FilterEventAdapter.preparedStatement_executeQuery(FilterEventAdapter.java:465)
-	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:2827)
-	at com.alibaba.druid.proxy.jdbc.PreparedStatementProxyImpl.executeQuery(PreparedStatementProxyImpl.java:181)
-	at com.alibaba.druid.pool.DruidPooledPreparedStatement.executeQuery(DruidPooledPreparedStatement.java:228)
-	at com.tmt.system.service.NumberGenerator.fetchKeyAndStep(NumberGenerator.java:75)
-	at com.tmt.system.service.NumberGenerator.loadFromDB(NumberGenerator.java:50)
-	at com.tmt.system.service.NumberGenerator.getNextKey(NumberGenerator.java:39)
-	at com.tmt.system.service.NumberGenerator.generateNumber(NumberGenerator.java:31)
-	at com.tmt.web.TestNumberController.num(TestNumberController.java:29)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:497)
-	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:209)
-	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:136)
-	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:102)
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:877)
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:783)
-	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
-	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:991)
-	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:925)
-	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:974)
-	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:866)
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:635)
-	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:851)
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:742)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at com.tmt.common.security.SecurityFilter.executeChain(SecurityFilter.java:159)
-	at com.tmt.common.security.SecurityFilter$1.call(SecurityFilter.java:66)
-	at com.tmt.common.security.context.SubjectCallable.call(SubjectCallable.java:25)
-	at com.tmt.common.security.subjct.support.DefaultSubject.execute(DefaultSubject.java:165)
-	at com.tmt.common.security.SecurityFilter.doFilterInternal(SecurityFilter.java:63)
-	at com.tmt.common.security.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:68)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at com.tmt.common.web.filter.EncodingConvertFilter.doFilterInternal(EncodingConvertFilter.java:52)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:198)
-	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
-	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:496)
-	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:140)
-	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:81)
-	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
-	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:803)
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:790)
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1468)
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
-	at java.lang.Thread.run(Thread.java:745)
-2018-11-29 11:09:22 jdbc[12]: exception
-org.h2.jdbc.JdbcSQLException: Parameter "#1" is not set; SQL statement:
-SELECT CURRENT_VALUE + 1, STEP FROM SYS_ID_STORE WHERE TABLE_NAME = ? [90012-197]
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:357)
-	at org.h2.message.DbException.get(DbException.java:179)
-	at org.h2.message.DbException.get(DbException.java:155)
-	at org.h2.expression.Parameter.checkSet(Parameter.java:81)
-	at org.h2.command.Prepared.checkParameters(Prepared.java:170)
-	at org.h2.command.CommandContainer.query(CommandContainer.java:113)
-	at org.h2.command.Command.executeQuery(Command.java:202)
-	at org.h2.jdbc.JdbcPreparedStatement.executeQuery(JdbcPreparedStatement.java:114)
-	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:2830)
-	at com.alibaba.druid.filter.FilterEventAdapter.preparedStatement_executeQuery(FilterEventAdapter.java:465)
-	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:2827)
-	at com.alibaba.druid.filter.FilterEventAdapter.preparedStatement_executeQuery(FilterEventAdapter.java:465)
-	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:2827)
-	at com.alibaba.druid.proxy.jdbc.PreparedStatementProxyImpl.executeQuery(PreparedStatementProxyImpl.java:181)
-	at com.alibaba.druid.pool.DruidPooledPreparedStatement.executeQuery(DruidPooledPreparedStatement.java:228)
-	at com.tmt.system.service.NumberGenerator.fetchKeyAndStep(NumberGenerator.java:75)
-	at com.tmt.system.service.NumberGenerator.loadFromDB(NumberGenerator.java:50)
-	at com.tmt.system.service.NumberGenerator.getNextKey(NumberGenerator.java:39)
-	at com.tmt.system.service.NumberGenerator.generateNumber(NumberGenerator.java:31)
-	at com.tmt.web.TestNumberController.num(TestNumberController.java:29)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:497)
-	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:209)
-	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:136)
-	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:102)
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:877)
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:783)
-	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
-	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:991)
-	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:925)
-	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:974)
-	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:866)
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:635)
-	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:851)
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:742)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at com.tmt.common.security.SecurityFilter.executeChain(SecurityFilter.java:159)
-	at com.tmt.common.security.SecurityFilter$1.call(SecurityFilter.java:66)
-	at com.tmt.common.security.context.SubjectCallable.call(SubjectCallable.java:25)
-	at com.tmt.common.security.subjct.support.DefaultSubject.execute(DefaultSubject.java:165)
-	at com.tmt.common.security.SecurityFilter.doFilterInternal(SecurityFilter.java:63)
-	at com.tmt.common.security.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:68)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at com.tmt.common.web.filter.EncodingConvertFilter.doFilterInternal(EncodingConvertFilter.java:52)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:198)
-	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
-	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:496)
-	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:140)
-	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:81)
-	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
-	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:803)
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:790)
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1468)
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
-	at java.lang.Thread.run(Thread.java:745)
-2018-11-29 11:09:55 jdbc[12]: exception
-org.h2.jdbc.JdbcSQLException: No data is available [2000-197]
-2018-11-29 11:18:04 jdbc[12]: exception
-org.h2.jdbc.JdbcSQLException: This method is not allowed for a prepared statement; use a regular statement instead. [90130-197]
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:357)
+2018-11-29 11:28:10 database: wrong user or password; user: "ROOT"
+org.h2.message.DbException: Wrong user name or password [28000-197]
 	at org.h2.message.DbException.get(DbException.java:179)
 	at org.h2.message.DbException.get(DbException.java:155)
 	at org.h2.message.DbException.get(DbException.java:144)
-	at org.h2.jdbc.JdbcPreparedStatement.addBatch(JdbcPreparedStatement.java:318)
-	at com.alibaba.druid.filter.FilterChainImpl.statement_addBatch(FilterChainImpl.java:2691)
-	at com.alibaba.druid.filter.FilterAdapter.statement_addBatch(FilterAdapter.java:2453)
-	at com.alibaba.druid.filter.FilterChainImpl.statement_addBatch(FilterChainImpl.java:2688)
-	at com.alibaba.druid.filter.FilterAdapter.statement_addBatch(FilterAdapter.java:2453)
-	at com.alibaba.druid.filter.FilterChainImpl.statement_addBatch(FilterChainImpl.java:2688)
-	at com.alibaba.druid.proxy.jdbc.StatementProxyImpl.addBatch(StatementProxyImpl.java:85)
-	at com.alibaba.druid.pool.DruidPooledStatement.addBatch(DruidPooledStatement.java:690)
-	at com.tmt.system.service.NumberGenerator.fetchKeyAndStep(NumberGenerator.java:68)
-	at com.tmt.system.service.NumberGenerator.loadFromDB(NumberGenerator.java:50)
-	at com.tmt.system.service.NumberGenerator.getNextKey(NumberGenerator.java:39)
-	at com.tmt.system.service.NumberGenerator.generateNumber(NumberGenerator.java:31)
-	at com.tmt.web.TestNumberController.num(TestNumberController.java:31)
-	at sun.reflect.GeneratedMethodAccessor75.invoke(Unknown Source)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:497)
-	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:209)
-	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:136)
-	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:102)
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:877)
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:783)
-	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
-	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:991)
-	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:925)
-	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:974)
-	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:866)
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:635)
-	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:851)
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:742)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at com.tmt.common.security.SecurityFilter.executeChain(SecurityFilter.java:159)
-	at com.tmt.common.security.SecurityFilter$1.call(SecurityFilter.java:66)
-	at com.tmt.common.security.context.SubjectCallable.call(SubjectCallable.java:25)
-	at com.tmt.common.security.subjct.support.DefaultSubject.execute(DefaultSubject.java:165)
-	at com.tmt.common.security.SecurityFilter.doFilterInternal(SecurityFilter.java:63)
-	at com.tmt.common.security.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:68)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at com.tmt.common.web.filter.EncodingConvertFilter.doFilterInternal(EncodingConvertFilter.java:52)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:198)
-	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
-	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:496)
-	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:140)
-	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:81)
-	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
-	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:803)
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:790)
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1468)
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
-	at java.lang.Thread.run(Thread.java:745)
+	at org.h2.engine.Engine.openSession(Engine.java:107)
+	at org.h2.engine.Engine.openSession(Engine.java:179)
+	at org.h2.engine.Engine.createSessionAndValidate(Engine.java:157)
+	at org.h2.engine.Engine.createSession(Engine.java:140)
+	at org.h2.engine.Engine.createSession(Engine.java:28)
+	at org.h2.engine.SessionRemote.connectEmbeddedOrServer(SessionRemote.java:351)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:124)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:103)
+	at org.h2.Driver.connect(Driver.java:69)
+	at org.h2.server.web.WebServer.getConnection(WebServer.java:733)
+	at org.h2.server.web.WebApp.login(WebApp.java:954)
+	at org.h2.server.web.WebApp.process(WebApp.java:211)
+	at org.h2.server.web.WebApp.processRequest(WebApp.java:170)
+	at org.h2.server.web.WebThread.process(WebThread.java:134)
+	at org.h2.server.web.WebThread.run(WebThread.java:90)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: org.h2.jdbc.JdbcSQLException: Wrong user name or password [28000-197]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:357)
+	... 19 more
+2018-11-29 11:28:25 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLException: Table "USER" not found; SQL statement:
+select * from user [42102-197]
+2018-11-29 18:22:57 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Column "T1065053626139021312.EMPLOYEE_NAME" must be in the GROUP BY list; SQL statement:
+SELECT
+	'合计' T1065053626139021312_EMPLOYEE_NAME,
+	SUM(
+		T1065053626139021312.FLEX_NUM_ATTRIBUTE1
+	) T1065053626139021312_FLEX_NUM_ATTRIBUTE1,
+	SUM(
+		T1065053626139021312.FLEX_NUM_ATTRIBUTE2
+	) T1065053626139021312_FLEX_NUM_ATTRIBUTE2,
+	SUM(
+		T1065053626139021312.FLEX_NUM_ATTRIBUTE3
+	) T1065053626139021312_FLEX_NUM_ATTRIBUTE3,
+	SUM(
+		T1065053626139021312.FLEX_NUM_ATTRIBUTE4
+	) T1065053626139021312_FLEX_NUM_ATTRIBUTE4,
+	SUM(
+		T1065053626139021312.SHOULD_PAY_MONEY
+	) T1065053626139021312_SHOULD_PAY_MONEY,
+	SUM(
+		T1065053626139021312.FREE_TAX_INCOME
+	) T1065053626139021312_FREE_TAX_INCOME,
+	SUM(
+		T1065053626139021312.OLD_AGE_INSURANCE
+	) T1065053626139021312_OLD_AGE_INSURANCE,
+	SUM(
+		T1065053626139021312.MEDICAL_INSURANCE
+	) T1065053626139021312_MEDICAL_INSURANCE,
+	SUM(
+		T1065053626139021312.UNEMPLOYEEMENT_INSURANCE
+	) T1065053626139021312_UNEMPLOYEEMENT_INSURANCE,
+	SUM(
+		T1065053626139021312.HOUSING_FUND
+	) T1065053626139021312_HOUSING_FUND,
+	SUM(
+		T1065053626139021312.DEFERRED_INSURANCE
+	) T1065053626139021312_DEFERRED_INSURANCE,
+	SUM(
+		T1065053626139021312.HEALTH_INSURANCE
+	) T1065053626139021312_HEALTH_INSURANCE,
+	SUM(
+		T1065053626139021312.TAX_RATE
+	) T1065053626139021312_TAX_RATE,
+	SUM(
+		T1065053626139021312.QUICK_MINUS
+	) T1065053626139021312_QUICK_MINUS,
+	SUM(
+		T1065053626139021312.PERSONAL_TAX
+	) T1065053626139021312_PERSONAL_TAX,
+	SUM(
+		T1065053626139021312.NET_MONEY
+	) T1065053626139021312_NET_MONEY
+FROM
+	PTMS_REPORT_DATA T1065053626139021312
+INNER JOIN PTMS_EMPLOYEE TE ON T1065053626139021312.EMPLOYEE_ID = TE.ID
+WHERE
+	T1065053626139021312.REPORT_INSTANCE_ID = 1068087276862574592
+ORDER BY
+	T1065053626139021312.DEPT_CODE,
+	T1065053626139021312.DEPT_NAME,
+	T1065053626139021312.EMPLOYEE_NAME [90016-197]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:357)
+	at org.h2.message.DbException.get(DbException.java:179)
+	at org.h2.message.DbException.get(DbException.java:155)
+	at org.h2.expression.ExpressionColumn.updateAggregate(ExpressionColumn.java:172)
+	at org.h2.command.dml.Select.queryGroup(Select.java:350)
+	at org.h2.command.dml.Select.queryWithoutCache(Select.java:628)
+	at org.h2.command.dml.Query.queryWithoutCacheLazyCheck(Query.java:114)
+	at org.h2.command.dml.Query.query(Query.java:371)
+	at org.h2.command.dml.Query.query(Query.java:333)
+	at org.h2.command.CommandContainer.query(CommandContainer.java:114)
+	at org.h2.command.Command.executeQuery(Command.java:202)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:227)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:1077)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1386)
+	at org.h2.server.web.WebApp.query(WebApp.java:1060)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1022)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1009)
+	at org.h2.server.web.WebThread.process(WebThread.java:165)
+	at org.h2.server.web.WebThread.run(WebThread.java:90)
+	at java.lang.Thread.run(Thread.java:748)
+2018-11-29 18:24:58 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Column "T1065053626139021312.EMPLOYEE_NAME" must be in the GROUP BY list; SQL statement:
+SELECT
+	'合计' T1065053626139021312_EMPLOYEE_NAME,
+	SUM(
+		T1065053626139021312.FLEX_NUM_ATTRIBUTE1
+	) T1065053626139021312_FLEX_NUM_ATTRIBUTE1
+	
+FROM
+	PTMS_REPORT_DATA T1065053626139021312
+INNER JOIN PTMS_EMPLOYEE TE ON T1065053626139021312.EMPLOYEE_ID = TE.ID
+WHERE
+	T1065053626139021312.REPORT_INSTANCE_ID = 1068087276862574592
+ORDER BY
+	T1065053626139021312.DEPT_CODE,
+	T1065053626139021312.DEPT_NAME,
+	T1065053626139021312.EMPLOYEE_NAME [90016-197]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:357)
+	at org.h2.message.DbException.get(DbException.java:179)
+	at org.h2.message.DbException.get(DbException.java:155)
+	at org.h2.expression.ExpressionColumn.updateAggregate(ExpressionColumn.java:172)
+	at org.h2.command.dml.Select.queryGroup(Select.java:350)
+	at org.h2.command.dml.Select.queryWithoutCache(Select.java:628)
+	at org.h2.command.dml.Query.queryWithoutCacheLazyCheck(Query.java:114)
+	at org.h2.command.dml.Query.query(Query.java:371)
+	at org.h2.command.dml.Query.query(Query.java:333)
+	at org.h2.command.CommandContainer.query(CommandContainer.java:114)
+	at org.h2.command.Command.executeQuery(Command.java:202)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:227)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:1077)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1386)
+	at org.h2.server.web.WebApp.query(WebApp.java:1060)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1022)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1009)
+	at org.h2.server.web.WebThread.process(WebThread.java:165)
+	at org.h2.server.web.WebThread.run(WebThread.java:90)
+	at java.lang.Thread.run(Thread.java:748)
+2018-11-29 18:26:41 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Column "T1065053626139021312.EMPLOYEE_NAME" must be in the GROUP BY list; SQL statement:
+SELECT
+	'合计' T1065053626139021312_EMPLOYEE_NAME,
+        T1065053626139021312.EMPLOYEE_NAME,
+	SUM(
+		T1065053626139021312.FLEX_NUM_ATTRIBUTE1
+	) T1065053626139021312_FLEX_NUM_ATTRIBUTE1
+	
+FROM
+	PTMS_REPORT_DATA T1065053626139021312
+INNER JOIN PTMS_EMPLOYEE TE ON T1065053626139021312.EMPLOYEE_ID = TE.ID
+WHERE
+	T1065053626139021312.REPORT_INSTANCE_ID = 1068087276862574592
+ORDER BY
+	T1065053626139021312.DEPT_CODE,
+	T1065053626139021312.DEPT_NAME,
+	T1065053626139021312.EMPLOYEE_NAME [90016-197]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:357)
+	at org.h2.message.DbException.get(DbException.java:179)
+	at org.h2.message.DbException.get(DbException.java:155)
+	at org.h2.expression.ExpressionColumn.updateAggregate(ExpressionColumn.java:172)
+	at org.h2.command.dml.Select.queryGroup(Select.java:350)
+	at org.h2.command.dml.Select.queryWithoutCache(Select.java:628)
+	at org.h2.command.dml.Query.queryWithoutCacheLazyCheck(Query.java:114)
+	at org.h2.command.dml.Query.query(Query.java:371)
+	at org.h2.command.dml.Query.query(Query.java:333)
+	at org.h2.command.CommandContainer.query(CommandContainer.java:114)
+	at org.h2.command.Command.executeQuery(Command.java:202)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:227)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:1077)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1386)
+	at org.h2.server.web.WebApp.query(WebApp.java:1060)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1022)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1009)
+	at org.h2.server.web.WebThread.process(WebThread.java:165)
+	at org.h2.server.web.WebThread.run(WebThread.java:90)
+	at java.lang.Thread.run(Thread.java:748)
+2018-11-29 18:27:19 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Column "T1065053626139021312.EMPLOYEE_NAME" must be in the GROUP BY list; SQL statement:
+SELECT
+	'合计' T1065053626139021312_EMPLOYEE_NAME,
+        T1065053626139021312.EMPLOYEE_NAME,
+	SUM(
+		T1065053626139021312.FLEX_NUM_ATTRIBUTE1
+	) T1065053626139021312_FLEX_NUM_ATTRIBUTE1
+	
+FROM
+	PTMS_REPORT_DATA T1065053626139021312
+INNER JOIN PTMS_EMPLOYEE TE ON T1065053626139021312.EMPLOYEE_ID = TE.ID
+WHERE
+	T1065053626139021312.REPORT_INSTANCE_ID = 1068087276862574592 [90016-197]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:357)
+	at org.h2.message.DbException.get(DbException.java:179)
+	at org.h2.message.DbException.get(DbException.java:155)
+	at org.h2.expression.ExpressionColumn.updateAggregate(ExpressionColumn.java:172)
+	at org.h2.command.dml.Select.queryGroup(Select.java:350)
+	at org.h2.command.dml.Select.queryWithoutCache(Select.java:628)
+	at org.h2.command.dml.Query.queryWithoutCacheLazyCheck(Query.java:114)
+	at org.h2.command.dml.Query.query(Query.java:371)
+	at org.h2.command.dml.Query.query(Query.java:333)
+	at org.h2.command.CommandContainer.query(CommandContainer.java:114)
+	at org.h2.command.Command.executeQuery(Command.java:202)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:227)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:1077)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1386)
+	at org.h2.server.web.WebApp.query(WebApp.java:1060)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1022)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1009)
+	at org.h2.server.web.WebThread.process(WebThread.java:165)
+	at org.h2.server.web.WebThread.run(WebThread.java:90)
+	at java.lang.Thread.run(Thread.java:748)
+2018-11-29 18:27:42 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Column "T1065053626139021312.EMPLOYEE_NAME" must be in the GROUP BY list; SQL statement:
+SELECT
+	'合计' T1065053626139021312_EMPLOYEE_NAME,
+        T1065053626139021312.EMPLOYEE_NAME,
+	SUM(
+		T1065053626139021312.FLEX_NUM_ATTRIBUTE1
+	) T1065053626139021312_FLEX_NUM_ATTRIBUTE1
+	
+FROM
+	PTMS_REPORT_DATA T1065053626139021312
+INNER JOIN PTMS_EMPLOYEE TE ON T1065053626139021312.EMPLOYEE_ID = TE.ID
+WHERE
+	T1065053626139021312.REPORT_INSTANCE_ID = 1068087276862574592 [90016-197]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:357)
+	at org.h2.message.DbException.get(DbException.java:179)
+	at org.h2.message.DbException.get(DbException.java:155)
+	at org.h2.expression.ExpressionColumn.updateAggregate(ExpressionColumn.java:172)
+	at org.h2.command.dml.Select.queryGroup(Select.java:350)
+	at org.h2.command.dml.Select.queryWithoutCache(Select.java:628)
+	at org.h2.command.dml.Query.queryWithoutCacheLazyCheck(Query.java:114)
+	at org.h2.command.dml.Query.query(Query.java:371)
+	at org.h2.command.dml.Query.query(Query.java:333)
+	at org.h2.command.CommandContainer.query(CommandContainer.java:114)
+	at org.h2.command.Command.executeQuery(Command.java:202)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:227)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:1077)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1386)
+	at org.h2.server.web.WebApp.query(WebApp.java:1060)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1022)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1009)
+	at org.h2.server.web.WebThread.process(WebThread.java:165)
+	at org.h2.server.web.WebThread.run(WebThread.java:90)
+	at java.lang.Thread.run(Thread.java:748)
+2018-11-29 18:28:14 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Column "T1065053626139021312.EMPLOYEE_NAME" must be in the GROUP BY list; SQL statement:
+SELECT
+	'合计' T1065053626139021312_EMPLOYEE_NAME,
+	SUM(
+		T1065053626139021312.FLEX_NUM_ATTRIBUTE1
+	) T1065053626139021312_FLEX_NUM_ATTRIBUTE1
+	
+FROM
+	PTMS_REPORT_DATA T1065053626139021312
+INNER JOIN PTMS_EMPLOYEE TE ON T1065053626139021312.EMPLOYEE_ID = TE.ID
+WHERE
+	T1065053626139021312.REPORT_INSTANCE_ID = 1068087276862574592
+ORDER BY
+	T1065053626139021312.DEPT_CODE,
+	T1065053626139021312.DEPT_NAME,
+	T1065053626139021312.EMPLOYEE_NAME [90016-197]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:357)
+	at org.h2.message.DbException.get(DbException.java:179)
+	at org.h2.message.DbException.get(DbException.java:155)
+	at org.h2.expression.ExpressionColumn.updateAggregate(ExpressionColumn.java:172)
+	at org.h2.command.dml.Select.queryGroup(Select.java:350)
+	at org.h2.command.dml.Select.queryWithoutCache(Select.java:628)
+	at org.h2.command.dml.Query.queryWithoutCacheLazyCheck(Query.java:114)
+	at org.h2.command.dml.Query.query(Query.java:371)
+	at org.h2.command.dml.Query.query(Query.java:333)
+	at org.h2.command.CommandContainer.query(CommandContainer.java:114)
+	at org.h2.command.Command.executeQuery(Command.java:202)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:227)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:1077)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1386)
+	at org.h2.server.web.WebApp.query(WebApp.java:1060)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1022)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1009)
+	at org.h2.server.web.WebThread.process(WebThread.java:165)
+	at org.h2.server.web.WebThread.run(WebThread.java:90)
+	at java.lang.Thread.run(Thread.java:748)
+2018-11-29 18:28:57 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Column "T1065053626139021312.EMPLOYEE_NAME" must be in the GROUP BY list; SQL statement:
+SELECT
+	SUM(
+		T1065053626139021312.FLEX_NUM_ATTRIBUTE1
+	) T1065053626139021312_FLEX_NUM_ATTRIBUTE1
+	
+FROM
+	PTMS_REPORT_DATA T1065053626139021312
+INNER JOIN PTMS_EMPLOYEE TE ON T1065053626139021312.EMPLOYEE_ID = TE.ID
+WHERE
+	T1065053626139021312.REPORT_INSTANCE_ID = 1068087276862574592
+ORDER BY
+	T1065053626139021312.DEPT_CODE,
+	T1065053626139021312.DEPT_NAME,
+	T1065053626139021312.EMPLOYEE_NAME [90016-197]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:357)
+	at org.h2.message.DbException.get(DbException.java:179)
+	at org.h2.message.DbException.get(DbException.java:155)
+	at org.h2.expression.ExpressionColumn.updateAggregate(ExpressionColumn.java:172)
+	at org.h2.command.dml.Select.queryGroup(Select.java:350)
+	at org.h2.command.dml.Select.queryWithoutCache(Select.java:628)
+	at org.h2.command.dml.Query.queryWithoutCacheLazyCheck(Query.java:114)
+	at org.h2.command.dml.Query.query(Query.java:371)
+	at org.h2.command.dml.Query.query(Query.java:333)
+	at org.h2.command.CommandContainer.query(CommandContainer.java:114)
+	at org.h2.command.Command.executeQuery(Command.java:202)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:227)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:1077)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1386)
+	at org.h2.server.web.WebApp.query(WebApp.java:1060)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1022)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1009)
+	at org.h2.server.web.WebThread.process(WebThread.java:165)
+	at org.h2.server.web.WebThread.run(WebThread.java:90)
+	at java.lang.Thread.run(Thread.java:748)
+2018-11-29 18:30:48 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "SELECT
+	SUM(
+		T1065053626139021312.FLEX_NUM_ATTRIBUTE1
+	) T1065053626139021312_FLEX_NUM_ATTRIBUTE1
+	
+FROM
+	PTMS_REPORT_DATA T1065053626139021312
+INNER JOIN PTMS_EMPLOYEE TE ON T1065053626139021312.EMPLOYEE_ID = TE.ID
+WHERE
+	T1065053626139021312.REPORT_INSTANCE_ID = 1068087276862574592
+ORDER BY
+	T1065053626139021312.DEPT_CODE,
+	T1065053626139021312.DEPT_NAME,
+	T1065053626139021312.EMPLOYEE_NAME
+GROUP[*] BY T1065053626139021312.EMPLOYEE_NAME"; SQL statement:
+SELECT
+	SUM(
+		T1065053626139021312.FLEX_NUM_ATTRIBUTE1
+	) T1065053626139021312_FLEX_NUM_ATTRIBUTE1
+	
+FROM
+	PTMS_REPORT_DATA T1065053626139021312
+INNER JOIN PTMS_EMPLOYEE TE ON T1065053626139021312.EMPLOYEE_ID = TE.ID
+WHERE
+	T1065053626139021312.REPORT_INSTANCE_ID = 1068087276862574592
+ORDER BY
+	T1065053626139021312.DEPT_CODE,
+	T1065053626139021312.DEPT_NAME,
+	T1065053626139021312.EMPLOYEE_NAME
+GROUP BY T1065053626139021312.EMPLOYEE_NAME [42000-197]
+2018-11-29 18:31:16 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Column "T1065053626139021312.EMPLOYEE_NAME" must be in the GROUP BY list; SQL statement:
+SELECT
+	SUM(
+		T1065053626139021312.FLEX_NUM_ATTRIBUTE1
+	) T1065053626139021312_FLEX_NUM_ATTRIBUTE1
+	
+FROM
+	PTMS_REPORT_DATA T1065053626139021312
+INNER JOIN PTMS_EMPLOYEE TE ON T1065053626139021312.EMPLOYEE_ID = TE.ID
+WHERE
+	T1065053626139021312.REPORT_INSTANCE_ID = 1068087276862574592
+ORDER BY
+	T1065053626139021312.DEPT_CODE,
+	T1065053626139021312.DEPT_NAME,
+	T1065053626139021312.EMPLOYEE_NAME [90016-197]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:357)
+	at org.h2.message.DbException.get(DbException.java:179)
+	at org.h2.message.DbException.get(DbException.java:155)
+	at org.h2.expression.ExpressionColumn.updateAggregate(ExpressionColumn.java:172)
+	at org.h2.command.dml.Select.queryGroup(Select.java:350)
+	at org.h2.command.dml.Select.queryWithoutCache(Select.java:628)
+	at org.h2.command.dml.Query.queryWithoutCacheLazyCheck(Query.java:114)
+	at org.h2.command.dml.Query.query(Query.java:371)
+	at org.h2.command.dml.Query.query(Query.java:333)
+	at org.h2.command.CommandContainer.query(CommandContainer.java:114)
+	at org.h2.command.Command.executeQuery(Command.java:202)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:227)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:1077)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1386)
+	at org.h2.server.web.WebApp.query(WebApp.java:1060)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1022)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1009)
+	at org.h2.server.web.WebThread.process(WebThread.java:165)
+	at org.h2.server.web.WebThread.run(WebThread.java:90)
+	at java.lang.Thread.run(Thread.java:748)
+2018-11-29 18:31:31 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "SELECT
+	SUM(
+		T1065053626139021312.FLEX_NUM_ATTRIBUTE1
+	) T1065053626139021312_FLEX_NUM_ATTRIBUTE1
+	
+FROM
+	PTMS_REPORT_DATA T1065053626139021312
+INNER JOIN PTMS_EMPLOYEE TE ON T1065053626139021312.EMPLOYEE_ID = TE.ID
+WHERE
+	T1065053626139021312.REPORT_INSTANCE_ID = 1068087276862574592
+ORDER BY
+	T1065053626139021312.DEPT_CODE,
+	T1065053626139021312.DEPT_NAME,
+	T1065053626139021312.EMPLOYEE_NAME
+GROUP[*] BY T1065053626139021312.EMPLOYEE_NAME"; SQL statement:
+SELECT
+	SUM(
+		T1065053626139021312.FLEX_NUM_ATTRIBUTE1
+	) T1065053626139021312_FLEX_NUM_ATTRIBUTE1
+	
+FROM
+	PTMS_REPORT_DATA T1065053626139021312
+INNER JOIN PTMS_EMPLOYEE TE ON T1065053626139021312.EMPLOYEE_ID = TE.ID
+WHERE
+	T1065053626139021312.REPORT_INSTANCE_ID = 1068087276862574592
+ORDER BY
+	T1065053626139021312.DEPT_CODE,
+	T1065053626139021312.DEPT_NAME,
+	T1065053626139021312.EMPLOYEE_NAME
+GROUP BY T1065053626139021312.EMPLOYEE_NAME [42000-197]
+2018-11-29 18:38:11 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "SELECT
+	*
+FROM
+	(
+		SELECT
+			M.*, ROWNUM NUM
+		FROM
+			(
+				SELECT
+					T1065053626139021312.EMPLOYEE_CODE T1065053626139021312_EMPLOYEE_CODE,
+					T1065053626139021312.EMPLOYEE_NAME T1065053626139021312_EMPLOYEE_NAME,
+					T1065053626139021312.DEPT_CODE T1065053626139021312_DEPT_CODE,
+					T1065053626139021312.DEPT_NAME T1065053626139021312_DEPT_NAME,
+					T1065053626139021312.CERTIFICATE_TYPE T1065053626139021312_CERTIFICATE_TYPE,
+					T1065053626139021312.CERTIFICATE_CODE T1065053626139021312_CERTIFICATE_CODE,
+					T1065053626139021312.FLEX_NUM_ATTRIBUTE1 T1065053626139021312_FLEX_NUM_ATTRIBUTE1,
+					T1065053626139021312.FLEX_NUM_ATTRIBUTE2 T1065053626139021312_FLEX_NUM_ATTRIBUTE2,
+					T1065053626139021312.FLEX_NUM_ATTRIBUTE3 T1065053626139021312_FLEX_NUM_ATTRIBUTE3,
+					T1065053626139021312.FLEX_NUM_ATTRIBUTE4 T1065053626139021312_FLEX_NUM_ATTRIBUTE4,
+					T1065053626139021312.SHOULD_PAY_MONEY T1065053626139021312_SHOULD_PAY_MONEY,
+					T1065053626139021312.FREE_TAX_INCOME T1065053626139021312_FREE_TAX_INCOME,
+					T1065053626139021312.OLD_AGE_INSURANCE T1065053626139021312_OLD_AGE_INSURANCE,
+					T1065053626139021312.MEDICAL_INSURANCE T1065053626139021312_MEDICAL_INSURANCE,
+					T1065053626139021312.UNEMPLOYEEMENT_INSURANCE T1065053626139021312_UNEMPLOYEEMENT_INSURANCE,
+					T1065053626139021312.HOUSING_FUND T1065053626139021312_HOUSING_FUND,
+					T1065053626139021312.DEFERRED_INSURANCE T1065053626139021312_DEFERRED_INSURANCE,
+					T1065053626139021312.HEALTH_INSURANCE T1065053626139021312_HEALTH_INSURANCE,
+					T1065053626139021312.TAX_RATE T1065053626139021312_TAX_RATE,
+					T1065053626139021312.QUICK_MINUS T1065053626139021312_QUICK_MINUS,
+					T1065053626139021312.PERSONAL_TAX T1065053626139021312_PERSONAL_TAX,
+					T1065053626139021312.NET_MONEY T1065053626139021312_NET_MONEY
+				FROM
+					PTMS_REPORT_DATA T1065053626139021312
+				INNER JOIN PTMS_EMPLOYEE TE ON T1065053626139021312.EMPLOYEE_ID = TE.ID
+				WHERE
+					T1065053626139021312.REPORT_INSTANCE_ID = 1068087276862574592
+				ORDER BY
+					T1065053626139021312.DEPT_CODE,
+					T1065053626139021312.DEPT_NAME,
+
+			)[*] M
+		WHERE
+			ROWNUM <= 100
+	)
+WHERE
+	NUM > 0"; expected "=, NOT, EXISTS, INTERSECTS"; SQL statement:
+SELECT
+	*
+FROM
+	(
+		SELECT
+			M.*, ROWNUM NUM
+		FROM
+			(
+				SELECT
+					T1065053626139021312.EMPLOYEE_CODE T1065053626139021312_EMPLOYEE_CODE,
+					T1065053626139021312.EMPLOYEE_NAME T1065053626139021312_EMPLOYEE_NAME,
+					T1065053626139021312.DEPT_CODE T1065053626139021312_DEPT_CODE,
+					T1065053626139021312.DEPT_NAME T1065053626139021312_DEPT_NAME,
+					T1065053626139021312.CERTIFICATE_TYPE T1065053626139021312_CERTIFICATE_TYPE,
+					T1065053626139021312.CERTIFICATE_CODE T1065053626139021312_CERTIFICATE_CODE,
+					T1065053626139021312.FLEX_NUM_ATTRIBUTE1 T1065053626139021312_FLEX_NUM_ATTRIBUTE1,
+					T1065053626139021312.FLEX_NUM_ATTRIBUTE2 T1065053626139021312_FLEX_NUM_ATTRIBUTE2,
+					T1065053626139021312.FLEX_NUM_ATTRIBUTE3 T1065053626139021312_FLEX_NUM_ATTRIBUTE3,
+					T1065053626139021312.FLEX_NUM_ATTRIBUTE4 T1065053626139021312_FLEX_NUM_ATTRIBUTE4,
+					T1065053626139021312.SHOULD_PAY_MONEY T1065053626139021312_SHOULD_PAY_MONEY,
+					T1065053626139021312.FREE_TAX_INCOME T1065053626139021312_FREE_TAX_INCOME,
+					T1065053626139021312.OLD_AGE_INSURANCE T1065053626139021312_OLD_AGE_INSURANCE,
+					T1065053626139021312.MEDICAL_INSURANCE T1065053626139021312_MEDICAL_INSURANCE,
+					T1065053626139021312.UNEMPLOYEEMENT_INSURANCE T1065053626139021312_UNEMPLOYEEMENT_INSURANCE,
+					T1065053626139021312.HOUSING_FUND T1065053626139021312_HOUSING_FUND,
+					T1065053626139021312.DEFERRED_INSURANCE T1065053626139021312_DEFERRED_INSURANCE,
+					T1065053626139021312.HEALTH_INSURANCE T1065053626139021312_HEALTH_INSURANCE,
+					T1065053626139021312.TAX_RATE T1065053626139021312_TAX_RATE,
+					T1065053626139021312.QUICK_MINUS T1065053626139021312_QUICK_MINUS,
+					T1065053626139021312.PERSONAL_TAX T1065053626139021312_PERSONAL_TAX,
+					T1065053626139021312.NET_MONEY T1065053626139021312_NET_MONEY
+				FROM
+					PTMS_REPORT_DATA T1065053626139021312
+				INNER JOIN PTMS_EMPLOYEE TE ON T1065053626139021312.EMPLOYEE_ID = TE.ID
+				WHERE
+					T1065053626139021312.REPORT_INSTANCE_ID = 1068087276862574592
+				ORDER BY
+					T1065053626139021312.DEPT_CODE,
+					T1065053626139021312.DEPT_NAME,
+
+			) M
+		WHERE
+			ROWNUM <= 100
+	)
+WHERE
+	NUM > 0 [42001-197]
+2018-11-29 18:38:36 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "SELECT
+	*
+FROM
+	(
+		SELECT
+			M.*, ROWNUM NUM
+		FROM
+			(
+				SELECT
+					
+					T1065053626139021312.NET_MONEY T1065053626139021312_NET_MONEY
+				FROM
+					PTMS_REPORT_DATA T1065053626139021312
+				INNER JOIN PTMS_EMPLOYEE TE ON T1065053626139021312.EMPLOYEE_ID = TE.ID
+				WHERE
+					T1065053626139021312.REPORT_INSTANCE_ID = 1068087276862574592
+				ORDER BY
+					T1065053626139021312.DEPT_CODE,
+					T1065053626139021312.DEPT_NAME,
+
+			)[*] M
+		WHERE
+			ROWNUM <= 100
+	)
+WHERE
+	NUM > 0"; expected "=, NOT, EXISTS, INTERSECTS"; SQL statement:
+SELECT
+	*
+FROM
+	(
+		SELECT
+			M.*, ROWNUM NUM
+		FROM
+			(
+				SELECT
+					
+					T1065053626139021312.NET_MONEY T1065053626139021312_NET_MONEY
+				FROM
+					PTMS_REPORT_DATA T1065053626139021312
+				INNER JOIN PTMS_EMPLOYEE TE ON T1065053626139021312.EMPLOYEE_ID = TE.ID
+				WHERE
+					T1065053626139021312.REPORT_INSTANCE_ID = 1068087276862574592
+				ORDER BY
+					T1065053626139021312.DEPT_CODE,
+					T1065053626139021312.DEPT_NAME,
+
+			) M
+		WHERE
+			ROWNUM <= 100
+	)
+WHERE
+	NUM > 0 [42001-197]
+2018-11-30 09:01:29 database: wrong user or password; user: "ROOT"
+org.h2.message.DbException: Wrong user name or password [28000-197]
+	at org.h2.message.DbException.get(DbException.java:179)
+	at org.h2.message.DbException.get(DbException.java:155)
+	at org.h2.message.DbException.get(DbException.java:144)
+	at org.h2.engine.Engine.openSession(Engine.java:107)
+	at org.h2.engine.Engine.openSession(Engine.java:179)
+	at org.h2.engine.Engine.createSessionAndValidate(Engine.java:157)
+	at org.h2.engine.Engine.createSession(Engine.java:140)
+	at org.h2.engine.Engine.createSession(Engine.java:28)
+	at org.h2.engine.SessionRemote.connectEmbeddedOrServer(SessionRemote.java:351)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:124)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:103)
+	at org.h2.Driver.connect(Driver.java:69)
+	at org.h2.server.web.WebServer.getConnection(WebServer.java:733)
+	at org.h2.server.web.WebApp.login(WebApp.java:954)
+	at org.h2.server.web.WebApp.process(WebApp.java:211)
+	at org.h2.server.web.WebApp.processRequest(WebApp.java:170)
+	at org.h2.server.web.WebThread.process(WebThread.java:134)
+	at org.h2.server.web.WebThread.run(WebThread.java:90)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: org.h2.jdbc.JdbcSQLException: Wrong user name or password [28000-197]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:357)
+	... 19 more
+2018-11-30 09:34:09 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "DELETE *[*] FROM SYS_GROUP A WHERE A.ID='30000' "; expected "identifier"; SQL statement:
+delete * from sys_group a where a.id='30000' [42001-197]
+2018-11-30 09:34:14 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "DELETE A.*[*] FROM SYS_GROUP A WHERE A.ID='30000' "; expected "identifier"; SQL statement:
+delete a.* from sys_group a where a.id='30000' [42001-197]
+2018-11-30 09:34:17 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "DELETE A.*[*] FROM SYS_GROUP A WHERE A.ID='30000' "; expected "identifier"; SQL statement:
+delete a.* from sys_group a where a.id='30000' [42001-197]
+2018-11-30 17:01:31 jdbc[187]: exception
+org.h2.jdbc.JdbcSQLException: Column "A.NAME" not found; SQL statement:
+select * from sys_role_menu a where a.name='工资信息' [42122-197]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:357)
+	at org.h2.message.DbException.get(DbException.java:179)
+	at org.h2.message.DbException.get(DbException.java:155)
+	at org.h2.expression.ExpressionColumn.optimize(ExpressionColumn.java:150)
+	at org.h2.expression.Comparison.optimize(Comparison.java:177)
+	at org.h2.command.dml.Select.prepare(Select.java:861)
+	at org.h2.command.Parser.prepareCommand(Parser.java:283)
+	at org.h2.engine.Session.prepareLocal(Session.java:611)
+	at org.h2.engine.Session.prepareCommand(Session.java:549)
+	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1247)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:217)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:1077)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1386)
+	at org.h2.server.web.WebApp.query(WebApp.java:1060)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1022)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1009)
+	at org.h2.server.web.WebThread.process(WebThread.java:165)
+	at org.h2.server.web.WebThread.run(WebThread.java:90)
+	at java.lang.Thread.run(Thread.java:748)
+2018-11-30 18:30:11 jdbc[78]: exception
+org.h2.jdbc.JdbcSQLException: Column "A.REPORT_TYPE" not found; SQL statement:
+select * from ptms_report_instance  a where a.report_type = 'TOTAL_CALCULATE' [42122-197]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:357)
+	at org.h2.message.DbException.get(DbException.java:179)
+	at org.h2.message.DbException.get(DbException.java:155)
+	at org.h2.expression.ExpressionColumn.optimize(ExpressionColumn.java:150)
+	at org.h2.expression.Comparison.optimize(Comparison.java:177)
+	at org.h2.command.dml.Select.prepare(Select.java:861)
+	at org.h2.command.Parser.prepareCommand(Parser.java:283)
+	at org.h2.engine.Session.prepareLocal(Session.java:611)
+	at org.h2.engine.Session.prepareCommand(Session.java:549)
+	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1247)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:217)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:1077)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1386)
+	at org.h2.server.web.WebApp.query(WebApp.java:1060)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1022)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1009)
+	at org.h2.server.web.WebThread.process(WebThread.java:165)
+	at org.h2.server.web.WebThread.run(WebThread.java:90)
+	at java.lang.Thread.run(Thread.java:748)
+2018-11-30 18:58:43 jdbc[78]: exception
+org.h2.jdbc.JdbcSQLException: Table "TMS_REPORT_DATA" not found; SQL statement:
+SELECT
+	T1065053626139021312.EMPLOYEE_CODE T1065053626139021312_EMPLOYEE_CODE,
+	T1065053626139021312.EMPLOYEE_NAME T1065053626139021312_EMPLOYEE_NAME,
+	T1065053626139021312.DEPT_CODE T1065053626139021312_DEPT_CODE,
+	T1065053626139021312.DEPT_NAME T1065053626139021312_DEPT_NAME,
+	T1065053626139021312.CERTIFICATE_TYPE T1065053626139021312_CERTIFICATE_TYPE,
+	T1065053626139021312.CERTIFICATE_CODE T1065053626139021312_CERTIFICATE_CODE,
+	T1065053626139021312.FLEX_NUM_ATTRIBUTE1 T1065053626139021312_FLEX_NUM_ATTRIBUTE1,
+	T1065053626139021312.FLEX_NUM_ATTRIBUTE2 T1065053626139021312_FLEX_NUM_ATTRIBUTE2,
+	T1065053626139021312.FLEX_NUM_ATTRIBUTE3 T1065053626139021312_FLEX_NUM_ATTRIBUTE3,
+	T1065053626139021312.FLEX_NUM_ATTRIBUTE4 T1065053626139021312_FLEX_NUM_ATTRIBUTE4,
+	T1065053626139021312.SHOULD_PAY_MONEY T1065053626139021312_SHOULD_PAY_MONEY,
+	T1065053626139021312.FREE_TAX_INCOME T1065053626139021312_FREE_TAX_INCOME,
+	T1065053626139021312.OLD_AGE_INSURANCE T1065053626139021312_OLD_AGE_INSURANCE,
+	T1065053626139021312.MEDICAL_INSURANCE T1065053626139021312_MEDICAL_INSURANCE,
+	T1065053626139021312.UNEMPLOYEEMENT_INSURANCE T1065053626139021312_UNEMPLOYEEMENT_INSURANCE,
+	T1065053626139021312.HOUSING_FUND T1065053626139021312_HOUSING_FUND,
+	T1065053626139021312.DEFERRED_INSURANCE T1065053626139021312_DEFERRED_INSURANCE,
+	T1065053626139021312.HEALTH_INSURANCE T1065053626139021312_HEALTH_INSURANCE,
+	T1065053626139021312.TAX_RATE T1065053626139021312_TAX_RATE,
+	T1065053626139021312.QUICK_MINUS T1065053626139021312_QUICK_MINUS,
+	T1065053626139021312.PERSONAL_TAX T1065053626139021312_PERSONAL_TAX,
+	T1065053626139021312.NET_MONEY T1065053626139021312_NET_MONEY
+FROM
+	TMS_REPORT_DATA T1065053626139021312
+INNER JOIN PTMS_EMPLOYEE TE ON T1065053626139021312.EMPLOYEE_ID = TE.ID
+WHERE
+	T1065053626139021312.REPORT_INSTANCE_ID = 1068310464334794752
+ORDER BY
+	T1065053626139021312.DEPT_CODE,
+	T1065053626139021312.DEPT_NAME [42102-197]
+2018-11-30 19:00:07 jdbc[78]: exception
+org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "SELECT * FROM PTMS_REPORT_DATA[*]； "; SQL statement:
+SELECT * from PTMS_REPORT_DATA； [42000-197]
+2018-12-01 17:43:08 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLException: Column "D.CERTIFICATE_CODE" must be in the GROUP BY list; SQL statement:
+SELECT
+			d.period_year,
+			d.period_month,
+			concat(
+				concat(d.period_year, '年'),
+				concat(d.period_month, '月')
+			) tax_period,
+			concat(
+				concat(
+					d.certificate_type,
+					d.certificate_code
+				),
+				concat(
+					d.period_year,
+					d.period_month
+				)
+			) id_column,
+			d.certificate_code,
+			d.employee_id,
+			d.employee_code,
+			d.employee_name,
+			max(d.dept_name) dept_name,
+			sum(d.should_pay_money) should_pay_money,
+			sum(d.personal_tax) personal_tax,
+			1
+		FROM
+			ptms_report_data d,
+			ptms_report_instance i
+		WHERE
+			d.report_instance_id = i.id
+		AND d.period_year = '2018' [90016-197]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:357)
+	at org.h2.message.DbException.get(DbException.java:179)
+	at org.h2.message.DbException.get(DbException.java:155)
+	at org.h2.expression.ExpressionColumn.updateAggregate(ExpressionColumn.java:172)
+	at org.h2.expression.Function.updateAggregate(Function.java:2488)
+	at org.h2.expression.Function.updateAggregate(Function.java:2488)
+	at org.h2.expression.Alias.updateAggregate(Alias.java:87)
+	at org.h2.command.dml.Select.queryGroup(Select.java:350)
+	at org.h2.command.dml.Select.queryWithoutCache(Select.java:628)
+	at org.h2.command.dml.Query.queryWithoutCacheLazyCheck(Query.java:114)
+	at org.h2.command.dml.Query.query(Query.java:371)
+	at org.h2.command.dml.Query.query(Query.java:333)
+	at org.h2.command.CommandContainer.query(CommandContainer.java:114)
+	at org.h2.command.Command.executeQuery(Command.java:202)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:227)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:1077)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1386)
+	at org.h2.server.web.WebApp.query(WebApp.java:1060)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1022)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1009)
+	at org.h2.server.web.WebThread.process(WebThread.java:165)
+	at org.h2.server.web.WebThread.run(WebThread.java:90)
+	at java.lang.Thread.run(Thread.java:748)
+2018-12-01 17:43:20 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLException: Column "D.CERTIFICATE_CODE" must be in the GROUP BY list; SQL statement:
+SELECT
+			d.period_year,
+			d.period_month,
+			concat(
+				concat(d.period_year, '年'),
+				concat(d.period_month, '月')
+			) tax_period,
+			concat(
+				concat(
+					d.certificate_type,
+					d.certificate_code
+				),
+				concat(
+					d.period_year,
+					d.period_month
+				)
+			) id_column,
+			d.certificate_code,
+			d.employee_id,
+			d.employee_code,
+			d.employee_name,
+			max(d.dept_name) dept_name,
+			sum(d.should_pay_money) should_pay_money,
+			sum(d.personal_tax) personal_tax,
+			1
+		FROM
+			ptms_report_data d,
+			ptms_report_instance i
+		WHERE
+			d.report_instance_id = i.id
+		AND d.period_year = '2018' [90016-197]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:357)
+	at org.h2.message.DbException.get(DbException.java:179)
+	at org.h2.message.DbException.get(DbException.java:155)
+	at org.h2.expression.ExpressionColumn.updateAggregate(ExpressionColumn.java:172)
+	at org.h2.expression.Function.updateAggregate(Function.java:2488)
+	at org.h2.expression.Function.updateAggregate(Function.java:2488)
+	at org.h2.expression.Alias.updateAggregate(Alias.java:87)
+	at org.h2.command.dml.Select.queryGroup(Select.java:350)
+	at org.h2.command.dml.Select.queryWithoutCache(Select.java:628)
+	at org.h2.command.dml.Query.queryWithoutCacheLazyCheck(Query.java:114)
+	at org.h2.command.dml.Query.query(Query.java:371)
+	at org.h2.command.dml.Query.query(Query.java:333)
+	at org.h2.command.CommandContainer.query(CommandContainer.java:114)
+	at org.h2.command.Command.executeQuery(Command.java:202)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:227)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:1077)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1386)
+	at org.h2.server.web.WebApp.query(WebApp.java:1060)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1022)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1009)
+	at org.h2.server.web.WebThread.process(WebThread.java:165)
+	at org.h2.server.web.WebThread.run(WebThread.java:90)
+	at java.lang.Thread.run(Thread.java:748)
+2018-12-01 17:43:43 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLException: Column "D.CERTIFICATE_CODE" must be in the GROUP BY list; SQL statement:
+SELECT
+			d.period_year,
+			d.period_month,
+			concat(
+				concat(d.period_year, '年'),
+				concat(d.period_month, '月')
+			) tax_period,
+			concat(
+				concat(
+					d.certificate_type,
+					d.certificate_code
+				),
+				concat(
+					d.period_year,
+					d.period_month
+				)
+			) id_column,
+			d.certificate_code,
+			d.employee_id,
+			d.employee_code,
+			d.employee_name,
+			max(d.dept_name) dept_name,
+			sum(d.should_pay_money) should_pay_money,
+			sum(d.personal_tax) personal_tax,
+			1
+		FROM
+			ptms_report_data d,
+			ptms_report_instance i
+		WHERE
+			d.report_instance_id = i.id
+		AND d.period_year = '2018' [90016-197]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:357)
+	at org.h2.message.DbException.get(DbException.java:179)
+	at org.h2.message.DbException.get(DbException.java:155)
+	at org.h2.expression.ExpressionColumn.updateAggregate(ExpressionColumn.java:172)
+	at org.h2.expression.Function.updateAggregate(Function.java:2488)
+	at org.h2.expression.Function.updateAggregate(Function.java:2488)
+	at org.h2.expression.Alias.updateAggregate(Alias.java:87)
+	at org.h2.command.dml.Select.queryGroup(Select.java:350)
+	at org.h2.command.dml.Select.queryWithoutCache(Select.java:628)
+	at org.h2.command.dml.Query.queryWithoutCacheLazyCheck(Query.java:114)
+	at org.h2.command.dml.Query.query(Query.java:371)
+	at org.h2.command.dml.Query.query(Query.java:333)
+	at org.h2.command.CommandContainer.query(CommandContainer.java:114)
+	at org.h2.command.Command.executeQuery(Command.java:202)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:227)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:1077)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1386)
+	at org.h2.server.web.WebApp.query(WebApp.java:1060)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1022)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1009)
+	at org.h2.server.web.WebThread.process(WebThread.java:165)
+	at org.h2.server.web.WebThread.run(WebThread.java:90)
+	at java.lang.Thread.run(Thread.java:748)
+2018-12-01 17:43:45 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLException: Column "D.CERTIFICATE_CODE" must be in the GROUP BY list; SQL statement:
+SELECT
+			d.period_year,
+			d.period_month,
+			concat(
+				concat(d.period_year, '年'),
+				concat(d.period_month, '月')
+			) tax_period,
+			concat(
+				concat(
+					d.certificate_type,
+					d.certificate_code
+				),
+				concat(
+					d.period_year,
+					d.period_month
+				)
+			) id_column,
+			d.certificate_code,
+			d.employee_id,
+			d.employee_code,
+			d.employee_name,
+			max(d.dept_name) dept_name,
+			sum(d.should_pay_money) should_pay_money,
+			sum(d.personal_tax) personal_tax,
+			1
+		FROM
+			ptms_report_data d,
+			ptms_report_instance i
+		WHERE
+			d.report_instance_id = i.id
+		AND d.period_year = '2018' [90016-197]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:357)
+	at org.h2.message.DbException.get(DbException.java:179)
+	at org.h2.message.DbException.get(DbException.java:155)
+	at org.h2.expression.ExpressionColumn.updateAggregate(ExpressionColumn.java:172)
+	at org.h2.expression.Function.updateAggregate(Function.java:2488)
+	at org.h2.expression.Function.updateAggregate(Function.java:2488)
+	at org.h2.expression.Alias.updateAggregate(Alias.java:87)
+	at org.h2.command.dml.Select.queryGroup(Select.java:350)
+	at org.h2.command.dml.Select.queryWithoutCache(Select.java:628)
+	at org.h2.command.dml.Query.queryWithoutCacheLazyCheck(Query.java:114)
+	at org.h2.command.dml.Query.query(Query.java:371)
+	at org.h2.command.dml.Query.query(Query.java:333)
+	at org.h2.command.CommandContainer.query(CommandContainer.java:114)
+	at org.h2.command.Command.executeQuery(Command.java:202)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:227)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:1077)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1386)
+	at org.h2.server.web.WebApp.query(WebApp.java:1060)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1022)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1009)
+	at org.h2.server.web.WebThread.process(WebThread.java:165)
+	at org.h2.server.web.WebThread.run(WebThread.java:90)
+	at java.lang.Thread.run(Thread.java:748)
+2018-12-03 11:38:43 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "SELECT ID, USER_ID, USER_NAME, ROLE, REMARKS
+     FROM PTMS_ROLE[*]；"; SQL statement:
+SELECT ID, USER_ID, USER_NAME, ROLE, REMARKS
+     FROM PTMS_ROLE； [42000-197]
