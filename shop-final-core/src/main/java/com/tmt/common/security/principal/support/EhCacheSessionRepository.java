@@ -37,7 +37,7 @@ public class EhCacheSessionRepository implements SessionRepository<EhCacheSessio
 	 * @param cacheManager
 	 */
 	public EhCacheSessionRepository(CacheManager cacheManager) {
-		sessionCache = cacheManager.getCache("Cache_Session");
+		sessionCache = cacheManager.getCache("sessions");
 	}
 
 	public int getSessionTimeout() {
