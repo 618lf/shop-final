@@ -14,6 +14,7 @@ import com.tmt.common.web.security.session.SessionProvider;
  * 不建议使用springmvc 的重定向，前台提价数据全部使用ajax
  * 后端可以使用form提交
  * springmvc 的 SessionFlashMapManager
+ * 
  * @author lifeng
  */
 public class SessionFlashMapManager extends AbstractFlashMapManager {

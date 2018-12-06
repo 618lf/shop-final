@@ -1,5 +1,6 @@
 package com.tmt.common.security.principal.support;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
@@ -19,7 +20,7 @@ import com.tmt.common.utils.Maps;
  * 
  * @author lifeng
  */
-public class EhCacheSessionRepository implements SessionRepository<EhCacheSession>{
+public class EhCacheSessionRepository implements SessionRepository<EhCacheSession> {
 
 	private String SESSION_PREFIX = "session:";
 	private String SESSION_ATTR_PREFIX = "attr:";
@@ -29,15 +30,16 @@ public class EhCacheSessionRepository implements SessionRepository<EhCacheSessio
 	private String RUNASPRINCIPALS_ATTR = "rps";
 	private int sessionTimeout = 1800;
 	private final Cache sessionCache;
-	
+
 	/**
 	 * Session cache
+	 * 
 	 * @param cacheManager
 	 */
 	public EhCacheSessionRepository(CacheManager cacheManager) {
 		sessionCache = cacheManager.getCache("Cache_Session");
 	}
-	
+
 	public int getSessionTimeout() {
 		return sessionTimeout;
 	}
@@ -63,30 +65,25 @@ public class EhCacheSessionRepository implements SessionRepository<EhCacheSessio
 		if (entries == null || entries.isEmpty()) {
 			return null;
 		}
-		EhCacheSession session = loadSession(id, entries);
-		return session;
+		return loadSession(id, entries);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private EhCacheSession loadSession(String id, Map<String, Object> entries) {
 		EhCacheSession session = new EhCacheSession(id);
 		for (Map.Entry<String, Object> entry : entries.entrySet()) {
-			 String key = entry.getKey();
-			 if (CREATION_TIME_ATTR.equals(key)) {
+			String key = entry.getKey();
+			if (CREATION_TIME_ATTR.equals(key)) {
 				session.creationTime = ((Long) entry.getValue());
-			 }
-			 else if (PRINCIPAL_ATTR.equals(key)) {
+			} else if (PRINCIPAL_ATTR.equals(key)) {
 				session.principal = (Principal) (entry.getValue());
-			 }
-			 else if (AUTHENTICATED_ATTR.equals(key)) {
+			} else if (AUTHENTICATED_ATTR.equals(key)) {
 				session.authenticated = ((Boolean) entry.getValue());
-			 }
-			 else if (RUNASPRINCIPALS_ATTR.equals(key)) {
-				session.runAsPrincipals = (Stack<Principal>)entry.getValue();
-			 }
-			 else if (key.startsWith(SESSION_ATTR_PREFIX)) {
+			} else if (RUNASPRINCIPALS_ATTR.equals(key)) {
+				session.runAsPrincipals = (Stack<Principal>) entry.getValue();
+			} else if (key.startsWith(SESSION_ATTR_PREFIX)) {
 				session._setAttribute(key.substring(SESSION_ATTR_PREFIX.length()), entry.getValue());
-			 }
+			}
 		}
 		return session;
 	}
@@ -104,38 +101,40 @@ public class EhCacheSessionRepository implements SessionRepository<EhCacheSessio
 			sessionCache.delete(this.getSessionKey(sessionId));
 		}
 	}
-	
+
 	/**
 	 * session 的名称
+	 * 
 	 * @param sessionId
 	 * @return
 	 */
 	public String getSessionKey(String sessionId) {
 		return new StringBuilder(SESSION_PREFIX).append(sessionId).toString();
 	}
-	
+
 	/**
 	 * session 的存储名称
+	 * 
 	 * @param attributeName
 	 * @return
 	 */
 	public String getSessionAttrNameKey(String attributeName) {
 		return new StringBuilder(SESSION_ATTR_PREFIX).append(attributeName).toString();
 	}
-	
+
 	public class EhCacheSession implements Session {
-		
+
 		protected String id;
 		protected long creationTime = System.currentTimeMillis();
 		protected Principal principal = null;
 		protected boolean authenticated = false;
 		protected Stack<Principal> runAsPrincipals;
 		protected Map<String, Object> sessionAttrs;
-		
+
 		public EhCacheSession() {
 			this.id = UUID.randomUUID().toString();
 		}
-		
+
 		public EhCacheSession(String id) {
 			this.id = id;
 		}
@@ -203,11 +202,18 @@ public class EhCacheSessionRepository implements SessionRepository<EhCacheSessio
 
 		@Override
 		public void destory() {
-			this.id = null; this.principal = null;
-			if (this.runAsPrincipals != null) {this.runAsPrincipals.clear();} this.runAsPrincipals = null;
-			if (this.sessionAttrs != null) {sessionAttrs.clear();} this.sessionAttrs = null;
+			this.id = null;
+			this.principal = null;
+			if (this.runAsPrincipals != null) {
+				this.runAsPrincipals.clear();
+			}
+			this.runAsPrincipals = null;
+			if (this.sessionAttrs != null) {
+				sessionAttrs.clear();
+			}
+			this.sessionAttrs = null;
 		}
-		
+
 		/**
 		 * 最后提交
 		 */
@@ -223,16 +229,23 @@ public class EhCacheSessionRepository implements SessionRepository<EhCacheSessio
 			delta.put(CREATION_TIME_ATTR, this.getCreationTime());
 			delta.put(PRINCIPAL_ATTR, this.getPrincipal());
 			delta.put(AUTHENTICATED_ATTR, this.isAuthenticated());
+			if (sessionAttrs != null) {
+				Iterator<String> keys = sessionAttrs.keySet().iterator();
+				while (keys.hasNext()) {
+					String _key = keys.next();
+					delta.put(getSessionAttrNameKey(_key), sessionAttrs.get(_key));
+				}
+			}
 			sessionCache.put(key, delta);
 		}
-		
+
 		public void _setAttribute(String key, Object v) {
 			if (sessionAttrs == null) {
 				sessionAttrs = Maps.newHashMap();
 			}
 			sessionAttrs.put(key, v);
 		}
-		
+
 		public boolean equals(Object obj) {
 			return obj instanceof Session && this.id.equals(((Session) obj).getId());
 		}
