@@ -57,5 +57,17 @@ public interface TaskServiceFacade extends BaseServiceFacade<Task, Long>{
 	 * @param tasks
 	 */
 	public List<LabelVO> business();
-
+	
+	/**
+	 * 任务执行前
+	 * @param t
+	 * @return
+	 */
+	public Task preDoTask(Task t);
+	
+	/**
+	 * 任务执行后
+	 * @param task
+	 */
+	public void postDoTask(Task task);
 }

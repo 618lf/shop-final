@@ -286,6 +286,11 @@
   line-height: 45px;
   padding: 0 10px;
 }
+.app-design .app-sidebar .options .edit-tag-list {
+  border-top: 1px solid #ddd;
+  position: relative;
+  padding: 5px 0;
+}
 .app-design .app-sidebar .choice {
   position: relative;
   border: 1px solid #e5e5e5;

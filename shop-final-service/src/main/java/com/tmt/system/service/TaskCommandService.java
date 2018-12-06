@@ -2,6 +2,7 @@ package com.tmt.system.service;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 import org.quartz.CronExpression;
@@ -222,12 +223,14 @@ public class TaskCommandService {
 
 	// 构建任务
 	private JobDetail getJobDetail(Task task, boolean storeDurably) {
-		if (StringUtil3.isBlank(task.getBusinessObject()) || (this.getExecutor(task)) == null
+		TaskExecutor executor = null;
+		if (StringUtil3.isBlank(task.getBusinessObject()) || (executor = this.getExecutor(task)) == null
 				|| !this.isValidExpression(task)) {
 			return null;
 		}
 		JobDataMap jobDataMap = new JobDataMap();
-		jobDataMap.put(TaskExecutorAdapter.JOB_TASK_KEY, task.getId());
+		jobDataMap.put(Constants.JOB_TASK_KEY, task);
+		jobDataMap.put(Constants.JOB_EXECUTOR_KEY, executor);
 		Class<? extends TaskExecutorAdapter> jobClass = task.getConcurrent() ? TaskExecutorAdapter.class
 				: StatefulTaskExecutorAdapter.class;
 		JobBuilder builder = JobBuilder.newJob(jobClass);
@@ -240,16 +243,18 @@ public class TaskCommandService {
 	}
 
 	// 下一次执行的时间点(主要校验执行时间是否填写正确)
-	public boolean isValidExpression(Task task) {
+	private boolean isValidExpression(Task task) {
 		return CronExpression.isValidExpression(task.getCronExpression());
 	}
 
 	// 具体的任务执行器
-	public TaskExecutor getExecutor(Task task) {
-		try {
-			return SpringContextHolder.getBean(task.getBusinessObject());
-		} catch (Exception e) {
-			return null;
+	private TaskExecutor getExecutor(Task task) {
+		List<TaskExecutor> tasks = SpringContextHolder.getBean(Constants.RUNNING_ABLE_TASKS);
+		for (TaskExecutor _task : tasks) {
+			if (_task.getName().equals(task.getBusinessObject())) {
+				return _task;
+			}
 		}
+		return null;
 	}
 }

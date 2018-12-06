@@ -98,7 +98,7 @@ var THISPAGE = {
 			$(this).addClass('cur');
 		});
         $(document).on('click','#pickerBtn',function(){
-        	Public.doExport('${ctx}/system/area/extend/picker/data');
+        	Public.doExport('${ctx}/system/area/picker/data');
         });
         
         // 添加
@@ -201,7 +201,7 @@ var THISPAGE = {
 	},
 	loadProvince : function() {
 		var that = this;
-		var url = '${ctx}/system/tag/area/2';
+		var url = '${ctx}/system/tag/area/1';
 		var name = $('.area-province input[name="name"]').val();
 		Public.postAjax(url, {name : name}, function(data) {
 			var html = Public.runTemplate($('#areaTemplate').html(), {datas:data.obj});
@@ -214,7 +214,7 @@ var THISPAGE = {
 	},
 	loadCity : function(pId) {
 		var that = this;
-		var url = '${ctx}/system/tag/area/3';
+		var url = '${ctx}/system/tag/area/2';
 		var name = $('.area-city input[name="name"]').val();
 		Public.postAjax(url, {name : name, parentId: pId}, function(data) {
 			var html = Public.runTemplate($('#areaTemplate').html(), {datas:data.obj});
@@ -227,7 +227,7 @@ var THISPAGE = {
 	},
 	loadCounty : function(pId) {
 		var that = this;
-		var url = '${ctx}/system/tag/area/4';
+		var url = '${ctx}/system/tag/area/3';
 		var name = $('.area-county input[name="name"]').val();
 		Public.postAjax(url, {name : name, parentId: pId}, function(data) {
 			var html = Public.runTemplate($('#areaTemplate').html(), {datas:data.obj});
@@ -239,7 +239,7 @@ var THISPAGE = {
 	},
 	loadStreet : function(pId) {
 		var that = this;
-		var url = '${ctx}/system/tag/area/5';
+		var url = '${ctx}/system/tag/area/4';
 		var name = $('.area-street input[name="name"]').val();
 		Public.postAjax(url, {name : name, parentId: pId}, function(data) {
 			var html = Public.runTemplate($('#areaTemplate').html(), {datas:data.obj});

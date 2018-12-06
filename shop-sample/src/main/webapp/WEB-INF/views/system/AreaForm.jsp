@@ -19,29 +19,28 @@
 		<form:hidden path="level"/>
 		<form:hidden path="path"/>
 		<div class="control-group formSep">
-			<label class="control-label">上级区域:</label>
+			<label class="control-label">上级区域<span class="red">*</span>:</label>
 			<div class="controls">
 			    <tags:treeselect id="parentId" name="parentName" idValue="${area.parentId}" nameValue="${area.parentName}"
 				      title="区域" url="${ctx}/system/area/treeSelect" extId="${area.id}"/>
 			</div>
 		</div>
 		<div class="control-group formSep">
-			<label class="control-label">区域名称:</label>
+			<label class="control-label">区域名称<span class="red">*</span>:</label>
 			<div class="controls">
 				<form:input path="name" htmlEscape="false" maxlength="50" class="required"/>
 			</div>
 		</div>
 		<div class="control-group formSep">
-			<label class="control-label">区域CODE:</label>
+			<label class="control-label">区域CODE<span class="red">*</span>:</label>
 			<div class="controls">
 				<form:input path="code" htmlEscape="false" maxlength="50" class="required"/>
 			</div>
 		</div>
 		<div class="control-group formSep">
-			<label class="control-label">区域类型:</label>
+			<label class="control-label">区域类型<span class="red">*</span>:</label>
 			<div class="controls">
 			    <form:select path="type" cssClass="iSelect required">
-			       <form:option value="0">国家</form:option>
 			       <form:option value="1">省份</form:option>
 			       <form:option value="2">城市</form:option>
 			       <form:option value="3">县区</form:option>
@@ -52,7 +51,7 @@
 			</div>
 		</div>
 		<div class="control-group formSep">
-			<label class="control-label">排序:</label>
+			<label class="control-label">排序<span class="red">*</span>:</label>
 			<div class="controls">
 				<form:input path="sort" htmlEscape="false" maxlength="50" class="required"/>
 			</div>

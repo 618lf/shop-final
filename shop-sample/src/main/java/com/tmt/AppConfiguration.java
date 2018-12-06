@@ -56,7 +56,7 @@ public class AppConfiguration {
 	 * 
 	 * @return
 	 */
-	@Bean
+	@Bean(name = Constants.RUNNING_ABLE_TASKS)
 	public List<TaskExecutor> tasks(List<UpdateHandler> handlers) {
 		List<TaskExecutor> tasks = Lists.newArrayList();
 		tasks.add(new AccessLogTask(getLogPath()));
@@ -90,8 +90,14 @@ public class AppConfiguration {
 	@Bean
 	public SecurityConfigurationSupport securityConfiguration() {
 		SecurityConfigurationSupport securityConfiguration = new SecurityConfigurationSupport();
-		securityConfiguration.definition("/admin/validate/code = anon").definition("/admin/login = authc")
-				.loginUrl("/admin/login").successUrl("/admin/").unauthorizedUrl("/admin/login");
+		securityConfiguration.definition("/admin/validate/code = anon")
+		.definition("/admin/login = authc")
+		.definition("/admin/logout = logout")
+		.definition("/admin/** = user, roles[\"admin\"]")
+		.definition("/** = anon")
+		.loginUrl("/admin/login")
+		.successUrl("/admin/")
+		.unauthorizedUrl("/admin/login");
 		return securityConfiguration;
 	}
 }

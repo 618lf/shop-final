@@ -295,7 +295,7 @@ public abstract class StringUtil3 extends org.apache.commons.lang3.StringUtils {
 	 * @param value
 	 * @return
 	 */
-	public static Object escapeDb(String value) {
+	public static String escapeDb(String value) {
 		if (value != null && value instanceof String
 				&& StringUtil3.containsAny((String)value, '\\', '\'')) {
 			return StringUtil3.replaceEach(value, new String[]{"\\", "\'"}, new String[]{"\\\\\\\\", "\\'"});

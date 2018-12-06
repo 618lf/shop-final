@@ -54,7 +54,7 @@
 			<label class="control-label">微信号<span class="red">*</span>:</label>
 			<div class="controls">
 		      <form:input path="srcId" htmlEscape="false" maxlength="100" class="required" />
-		      <div class="control-tip">微信后台微信号</div>
+		      <div class="control-tip">微信后台微信号,原始ID</div>
 			</div>
 		</div>
            <div class="control-group formSep">
@@ -81,7 +81,7 @@
            <div class="control-group formSep">
 			<label class="control-label">域名:</label>
 			<div class="controls">
-		      <form:input path="domain" htmlEscape="false" maxlength="100" class=" " />
+		      <form:input path="domain" htmlEscape="false" maxlength="100" class=" "/>
 		      <div class="control-tip">此域名的请求会通过当前公众号来授权, 如果不填写，则作为默认授权的公众号</div>
 		      <div class="control-tip">不包含http:// 或 https://</div>
 			</div>

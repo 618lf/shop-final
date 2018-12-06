@@ -344,7 +344,10 @@ var THISPAGE = {
 		$(document).on('click', '.shareBtn', function() {
 			var files = self.getSelectedFiles();
 			if(files.length == 1 && files[0].type != 'DIR') {
-			   var src = '${base}' + $('a[data-id="'+files[0].id+'"]').data('src');
+			   var src = $('a[data-id="'+files[0].id+'"]').data('src');
+			   if (!(src.startWith('http:') || src.startWith('https:'))) {
+				   src = base + src;
+			   }
 			   Public.showQrcode(src, '分享附件');
 			} else {
 				Public.error("请选择一个要分享的文件（目前只支持文件）");

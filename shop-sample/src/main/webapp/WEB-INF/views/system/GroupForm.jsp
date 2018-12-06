@@ -16,13 +16,13 @@
 		<tags:token/>
 		<form:hidden path="id"/>
 		<div class="control-group formSep">
-			<label class="control-label">用户组名称:</label>
+			<label class="control-label">用户组名称<span class="red">*</span>:</label>
 			<div class="controls">
 				<form:input path="name" htmlEscape="false" maxlength="100" class="required"/>
 			</div>
 		</div>
 		<div class="control-group formSep">
-			<label class="control-label">用户组编码:</label>
+			<label class="control-label">用户组编码<span class="red">*</span>:</label>
 			<div class="controls">
 				<form:input path="code" htmlEscape="false" maxlength="100" class="required"/>
 			</div>

@@ -1,0 +1,192 @@
+.-btn {
+  padding: 7px 10px;
+  color: #fff;
+  background-color: #0099CC;
+  display: block;
+  width: 100px;
+  text-align: center;
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+.-btn:hover {
+  color: #fff;
+}
+#sample-table {
+  width: auto;
+  margin-bottom: 0px;
+}
+#sample-table td {
+  text-align: center;
+  vertical-align: middle;
+}
+#sample-table .-del {
+  color: #666;
+}
+#sample-table td select {
+  width: 160px;
+}
+#sample-table td input {
+  width: 160px;
+}
+.tab-content {
+  border: 1px solid #ddd;
+  margin-bottom: 20px;
+  min-height: 120px;
+  padding: 15px;
+}
+.tab-content textarea {
+  width: 100%;
+  border: 0;
+  box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0);
+  resize: none;
+}
+.nav-tabs.success > .active > a{
+  border-top-color: #51a351;
+}
+.nav-tabs.failure > .active > a{
+  border-top-color: #CC3333;
+}
+.projects {
+  padding: 40px;
+}
+.projects, .projects * {
+  box-sizing: border-box;
+  font-size: 16px;
+}
+.project.add-project .-img{
+   height: 290px;
+   line-height: 290px;
+   cursor: pointer;
+}
+.project {
+  padding: 20px;
+  background-color: #fff;
+  float: left;
+  margin: 0 20px 20px 0;
+}
+.project .-img {
+  width: 220px;
+  height: 120px;
+  line-height: 120px;
+  text-align: center;
+  color: #0066CC;
+}
+.project .-img > i {
+  font-size: 80px;
+  display: block;
+}
+.project .-name {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.project .-remarks {
+  color: #999;
+  height: 120px;
+  overflow: hidden;
+  word-break:break-all;
+  width: 220px;
+}
+.project .-ops {
+  text-align: center;
+  font-size: 14px;
+  visibility: hidden;
+}
+.project .-ops > a {
+  margin-left: 10px;
+}
+.project:hover .-ops{
+  visibility: visible;
+}
+.project-site {
+  background-color: #fff;
+  width: 320px;
+  position: fixed;
+  left: 20px;
+  top: 40px;
+}
+.project-main {
+  margin-left: 350px;
+  background-color: #fff;
+  margin-top: 40px;
+}
+.project-site .-name {
+  padding: 10px;
+  background-color: #0099CC;
+  color: #fff;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+.project-site .-name .-ops {
+  display: block;
+  float: right;
+  color: #fff;
+}
+.project-site .groups > li {
+  display: block;
+  border-bottom: 1px solid #f4f4f4;
+  border-left: 3px solid #fff;
+}
+.project-site .groups > li > a {
+  display: block;
+  padding: 10px;
+  color: #666;
+}
+.project-site .groups > li.cur {
+  border-left: 3px solid #0066CC;
+}
+.project-site .groups > li.cur > a {
+  color: #333;
+}
+.project-main .title {
+  padding: 10px;
+  font-size: 16px;
+}
+.project-main .title .ops {
+  margin-left: 10px;
+}
+#project-table th {
+  text-align: left;
+  font-size: 16px;
+}
+#project-table a {
+  margin-right: 5px;
+}
+#project-table code {
+  background-color: #00a65a !important;
+  color: #fff;
+  margin-right: 10px;
+}
+#project-table .-detail > i{
+  margin-right: 5px;
+}
+.doc-detail-body {
+  background-color: #fff;
+}
+.doc-detail {
+  margin: 40px 80px 100px 80px;
+  box-sizing: border-box;
+  width: 1024px;
+}
+.doc-detail * {
+  box-sizing: border-box;
+}
+.doc-detail > h3 {
+  margin: 20px 0;
+  border-bottom: 1px solid #ddd;
+}
+.doc-detail .url {
+  font-size: 16px;
+}
+.doc-detail > #remarks {
+  padding: 0;
+  margin: 20px 0;
+}
+.doc-detail .example {
+  border: 1px solid #ddd;
+  padding: 20px;
+  background-color: #f4f4f4;
+  margin: 10px 0;
+}
+.test-wrap a {
+  margin: 0 5px;
+}

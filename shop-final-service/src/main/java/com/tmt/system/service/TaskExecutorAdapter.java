@@ -6,6 +6,7 @@ import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.tmt.Constants;
 import com.tmt.common.utils.SpringContextHolder;
 import com.tmt.system.entity.Task;
 import com.tmt.system.entity.TaskProgress;
@@ -18,19 +19,14 @@ import com.tmt.system.entity.TaskProgress;
  */
 public class TaskExecutorAdapter implements Job {
 
-	public static String JOB_TASK_KEY = "TASK_KEY";
-	private static TaskService taskService;
-
-	static {
-		taskService = SpringContextHolder.getBean(TaskService.class);
-	}
+	private Logger logger = LoggerFactory.getLogger(TaskExecutorAdapter.class);
 
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
-		Logger logger = LoggerFactory.getLogger(TaskExecutorAdapter.class);
-		Long key = context.getMergedJobDataMap().getLong(JOB_TASK_KEY);
-		Task task = taskService.preDoTask(key);
-		TaskExecutor target = taskService.getExecutor(task);
+		Task _task = (Task) context.getMergedJobDataMap().get(Constants.JOB_TASK_KEY);
+		TaskExecutor target = (TaskExecutor) context.getMergedJobDataMap().get(Constants.JOB_EXECUTOR_KEY);
+		TaskServiceFacade taskService = SpringContextHolder.getBean(TaskServiceFacade.class);
+		Task task = taskService.preDoTask(_task);
 		if (task != null && target != null) {
 			TaskProgress.removeTaskProgress(task.getId());
 			try {

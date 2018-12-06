@@ -65,19 +65,19 @@
      <form:hidden path="id"/>
      <div class="clearfix">
         <div class="control-group">
-			<label class="control-label">模版名称:</label>
+			<label class="control-label">模版名称<span class="red">*</span>:</label>
 			<div class="controls">
 				<form:input path="name" htmlEscape="false" maxlength="100" class="required"/>
 			</div>
 		 </div>
 		 <div class="control-group">
-				<label class="control-label">模版类型:</label>
+				<label class="control-label">模版类型<span class="red">*</span>:</label>
 				<div class="controls">
 					<form:input path="type" htmlEscape="false" maxlength="100" class="required"/>
 				</div>
 		 </div>
 		 <div class="control-group">
-				<label class="control-label">目标类:</label>
+				<label class="control-label">目标类<span class="red">*</span>:</label>
 				<div class="controls">
 					<form:input path="targetClass" htmlEscape="false" maxlength="100" class="required"/>
 				</div>
@@ -111,10 +111,10 @@
 					<tr>
 						<th class="tc">序号</th>
 						<th>操作</th>
-						<th>Excel列名称</th>
-						<th width="8%">Excel列序号</th>
-						<th>类属性</th>
-						<th width="8%">数据类型</th>
+						<th>Excel列名称<span class="red">*</span></th>
+						<th width="8%">Excel列序号<span class="red">*</span></th>
+						<th>类属性<span class="red">*</span></th>
+						<th width="8%">数据类型<span class="red">*</span></th>
 						<th>格式化表达式</th>
 						<th width="25%">校验项目</th>
 					</tr>
@@ -148,14 +148,14 @@
 						<td class="tc"><select name="items.columnName" class="columnName">
 						       <c:forEach items="${fnc:getExcelColumns(32)}" var="vo">
 						       <c:if test="${item.columnName eq vo.label}"><option value="${vo.label}" selected="selected">${vo.value}</option></c:if>
-						       <c:if test="${not(item.columnName eq vo.label)}"><option value="${vo.label}">${vo.value}</option></c:if>
+						       <c:if test="${!(item.columnName eq vo.label)}"><option value="${vo.label}">${vo.value}</option></c:if>
 						       </c:forEach>
 						    </select></td>
 						<td class="tc"><input  name="items.property" type='text' class="required"  maxlength="50" value="${item.property}"/></td>
 						<td class="tc"><select name="items.dataType" class="dataType">
 						       <c:forEach items="${fnc:getDataTypes()}" var="vo">
 						        <c:if test="${item.dataType eq vo.label}"><option value="${vo.label}" selected="selected">${vo.value}</option></c:if>
-						        <c:if test="${not(item.dataType eq vo.label)}"><option value="${vo.label}">${vo.value}</option></c:if>
+						        <c:if test="${!(item.dataType eq vo.label)}"><option value="${vo.label}">${vo.value}</option></c:if>
 						       </c:forEach>
 						    </select></td>
 						<td class="tc"><input  name="items.dataFormat" type='text'  maxlength="200" value='${item.dataFormat}'/></td>

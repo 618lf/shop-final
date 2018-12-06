@@ -73,7 +73,7 @@ var THISPAGE = {
 				url: '${ctx}/system/task/page?timeid='+ Math.random(),
 				height:init.h,
 				shrinkToFit:!1, 
-				colNames: ['任务Id','任务名称', '已经执行次数', '上次执行时间','预计下次执行时间', '状态', '操作'],
+				colNames: ['任务Id','任务名称', '已经执行次数', '上次执行时间','预计下次执行时间', '状态', '待执行命令', '操作'],
 				colModel: [
 	                {name:'id', index:'id', width:150,sortable:false,hidden:true},
 					{name:'name', index:'name', width:150,sortable:false},
@@ -81,6 +81,7 @@ var THISPAGE = {
 					{name:'preExecuteTime', index:'preExecuteTime',align:'center',width:150,sortable:false},
 					{name:'nextExecuteTime', index:'nextExecuteTime',align:'center',width:150,sortable:false,formatter:nextExecuteTimeFmt},
 					{name:'taskStatusName', index:'taskStatusName',align:'center',width:80,sortable:false},
+					{name:'ops', index:'ops',align:'center',width:100,sortable:false},
 					{name:'options', index:'options',align:'center',width:80,sortable:false,formatter:optionsFmt}
 				]
 			})		

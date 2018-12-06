@@ -1994,13 +1994,13 @@ legend + .control-group {
 }
 
 table {
-  max-width: 100%;
   background-color: transparent;
   border-collapse: collapse;
   border-spacing: 0;
 }
 
 .table {
+  max-width: 100%;
   width: 100%;
   margin-bottom: 20px;
 }

@@ -27,31 +27,11 @@ var Business = {
 		});
 	},
 	
-	// 商品搜索
-	_searchLink : function(callback) {
-		var data = {
-			link_title: '商品搜索',
-			link_url : base + '/f/shop/search/goods.html'
-		}
-		// 回调
-		callback(data);
-	},
-	
-	// 商品分类
-	_categoryLink : function(callback) {
-		var data = {
-			link_title: '商品分类',
-			link_url : base + '/f/shop/search/goods.html'
-		}
-		// 回调
-		callback(data);
-	},
-	
 	// 商品
 	_goodsLink : function(callback) {
-		Shop.selectGoods(function(goods) {
+		Shop.selectProduct(function(goods) {
 			var data = {
-				link_title: goods.name,
+				link_title: goods.name + goods.tip,
 				link_url : goods.url
 			}
 			// 回调
@@ -82,24 +62,18 @@ var Business = {
 		});
 	},
 	
-	// 首页导航
-	_indexLink : function(callback) {
-		var data = {
-			link_title: '首页',
-			link_url : base + '/f/member/to_index.html'
+	// 动态页面
+	_pagesLink : function(name, callback) {
+		var page = Pages.getPage(name);
+		if (page) {
+			
+			// 回调
+			callback(data);
+		} else {
+			
+			// 提示不支持
+			Public.toast('不支持');
 		}
-		// 回调
-		callback(data);
-	},
-	
-	// 会员中心
-	_usercenterLink : function(callback) {
-		var data = {
-			link_title: '会员中心',
-			link_url : base + '/f/member/index.html'
-		}
-		// 回调
-		callback(data);
 	},
 	
 	// link
@@ -143,19 +117,17 @@ var Business = {
 		if (type == 'feature') {
 			this._featureLink(callback);
 		} else if (type == 'search') {
-			this._searchLink(callback);
+			this._pagesLink('搜索', callback);
 		} else if (type == 'category') {
-			this._categoryLink(callback);
+			this._pagesLink('分类', callback);
 		} else if (type == 'goods') {
 			this._goodsLink(callback);
 		} else if (type == 'activity') {
 			this._activityLink(callback);
 		} else if (type == 'index') {
-			this._indexLink(callback);
+			this._pagesLink('首页', callback);
 		} else if (type == 'usercenter') {
-			this._usercenterLink(callback);
-		} else if (type == 'usercenter') {
-			this._usercenterLink(callback);
+			this._pagesLink('会员中心', callback);
 		} else if (type == 'link') {
 			this._customLink(callback);
 		} else {
@@ -163,3 +135,48 @@ var Business = {
 		}
 	},
 };
+
+/**
+ * 可配置的页面
+ */
+var Pages = {
+	
+	/**
+	 *  缓存
+	 */
+	pages : null,
+	
+    /**
+     * 返回所有的可选择的页面
+     */
+	getPages : function() {
+	   if (this.pages) {
+		   return this.pages;
+	   }
+	   
+	   var self = this;
+	   
+	   // 获取
+	   Public.postAjax(webRoot + '/admin/shop/store/pages', {}, function(data) {
+		   self.pages = data;
+	   }, false);
+	   return self.pages;
+	},
+	
+	/**
+	 * 返回指定的页面
+	 */
+	getPage : function(name) {
+		var _pages = this.getPages();
+		for(var i in _pages) {
+			if (_pages[i].name == name) {
+				return {
+					link_title: _pages[i].label,
+					link_url : _pages[i].value	
+				}
+			}
+		}
+		return null;
+	}
+	
+}

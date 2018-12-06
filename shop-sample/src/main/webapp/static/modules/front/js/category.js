@@ -79,12 +79,24 @@ $(function(){
 		Public.resetScrollLoad();
 	});
 	
-	// 加载购物车数量
-	User.cartQuantity();
-	
 	// 分页数据
-	Public.initScrollLoad(webRoot + '/f/shop/search/goods/category', $('#goodsTemplate').text(), function() {});
+	Public.initScrollLoad(ctxFront + '/shop/search/goods/category.json', $('#goodsTemplate').text(), function() {});
+	
+	// 加入购物车
+    $(document).on('click', '.add-cart', function(e) {
+    	e.stopPropagation();
+		e.preventDefault();
+		var id = $(this).data('id'); var b = $(this).closest('.ops').find('b');
+		User.addGoodsCart(id, function() {
+			// 加载购物车的数量
+			User.cartQuantity();
+			$(b).show().fadeOut(1000);
+		});
+    });
     
+    // 合并 加载购物车数量 - 我的订单数量
+	User.mutilAbout();
+	
 	// 统计分类访问次数
     Statistics.pageStatistics('category_' + category.id);
 });

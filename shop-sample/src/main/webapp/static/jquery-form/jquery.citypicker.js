@@ -5,6 +5,7 @@
     var PROVINCE = 'province';
     var CITY = 'city';
     var DISTRICT = 'district';
+    var STREET = 'street';
     
 	var CityPicker = function(element, options) {
 		this.$element = $(element);
@@ -25,7 +26,7 @@
 	       this.active = true;
 		},
 		defineDems : function() {
-            $.each([PROVINCE, CITY, DISTRICT], $.proxy(function (i, type) {
+            $.each([PROVINCE, CITY, DISTRICT, STREET], $.proxy(function (i, type) {
             	this.dems.push(type);
             }, this));
 		},
@@ -41,11 +42,15 @@
 		                  '<div class="city-select-tab">' +
 		                  '<a class="active" data-count="province">省份</a>' +
 		                  '<a data-count="city">城市</a>' +
-		                  '<a data-count="district">区县</a>' + '</div>' +
+		                  '<a data-count="district">区县</a>' + 
+		                  (this.level === 'street' ? '<a data-count="street">街道</a>' : '')+ 
+		                  '</div>' +
 		                  '<div class="city-select-content">' +
 		                  '<div class="city-select province" data-count="province"></div>' +
 		                  '<div class="city-select city" data-count="city"></div>' + 
-		                  '<div class="city-select district" data-count="district"></div>' + '</div></div>';
+		                  '<div class="city-select district" data-count="district"></div>' + 
+		                  (this.level === 'street' ? '<div class="city-select street" data-count="street"></div>' : '')+ 
+		                  '</div></div>';
 		    this.$element.addClass('city-picker-input');
 		    this.$container = $(container).insertAfter(this.$element).css('width', offset.width);
 		    this.$choice = $(choice).appendTo(this.$container);
@@ -176,6 +181,7 @@
                 this.$province.on(EVENT_CHANGE, (this._changeProvince = $.proxy(function () {
                     this.output(CITY);
                     this.output(DISTRICT);
+                    this.output(STREET);
                     this.tab(CITY);
                     this.triggerListen();
                 }, this)));
@@ -183,12 +189,20 @@
             if(this.$city) {
                 this.$city.on(EVENT_CHANGE, (this._changeCity = $.proxy(function () {
                     this.output(DISTRICT);
+                    this.output(STREET);
                     this.tab(DISTRICT);
                     this.triggerListen();
                 }, this)));
             }
             if(this.$district) {
             	this.$district.on(EVENT_CHANGE, ($.proxy(function () {
+            		this.output(STREET);
+                    this.tab(STREET);
+                    this.triggerListen();
+                }, this)));
+            }
+            if(this.$street) {
+            	this.$street.on(EVENT_CHANGE, ($.proxy(function () {
                     this.triggerListen();
                 }, this)));
             }
@@ -299,7 +313,8 @@
             code = (
                 type === PROVINCE ? 86 :
                     type === CITY ? this.$province && this.$province.find('.active').data('code') :
-                        type === DISTRICT ? this.$city && this.$city.find('.active').data('code') : code
+                        type === DISTRICT ? this.$city && this.$city.find('.active').data('code') : 
+                        	type === STREET ? this.$district && this.$district.find('.active').data('code') : code
             );
 
             districts = $.isNumeric(code) ? ChineseDistricts[code] : null;

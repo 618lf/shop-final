@@ -54,8 +54,8 @@
 			 <div class="tab-pane" data-id="config-pic">
 			    <div class="config-pic">
 			       <input type="hidden" class="-config">
-			       <div class="image-wrap"><img alt="" src="${ctxStatic}/img/logo-wx.jpg"></div>
-			       <div class="ops"><a class="btn config-pic-select">选择图片</a><a class="btn btn-danger config-pic-upload">上传</a><span style="margin-left: 10px;">临时素材，3天后过期，请及时维护</span></div>
+			       <div class="image-wrap"><img alt=""></div>
+			       <div class="ops"><a class="btn config-pic-select">选择图片</a><a class="btn btn-danger config-pic-upload">上传</a><span style="margin-left: 10px;">永久素材</span></div>
 			    </div>
 			 </div>
           </div>
@@ -91,8 +91,8 @@
 			 <div class="tab-pane active" data-id="config-pic">
 			    <div class="config-pic">
 			       <input type="hidden" class="-config">
-			       <div class="image-wrap"><img alt="" src="${ctxStatic}/img/logo-wx.jpg"></div>
-			       <div class="ops"><a class="btn config-pic-select">选择图片</a><a class="btn btn-danger config-pic-upload">上传</a><span style="margin-left: 10px;">临时素材，3天后过期，请及时维护</span></div>
+			       <div class="image-wrap"><img alt=""></div>
+			       <div class="ops"><a class="btn config-pic-select">选择图片</a><a class="btn btn-danger config-pic-upload">上传</a><span style="margin-left: 10px;">永久素材</span></div>
 			    </div>
 			 </div>
           </div>

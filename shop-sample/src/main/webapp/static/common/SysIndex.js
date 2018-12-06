@@ -91,7 +91,7 @@ $(function(){
 	
 	//自适应大小
 	$(window).on("resize", function(a) {
-		setTabLayout(); setSubmenuLayout();
+		setTabLayout(); setMenuLayout(); setSubmenuLayout();
 	});
 });
 
@@ -121,14 +121,19 @@ function userMenu(parentId) {
 		    param += "&screenSize=" + $("#content").height() +"  #userMenuNav";//取 #userMenuNav的数据
 		if( !!url ) {
 			Public.getAjax(url + param, {}, function(data) {
+				
 				// 设置页面
 				that.html(data.obj);
+				
 				// 初始化大小
 				$('.group-submenu').each(function() {
 					var that = $(this);
 					var width = that.children('.group-item').eq(0).width() * that.children('.group-item').length + 10 ;
 					that.width(width);
 				});
+				
+				// 自适应大小
+				setMenuLayout();
 				
 				// 设置二级菜单的高度
 				setSubmenuLayout();
@@ -170,6 +175,32 @@ function setTabLayout(){
 	i = e - t.offset().top;
     t.height(i)
     $('#sidebar').height(e);
+};
+
+/**
+ * 一级菜单的高度
+ * @returns
+ */
+function setMenuLayout() {
+	var themes = [72, 60]; //0 、1、2、3、4
+	var e = $('#sidebar').height();
+	var $li = $('#userMenuNav > li:last');
+	if ($li.get(0) && ($li.offset().top + $li.height()) > e) {
+		var size = $('#userMenuNav > li').length;
+		var heigth = e - 46;
+		var one_size = parseInt(heigth /size);
+		if (one_size < 80) {
+			var c = 2;
+			for(var i in themes) {
+				if (themes[i]<=one_size) {
+					c = i;
+					break;
+				}
+			}
+			// 使用1号主题
+			$('#sidebar').attr('class', 'sidebar sidebar-' + c);
+		}
+	}
 };
 
 /**

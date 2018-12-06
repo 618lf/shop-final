@@ -1,12 +1,44 @@
+<%@ page contentType="text/html;charset=UTF-8" session="false" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/pageHead.jsp"%>
 <!DOCTYPE html>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <html>
 <head>
 <title>接口</title>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
+</head>
+<body>
+<div class="wrapper">
+    <div class="wrapper-inner">
+		<div class="top">
+		    <form name="queryForm" id="queryForm">
+				<div class="fl">
+				  <div class="ui-btn-menu">
+				      <span class="ui-btn ui-menu-btn">
+				         <strong>点击查询</strong><b></b>
+				      </span>
+				      <div class="dropdown-menu" style="width: 320px;">
+					       <div class="ui-btns">
+				              <input class="btn btn-primary query" type="button" value="查询"/>
+				              <input class="btn reset" type="button" value="重置"/>
+				           </div> 
+				      </div>
+				  </div>
+				  <input type="button" class="btn btn-primary" value="&nbsp;刷&nbsp;新&nbsp;" onclick="Public.doQuery()">
+				</div>
+				<div class="fr">
+				   <input type="button" class="btn btn-primary" id="addBtn" value="&nbsp;添&nbsp;加&nbsp;">&nbsp;
+				   <input type="button" class="btn" id="delBtn" value="&nbsp;删&nbsp;除&nbsp;">&nbsp;
+				</div>
+			</form>
+		</div>
+	</div>
+	<div id="dataGrid" class="autoGrid">
+		<table id="grid"></table>
+		<div id="page"></div>
+	</div> 
+</div>
+<%@ include file="/WEB-INF/views/include/list-footer.jsp"%>
 <script type="text/javascript">
-
 var THISPAGE = {
 	_init : function(){
 		this.loadGrid();
@@ -79,37 +111,5 @@ $(function(){
 	THISPAGE._init();
 });
 </script>
-</head>
-<body>
-<div class="wrapper">
-    <div class="wrapper-inner">
-		<div class="top">
-		    <form name="queryForm" id="queryForm">
-				<div class="fl">
-				  <div class="ui-btn-menu">
-				      <span class="ui-btn ui-menu-btn">
-				         <strong>点击查询</strong><b></b>
-				      </span>
-				      <div class="dropdown-menu" style="width: 320px;">
-					       <div class="ui-btns">
-				              <input class="btn btn-primary query" type="button" value="查询"/>
-				              <input class="btn reset" type="button" value="重置"/>
-				           </div> 
-				      </div>
-				  </div>
-				  <input type="button" class="btn btn-primary" value="&nbsp;刷&nbsp;新&nbsp;" onclick="Public.doQuery()">
-				</div>
-				<div class="fr">
-				   <input type="button" class="btn btn-primary" id="addBtn" value="&nbsp;添&nbsp;加&nbsp;">&nbsp;
-				   <input type="button" class="btn" id="delBtn" value="&nbsp;删&nbsp;除&nbsp;">&nbsp;
-				</div>
-			</form>
-		</div>
-	</div>
-	<div id="dataGrid" class="autoGrid">
-		<table id="grid"></table>
-		<div id="page"></div>
-	</div> 
-</div>
 </body>
 </html>

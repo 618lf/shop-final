@@ -1,9 +1,9 @@
 $(function(){
 	
 	//加载数据
-	Public.initScrollLoad(webRoot + '/f/member/coupon/codeList/data', $('#couponCodeTemplate').text(), function(){}, 
+	Public.initScrollLoad(ctxFront + '/member/coupon/codeList/data.json', $('#couponCodeTemplate').text(), function(){}, 
 		{   showNoData: function() {
-			var html = '<div class="weui_msg"><div class="weui_icon_area"><img src="'+ webRoot + '/static/modules/front/img/no-data.png"/></div><div class="weui_text_area"><p class="weui_msg_desc">暂无优惠</p></div></div>';
+			var html = '<div class="weui_msg"><div class="weui_icon_area"><img src="'+ ctxStatic +'/modules/front/img/no-data.png"/></div><div class="weui_text_area"><p class="weui_msg_desc">暂无优惠</p></div></div>';
 			$('#ajax-load-page').append(html);
 		}
 	}); 
@@ -12,7 +12,7 @@ $(function(){
 	$(document).on("click",".query-btn",function(){
 		var val = $("#code").val();
 		if (!!val && val.length >= 18) {
-			Public.postAjax(webRoot + "/f/member/coupon/fetchByCode",{"code":val}, function(data){
+			Public.postAjax(ctxFront + "/member/coupon/fetchByCode.json",{"code":val}, function(data){
 				if (data.success){
 					var _val = data.obj;
 					Public.tip('恭喜获得一张面值为' + _val +'元的优惠券');

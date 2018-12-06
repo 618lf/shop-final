@@ -90,7 +90,7 @@ var Shop = {
 	// 选择商品(前台配置)
 	selectGoods : function(callback) {
 		var url = webRoot + '/admin/shop/goods/table_select';
-		Public.tableSelect(url, '选择商品', 750, 420, function(iframe, ids, names) {
+		Public.tableSelect(url, '选择商品', 750, 520, function(iframe, ids, names) {
 			var id = !!ids && ids.length > 0 ? ids[0] : null;
 			var goods = Shop.getGoods(id);
 			callback(goods);
@@ -111,7 +111,7 @@ var Shop = {
 	// 选择货品(后台配置)
 	selectProduct : function(callback) {
 		var url = webRoot + '/admin/shop/product/table_select';
-		Public.tableSelect(url, '选择商品', 750, 420, function(iframe, ids, names) {
+		Public.tableSelect(url, '选择商品', 750, 520, function(iframe, ids, names) {
 			$.each(ids, function(n, e) {
 				var goods = Shop.getProduct(e);
 				callback(goods);
@@ -133,14 +133,13 @@ var Shop = {
 	// 选择优惠券
 	selectCoupon : function(callback) {
 		var url = webRoot + '/admin/shop/coupon/table_select';
-		Public.tableSelect(url, '选择优惠券', 750, 420,
-				function(iframe, ids, names) {
-					$.each(ids, function(n, e) {
-						var goods = Shop.getCoupon(e);
-						callback(goods);
-					});
-					return true;
-				});
+		Public.tableSelect(url, '选择优惠券', 750, 420, function(iframe, ids, names) {
+			$.each(ids, function(n, e) {
+				var goods = Shop.getCoupon(e);
+				callback(goods);
+			});
+			return true;
+		});
 	},
 
 	// 获得用户的默认收获地址
@@ -152,6 +151,28 @@ var Shop = {
 				ok(data.obj);
 			}
 		});
+	},
+	
+	// treeSelect
+	selectCategory : function(callback) {
+		var url = webRoot + '/admin//shop/category/treeSelect';
+		Public.treeSelect(url, '商品分组', 370, 420, function(iframe, ids, names) {
+			$.each(ids, function(n, e) {
+				var goods = Shop.getCategory(e);
+				callback(goods);
+			});
+			return true;
+		}, null, null, null, false, null, true, true);
+	},
+	
+	// 返回分类
+	getCategory : function(id) {
+		var goods = {};
+		var url = webRoot + '/admin/shop/category/get/' + id;
+		Public.getAjax(url, {}, function(data) {
+			goods = data;
+		}, false);
+		return goods;
 	}
 };
 
@@ -363,4 +384,4 @@ var OrderSplit = {
 					          + target_pos.Y2 + '<br/>';
 		$('.order-split-pos').html(html);
 	}
-}
+};

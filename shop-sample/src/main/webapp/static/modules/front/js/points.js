@@ -7,7 +7,7 @@ var Points = {
 	init : function() {
 		
 		// 加载数据
-		Public.initScrollLoad(webRoot + '/f/member/point/list/data', $('#pointTemplate').text());
+		Public.initScrollLoad(ctxFront + '/member/point/list/data.json', $('#pointTemplate').text());
 	}
 };
 

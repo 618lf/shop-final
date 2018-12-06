@@ -85,20 +85,20 @@
 		<form:hidden path="level"/>
 		<form:hidden path="parentIds"/>
 		<div class="control-group formSep">
-			<label class="control-label">上级菜单:</label>
+			<label class="control-label">上级菜单<span class="red">*</span>:</label>
 			<div class="controls">
 			    <tags:treeselect id="parentId" name="parentName" idValue="${menu.parentId}" nameValue="${menu.parentMenu.name}"
 				      title="菜单" url="${ctx}/system/menu/treeSelect" extId="${menu.id}" cssClass="required"/>
 			</div>
 		</div>
 		<div class="control-group formSep">
-			<label class="control-label">菜单名称:</label>
+			<label class="control-label">菜单名称<span>*</span>:</label>
 			<div class="controls">
 				<form:input path="name" htmlEscape="false" maxlength="50" class="required"/>
 			</div>
 		</div>
 		<div class="control-group formSep">
-			<label class="control-label">菜单类型:</label>
+			<label class="control-label">菜单类型<span class="red">*</span>:</label>
 			<div class="controls">
 			    <form:select path="type" cssClass="iSelect">
 			       <form:option value="1">目录</form:option>
@@ -147,7 +147,7 @@
 			</div>
 		</div>
 		<div class="control-group formSep">
-			<label class="control-label">同级排序:</label>
+			<label class="control-label">同级排序<span class="red">*</span>:</label>
 			<div class="controls">
 				<form:input path="sort" htmlEscape="false" value="${menu.sort}" maxlength="50" class="required digits" />
 			</div>

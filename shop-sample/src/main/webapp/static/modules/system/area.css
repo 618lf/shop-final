@@ -16,6 +16,9 @@
   background-color: #fff;
   border: 1px solid #ddd;
 }
+.area-three > .area {
+  width: 33.333%;
+}
 .area * {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;

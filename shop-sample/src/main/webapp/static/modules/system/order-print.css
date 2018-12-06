@@ -1,0 +1,123 @@
+body{background-color: #fff; font-size: 12px;}
+.print-content .table th{
+  text-align: left;
+}
+.print-content .table td{ border: 0;}
+.print-content .table .separated th, 
+.print-content .table .separated td {
+  border-top: 1px solid #000000;
+  border-bottom: 1px solid #000000;
+}
+.print-content .table .separated th {
+  text-align: center;
+}
+.print-content .table .separated td.tc {
+  text-align: center;
+}
+.print-content .table .separated td.tr {
+  text-align: right;
+}
+.print-bar {
+  height: 30px;
+  line-height: 30px;
+  border-bottom: 1px solid #d7e8f8;
+  background-color: #3884AE;
+  padding: 4px;
+}
+.company {
+  text-align: center !important;
+  font-size: 18px;
+  line-height: 40px;
+  font-weight: bold;
+}
+.shipping-page {
+  width: 750px;
+  margin: 0px auto;
+}
+.separated-table-wrap {
+  position: relative;
+  page-break-after: always;
+  padding: 0 0px;
+}
+.separated-table-wrap * {
+  box-sizing: border-box;
+}
+.separated-table .separated td, .separated-table .separated th {
+  border: 1px solid #000000;
+  font-size: 12px;
+  padding: 0;
+}
+.separated-table-wrap .print-index {
+  right: 10px;
+  top: 30px;
+  font-size: 12px;
+  position: absolute;
+  right: 10px;
+}
+.separated-table-wrap .print-index .-t{
+  margin-left: 5px;
+}
+.info-wrap {
+  padding: 0;
+}
+.info-wrap .info {
+  display: flex;
+}
+.info-wrap .info .-side {
+  width: 160px;
+}
+.info-wrap .info .-main {
+  flex: 1;
+}
+.info-wrap .info .-item {
+  padding-left: 70px;
+  position: relative;
+  margin-right: 10px;
+}
+.info-wrap .info .-item > label {
+  display: block;
+  position: absolute;
+  left: 0;
+  font-size: 12px;
+}
+.info-wrap .info .-item > .-c {
+  
+}
+.info-wrap .info .-items {
+  display: flex;
+}
+.info-wrap .info .-items > .-item {
+  flex: 1;
+  margin-top: 0;
+}
+.print-content .table td.tc {
+  text-align: center;
+}
+.-index {
+  color: #999 !important;
+  margin-left: 20px;
+}
+.-name-wrap {
+  position: relative;
+}
+.-name {
+  font-size: 16px;
+}
+.-name-wrap .-sn {
+  position: absolute;
+  right: 150px;
+  font-size: 12px;
+  font-style: oblique;
+}
+.table td.signs {
+  padding: 5px 10px 10px 5px;
+}
+.signs:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+.signs .-item {
+  float: left;
+  width: 25%;
+}

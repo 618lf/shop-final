@@ -16,13 +16,13 @@
 		<tags:token/>
 		<form:hidden path="id"/>
 		<div class="control-group formSep">
-			<label class="control-label">角色名称:</label>
+			<label class="control-label">角色名称<span class="red">*</span>:</label>
 			<div class="controls">
 				<form:input path="name" htmlEscape="false" maxlength="50" class="required"/>
 			</div>
 		</div>
 		<div class="control-group formSep">
-			<label class="control-label">角色编码:</label>
+			<label class="control-label">角色编码<span class="red">*</span>:</label>
 			<div class="controls">
 				<form:input path="code" htmlEscape="false" maxlength="50" class="required"/>
 			</div>
@@ -40,7 +40,7 @@
 			</div>
 		</div>
 		<div class="control-group formSep">
-			<label class="control-label">所属组织:</label>
+			<label class="control-label">所属组织<span class="red">*</span>:</label>
 			<div class="controls">
 				<tags:treeselect id="officeId" name="officeName" idValue="${role.officeId}" nameValue="${role.officeName}"
 				      title="所属组织" url="${ctx}/system/office/treeSelect" extId="-1" cssClass="required"/>

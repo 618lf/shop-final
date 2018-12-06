@@ -25,7 +25,7 @@ public class TransactionalLock implements Lock {
 	public <T> T doHandler(Handler handler) throws LockTimeOutException {
 		
 		// 如果有实现资源锁的service
-		ResourceLockServiceFacade lockService = SpringContextHolder.getBeanQuietly(ResourceLockServiceFacade.class);
+		ResourceLockServiceFacade lockService = SpringContextHolder.getBean(ResourceLockServiceFacade.class);
 		if (lockService == null) {
 			throw new LockTimeOutException("no service ResourceLockServiceFacade");
 		}

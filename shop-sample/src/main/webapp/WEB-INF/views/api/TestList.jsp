@@ -1,12 +1,43 @@
+<%@ page contentType="text/html;charset=UTF-8" session="false" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/pageHead.jsp"%>
 <!DOCTYPE html>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <html>
 <head>
 <title>测试</title>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
+</head>
+<body>
+<div class="wrapper">
+    <div class="wrapper-inner">
+		<div class="top">
+		    <form name="queryForm" id="queryForm">
+				<div class="fl">
+				  <div class="ui-btn-menu">
+				      <span class="ui-btn ui-menu-btn">
+				         <strong>点击查询</strong><b></b>
+				      </span>
+				      <div class="dropdown-menu" style="width: 320px;">
+					       <div class="ui-btns">
+				              <input class="btn btn-primary query" type="button" value="查询"/>
+				              <input class="btn reset" type="button" value="重置"/>
+				           </div> 
+				      </div>
+				  </div>
+				  <input type="button" class="btn btn-primary" value="&nbsp;刷&nbsp;新&nbsp;" onclick="Public.doQuery()">
+				</div>
+				<div class="fr">
+				   <input type="button" class="btn" id="delBtn" value="&nbsp;删&nbsp;除&nbsp;">&nbsp;
+				</div>
+			</form>
+		</div>
+	</div>
+	<div id="dataGrid" class="autoGrid">
+		<table id="grid"></table>
+		<div id="page"></div>
+	</div> 
+</div>
+<%@ include file="/WEB-INF/views/include/list-footer.jsp"%>
 <script type="text/javascript">
-
 var THISPAGE = {
 	_init : function(){
 		this.loadGrid();
@@ -17,6 +48,9 @@ var THISPAGE = {
 		var optionsFmt = function (cellvalue, options, rowObject) {
 			return Public.billsOper(cellvalue, options, rowObject);
 		};
+		var runsFmt = function (cellvalue, options, rowObject) {
+			return '<a class="-run" data-id="'+(rowObject.id)+'">运行</a>';
+		};
 		$('#grid').jqGrid(
 			Public.defaultGrid({
 				url: '${ctx}/api/test/page?timeid='+ Math.random(),
@@ -25,9 +59,13 @@ var THISPAGE = {
                 rownumbers: !0,//序号
 				multiselect:true,//定义是否可以多选
 				multiboxonly: false,
-				colNames: ['ID', ''],
+				colNames: ['ID', '接口名称', '接口URL', '提交方式', '运行', ''],
 				colModel: [
                     {name:'id', index:'id', width:80,sortable:false,hidden:true},
+                    {name:'documentName', index:'documentName',align:'center',width:150},
+                    {name:'requestUrl', index:'requestUrl',align:'center',width:120},
+                    {name:'requestMethod', index:'requestMethod',align:'center',width:120},
+                    {name:'run', index:'run',align:'center',width:80,formatter:runsFmt},
 					{name:'options', index:'options',align:'center',width:80,sortable:false,formatter:optionsFmt}
 				]
 			})		
@@ -66,50 +104,23 @@ var THISPAGE = {
 		$('#dataGrid').on('click','.delete',function(e){
 			delTest($(this).data('id'));
 		});
-		$(document).on('click','#addBtn',function(e){
-			var url = "${ctx}/api/test/form";
-			Public.openOnTab('test-add', '添加测试', url);
+		$('#dataGrid').on('click','.-run',function(e){
+			var id = $(this).data('id');
+    		var url = webRoot + '/admin/api/test/run?id=' + id;
+    		Public.loading();
+    		Public.postAjax(url, {}, function(data) {
+    			Public.success('结果：【' + data.obj + '】', -1, function() {});
+    		});
 		});
 		$(document).on('click','#delBtn',function(e){
 			var checkeds = $('#grid').getGridParam('selarrrow');
 			delTest(checkeds);
 		});
-	}};
+	}
+};
 $(function(){
 	THISPAGE._init();
 });
 </script>
-</head>
-<body>
-<div class="wrapper">
-    <div class="wrapper-inner">
-		<div class="top">
-		    <form name="queryForm" id="queryForm">
-				<div class="fl">
-				  <div class="ui-btn-menu">
-				      <span class="ui-btn ui-menu-btn">
-				         <strong>点击查询</strong><b></b>
-				      </span>
-				      <div class="dropdown-menu" style="width: 320px;">
-					       <div class="ui-btns">
-				              <input class="btn btn-primary query" type="button" value="查询"/>
-				              <input class="btn reset" type="button" value="重置"/>
-				           </div> 
-				      </div>
-				  </div>
-				  <input type="button" class="btn btn-primary" value="&nbsp;刷&nbsp;新&nbsp;" onclick="Public.doQuery()">
-				</div>
-				<div class="fr">
-				   <input type="button" class="btn btn-primary" id="addBtn" value="&nbsp;添&nbsp;加&nbsp;">&nbsp;
-				   <input type="button" class="btn" id="delBtn" value="&nbsp;删&nbsp;除&nbsp;">&nbsp;
-				</div>
-			</form>
-		</div>
-	</div>
-	<div id="dataGrid" class="autoGrid">
-		<table id="grid"></table>
-		<div id="page"></div>
-	</div> 
-</div>
 </body>
 </html>

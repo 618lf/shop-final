@@ -232,13 +232,21 @@ $(function() {
 	$(document).on('click', '.config-pic-upload', function() {
 		var that = $(this); var p = $(this).closest('.config-pic');
 		var img = $(p).find('img').attr('src');
+		if (!img) {
+			Public.toast('请选择图片');
+			return;
+		}
 		var appId = $('.apps > .active > a').data('app');
 		Public.loading('图片上传中...')
 		Public.postAjax(webRoot + '/admin/wechat/meta/image/upload', {appId: appId, img: img}, function(data) {
-			Public.close();
-			Public.success('图片上传成功！');
-			$(p).find('.-config').val(data.obj);
-			$(p).find('.-config').trigger('input');
+			if (data.success) {
+				Public.close();
+				Public.success('图片上传成功！');
+				$(p).find('.-config').val(data.obj); 
+				$(p).find('.-config').trigger('input');
+			} else {
+				Public.error(data.msg);
+			}
 		});
 	});
 	

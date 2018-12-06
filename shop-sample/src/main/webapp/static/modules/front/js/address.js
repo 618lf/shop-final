@@ -21,7 +21,7 @@ var Address = {
 			var query = $('#key').val();
 			if (!!query) {
 				// 获取数据
-				Public.postAjax(webRoot + '/f/member/map/getPoisByKey', {"key": query}, function(data) {
+				Public.postAjax(ctxFront + '/member/map/getPoisByKey.json', {"key": query}, function(data) {
 					if (data.success) {
 						var html = Public.runTemplate($('#addressTemplate').html(), {pois: data.obj})
 						$('#address-container').html(html);
@@ -38,7 +38,7 @@ var Address = {
 	
 	// 定位当前地址（周边）
 	doLocation : function() {
-		Public.postAjax(webRoot + '/f/member/map/getLocationPois', {}, function(data) {
+		Public.postAjax(ctxFront + '/member/map/getLocationPois.json', {}, function(data) {
 			if (data.success) {
 				var html = Public.runTemplate($('#addressTemplate').html(), {pois: data.obj})
 				$('#address-container').html(html);

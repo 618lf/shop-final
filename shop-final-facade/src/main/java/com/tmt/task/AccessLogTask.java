@@ -38,7 +38,7 @@ public class AccessLogTask implements TaskExecutor {
 	 */
 	@Autowired
 	private Dialect dialect;
-	
+
 	/**
 	 * 日志文件的路径
 	 * 
@@ -88,7 +88,7 @@ public class AccessLogTask implements TaskExecutor {
 	 * 存储到数据库 1百万条数据 18S
 	 */
 	private void storeToOther(File file) {
-		String bulk_Load_Sql = "INTO TABLE SYS_LOG (ID, TYPE, CREATE_ID, CREATE_NAME, CREATE_DATE, REMOTE_ADDR, USER_AGENT, REQUEST_URI, METHOD, DEAL_TIME, EXCEPTION, REFERER) values('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')";
+		String bulk_Load_Sql = "INSERT INTO SYS_LOG (ID, TYPE, CREATE_ID, CREATE_NAME, CREATE_DATE, REMOTE_ADDR, USER_AGENT, REQUEST_URI, METHOD, DEAL_TIME, EXCEPTION, REFERER) values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)";
 		BufferedReader reader = null;
 		try {
 			// 缓存设置为1M
@@ -101,8 +101,8 @@ public class AccessLogTask implements TaskExecutor {
 			String line = null;
 			int size = 0;
 			while ((line = reader.readLine()) != null) {
-				Object[] args = line.split("\\t");
-				batchSql.add(StringUtil3.format(bulk_Load_Sql, args));
+				String sql = StringUtil3.format(bulk_Load_Sql, this.parseLine(line));
+				batchSql.add(sql);
 				if (size++ >= 1500) {
 					dialect.bulkSave(batchSql, null);
 					batchSql.clear();
@@ -129,6 +129,23 @@ public class AccessLogTask implements TaskExecutor {
 		} finally {
 			IOUtils.closeQuietly(reader);
 		}
+	}
+
+	// 解析 line
+	private Object[] parseLine(String line) {
+		String[] params = new String[] { null, null, null, null, null, null, null, null, null, null, null, null };
+		Object[] args = line.split("\\t");
+		for (int i = 0; i < args.length; i++) {
+			params[i] = String.valueOf(args[i]);
+			if (params[i].equals("\\N")) {
+				params[i] = null;
+			}
+			params[i] = StringUtil3.escapeDb(params[i]);
+			if (params[i] != null) {
+				params[i] = "'" + params[i] + "'";
+			}
+		}
+		return params;
 	}
 
 	/**

@@ -16,19 +16,19 @@
 		<tags:token/>
 		<form:hidden path="id"/>
 		<div class="control-group formSep">
-			<label class="control-label">名称:</label>
+			<label class="control-label">名称<span class="red">*</span>:</label>
 			<div class="controls">
 				<form:input path="name" htmlEscape="false" maxlength="50" class="required" cssStyle="width:250px;"/>
 			</div>
 		</div>
 		<div class="control-group formSep">
-			<label class="control-label">键:</label>
+			<label class="control-label">键<span class="red">*</span>:</label>
 			<div class="controls">
 				<form:input path="code" htmlEscape="false" maxlength="50" class="required" cssStyle="width:250px;"/>
 			</div>
 		</div>
 		<div class="control-group formSep">
-			<label class="control-label">值:</label>
+			<label class="control-label">值<span class="red">*</span>:</label>
 			<div class="controls">
 				<form:textarea path="value" rows="5" cols="5" cssStyle="width:75%;" cssClass="required"/>
 			</div>

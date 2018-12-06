@@ -1,5 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" session="false" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/include/pageHead.jsp"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,8 +6,8 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
-<link href="${ctxStatic}/weui/style/weui.min.css" rel="stylesheet"/>
-<script src="${ctxStatic}/jquery/jquery-1.11.1.min.js" type="text/javascript"></script>
+<link href="/static/weui/style/weui.min.css" rel="stylesheet"/>
+<script src="/static/jquery/jquery-1.11.1.min.js" type="text/javascript"></script>
 </head>
 <body>
 <div class="weui_msg">

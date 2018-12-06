@@ -23,6 +23,11 @@
   width: 100%;
   line-height: 60px;
 }
+.epay-division {
+  padding: 10px 0 10px 0;
+  font-size: 16px;
+  margin-top: 40px;
+}
 /*====================================================
   订单管理
 ====================================================*/
@@ -167,10 +172,10 @@
   text-align: right;
 }
 #sample-table.goods-parameter td.input-cel>input {
-  width: 260px !important;
+  width: 220px !important;
 }
 #sample-table.goods-parameter td.option-cel {
-  width: 200px;
+  width: 120px;
   border-left: 0;
 }
 #sample-table.goods-parameter td.option-cel>a {
@@ -648,6 +653,134 @@
 .order-flow .line>.tip {
   text-align: center;
 }
+.order-flow_bd .confirm {
+  left: 245px;
+  top: 10px;
+}
+.order-flow_bd .create-confirm {
+  top: 10px;
+  left: 115px;
+}
+.order-flow_bd .shipping {
+  left: 480px;
+  top: 10px;
+}
+.order-flow_bd .confirm-shipping {
+  left: 355px;
+  top: 10px;
+}
+.order-flow_bd .payment {
+  left: 795px;
+  top: 10px;
+}
+.order-flow_bd .shipping-payment {
+  top: 10px;
+  left: 585px;
+  width: 200px;
+}
+.order-flow_bd .returns {
+  left: 480px;
+  top: 215px;
+}
+.order-flow_bd .payment-returns {
+  left: 530px;
+  top: 98px;
+  -moz-transform: rotate(148deg);
+  -webkit-transform: rotate(148deg);
+  -o-transform: rotate(148deg);
+  transform: rotate(148deg);
+  width: 280px;
+}
+.order-flow_bd .shipping-returns {
+  left: 465px;
+  top: 110px;
+  -moz-transform: rotate(90deg);
+  -webkit-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
+  width: 130px;
+}
+.order-flow_bd .refunds {
+  left: 480px;
+  top: 415px;
+}
+.order-flow_bd .returns-refunds {
+  left: 465px;
+  top: 315px;
+  -moz-transform: rotate(90deg);
+  -webkit-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
+  width: 130px;
+}
+.order-flow_bd .apply_returns {
+  left: 695px;
+  top: 215px;
+}
+.order-flow_bd .payment-apply_returns {
+  left: 710px;
+  top: 113px;
+  -moz-transform: rotate(125deg);
+  -webkit-transform: rotate(125deg);
+  -o-transform: rotate(125deg);
+  transform: rotate(125deg);
+  width: 165px;
+}
+.order-flow_bd .apply_returns-returns {
+  left: 590px;
+  top: 215px;
+  -moz-transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  transform: rotate(180deg);
+  width: 100px;
+}
+.order-flow_bd .complete {
+  left: 795px;
+  top: 415px;
+  border-radius: 50%;
+}
+.order-flow_bd .refunds-complete {
+  left: 585px;
+  top: 415px;
+  width: 200px;
+}
+.order-flow_bd .returns-complete {
+  left: 525px;
+  top: 325px;
+  width: 285px;
+  -moz-transform: rotate(32deg);
+  -webkit-transform: rotate(32deg);
+  -o-transform: rotate(32deg);
+  transform: rotate(32deg);
+}
+.order-flow_bd .apply_returns-complete {
+  left: 710px;
+  top: 315px;
+  -moz-transform: rotate(53deg);
+  -webkit-transform: rotate(53deg);
+  -o-transform: rotate(53deg);
+  transform: rotate(53deg);
+  width: 165px;
+}
+.order-flow_bd .confirm-cancel {
+  left: -40px;
+  -moz-transform: rotate(115deg);
+  -webkit-transform: rotate(115deg);
+  -o-transform: rotate(115deg);
+  transform: rotate(115deg);
+  width: 390px;
+  top: 200px;
+}
+.order-flow_bd .payment-complete {
+  left: 690px;
+  -moz-transform: rotate(90deg);
+  -webkit-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
+  width: 330px;
+  top: 210px;
+}
 /*====================================================
   批量导入 -- 校验结果
 ====================================================*/
@@ -938,6 +1071,27 @@
   color: #999;
   font-size: 10px;
 }
+.discount-ops {
+  text-align: left !important;
+}
+.discount-ops > a {
+  padding: 4px 5px;
+  display: inline-block;
+  background-color: #f4f4f4;
+  margin: 3px;
+  color: #999;
+  background-color: #FEFEFE;
+  font-size: 12px;
+  margin-right: 5px;
+  line-height: 1.5;
+  border-radius: 2px;
+  border: 1px solid #E0E0E0;
+}
+.discount-ops > a:hover {
+  color: #fff;
+  background-color: #31b0d5;
+  border-color: #269abc;
+}
 /*====================================================
   新建订单
 ====================================================*/
@@ -1112,4 +1266,236 @@
 }
 .rank-sel:HOVER {
   background-color: #99CCCC;
+}
+/*====================================================
+  通知设置
+====================================================*/
+.ns-template-wrap {
+  padding: 30px; 
+}
+.ns-template {
+  margin-bottom: 10px;
+}
+.ns-template .-title {
+  font-weight: normal;
+  font-size: 16px;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+.ns-template .-content > textarea{
+  width: 100%;
+  height: 220px;
+}
+.ns-template .-content {
+  min-height: 220px;
+}
+.tm-template {
+  position: relative;
+}
+.tm-template .-template {
+  position: relative;
+  margin-left: 320px;
+  background-color: #f4f4f4;
+  min-height: 400px;
+  right: 0;
+  padding: 5px;
+}
+.tm-template .-template span {
+  word-break: break-all !important;
+}
+.tm-template .-content {
+  position: absolute;
+  left: 0;
+  width: 310px;
+  height: 100%;
+  box-sizing: border-box;
+}
+.tm-template .-content > textarea {
+   height: 100%;
+   box-sizing: border-box;
+}
+/*====================================================
+  送货区域
+====================================================*/
+.add-areas {
+  color: #fff;
+  background-color: #31b0d5;
+  border-color: #269abc;
+  background-image:none;
+  text-shadow: none;
+}
+.add-areas:HOVER, .add-areas:FOCUS {
+  background-image:none;
+  background-color: #269abc;
+  color: #fff;
+}
+.shipping-areas:AFTER {
+  display: block;
+  content: "";
+  clear: both;
+}
+.shipping-areas .areas {
+  margin-bottom: 10px;
+}
+.shipping-areas .area-selected {
+  width: 500px;
+  height: 120px;
+  float: left;
+  border: 1px solid #ddd;
+}
+.shipping-areas .ops {
+  margin-left: 10px;
+  display: inline-block;
+  vertical-align: top;
+}
+.shipping-areas .areaselect-wrap {
+  display: inline-block;
+}
+.area-selected .sel-area {
+  float: left;
+  padding: 5px;
+  background-color: rgba(4,190,2,.8);
+  margin: 5px;
+  color: #fff;
+  cursor: pointer;
+}
+/*====================================================
+  添加商品
+====================================================*/
+.category-sel-wrap {
+  background-color: #fff;
+  padding: 30px;
+  margin: 10px;
+  padding-bottom: 10px;
+}
+.category-sel-wrap .area-wrap {
+  margin: 0;
+  padding: 0
+}
+.category-select {
+  padding: 20px 0;
+  font-size: 16px;
+}
+.category-guide {
+  text-align: center;
+  padding: 10px;
+}
+.category-guide > .-btn {
+  padding: 10px;
+  color: #fff;
+  background-color: #3071a9;
+  border-color: #285e8e;
+  font-size: 16px;
+}
+.category-select > .-selected {
+  font-weight: bold;
+  font-size: 18px;
+}
+.category-select > .-selected > b:before {
+  content: '>';
+  margin: 0 5px;
+  color: #999;
+  font-weight: normal;
+}
+.category-select > .-selected > b:first-child:before {
+  display: none;
+}
+.goods-attributes .table, .goods-parameters .table{
+  width: 580px;
+}
+.goods-attributes td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  line-height: 1.42857143;
+  vertical-align: middle;
+  text-align: center;
+}
+.parameter-null, .attribute-null, .specification-null {
+  font-size: 16px;
+  padding-top: 3px;
+}
+.form-horizontal textarea.big-remarks {
+  width: 100%;
+}
+.goods-specifications input[disabled] {
+  background-color: #eeeeee;
+}
+/*====================================================
+  模板配置
+====================================================*/
+.ns-template .-view {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+.ns-template .-view .-title {
+  font-size: 14px;
+  margin: 0;
+  padding: 0;
+}
+.ns-template .-view .-time {
+  margin-bottom: 15px;
+  color: #999;
+}
+.ns-template .-view .-first {
+  margin-bottom: 10px;
+}
+.ns-template .-view .-remark {
+  margin-top: 10px;
+  padding-bottom: 5px;
+}
+.ns-template .-view .-url {
+  border-top: 1px solid #ddd;
+  padding-top: 5px;
+}
+.ns-template .-template .item{
+  position: relative;
+  padding: 10px 0;
+  padding-left: 80px;
+  padding-right: 60px;
+  border-bottom: 1px solid #ddd;
+}
+.ns-template .-template .item > label {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  margin-top: -10px;
+}
+.ns-template .-template .item > input {
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+  height: 32px;
+  margin-bottom: 5px;
+}
+.ns-template .-template .item > textarea {
+  box-sizing: border-box;
+  width: 100%;
+  resize: none;
+}
+.ns-template .-template .item > .-ops {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  margin-top: -17.8px;
+}
+.ns-template .item > .-ops > a{
+  display: block;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  text-align: center;
+  border: 1px solid #ddd;
+  color: #999;
+  margin: 2px 0;
+  font-size: 18px;
+}
+.ns-template .item > .-ops > a input[type="color"] {
+  box-sizing: border-box;
+  width: 24px;
+  height: 24px;
+  border-radius: 0;
+  border: 0;
+}
+.ns-template .item.multi > .-ops {
+  margin-top: -38.4px;
 }

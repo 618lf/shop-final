@@ -8,7 +8,7 @@ var Appraise = {
 	 */
 	initPage : function() {
 		//加载数据
-		Public.initScrollLoad(webRoot + '/f/member/order/appraise/list/data', $('#ordersTemplate').text(), function() {
+		Public.initScrollLoad(ctxFront + '/member/order/appraise/list/data.json', $('#ordersTemplate').text(), function() {
 			
 			// 定时
 			$('[data-remain-time]').each(function(){
@@ -41,7 +41,7 @@ var Appraise = {
 			  score: function() {
 			    return $(that).attr('data-raty');
 			  },
-			  path: '/static/raty/images_big',
+			  path: ctxStatic + '/raty/images_big',
 			  readOnly : (function(){
 				  var ro = $(that).data('readonly');
 				  return !!ro;
@@ -128,7 +128,7 @@ var Appraise = {
 			var postData = getPostData();
 			if (check(postData)) {
 				Public.loading('提交中...');
-				var url = webRoot + '/f/member/order/appraise/save';
+				var url = ctxFront + '/member/order/appraise/save.json';
 				Public.postAjax(url, {
 					orderId : orderId,
 					postData : JSON.stringify(postData)
@@ -136,9 +136,9 @@ var Appraise = {
 					if (data.success) {
 						Public.close();
 						Public.success('评论成功!', function() {
-							// window.location.href = webRoot + '/f/member/order/appraise/view/' + orderId + '.html';
+							// window.location.href = ctxFront + '/member/order/appraise/view/' + orderId + '.html';
 							// 跳转到评价中心首页
-							window.location.href = webRoot + '/f/member/order/appraise/list.html';
+							window.location.href = ctxFront + '/member/order/appraise/list.html';
 						});
 					} else {
 						Public.toast(data.msg);
@@ -209,7 +209,7 @@ var Appraise = {
 			  score: function() {
 			    return $(that).attr('data-raty');
 			  },
-			  path: '/static/raty/images_big',
+			  path: ctxStatic + '/raty/images_big',
 			  readOnly : (function(){
 				  var ro = $(that).data('readonly');
 				  return !!ro;
@@ -254,7 +254,7 @@ var Appraise = {
 			var postData = getPostData();
 			if (check(postData)) {
 				Public.loading('提交中...');
-				var url = webRoot + '/f/member/order/appraise/rsave';
+				var url = ctxFront + '/member/order/appraise/rsave.json';
 				Public.postAjax(url, {
 					orderId : orderId,
 					postData : JSON.stringify(postData)
@@ -262,7 +262,7 @@ var Appraise = {
 					Public.close();
 					if (data.success) {
 						Public.success('追评成功!', function() {
-							window.location.href = webRoot + '/f/member/order/appraise/view/' + orderId + '.html';
+							window.location.href = ctxFront + '/member/order/appraise/view/' + orderId + '.html';
 						});
 					} else {
 						Public.toast(data.msg);

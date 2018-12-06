@@ -34,13 +34,52 @@ Public.validate = function(options){
 	};
 	return $.extend({},defaults,options);
 };
+/**
+ * 新版异步提交
+ */
+Public.ajaxValidate = function(options){
+	var defaults = {
+		submitHandler: function(form){
+			$('.price-val').each(function(index, item) {
+				_priceValRfmt(item);   
+	        });
+			Public.loading('正在提交，请稍等...');
+			$(form).ajaxSubmit({
+				url: $(form).attr('action'),
+				dataType:"json",
+				beforeSubmit : function(){},  
+				async: true,
+				success: function(data){
+					Public.success('操作成功！', function() {
+						$('#id').val(data.obj);
+					});
+				},
+				error : function(x){
+					Public.loaded();
+					var msg = $.parseJSON(x.responseText).msg;
+					Error.out(msg);
+				}
+			});
+		},
+		errorContainer: "#messageBox",
+		errorPlacement: function(error, element) {
+			Public.success('输入有误，请先更正');
+			if (element.is(":checkbox")||element.is(":radio")||element.parent().is(".input-append")){
+				error.appendTo(element.closest(".controls"));
+			} else {
+				error.insertAfter(element);
+			};
+		}
+	};
+	return $.extend({},defaults,options);
+};
 (function($) {
 	if (!!$('.form-actions').get(0) &&  !($('.form-actions').data('scrollable') == '0') ) {
 		$(document).on('scroll', function() {
 			var scrollTop = parseInt($(this).scrollTop());
 			var scrollHeight = parseInt(document.body.scrollHeight);
 			var windowHeight = parseInt($(window).outerHeight());
-			if(Math.abs(scrollHeight - ( scrollTop + windowHeight)) == 0){
+			if(Math.abs(scrollHeight - ( scrollTop + windowHeight)) <= 50){
 			　  $('.wrapper').removeClass('wrapper-fixed');
 			}else if(!$('.wrapper').hasClass('wrapper-fixed')){
 			   $('.wrapper').addClass('wrapper-fixed');
@@ -50,8 +89,8 @@ Public.validate = function(options){
 			var scrollTop = parseInt($(this).scrollTop());
 			var scrollHeight = parseInt(document.body.scrollHeight);
 			var windowHeight = parseInt($(window).outerHeight());
-			if(!$('.wrapper').hasClass('wrapper-fixed') && Math.abs(scrollHeight - ( scrollTop + windowHeight)) != 0) {
-			   $('.wrapper').addClass('wrapper-fixed');
+			if (!$('.wrapper').hasClass('wrapper-fixed') && Math.abs(scrollHeight - ( scrollTop + windowHeight)) != 0) {
+			    $('.wrapper').addClass('wrapper-fixed');
 			}
 		})();
 	}

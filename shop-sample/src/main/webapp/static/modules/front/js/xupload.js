@@ -149,15 +149,15 @@
 		start:function(){},//开始上传
 		success:function(){},//上传成功
 		error:function(){},//上传失败
-		uploadUrl: webRoot + "/f/member/attachment",
+		uploadUrl: ctxFront + "/member/attachment",
 		base64:'',
 		max : 5
 	};
 	
 	// 默认的接口
 	Xupload.interfaces = {
-		check :  "/check",
-		upload: "/image/upload"
+		check :  "/check.json",
+		upload: "/image/upload.json"
 	};
 	
 	Xupload.setDefaults = function (options) {

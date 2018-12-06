@@ -47,7 +47,7 @@
 				    <input type="text" id="config-url-input" name="config-url-input" placeholder="请填写跳转的地址，外部地址请添加http或https">
 				 </div>
 				 <div class="tab-pane" id="config-site">
-				    <select name="config-site-select" id="config-site-select" class="iSelect">
+				    <select name="config-site-select" id="config-site-select">
 				      <option value=""></option>
 				    </select>
 				 </div>
@@ -76,8 +76,8 @@
 				 <div class="tab-pane" id="config-pic">
 					<div class="config-pic">
 				       <input type="hidden" class="-config">
-				       <div class="image-wrap"><img alt="" src="${ctxStatic}/img/logo-wx.jpg"></div>
-				       <div class="ops"><a class="btn config-pic-select">选择图片</a><a class="btn btn-danger config-pic-upload">上传</a><span style="margin-left: 10px;">临时素材，3天后过期，请及时维护</span></div>
+				       <div class="image-wrap"><img alt=""></div>
+				       <div class="ops"><a class="btn config-pic-select">选择图片</a><a class="btn btn-danger config-pic-upload">上传</a><span style="margin-left: 10px;">永久素材</span></div>
 				    </div>
 				 </div>
 	          </div>
@@ -90,12 +90,23 @@
 </div>
 <%@ include file="/WEB-INF/views/include/form-footer.jsp"%>
 <script src="${ctxModules}/system/wechat.js" type="text/javascript"></script>
+<script src="${ctxModules}/system/Business.js" type="text/javascript"></script>
 <script type="text/javascript">
 var selectId = null;
 var THISPAGE = {
 	_init : function(){
+		this.loadPages();
 		this.addEvent();
 		this.loadMenus();
+	},
+	loadPages : function() {
+		var _pages = Pages.getPages();
+		var html = [];
+		for(var i in _pages) {
+			html.push('<option value="'+_pages[i].value+'">'+_pages[i].label+'</option>');
+		}
+		$('#config-site-select').append(html.join(''));
+		Public.combo($('#config-site-select').get(0));
 	},
 	insertMenus: function(target, menus) {
 		var html = Public.runTemplate($('#menuTemplate').html(), {datas: menus})
@@ -392,7 +403,7 @@ var THISPAGE = {
 				$('.tab-pane input').val('');
 				$('.tab-pane .-config').val('');
 				$('#config-site-select').select2('val', '');
-				$('.config-pic img').attr('src', '${ctxStatic}/img/logo-wx.jpg');
+				$('.config-pic img').attr('src', '');
 				$('.metas').html('');
 			};
 			reset();

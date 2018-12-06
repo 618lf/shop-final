@@ -1,0 +1,110 @@
+body { background-color: #fff; overflow-y: scroll;}
+.index-container {
+  padding-left: 85px;
+}
+.index-container .iScroll-wrap {
+  position: fixed;
+  height: 100%;
+  width: 80px;
+  left: 0;
+  top: 35px;
+  box-sizing: border-box;
+  padding-bottom: 85px;
+}
+.index-container .iScroll-categotys {
+  width: 80px;
+  max-height: none;
+  height: 100%;
+  background-color: #f4f4f4;
+}
+.index-container .iScroll-categotys .categotys {
+  height: auto;
+}
+.index-container .iScroll-categotys .categotys > a {
+  width: 80px;
+  height: 40px;
+  line-height: 40px;
+}
+.index-container .iScroll-categotys .image-wrap {
+  display: none;
+}
+.iScroll-item.cur {
+  background-color: #fff;
+  color: #EA6152;
+}
+.list-goods .goods-item {
+  width: 100%;
+  display: flex;
+}
+.list-goods .goods-item .ops{
+  flex: 1;
+  padding-left: 3px;
+  padding-right: 10px;
+}
+.list-goods .goods-item .info {
+  padding: 5px;
+}
+.list-goods .goods-item .image-wrap {
+  width: 75px;
+  height: 75px;
+}
+.list-goods .goods-item .image-wrap > img {
+  display: block;
+}
+.list-goods .goods-item .ops > span {
+  display: block;
+}
+.list-goods .goods-item .ops .-name {
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 16px;
+  word-break:break-all;
+  word-wrap:break-word;
+}
+.list-goods .goods-item .ops .-price {
+  color: #EA6152;
+  font-size: 14px;
+}
+.-ops {
+  text-align: right;
+  padding-left: 40px;
+  position: relative;
+}
+.-ops .-price  {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 32px;
+  line-height: 32px;
+}
+.-ops > a {
+  display: inline-block;
+  background-color: #f4f4f4;
+  color: #999;
+  padding: 3px 10px;
+}
+.-ops > b {
+  font-size: 18px;
+  color: #999;
+  font-weight: normal;
+  width: 30px;
+  text-align: center;
+}
+.-ops > .minus, .-ops > b {
+  display: none;
+}
+.-ops.has > .minus, .-ops.has > b{
+  display: inline-block;
+}
+@media (max-width: 338px) {
+	.-ops > a {
+	   padding: 0px 5px;
+	}
+	.-ops > a > i {
+       font-size: 14px;
+    }
+    .-ops > b {
+       font-size: 16px;
+       width: 18px;
+    }
+}

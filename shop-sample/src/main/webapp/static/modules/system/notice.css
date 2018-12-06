@@ -29,3 +29,10 @@
   min-height: 32px;
   margin-left: 180px;
 }
+.setting-template {
+  font-size: 14px;
+  float: left;
+  height: 32px;
+  line-height: 32px;
+  margin-left: 100px;
+}

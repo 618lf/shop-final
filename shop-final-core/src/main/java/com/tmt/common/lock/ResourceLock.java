@@ -25,7 +25,7 @@ public class ResourceLock {
 		
 		// 是否使用redis
 		if (USE_REDIS == null) {
-			CacheManager cacheManager  = SpringContextHolder.getBeanQuietly(CacheManager.class);
+			CacheManager cacheManager  = SpringContextHolder.getBean(CacheManager.class);
 			if (cacheManager != null && (cacheManager instanceof RedisCacheManager)) {
 				USE_REDIS = true;
 			} else {

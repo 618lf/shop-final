@@ -168,7 +168,29 @@
 	        for (var i = 0; i < Math.floor((num.length-(1+i))/3); i++)    
 	        num = num.substring(0,num.length-(4*i+3))+','+num.substring(num.length-(4*i+3));    
 	        return (((sign)?'':'-') + num + '.' + cents);    
-	    }   
+	    },
+	    formatDX : function(n) {
+	    	var fraction = ['角', '分'];
+	    	var digit = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖'];
+	    	var unit = [['元', '万', '亿'], ['', '拾', '佰', '仟']];
+	    	var head = n < 0 ? '欠': '';
+	    	n = Math.abs(n);
+	    	var s = '';
+	    	for (var i = 0; i < fraction.length; i++) {
+	    	    s += (digit[Math.floor(n * 10 * Math.pow(10, i)) % 10] + fraction[i]).replace(/(零.)+/, '');
+	    	}
+	    	s = s || '整';
+	    	n = Math.floor(n);
+	    	for (var i = 0; i < unit[0].length && n > 0; i++) {
+	    	    var p = '';
+	    	    for (var j = 0; j < unit[1].length && n > 0; j++) {
+	    	        p = digit[n % 10] + unit[1][j] + p;
+	    	        n = Math.floor(n / 10);
+	    	    }
+	    	    s = p.replace(/(零.)*零$/, '').replace(/^$/, '零') + unit[0][i] + s;
+	    	}
+	    	return head + s.replace(/(零.)*零元/, '元').replace(/(零.)+/, '零').replace(/^整$/, '零元整');    
+	    }
 	});
 	
 	//input占位符
@@ -400,16 +422,9 @@ Public._setAutoHeight = function(obj){
 };
 
 //异步提交时如果提交错误,判断是否是没有用户
-Public.isUserLogin = function(data){
-	if(!!data && (data.code == 40005 || (!!data.obj && data.obj.code == 40005))) {
-	   var _user = {}
-	   if(top.User) {_user = top.User; } else {_user = User}
-	   if(!!_user && _user.loginDialog) {
-		   _user.loginDialog();
-	   }
-	   return false;
-	}
-	return true;
+Public.isUserLogin = function(data) {
+	var _user = {}; if (top.User) {_user = top.User; } else {_user = User}
+	return !!_user.assertLogin?_user.assertLogin(data) : true;
 };
 
 //Ajax请求，
@@ -1027,30 +1042,45 @@ Public.initTagsEvent = function() {
     
     // 附件选择
     $('.attachment-wrap').each(function() {
-    	var $wrap = $(this);
+    	var $wrap = $(this); var multi = $wrap.data('multi');
     	var $target = $wrap.find('input'); var $preview = $wrap.find('.preview'); var readonly = !!$wrap.data('readonly');
     	
     	// 多选
     	var multiSel = function(files) {
-    		var urls = [];
- 		    for(var i =0;i < files.length; i++) {
- 		    	urls.push(files[i].src);
- 		    }
- 		    
- 		    $target.val($target.val() + "|" + urls.join("|"));
+    		var images = [];
+    		
+    		// 新加的
+    		if (!!files) {
+    			for(var i =0;i < files.length; i++) {
+    				images.push({
+    					src : files[i].src
+    				});
+     		    }
+    		}
+    		
+    		// 已有的
+    		$preview.find('img').each(function(n, e) {
+    			images.push({
+					src : $(e).attr('src'),
+					href : $(e).attr('href'),
+				});
+    		});
+ 		    $target.val(JSON.stringify(images));
     	};
     	
     	// 预览
+    	// [{id:'', src:'', title:'', href:''}]
     	var preview = function() {
-    		var li, urls = $target.val().split("|"); $preview.html('');
-    		for(var i=0; i<urls.length; i++){
-    			var _u = urls[i];
-    			if(!_u) {continue;}
-    			li = '<li><img src="'+_u+'" url="'+_u+'" style="max-width:220px;max-height:220px;_height:200px;border:0;padding-bottom:3px;">';
+    		var _images = $target.val();
+    		var li, images = multi && !!_images ? jQuery.parseJSON(_images): [{src : _images, href: ''}]; $preview.html('');
+    		for(var i=0; i<images.length; i++){
+    			var _u = images[i];
+    			if(!_u.src) {continue;}
+    			li = '<li><img src="'+_u.src+'" href="'+(_u.href||'')+'">';
     			if (!!readonly) {
     				li += '</li>';
     			} else {
-    				li += '<a href="javascript:" class="-del">×</a></li>';
+    				li += '<a href="javascript:" class="-del">×</a><a href="javascript:" class="-sets">e</a></li>';
     			}
     			$preview.append(li);
     		}
@@ -1065,7 +1095,6 @@ Public.initTagsEvent = function() {
     	// 注册事件
     	$wrap.on('click', 'a', function() {
     		if ($(this).hasClass('-select')) {
-        		var multi = $(this).data('multi');
         		Attachment.selectAttachments(function(files) {
         			if (!!files && files.length != 0) {
         				if (!!multi) {
@@ -1076,12 +1105,22 @@ Public.initTagsEvent = function() {
         		    	preview();
         			}
         		});
-        	} else if($(this).hasClass('-clear')){
+        	} else if($(this).hasClass('-clear')) {
         		$target.val("");
     	    	preview();
+        	} else if($(this).hasClass('-sets') && !!multi) {
+        		var $img = $(this).parent().find('img').eq(0); var href = !!$img.attr('href')?$img.attr('href'):'';
+        		Public.openWindow('设置链接', '<div style="padding:20px;">链接地址：<input class="_attachment-image_href" type="text" value="'+href+'"style="margin: 0; width: 220px;"></div>', 400, 180, function() {
+        			$img.attr('href', $('._attachment-image_href').val());
+        			multiSel(); 
+        		})
         	} else if($(this).hasClass('-del')) {
-        		var url = $(this).prev().attr("url");
-        		$target.val($target.val().replace("|"+url,"","").replace(url+"|","","").replace(url,"",""));
+        		$(this).prev().remove();
+        		if (!!multi) {
+        			multiSel();
+        		} else {
+        			$target.val('');
+        		}
     	    	preview();
         	}
     	});
@@ -2121,6 +2160,14 @@ Attachment.selectAttachments = function(success) {
 		return typeof(success) === 'function'? success(selectedFiles):true;
 	}
  }, null);
+};
+
+/**
+ * 没有图片
+ */
+Attachment.noImage = function() {
+	var img = event.srcElement;
+	$(img).attr('src', webRoot + '/static/img/ no_image.png');
 };
 
 // 用户

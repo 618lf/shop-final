@@ -1,10 +1,7 @@
 package com.tmt.system.service;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-import org.quartz.CronExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -127,11 +124,11 @@ public class TaskService extends BaseService<Task, Long> implements TaskServiceF
 	 * @return
 	 */
 	@Transactional
-	public Task preDoTask(Long id) {
-		Task task = this.get(id);
+	public Task preDoTask(Task t) {
+		Task task = this.get(t.getId());
 		if (task != null) {
 			Task newTask = new Task();
-			newTask.setId(id);
+			newTask.setId(t.getId());
 			newTask.setTaskStatus(TaskStatus.RUNNING);
 			this.update("updateStatus", newTask);
 		}
@@ -187,31 +184,15 @@ public class TaskService extends BaseService<Task, Long> implements TaskServiceF
 		List<LabelVO> tasks = CacheUtils.getSysCache().get(Constants.RUNNING_ABLE_TASKS);
 		if (tasks == null) {
 			tasks = Lists.newArrayList();
-			Map<String, TaskExecutor> _tasks = SpringContextHolder.getBeans(TaskExecutor.class);
-			Iterator<String> it = _tasks.keySet().iterator();
-			while (it.hasNext()) {
-				String key = it.next();
-				String label = _tasks.get(key).getName();
+			List<TaskExecutor> _tasks = SpringContextHolder.getBean(Constants.RUNNING_ABLE_TASKS);
+			for(TaskExecutor _task: _tasks) {
+				String key = _task.getName();
+				String label = _task.getName();
 				tasks.add(LabelVO.newLabel(label, key));
 			}
-
 			// 加入缓存
 			CacheUtils.getSysCache().put(Constants.RUNNING_ABLE_TASKS, tasks);
 		}
 		return tasks;
-	}
-
-	// 具体的任务执行器
-	public TaskExecutor getExecutor(Task task) {
-		try {
-			return SpringContextHolder.getBean(task.getBusinessObject());
-		} catch (Exception e) {
-			return null;
-		}
-	}
-
-	// 下一次执行的时间点(主要校验执行时间是否填写正确)
-	public boolean isValidExpression(Task task) {
-		return CronExpression.isValidExpression(task.getCronExpression());
 	}
 }

@@ -465,11 +465,11 @@ var goods = new Component({
 	    // 选择商品
 	    $(AppDesign.regions.editRegion).off('click.add-goods').on('click.add-goods', '.js-add-goods', function() {
 	    	// 选择商品
-	    	Shop.selectGoods(function(goods) {
+	    	Shop.selectProduct(function(goods) {
 	    		e.setGoods({
 	    			id : goods.id,
-	    			title : goods.name,
-	    			sub_title : goods.fullName,
+	    			title : goods.name + goods.tip,
+	    			sub_title : goods.goods.fullName,
 	    			price: goods.price,
 	    			image: goods.image,
 	    			url: goods.url
@@ -502,6 +502,45 @@ var goods_list = $.extend(true, {}, goods, {
 	goodss: [{id:'-1', title:'此处显示商品名称', sub_title:'第一个商品', price:'99.00', image:'/static/modules/app/img/goods-one.jpg', url : ''}, {id:'-1', title:'此处显示商品名称', sub_title:'第二个商品', price:'99.00', image:'/static/modules/app/img/goods-two.jpg', url : ''}, {id:'-1', title:'此处显示商品名称', sub_title:'第三个商品', price:'99.00', image:'/static/modules/app/img/goods-three.jpg', url : ''}, {id:'-1', title:'此处显示商品名称', sub_title:'第n个商品', price:'99.00', image:'/static/modules/app/img/goods-n.jpg', url : ''}],
 	goods_number_type: 0,
 	size: 1, // 0 大图、 1 小图、 2 一大两小、3 详细列表
+	
+	// 设置商品
+	setGoods : function(goods) {
+		this.goods = goods;
+		this.show();
+		this.showConfig();
+	},
+	
+	// 设置显示个数
+	setGoods_number_type : function(size) {
+		this.goods_number_type = size;
+		this.show();
+		this.showConfig();
+	},
+	
+	// 添加自定义事件
+	addCustomEvent : function() {
+       var e = this;
+		
+	    // 选择分组
+	    $(AppDesign.regions.editRegion).off('click.add-goods').on('click.add-goods', '.js-add-goods', function() {
+	    	// 选择商品
+	    	Shop.selectCategory(function(goods) {
+	    		e.setGoods({
+	    			id : goods.id,
+	    			title : goods.name,
+	    			url : goods.url
+	    		});
+	    	});
+	    });
+	    
+	    // 设置显示个数
+	    $(AppDesign.regions.editRegion).off('click.goods-size').on('click.goods-size', 'input[name="goods_number_type"]', function() {
+	    	// 选择商品
+	    	var size = $(this).val();
+	    	e.setGoods_number_type(size);
+	    });
+	},
+	
 });
 
 //图片广告
@@ -1486,7 +1525,6 @@ var tag_list = $.extend(true, {}, goods, {
 	
 	goodss: [{id:'-1', title:'此处显示商品名称', sub_title:'第一个商品', price:'99.00', image:'/static/modules/app/img/goods-one.jpg', url : ''}, {id:'-1', title:'此处显示商品名称', sub_title:'第二个商品', price:'99.00', image:'/static/modules/app/img/goods-two.jpg', url : ''}, {id:'-1', title:'此处显示商品名称', sub_title:'第三个商品', price:'99.00', image:'/static/modules/app/img/goods-three.jpg', url : ''}, {id:'-1', title:'此处显示商品名称', sub_title:'第n个商品', price:'99.00', image:'/static/modules/app/img/goods-n.jpg', url : ''}],
 	sub_entrys:[],
-	tag_group: 'tag_list',
 	size: 1, // 0 大图、 1 小图、 2 一大两小、3 详细列表
 	
 	setTag_group : function(tag_group) {
@@ -1495,14 +1533,87 @@ var tag_list = $.extend(true, {}, goods, {
 		this.showConfig();
 	},
 	
+	// 添加分组
+	addGoods : function(goods) {
+		this.sub_entrys.push(goods);
+		this.show();
+		this.showConfig();
+	},
+	
+	// 修改
+	modifyGoods : function(i, goods) {
+		this.sub_entrys[i] = goods;
+		this.show();
+		this.showConfig();
+	},
+	
+	// 删除指定
+	deleteGoods : function(i) {
+		this.sub_entrys.splice(i, 1);
+		this.show();
+		this.showConfig();
+	},
+	
+	// 重写配置
+	showConfig : function() {
+		var _self = this;
+    	var _config = Public.runTemplate(this.config, _self);
+    	
+    	// 显示配置
+    	AppDesign.regions.editRegion.html(_config)
+    	
+    	// 显示具体的图片配置
+    	var _images = _self.sub_entrys; var image_template = $('#tag_list-item-config').html();
+    	if (_images.length > 0) {
+    		var htmls = [];
+    		for(var i = 0; i< _images.length; i++) {
+    			var image = _images[i]; image.ci = i;
+    			var _html = Public.runTemplate(image_template, image);
+    			htmls.push(_html);
+    		}
+    		AppDesign.regions.editRegion.find('.js-add-subentry').append(htmls.join(''));
+    	}
+	},
+	
 	// 添加事件
 	addCustomEvent : function() {
 		var e = this;
 		
-		// 设置标题
+		// 设置类型
 	    $(AppDesign.regions.editRegion).off('click.tag_group').on('click.tag_group', 'input[name="tag_group"]', function() {
 	    	var title = $(this).val();
 	    	e.setTag_group(title);
+	    });
+	    
+	    // 选择分组
+	    $(AppDesign.regions.editRegion).off('click.add-goods').on('click.add-goods', '.js-add-goods', function() {
+	    	// 选择商品
+	    	Shop.selectCategory(function(goods) {
+	    		e.addGoods({
+	    			id : goods.id,
+	    			title : goods.name,
+	    			url : goods.url
+	    		});
+	    	});
+	    });
+	    
+	    // 修改分组
+	    $(AppDesign.regions.editRegion).off('click.modify-goods').on('click.modify-goods', '.js-modify-goods', function() {
+	    	var ci = $(this).data('ci');
+	    	// 选择商品
+	    	Shop.selectCategory(function(goods) {
+	    		e.modifyGoods(ci, {
+	    			id : goods.id,
+	    			title : goods.name,
+	    			url : goods.url
+	    		});
+	    	});
+	    });
+	    
+	    // 删除
+	    $(AppDesign.regions.editRegion).off('click.delete-goods').on('click.delete-goods', '.delete', function() {
+	    	var ci = $(this).data('ci');
+	    	e.deleteGoods(ci);
 	    });
 	},
 });
@@ -2009,7 +2120,7 @@ var full_scene = new Component({
 	template : $('#full_scene-template').html(),
 	
 	homepage_icon : 1,
-	music_icon: 1,
+	music_icon: 0,
 	music_title: '',
 	music_url: '',
 	loop: 1,
@@ -2090,6 +2201,16 @@ var full_scene = new Component({
 		this.renderSwiper();
 	},
 	
+	// 设置背景音乐
+	setMusic : function(music) {
+		this.music_title = music.name;
+		this.music_url = music.url;
+		this.music_icon = !!this.music_url ? 1 : 0; 
+		this.show();
+		this.showConfig();
+		this.renderSwiper();
+	},
+	
 	addEvent : function() {
 		
 		var e = this;
@@ -2150,6 +2271,27 @@ var full_scene = new Component({
 	    $(AppDesign.regions.editRegion).on('click.action_delete', '.action.delete', function() {
 	    	var index = $(this).closest('.image-box').data('index');
 	    	e.delPage(index);
+	    });
+	    
+	    // 添加背景音乐
+	    $(AppDesign.regions.editRegion).on('click.js-music', '.js-music', function() {
+	    	Attachment.selectAttachments(function(files) {
+	    		if(!!files && files.length != 0) {
+	    			e.setMusic({
+	    				name: files[0].name,
+	    				url : files[0].src
+	    			});
+	    		}
+	    		return true;
+	    	});
+	    });
+	    
+	    // 删除背景音乐
+	    $(AppDesign.regions.editRegion).on('click.js-delete-music', '.js-delete-music', function() {
+	    	e.setMusic({
+				name: '',
+				url : ''
+			});
 	    });
 	    
 	    // 初始化

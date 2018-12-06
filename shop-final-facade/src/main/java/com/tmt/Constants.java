@@ -33,6 +33,8 @@ public interface Constants {
 	// 任务
 	String TASK_PREFIX = "TASK-";
 	String RUNNING_ABLE_TASKS = "SYS-TASKS";
+	String JOB_TASK_KEY = "TASK_KEY";
+	String JOB_EXECUTOR_KEY = "EXECUTOR_KEY";
 	
 	// 日志
 	String SYS_ACCESS = "sys-access";

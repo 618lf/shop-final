@@ -62,6 +62,28 @@
 	        for (var i = 0; i < Math.floor((num.length-(1+i))/3); i++)    
 	        num = num.substring(0,num.length-(4*i+3))+','+num.substring(num.length-(4*i+3));    
 	        return '<span class="nums">' + ((sign)?'':'-') + num + '</span><span class="cents">' + '.' + cents + '</span>';    
+	    },
+	    formatDX : function(num) {
+	    	var fraction = ['角', '分'];
+	    	var digit = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖'];
+	    	var unit = [['元', '万', '亿'], ['', '拾', '佰', '仟']];
+	    	var head = n < 0 ? '欠': '';
+	    	n = Math.abs(n);
+	    	var s = '';
+	    	for (var i = 0; i < fraction.length; i++) {
+	    	    s += (digit[Math.floor(n * 10 * Math.pow(10, i)) % 10] + fraction[i]).replace(/(零.)+/, '');
+	    	}
+	    	s = s || '整';
+	    	n = Math.floor(n);
+	    	for (var i = 0; i < unit[0].length && n > 0; i++) {
+	    	    var p = '';
+	    	    for (var j = 0; j < unit[1].length && n > 0; j++) {
+	    	        p = digit[n % 10] + unit[1][j] + p;
+	    	        n = Math.floor(n / 10);
+	    	    }
+	    	    s = p.replace(/(零.)*零$/, '').replace(/^$/, '零') + unit[0][i] + s;
+	    	}
+	    	return head + s.replace(/(零.)*零元/, '元').replace(/(零.)+/, '零').replace(/^整$/, '零元整'); 
 	    }
 	});
 	
@@ -111,10 +133,10 @@ var Public = Public ||{};
  * 获取地址的全路径
  */
 Public.getBasePath = function(url) {
-	if (!!webRoot) {
-		return base + '/' + webRoot + url;
-	}
-	return base + url;
+	var _url = location.href;
+	    _url.indexOf('/f/') != -1 && (_url = _url.substr(0, _url.indexOf('/f/')));
+	    _url.indexOf('/front/') != -1 && (_url = _url.substr(0, _url.indexOf('/front/')));
+	return _url + url;
 };
 
 /**
@@ -173,6 +195,11 @@ Public.tip = function(msg, callback, time){
 Public.loading = function(msg, callback, time){
 	var toast = $('<div id="toast" class="weui_loading_toast weui_toast_wrap" style="display:none;"><div class="weui_mask_transparent"></div><div class="weui_toast"><div class="weui_loading"><div class="weui_loading_leaf weui_loading_leaf_0"></div><div class="weui_loading_leaf weui_loading_leaf_1"></div><div class="weui_loading_leaf weui_loading_leaf_2"></div><div class="weui_loading_leaf weui_loading_leaf_3"></div><div class="weui_loading_leaf weui_loading_leaf_4"></div><div class="weui_loading_leaf weui_loading_leaf_5"></div><div class="weui_loading_leaf weui_loading_leaf_6"></div><div class="weui_loading_leaf weui_loading_leaf_7"></div><div class="weui_loading_leaf weui_loading_leaf_8"></div><div class="weui_loading_leaf weui_loading_leaf_9"></div><div class="weui_loading_leaf weui_loading_leaf_10"></div><div class="weui_loading_leaf weui_loading_leaf_11"></div></div><p class="weui_toast_content">数据加载中</p></div></div>');
 	toast.appendTo('body').show().find('.weui_toast_content').text(msg||'数据加载中');
+	if (!!callback) {
+		Public.delayPerform(function() {
+			$(toast).remove(), !!callback&&(typeof(callback) === 'function')&&callback();
+		}, time||2000);
+	}
 };
 
 /**
@@ -311,7 +338,10 @@ Public.postAjax = function(url, params, callback, async, dataType){
 	   data: params,  
 	   //当异步请求成功时调用  
 	   success: function(data, status){  
-		   callback(data);  
+		   var r = User.isUserLogin(data);
+		   if (r) {
+			   callback(data);   
+		   }
 	   },  
 	   //当请求出现错误时调用  只要状态码不是200 都会执行这个
 	   error: function(x, s, e){
@@ -334,7 +364,10 @@ Public.getAjax = function(url, params, callback, async, dataType){
 	   data: params,  
 	   //当异步请求成功时调用  
 	   success: function(data, status){  
-		   callback(data);  
+		   var r = User.isUserLogin(data);
+		   if (r) {
+			   callback(data);   
+		   }
 	   },  
 	   //当请求出现错误时调用  只要状态码不是200 都会执行这个
 	   error: function(x, s, e){
@@ -429,7 +462,7 @@ Public.generateChars = function (length) {
  */
 Public.intShareEvent = function() {
 	var shareDiv =  '<a class="share hide" href="javascript:void(0)">';
-	    shareDiv += '<img src="' + webRoot + '/static/img/share_to.png" />';
+	    shareDiv += '<img src="'+ ctxStatic +'/img/share_to.png" />';
 	    shareDiv += '<div class="share-bg"></div>';
 	    shareDiv += '</a>';
 	
@@ -823,114 +856,133 @@ Public.imgToBase64 = function(file, callback, params) {
 /**
  * 用户相关数据
  */
-var User = User || {};
+var User = User || {
+	dialog : null,
+};
+
+/**
+ * 异步提交时如果提交错误,
+ * 判断是否是没有用户
+ */
+User.isUserLogin = function(data){
+	if (!!data && (data.code == 40005 || (!!data.obj && data.obj.code == 40005))) {
+	    if (User.loginDialog) {
+	    	Public.loading('系统登录中...', function() {
+	    		User.loginDialog();
+	    	});
+	    }
+	    return false;
+	}
+	return true;
+};
+
+/**
+ * 展示login对话框
+ * 直接重定向到登录页面，并设置returnUrl为当前的地址
+ */
+User.loginDialog = function(){
+	if (User.dialog == null) {
+		var url = ctxFront + '/member/login.html';
+		var returnUrl = window.location.href;
+		window.location.href = url + '?returnUrl=' + encodeURIComponent(returnUrl);
+	}
+};
 
 /**
  * 添加到购物车
  * 添加的GoodsID(没有规格，则两个ID是一样的)
  */
 User.addGoodsCart = function(goodsId, fnc) {
-	Public.postAjax(webRoot + '/f/shop/cart/add', {productId: goodsId}, function() {
+	Public.postAjax(ctxFront + '/shop/cart/add.json', {productId: goodsId}, function() {
 		typeof(fnc) === 'function' && fnc();
 	});
 };
 
 /**
- * 用户购物车数量
+ * 添加到购物车
+ * 添加的GoodsID(没有规格，则两个ID是一样的)
  */
-User.cartQuantity = function(fnc) {
-   Public.postAjax(webRoot + '/f/shop/cart/quantity', {}, function(data) { 
-	   var quantity = data.obj;
-	   $('.cart-tag b').text(quantity);
-	   
-	   // 执行回调
-	   !!fnc && typeof(fnc) === 'function' && fnc(quantity);
-   });
+User.addComplexCart = function(goodsId, fnc) {
+	Public.postAjax(ctxFront + '/shop/cart/add_complex.json', {productId: goodsId}, function() {
+		typeof(fnc) === 'function' && fnc();
+	});
 };
 
 /**
- * 用户未读消息
+ * 移除购物车
+ * 移除GoodsID(没有规格，则两个ID是一样的)
  */
-User.unreadMsg = function(fnc) {
-   Public.postAjax(webRoot + '/f/member/message/unread_count', {}, function(data) { 
-	   var quantity = data.obj;
-	   if (quantity > 0) {
+User.removeGoodsCart = function(goodsId, fnc) {
+	Public.postAjax(ctxFront + '/shop/cart/reduce.json', {productId: goodsId}, function() {
+		typeof(fnc) === 'function' && fnc();
+	});
+};
+
+/**
+ * 集合了 cartQuantity， unreadMsg， countOrderState
+ * 这些都不需要登录就可以查询
+ */
+User.mutilAbout = function() {
+   var mutils = [];
+   for(var i = 0; i < arguments.length; i++) {
+	   mutils[i] = arguments[i];
+   }
+   Public.postAjax(ctxFront + '/shop/mutil/user.json', {mutils: mutils.join(',')}, function(data) {
+	   var state = data.obj;
+	   
+	   // 购物车
+	   var cartQuantity = state.cartQuantity;
+	   $('.cart-tag b').text(cartQuantity);
+	   if (!!window.Cart && !!window.Cart.nullCart) {
+		   Cart.nullCart(cartQuantity);
+	   }
+	   
+	   // 订单
+	   var unpay = state.unpay;
+	   var unshipped = state.unshipped;
+	   var unreceipted = state.unreceipted;
+	   var usableCount = state.usableCount;
+	   if (unpay > 0) {
+		   $('.unpay b').show().text(unpay);
+	   }
+	   if (unshipped > 0) {
+		   $('.unshipped b').show().text(unshipped);
+	   }
+	   if (unreceipted > 0) {
+		   $('.unreceipted b').show().text(unreceipted);
+	   }
+	   if (usableCount > 0) {
+		   $('.coupon-tag b').css({'display':'inline-block'}).text(usableCount);
+	   }
+	   var total = unpay + unshipped + unreceipted;
+	   if (total > 0) {
+		   $('.member-tag b').css({'display':'inline-block'}).text(total);
+	   }
+	   
+	   // 未读消息
+	   var quantity = state.unreadMessage;
+	   if (!!quantity && quantity > 0) {
 		   $('.msg-tag b').css({'display':'inline-block'}).text(quantity);
 	   }
-   });
-};
-
-/**
- * 用户订单状态数量
- */
-User.countOrderState = function(fnc) {
-   Public.postAjax(webRoot + '/f/member/shop/order/count_order_state', {}, function(data) {
-	   if (data.success) {
-		   var quantitys = data.obj;
-		   var unpay = quantitys.unpay;
-		   var unshipped = quantitys.unshipped;
-		   var unreceipted = quantitys.unreceipted;
-		   var usableCount = quantitys.usableCount;
-		   if (unpay > 0) {
-			   $('.unpay b').show().text(unpay);
-		   }
-		   if (unshipped > 0) {
-			   $('.unshipped b').show().text(unshipped);
-		   }
-		   if (unreceipted > 0) {
-			   $('.unreceipted b').show().text(unreceipted);
-		   }
-		   //可用优惠券
-		   if (usableCount > 0) {
-			   $('.coupon-tag b').css({'display':'inline-block'}).text(usableCount);
-		   }
-		   
-		   // 我的中设置总数
-		   var total = unpay + unshipped + unreceipted;
-		   if (total > 0) {
-			   $('.member-tag b').css({'display':'inline-block'}).text(total);
-		   }
-	   }
-   });
-};
-
-/**
- * 用户待评价订单
- */
-User.appraiseState = function(fnc) {
-   Public.postAjax(webRoot + '/f/member/order/appraise/count_appraise_state', {}, function(data) { 
-	   var quantitys = data.obj;
-	   var unappraise = quantitys.unappraise;
-	   var unrappraise = quantitys.unrappraise;
-	   var appraised = quantitys.appraised;
-	   if (unappraise > 0) {
+	   
+	   // 用户待评价订单
+	   var unappraise = state.unappraise;
+	   var unrappraise = state.unrappraise;
+	   var appraised = state.appraised;
+	   if (!!unappraise && unappraise > 0) {
 		   $('.appraise-tag b').css({'display':'inline-block'}).text(unappraise);
 		   $('.appraise-tag .-num').text(unappraise);
 	   }
-	   if (unrappraise > 0) {
+	   if (!!unrappraise && unrappraise > 0) {
 		   $('.rappraise-tag .-num').text(unrappraise);
 	   }
-	   if (appraised > 0) {
+	   if (!!appraised && appraised > 0) {
 		   $('.appraised-tag .-num').text(appraised);
 	   }
-   });
-};
-
-/**
- * 用户没有头像
- */
-User.notHeadimg = function() {
-	var img = event.srcElement;
-	$(img).attr('src', webRoot + '/static/img/default_user.jpg');
-};
-
-/**
- * 用户等级
- */
-User.userRank = function() {
-	Public.postAjax(webRoot + '/f/member/rank/get', {}, function(data) { 
-		var rank = data.obj;
-		if (rank) {
+	   
+	   // 用户等级
+	   var rank = state.rank;
+	   if (rank) {
 			$('.rank_jf .-num').text(rank.points);
 			var state = '永久有效';
 			if (rank.useAble == 1) {
@@ -942,8 +994,35 @@ User.userRank = function() {
 			if (!!rank.rankImage) {
 				$('.rank_im img').attr('src', rank.rankImage);
 			}
-		}
-    });
+	   }
+	   
+	   // 用户地址
+	   var receiver = state.receiver;
+	   if (!!receiver) {
+   		   $('.location-name').html(receiver.area);
+   	   }
+   });
+};
+
+/**
+ * 用户购物车数量
+ */
+User.cartQuantity = function(fnc) {
+   Public.postAjax(ctxFront + '/shop/cart/quantity.json', {}, function(data) { 
+	   var quantity = data.obj;
+	   $('.cart-tag b').text(quantity);
+	   
+	   // 执行回调
+	   !!fnc && typeof(fnc) === 'function' && fnc(quantity);
+   });
+};
+
+/**
+ * 用户没有头像
+ */
+User.notHeadimg = function() {
+	var img = event.srcElement;
+	$(img).attr('src', ctxStatic + '/img/default_user.jpg');
 };
 
 /**
@@ -955,10 +1034,9 @@ var Statistics = Statistics || {};
  * 统计此页面的访问次数
  */
 Statistics.pageStatistics = function(page) {
-	Public.postAjax(webRoot + '/f/statistics/' + page + '?_t=' + Math.random(), {}, function(){
+	Public.postAjax(ctxFront + '/statistics/' + page + '.json?_t=' + Math.random(), {}, function(){
 	}, true, 'text');
 };
-
 
 /**
  * 初始化方法(公共的方法)
@@ -971,5 +1049,11 @@ $(function() {
 	$('[data-money]').each(function() {
 		$(this).html('￥' + $.formatFloat($(this).data('money'), 2));
 		$(this).removeAttr('data-money');
+	});
+	
+	// 弹出
+	$(document).on('click', '[data-alter]', function() {
+		var msg = $(this).data('alter');
+		Public.tip(msg);
 	});
 });

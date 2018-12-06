@@ -8,7 +8,7 @@ $(function() {
 	
 	//如果为更改且标签不是父母，朋友则显示出验证码
 	(function(){
-		if(!!$("#verifiedPhone").val() && !Verifition.isNotVerified()){
+		if (!!$("#verifiedPhone").val() && !Verifition.isNotVerified()){
 			$(".verification_code").removeClass("hide");
 		}
 	})();
@@ -30,25 +30,25 @@ $(function() {
 		// 必填项
 		if (isRequired()){
 			Public.error("请补充完整必填信息！");
-			return ;
+			return;
 		}
 		
-		// 手机号码验证
-		if (!Verifition.isVerified()) {
-			$("#isVerifiedPhone").val("0");//验证不通过置为0
-			//如果标签是朋友或者父母无需验证
-			if (!Verifition.isNotVerified()){
-				Public.error("手机号码验证不通过！");
-				return ;
-			}
+		// 手机号码验证 -- 如果设置了不需要验证的情况
+		if (!Verifition.isVerified() && !Verifition.isNotVerified()) {
+			Public.error("手机号码验证不通过！");
+			return;
 		}
 		
 		var postData = Public.serialize('#inputForm');
-		Public.postAjax(webRoot + '/f/member/receiver/save', postData, function(data) {
+		Public.postAjax(ctxFront + '/member/receiver/save.json', postData, function(data) {
 			if (data.success) {
 				Public.success('已完成', function() {
 					var id = data.obj.id;
-					window.history.go(-1);
+					if(!!_to) {
+						window.location.href = ctxFront + '/member/receiver/select.html?to=' + _to;
+					} else {
+						window.location.href = ctxFront + '/member/receiver/list.html';
+					}
 				});
 			} else {
 				Public.tip(data.msg);
@@ -79,23 +79,39 @@ $(function() {
 		}
 	});
 	
+	// 关闭选择
+	$(document).on('click', '.weui_mask', function() {
+		$('.actionSheet-wrap').hide();
+	});
+	
 	// 打开定位页面
-	$(document).on('click', '.to-address', function() {
-		//$('.receiver-container-wrap').hide();
-		//$('.address-container-wrap').show();
-		$('.actionSheet-wrap').show();
-		Address.doLocation();
+	$(document).on('click', '.to-city_picker', function() {
+		$('.actionSheet-wrap').hide();
+		$('#city_picker').show();
+		CITY.doLocation();
+	});
+	
+	// 打开定位页面
+	$(document).on('click', '.to-street_picker', function() {
+		$('.actionSheet-wrap').hide();
+		$('#street_picker').show();
+		STREET.doLocation();
 	});
 	
 	// 显示验证码
 	$(document).on('change', '#tag', function() {
-		if(Verifition.isNotVerified() || Verifition.isVerifiedPhone()){
+		if (Verifition.isNotVerified()){
 			$(".verification_code").addClass("hide");
 		} else {
 			$(".verification_code").removeClass("hide");
 		}
 	});
 	
+	// 默认区域支持（最好能自动识别用户区域）
+	if (!$('#areaId').val()) {
+		$('#areaId').val('42/420100000000');
+		$('#areaName').val('湖北省武汉市');
+	}
 });
 
 // 验证对象
@@ -116,40 +132,15 @@ var Verifition = {
     		return true;
     	}
     	
-    	// 如果是已经验证通过的手机号则无需再次验证
-    	else if(that.isVerifiedPhone()) {
-    		return true;
-    	}
     	// 其他情况都是不满足的
     	return false;
     },
     
-    //朋友、父母标签的不需要验证
+    // 朋友、父母标签的不需要验证(现在都不需要验证)
     isNotVerified : function(){
-    	var tag = $("#tag").val();
-    	if(tag=="朋友" || tag=="父母"){
-    		return true;
-    	}
-    	return false;
+    	return true;
     },
     
-    //判断手机号是否为已存在且经验证通过的
-    isVerifiedPhone : function(){
-    	var that = this;
-    	var phone = $("#phone").val();
-    	var flag = false;
-    	Public.postAjax(webRoot + "/f/member/receiver/code/isVerifiedPhone",{"phone":phone},function(data){
-    		if(data.success){
-    			$("#isVerifiedPhone").val("1");
-    			flag = true;
-    		}else{
-    			flag = false;
-    			$("#isVerifiedPhone").val("0");
-    		}
-    	},false);
-    	return flag;
-    },
-	
     // 初始化验证器
 	_init: function(phone, result) {
 		this.phone = phone;
@@ -184,7 +175,7 @@ var Verifition = {
 		var that = this;
 		if (that.enable) {
 			that._disabled();
-			Public.postAjax(webRoot + '/f/member/receiver/code/send', {'phone': phone}, function(data) {
+			Public.postAjax(ctxFront + '/member/receiver/code/send.json', {'phone': phone}, function(data) {
 				if (data.success) {
 					that._reset(phone);
 					Public.toast('已发送，请在10分钟之内验证')
@@ -227,13 +218,11 @@ var Verifition = {
 		var that = this;
 		var postData = {'phone' : phone, 'code' : code}
 		setTimeout(function() {
-			Public.postAjax(webRoot + '/f/member/receiver/code/verify', postData, function(data) {
+			Public.postAjax(ctxFront + '/member/receiver/code/verify.json', postData, function(data) {
 				if (data.success) {
 					that._success(phone);
-					$("#isVerifiedPhone").val("1");//验证通过的手机号
 				} else {
 					that._fail(phone, data.msg);
-					$("#isVerifiedPhone").val("0");//验证不通过的手机号
 				}
 			}, false);
 		}, 100);
@@ -244,11 +233,26 @@ var Verifition = {
  * 设置地址接口
  */
 var setAddress = function(address, location) {
-	$('#location').val(location);
-	$('#address').val(address);
-	
-	// 返回
-	//$('.receiver-container-wrap').show();
-	//$('.address-container-wrap').hide();
+//	$('#location').val(location);
+//	$('#address').val(address);
+//	
+//	// 返回
+//	//$('.receiver-container-wrap').show();
+//	//$('.address-container-wrap').hide();
+//	$('.actionSheet-wrap').hide();
+};
+
+// 设置城市
+var setCity = function(cityId, cityName) {
+	$('#areaId').val(cityId);
+	$('#areaName').val(cityName);
+	$('#address').val('');
+	$('.actionSheet-wrap').hide();
+};
+
+//设置街道
+var setStreet = function(streetId, streetName) {
+	$('#areaId').val(streetId);
+	$('#address').val(streetName);
 	$('.actionSheet-wrap').hide();
 };

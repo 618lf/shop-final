@@ -4,7 +4,7 @@
 $(function() {
 	
 	//加载数据
-	Public.initScrollLoad(webRoot + '/f/member/shop/order/list/data', $('#ordersTemplate').text(), function() {
+	Public.initScrollLoad(ctxFront + '/member/shop/order/list/data.json', $('#ordersTemplate').text(), function() {
 		
 		// 定时
 		$('[data-remain-time]').each(function(){
@@ -38,7 +38,7 @@ $(function() {
 	  			  name: '确定',
 	  			  clazz : 'primary',
 	  			  fnc: function(){
-	  				  Public.postAjax(webRoot + '/f/member/shop/order/receipt', {id: id}, function(data) {
+	  				  Public.postAjax(ctxFront + '/member/shop/order/receipt.json', {id: id}, function(data) {
 	  						if (data.success) {
 	  							Public.success('签收成功', function() {
 	  								location.reload(true);

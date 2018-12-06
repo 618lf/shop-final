@@ -119,9 +119,10 @@ Public.toast = function(message, times) {
 /**
  * 输入一个内容
  */
-Public.promptx = function(title, ok) {
+Public.promptx = function(title, ok, value) {
 	layer.prompt({
 	    title: title||'请输入内容',
+	    value: value||'',
 	    formType: 3
 	}, ok);
 };

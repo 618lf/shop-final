@@ -2,7 +2,7 @@ var Cart = {
 	editQuantity : function(id, quantity, ckecked) {
 		var that = this;
 		if (!!id && /^\d+$/.test(quantity)) {
-			Public.postAjax(webRoot + '/f/shop/cart/edit', {id: id, quantity: quantity}, function(data) {
+			Public.postAjax(ctxFront + '/shop/cart/edit.json', {id: id, quantity: quantity}, function(data) {
 				User.cartQuantity();
 				
 				// 计算订单金额
@@ -14,33 +14,34 @@ var Cart = {
 	},
 	selectItem : function(id) {
 		var that = this;
-		Public.postAjax(webRoot + '/f/shop/cart/item/select',{id: id}, function(data) {
+		Public.postAjax(ctxFront + '/shop/cart/item/select.json',{id: id}, function(data) {
 			var order = data.obj;
 			that.calculationOrder(order);
 		});
 	},
 	cancelItem : function(id) {
 		var that = this;
-		Public.postAjax(webRoot + '/f/shop/cart/item/cancel',{id: id}, function(data) {
+		Public.postAjax(ctxFront + '/shop/cart/item/cancel.json',{id: id}, function(data) {
 			var order = data.obj;
 			that.calculationOrder(order);
 		});
 	},
 	calculationOrder : function(order) {
 		if (!!order) {
-		   $('.cart-price > strong').text("￥" + $.formatFloat(order.amount, 2))
+		   $('.cart-price > .amount').text("￥" + $.formatFloat(order.amount, 2))
+		   $('.cart-discount > .discount').text("￥" + $.formatFloat(order.discount, 2))
 		}
 	},
 	selectedAll : function() {
 		var that = this;
-		Public.postAjax(webRoot + '/f/shop/cart/all_select',{}, function(data) {
+		Public.postAjax(ctxFront + '/shop/cart/all_select.json',{}, function(data) {
 			var order = data.obj;
 			that.calculationOrder(order);
 		});
 	},
 	cancelAll : function() {
 		var that = this;
-		Public.postAjax(webRoot + '/f/shop/cart/all_cancel',{}, function(data) {
+		Public.postAjax(ctxFront + '/shop/cart/all_cancel.json',{}, function(data) {
 			var order = data.obj;
 			that.calculationOrder(order);
 		});
@@ -48,7 +49,15 @@ var Cart = {
 	deleteItems : function(ids) {
 		var that = this;
 		if (!!ids && ids.length > 0) {
-			Public.postAjax(webRoot + '/f/shop/cart/item/delete', ids, function(data) {
+			Public.postAjax(ctxFront + '/shop/cart/item/delete.json', ids, function(data) {
+				window.location.reload();
+			});
+		}
+	},
+	deleteItem : function(id) {
+		var that = this;
+		if (!!id) {
+			Public.postAjax(ctxFront + '/shop/cart/item/delete_one.json', {id : id}, function(data) {
 				User.cartQuantity(that.nullCart);
 				var order = data.obj;
 				that.calculationOrder(order);
@@ -63,9 +72,9 @@ var Cart = {
 			    '<div class="weui_icon_area"><i class="weui_icon_msg weui_icon_info"></i></div>' +
 			    '<div class="weui_text_area">' +
 			        '<h2 class="weui_msg_title">购物车空空的</h2>' +
-			        '<p class="weui_msg_desc"><a href="/">去首页逛逛吧</a></p>' +
+			        '<p class="weui_msg_desc"><a href="'+ ctxFront + '/shop/store/index.html?_t='+ updateTime +'">去首页逛逛吧</a></p>' +
 			    '</div>' +
-			'</div>').appendTo('body')
+			'</div><a href="'+ctxFront +'/member/shop/order/againbuy_newest.html" class="againbuy-tag"><span>快捷下单通道</span><span class="-small">如果您最近下过订单，点我再次下单</span><i class="iconfont icon-right"></i></a>').appendTo('body')
 		})();
 	},
 	currCartItem : {},
@@ -81,7 +90,7 @@ var Cart = {
 		};
 		if (!_promotions) {
 			Public.loading('操作中...');
-			var href = webRoot + '/f/shop/goods/promotons/' + productId;
+			var href = ctxFront + '/shop/goods/promotons/' + productId + '.json';
 			Public.postAjax(href, {}, function(data) {
 				Public.close();
 				_promotions = data.obj;
@@ -111,7 +120,7 @@ var Cart = {
 		// 校验是否已使用
 		var has = false;
 		if (!!promotionId) {
-			$('[data-promotion]').each(function(n, e) {
+			$(obj).find('[data-promotion]').each(function(n, e) {
 				if ($(e).data('promotion') == promotionId) {
 					has = true;
 				}
@@ -120,23 +129,14 @@ var Cart = {
 		if (!has) {
 			var that = this;
 			// 切换
-			Public.postAjax(webRoot + '/f/shop/cart/item/change_pm', {id: id, productId: productId, promotionId: promotionId}, function(data) {
+			Public.postAjax(ctxFront + '/shop/cart/item/change_pm.json', {id: id, productId: productId, promotionId: promotionId}, function(data) {
 				var promotion = data.obj;
-				if (data.success && !!promotion) {
-					var html = Public.runTemplate($('#goodsPromotionTemplate').html(), {promotion: promotion});
-					$(obj).find('.cart-goods-promotion').removeClass('hide').html(html);
-					Public.toast('设置成功');
-				} else if(data.success && !promotion){
-					$(obj).find('.cart-goods-promotion').addClass('hide').html('');
-					Public.toast('设置成功');
+				if (data.success) {
+					Public.success('设置成功', function() {
+						window.location.reload();
+					});
 				} else {
 					Public.toast(data.msg);
-				}
-				
-				// 是否选中状态
-				var checked = $(obj).find('.weui_check').is(':checked');
-				if (checked) {
-					that.selectItem(id);
 				}
 			});
 		} else {
@@ -150,37 +150,62 @@ $(function(){
 	var mode = 'purchase';
 	
 	// 添加和减少数量
-	$(document).on('click', '.goods-quantity', function(e) {
-		var target = $(e.target); var b = parseInt($(this).find('b').text());
-		if (target.hasClass('minus')) {
+    $(document).on('click', '.goods-quantity a', function(e) {
+		var $target = $(this); var $b = $(this).closest('.goods-quantity').find('b'); var b = parseInt($b.text());
+		if ($target.hasClass('minus')) {
 			b = b - 1;
-		} else if(target.hasClass('add')) {
+		} else if($target.hasClass('add')) {
 			b = b + 1;
 		}
-		b = b <=0 ? 1: b;
-		$(this).find('b').text(b);
-		
-		var id = $(this).closest('.cart-item').data('id');
-		var checked = $(this).closest('.cart-item').find('.weui_check').is(':checked');
-		
-		// 改变数量
-		Cart.editQuantity(id, b, checked);
+		b = b <=0 ? 0: b;
+		if (b ==0) {
+			Public.dialog('操作提醒', '确定删除此商品?', {btns: [{
+				  id  : 'ok',
+				  name: '确定',
+				  clazz : 'primary',
+				  fnc: function(){
+					  var $item = $target.closest('.cart-item');
+					  var $wrap = $target.closest('.cart-item-wrap');
+					  var $nwrap = $wrap.next();
+					  var id = $item.data('id');
+					  Cart.deleteItem(id);
+					  if (!!$wrap.data('promotion') && !!$wrap.find('.cart-goods-promotion').get(0) 
+							  && $nwrap.get(0) && !!$nwrap.data('promotion') && $wrap.data('promotion') == $nwrap.data('promotion')) {
+						  $nwrap.prepend($wrap.find('.cart-goods-promotion').outerHTML());
+					  }
+					  $item.closest('.cart-item-wrap').remove();
+				  }
+			},{
+				  id  : 'cancel',
+				  name: '取消',
+				  clazz : 'btn',
+				  fnc: function(){}
+			}]});
+		} else {
+			$b.text(b); 
+			var $item = $(this).closest('.cart-item');
+			var id = $item.data('id');
+			var checked = $item.find('.weui_check').is(':checked');
+			
+			// 改变数量
+			Cart.editQuantity(id, b, checked);
+		}
 		
 		// 禁止相关事件
 		e.stopPropagation();
 		e.preventDefault(); 
-	});
-	
+    });
+	   
 	// 编辑模式
 	$(document).on('click', '.modeBtn', function() {
 		mode = mode == 'purchase' ? 'edit': 'purchase';
 		if (mode == 'purchase') {
 			$('.delBtn').hide();
-			$('.buyBtn').show();
+			$('.buyBtn').css({'display': 'block'});
 			$(this).text('编辑');
 		} else {
 			$('.buyBtn').hide();
-			$('.delBtn').show();
+			$('.delBtn').css({'display': 'block'});
 			$(this).text('完成');
 		}
 	});
@@ -238,7 +263,7 @@ $(function(){
     			});
     			
     			// 删除
-    			$(item).closest('.cart-item').remove();
+    			$(item).closest('.cart-item-wrap').remove();
     		}
     	});
     	Cart.deleteItems(ids);
@@ -277,11 +302,7 @@ $(function(){
     	var promotionId = $(this).data('id');
     	Cart.selectPromotion(promotionId);
 	});
-    
 	
-	// 加载购物车数量
-	User.cartQuantity(Cart.nullCart);
-	
-	// 我的订单数量
-	User.countOrderState();
+	// 统一地址
+	User.mutilAbout();
 });

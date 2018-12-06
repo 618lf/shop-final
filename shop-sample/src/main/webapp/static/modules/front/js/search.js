@@ -41,8 +41,9 @@ var History = {
 
 // 初始化
 $(function(){
-	// 加载购物车数量
-	User.cartQuantity();
+	
+	// 合并 加载购物车数量 - 我的订单数量
+	User.mutilAbout();
 	
 	// 只初始化一次
 	var loadonce = false;
@@ -56,7 +57,7 @@ $(function(){
 			$('#goods-tab').show();
 			$('#history-tab').hide();
 			// 分页数据
-			Public.initScrollLoad(webRoot + '/f/shop/search/goods/data', $('#goodsTemplate').text(), function(data) {
+			Public.initScrollLoad(ctxFront + '/shop/search/goods/data.json', $('#goodsTemplate').text(), function(iscroll, data) {
 				var recordCount = data.param.recordCount;
 				$('.record-count').html('查询结果『共找到'+recordCount+'条记录』');
 			});
@@ -88,6 +89,18 @@ $(function(){
 			load();
 		}
 	});
+	
+    // 加入购物车
+    $(document).on('click', '.add-cart', function(e) {
+    	e.stopPropagation();
+		e.preventDefault();
+		var id = $(this).data('id'); var b = $(this).closest('.ops').find('b');
+		User.addGoodsCart(id, function() {
+			// 加载购物车的数量
+			User.cartQuantity();
+			$(b).show().fadeOut(1000);
+		});
+    });
 	
 	// 查询历史加载
 	History.init();

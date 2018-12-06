@@ -1,115 +1,67 @@
+<%@ page contentType="text/html;charset=UTF-8" session="false" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/include/pageHead.jsp"%>
 <!DOCTYPE html>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <html>
 <head>
 <title>项目</title>
 <%@ include file="/WEB-INF/views/include/header.jsp"%>
-<script type="text/javascript">
-
-var THISPAGE = {
-	_init : function(){
-		this.loadGrid();
-		this.addEvent();
-	},
-	loadGrid : function(){
-		var init = Public.setGrid();
-		var optionsFmt = function (cellvalue, options, rowObject) {
-			return Public.billsOper(cellvalue, options, rowObject);
-		};
-		$('#grid').jqGrid(
-			Public.defaultGrid({
-				url: '${ctx}/api/project/page?timeid='+ Math.random(),
-				height:init.h,
-				shrinkToFit:!1, 
-                rownumbers: !0,//序号
-				multiselect:true,//定义是否可以多选
-				multiboxonly: false,
-				colNames: ['ID', ''],
-				colModel: [
-                    {name:'id', index:'id', width:80,sortable:false,hidden:true},
-					{name:'options', index:'options',align:'center',width:80,sortable:false,formatter:optionsFmt}
-				]
-			})		
-		);
-		$('#grid').jqGrid('setFrozenColumns');
-	},
-	addEvent : function(){
-		Public.initBtnMenu();
-		var delProject = function(checkeds){
-			if (!!checkeds) {
-				var param = [];
-				if(typeof(checkeds) === 'object'){
-					$.each(checkeds,function(index,item){
-						var userId = $('#grid').getRowData(item).id;
-						param.push({name:'idList',value:userId});
-					});
-				} else {
-					param.push({name:'idList',value:checkeds});
-				}
-				Public.deletex("确定删除选中的项目？","${ctx}/api/project/delete", param, function(data){
-					if(!!data.success) {
-						Public.success('删除项目成功');
-						Public.doQuery();
-					} else {
-						Public.error(data.msg);
-					}
-				});
-			} else {
-				Public.error("请选择要删除的项目!");
-			}
-		};
-		$('#dataGrid').on('click','.edit',function(e){
-			var url = "${ctx}/api/project/form?id="+$(this).data('id');
-		    Public.openOnTab('project-edit', '编辑项目', url);
-		});
-		$('#dataGrid').on('click','.delete',function(e){
-			delProject($(this).data('id'));
-		});
-		$(document).on('click','#addBtn',function(e){
-			var url = "${ctx}/api/project/form";
-			Public.openOnTab('project-add', '添加项目', url);
-		});
-		$(document).on('click','#delBtn',function(e){
-			var checkeds = $('#grid').getGridParam('selarrrow');
-			delProject(checkeds);
-		});
-	}};
-$(function(){
-	THISPAGE._init();
-});
-</script>
+<link href="${ctxModules}/system/api.css?v=${version}" rel="stylesheet"/>
 </head>
 <body>
-<div class="wrapper">
-    <div class="wrapper-inner">
-		<div class="top">
-		    <form name="queryForm" id="queryForm">
-				<div class="fl">
-				  <div class="ui-btn-menu">
-				      <span class="ui-btn ui-menu-btn">
-				         <strong>点击查询</strong><b></b>
-				      </span>
-				      <div class="dropdown-menu" style="width: 320px;">
-					       <div class="ui-btns">
-				              <input class="btn btn-primary query" type="button" value="查询"/>
-				              <input class="btn reset" type="button" value="重置"/>
-				           </div> 
-				      </div>
-				  </div>
-				  <input type="button" class="btn btn-primary" value="&nbsp;刷&nbsp;新&nbsp;" onclick="Public.doQuery()">
-				</div>
-				<div class="fr">
-				   <input type="button" class="btn btn-primary" id="addBtn" value="&nbsp;添&nbsp;加&nbsp;">&nbsp;
-				   <input type="button" class="btn" id="delBtn" value="&nbsp;删&nbsp;除&nbsp;">&nbsp;
-				</div>
-			</form>
-		</div>
-	</div>
-	<div id="dataGrid" class="autoGrid">
-		<table id="grid"></table>
-		<div id="page"></div>
-	</div> 
+<div class="projects">
+<div class="projects-inner">
+   <div class="project add-project">
+      <div class="-img"><i class="iconfont icon-jiaxianxing"></i></div>
+   </div>
 </div>
+</div>
+<%@ include file="/WEB-INF/views/include/form-footer.jsp"%>
+<script type="text/html" id="projectTemplate">
+{{ for(var i=0; i<datas.length; i++) { var item = datas[i]; }}
+<div class="project" data-id="{{=item.id}}">
+	<div class="-img"><i class="iconfont icon-project"></i></div>
+	<div class="-name">{{=item.name}}</div>
+	<div class="-remarks">{{=item.remarks}}</div>
+	<div class="-ops"><a class="-edit">编辑</a><a class="-del">删除</a><a class="-manage">管理</a></div>
+</div>
+{{ } }}
+</script>
+<script type="text/javascript">
+$(function() {
+	var params = {
+		'param.pageIndex' : 1,
+		'param.pageSize': 20
+	};
+	Public.postAjax('${ctx}/api/project/page', params, function(page) {
+		var datas = page.data;
+		var html = Public.runTemplate($('#projectTemplate').html(), {datas: datas});
+		$('.projects-inner').append(html);
+	});
+	$(document).on('click', '.-del', function() {
+		var id = $(this).closest('.project').data('id'); var $p = $(this).closest('.project');
+		Public.postAjax('${ctx}/api/project/delete', [{'name': 'idList', 'value': id}], function(data) {
+			if (data.success) {
+				Public.success('删除成功', function() {
+					$p.remove();
+				});
+			} else {
+				Public.error(data.msg);
+			}
+		});
+	});
+	$(document).on('click', '.-edit', function() {
+		var url = '${ctx}/api/project/form?id=' + $(this).closest('.project').data('id');
+		Public.openOnTab('project-edit', '编辑项目', url);
+	});
+	$(document).on('click', '.-manage', function() {
+		var url = '${ctx}/api/project/manage?id=' + $(this).closest('.project').data('id');
+		Public.openOnTab('project-manage', '接口管理', url);
+	});
+	$(document).on('click', '.add-project', function() {
+		var url = '${ctx}/api/project/form';
+		Public.openOnTab('project-edit', '添加项目', url);
+	});
+});
+</script>
 </body>
 </html>

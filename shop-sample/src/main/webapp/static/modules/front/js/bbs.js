@@ -26,7 +26,7 @@ var BBS = {
 		
 		// 发表动态
 		$(document).on('click.to_top', '.add_topic', function() {
-			window.location.href = webRoot + '/f/member/bbs/topic/add.html';
+			window.location.href = ctxFront + '/member/bbs/topic/add.html';
         });
 	},
 	
@@ -39,7 +39,7 @@ var BBS = {
 		this.addEvent();
 		
 		//加载数据
-		Public.initScrollLoad(webRoot + '/f/member/bbs/hotspot/page', $('#topicTemplate').html(), function(_scroll, data) {
+		Public.initScrollLoad(ctxFront + '/member/bbs/hotspot/page.json', $('#topicTemplate').html(), function(_scroll, data) {
 			if (data) {
 				that.me_hits(data)
 				that.show_images(data.data);
@@ -59,7 +59,7 @@ var BBS = {
 		this.addEvent();
 		
 		//加载数据
-		Public.initScrollLoad(webRoot + '/f/member/bbs/newest/page', $('#topicTemplate').html(), function(_scroll, data) {
+		Public.initScrollLoad(ctxFront + '/member/bbs/newest/page.json', $('#topicTemplate').html(), function(_scroll, data) {
 			if (data) {
 				that.me_hits(data)
 				that.show_images(data.data);
@@ -79,7 +79,7 @@ var BBS = {
 		this.addEvent();
 		
 		//加载数据
-		Public.initScrollLoad(webRoot + '/f/member/bbs/section/page', $('#topicTemplate').html(), function(_scroll, data) {
+		Public.initScrollLoad(ctxFront + '/member/bbs/section/page.json', $('#topicTemplate').html(), function(_scroll, data) {
 			if (data) {
 				that.me_hits(data)
 				that.show_images(data.data);
@@ -157,6 +157,7 @@ var BBS = {
 		// 删除图片
 		$(document).on('click', '.weui-icon_gallery-delete', function() {
 			if (!!$file) {
+				$file.closest('.weui_uploader').find('.weui_uploader_input_wrp').show();
 				$file.remove();
 			}
 		});
@@ -178,7 +179,7 @@ var BBS = {
 			}], true);
 			
 			//加载数据
-			Public.initScrollLoad(webRoot + '/f/member/bbs/reply/page/' + topicId, $('#replyTemplate').html(), function(_scroll, data) {
+			Public.initScrollLoad(ctxFront + '/member/bbs/reply/page/' + topicId + '.json', $('#replyTemplate').html(), function(_scroll, data) {
 				if (data) {
 					var replys = data.data;
 					$("[data-time]").each(function(){
@@ -311,11 +312,11 @@ var BBS = {
 		})();
 		Public.loading('提交中...');
 		// 提交
-		var url = webRoot + '/f/member/bbs/topic/save';
+		var url = ctxFront + '/member/bbs/topic/save.json';
 		Public.postAjax(url, {content : content, mood: mood, images: images}, function(data) {
 			Public.close();
 			Public.success('发布成功', function() {
-				window.location.href = webRoot + '/f/member/bbs/topic/add.html';
+				window.location.href = ctxFront + '/member/bbs/topic/add.html';
 			});
 		});
 	},
@@ -323,7 +324,7 @@ var BBS = {
 	// 点赞动态
 	hitTopic: function($topic) {
 		var that = this; var topicId = $topic.data('id');
-		var url = webRoot + '/f/member/bbs/topic/hit/' + topicId;
+		var url = ctxFront + '/member/bbs/topic/hit/' + topicId + '.json';
 		Public.postAjax(url, {}, function() {
 			that._hited($topic, true);
 		});
@@ -351,7 +352,7 @@ var BBS = {
 		});
 		
 		// 点击
-		var url = webRoot + '/f/member/bbs/topic/me_hits';
+		var url = ctxFront + '/member/bbs/topic/me_hits.json';
 		Public.postAjax(url, {ids: ids.join(',')}, function(data) {
 			$.each(data.obj, function(n, e) {
 				if (e.hited == 1) {
@@ -361,7 +362,7 @@ var BBS = {
 		});
 		
 		// 回复
-		var url = webRoot + '/f/member/bbs/topic/me_replys';
+		var url = ctxFront + '/member/bbs/topic/me_replys.json';
 		Public.postAjax(url, {ids: ids.join(',')}, function(data) {
 			$.each(data.obj, function(n, e) {
 				if (e.hited == 1) {
@@ -412,7 +413,7 @@ var BBS = {
 			return;
 		}
 		Public.loading('提交中...');
-		var url = webRoot + '/f/member/bbs/reply/topic/' + topicId;
+		var url = ctxFront + '/member/bbs/reply/topic/' + topicId + '.json';
 		Public.postAjax(url, {content : content, replyId : replyId, replyUser: replyUser}, function() {
 			Public.close();
 			Public.success('评论成功!');
@@ -438,7 +439,7 @@ var BBS = {
 	// 3条评论
 	top3_replys : function($topic) {
 		var topicId = $topic.data('id'); var that = this;
-		var url = webRoot + '/f/member/bbs/reply/top3/' + topicId;
+		var url = ctxFront + '/member/bbs/reply/top3/' + topicId + '.json';
 		Public.postAjax(url, {}, function(data) {
 			var replys = data.obj;
 			if (data.success) {
@@ -462,7 +463,7 @@ var BBS = {
 			ids.push(e.id);
 		});
 		// 点击
-		var url = webRoot + '/f/member/bbs/reply/me_hits';
+		var url = ctxFront + '/member/bbs/reply/me_hits.json';
 		Public.postAjax(url, {ids: ids.join(',')}, function(data) {
 			if (!!data.obj) {
 				$.each(data.obj, function(n, e) {
@@ -490,7 +491,7 @@ var BBS = {
 	// 点赞动态
 	hitReply: function($topic) {
 		var that = this; var topicId = $topic.data('id');
-		var url = webRoot + '/f/member/bbs/reply/hit/' + topicId;
+		var url = ctxFront + '/member/bbs/reply/hit/' + topicId + '.json';
 		Public.postAjax(url, {}, function() {
 			that._reply_hited($topic, true);
 		});

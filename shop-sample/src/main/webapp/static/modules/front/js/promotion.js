@@ -6,7 +6,7 @@ var Promotion = {
 	// 获取新人礼包
 	getXrGift : function() {
 		
-		var href = webRoot + '/f/member/promotion/getNewGift?recommendId=' + recommendId;
+		var href = ctxFront + '/member/promotion/getNewGift.json?recommendId=' + recommendId;
 		
 		// 获取新人礼包
 		Public.postAjax(href, {}, function(data) {
@@ -26,7 +26,7 @@ var Promotion = {
 	
 	// 初始化验证
 	init : function() {
-		Public.postAjax(webRoot + "/f/member/promotion/isGetNewGift",{},function(data){
+		Public.postAjax(ctxFront + "/member/promotion/isGetNewGift.json",{},function(data){
 			if (data){
 				var html = $('#errorTemplate').html();
 				$('#container').html(html);

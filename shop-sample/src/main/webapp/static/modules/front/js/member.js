@@ -31,7 +31,7 @@ var Member = {
 			if (that.check()) {
 			    Public.loading();
 			    var postData = that.getPostData();
-			    Public.postAjax('/f/member/save', postData, function() {
+			    Public.postAjax(ctxFront + '/member/save.json', postData, function() {
 				   Public.close();
 				   Public.success();
 			    });
@@ -150,7 +150,7 @@ var Member = {
                 fd.append('myFile', blob);
             
             //实际的上传服务。
-            Public.uploadAjax('/f/member/save/headimg', fd, function(data) {
+            Public.uploadAjax(ctxFront + '/member/save/headimg', fd, function(data) {
             	Public.close();
             	if (data.success) {
     				backFun(data.obj);

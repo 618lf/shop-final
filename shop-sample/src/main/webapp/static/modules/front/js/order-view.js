@@ -16,7 +16,7 @@ var Redenvelope = {
 		if (giveAble != 1) {return;}
 		
 		//是否有红包
-		Public.postAjax(webRoot + '/f/member/shop/order/has_redenvelope?id=' + orderId, {}, function(data) {
+		Public.postAjax(ctxFront + '/member/shop/order/has_redenvelope.json?id=' + orderId, {}, function(data) {
 			if (data.success) {
 				var html = $('#redenvelopeTemplate').html();
 				$(html).appendTo($('body'));
@@ -55,7 +55,7 @@ var Redenvelope = {
 		this.receiveFalg = 1; $(document).off('click.redenvelope');
 		
 		// 去领取
-		Public.postAjax(webRoot + '/f/member/promotion/give_redenvelope_form_order', {id: orderId}, function(data) {
+		Public.postAjax(ctxFront + '/member/promotion/give_redenvelope_form_order.json', {id: orderId}, function(data) {
 			$('.order-redenvelope').remove();
 			if (data.returnFlag == 99999) {
 				Public.toast(data.msg);
@@ -68,7 +68,7 @@ var Redenvelope = {
 				}, 2500)
 			} else if(data.returnFlag == 10001) {
 				var fissions = data.fissions;
-				var href = webRoot + '/f/member/coupon/redenvelope_from_fission/'+fissions+'.html';
+				var href = ctxFront + '/member/coupon/redenvelope_from_fission/'+fissions+'.html';
 				window.location.href = href;
 			}
 		});
@@ -117,7 +117,7 @@ $(function(){
 	  			  name: '确定',
 	  			  clazz : 'primary',
 	  			  fnc: function(){
-	  				  Public.postAjax(webRoot + '/f/member/shop/order/apply_return', {id: id}, function(data) {
+	  				  Public.postAjax(ctxFront + '/member/shop/order/apply_return.json', {id: id}, function(data) {
 	  						if (data.success) {
 	  							location.reload(true);
 	  						} else {
@@ -143,7 +143,7 @@ $(function(){
 	  			  name: '确定',
 	  			  clazz : 'primary',
 	  			  fnc: function(){
-	  				  Public.postAjax(webRoot + '/f/member/shop/order/apply_refund', {id: id}, function(data) {
+	  				  Public.postAjax(ctxFront + '/member/shop/order/apply_refund.json', {id: id}, function(data) {
 	  						if (data.success) {
 	  							location.reload(true);
 	  						} else {
@@ -169,7 +169,7 @@ $(function(){
 	  			  name: '确定',
 	  			  clazz : 'primary',
 	  			  fnc: function(){
-	  				  Public.postAjax(webRoot + '/f/member/shop/order/cancel', {id: id}, function(data) {
+	  				  Public.postAjax(ctxFront + '/member/shop/order/cancel.json', {id: id}, function(data) {
 	  						if (data.success) {
 	  							location.reload(true);
 	  						} else {
@@ -195,11 +195,11 @@ $(function(){
 	  			  name: '确定',
 	  			  clazz : 'primary',
 	  			  fnc: function(){
-	  				  Public.postAjax(webRoot + '/f/member/shop/order/receipt', {id: id}, function(data) {
+	  				  Public.postAjax(ctxFront + '/member/shop/order/receipt.json', {id: id}, function(data) {
 	  						if (data.success) {
 	  							// location.reload(true);
 	  							// 跳转到订单评价页面
-	  							window.location.href = webRoot + '/f/member/order/appraise/form/' + id + '.html';
+	  							window.location.href = ctxFront + '/member/order/appraise/form/' + id + '.html';
 	  						} else {
 	  							Public.error(data.msg);
 	  						}
@@ -211,7 +211,7 @@ $(function(){
     
     // 返回列表
     $(document).on('click', '.toList', function(e) {
-    	location.href = webRoot + '/f/member/shop/order/list.html'
+    	location.href = ctxFront + '/member/shop/order/list.html'
     });
     
     // 红包初始化

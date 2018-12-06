@@ -22,11 +22,14 @@
   </ul>
 </div>
 <div class="main" id="mainBg">
-	<div id="errorMsg" class="main-errors ${(empty error)?'hide mini-errors':''}">
+	<div id="errorMsg" class="main-errors ${(empty error)?'hide':''}">
 		<h4 class="main-errors-title icons-color"><span class="icon32 icon-alert"></span><span class="msg">${error.msg}</span></h4>
-		<p>提示：</p>
-		<p>1. 请检查帐号拼写，是否输入有误</p>
-		<p>2. 如忘记密码，请联系管理员</p>
+		<div class="tips">
+			<p>提示：</p>
+			<p>1. 请检查帐号拼写，是否输入有误</p>
+			<p>2. 如忘记密码，请联系管理员</p>
+			<p>3. 验证码为4位字符，不区分大小写</p>
+		</div>
 	</div>
 	<div class="login">
 		<div class="loginForm">
@@ -230,9 +233,13 @@ $(document).ready(function() {
 		}
 	});
 });
+var reason = '${reason}';
 //如果在框架中，则跳转刷新上级页面 --- 有bug,如果在页面输入的第三方登录，则无限循环（虽然不可能在页面输入第三方登录）
 if (self.frameElement && (self.frameElement.tagName=="IFRAME"||self.frameElement.tagName=="FRAME")){
-	top.location.href="${ctx}/login";//直接这样写，更好一点
+	top.location.href = location.href; // 这样写可以将参数带过去
+} else if(!!reason){
+	$('#errorMsg').find('.tips').html('<p>' + reason + '</p>');
+	$('#errorMsg').removeClass('hide').removeClass('mini-errors').find('.msg').html('帐号异常')
 }
 </script>
 </body>

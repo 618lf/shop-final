@@ -31,14 +31,23 @@ User.loginDialog = function(){
 };
 
 /**
+ * 展示login对话框
+ */
+User.logoutReason = function(msg){
+	if (User.dialog == null) {
+		User.dialog = Public.openViewWindow('<div class="logout-reason-wrap"><div class="logout-reason">'+ msg +'</div><a class="btn" href="'+ webRoot +'/admin/login">确定</a></div>', 400, 320, false);
+	}
+};
+
+/**
  * 断言登录
  */
 User.assertLogin = function(data) {
-	if (!!data && !data.success && !!data.obj && !!data.obj.code && data.obj['code'] == 40005) {
-	    User.loginDialog();
-	    return true;
+	if (!!data && data.code == 40005) {
+	    !!data.reason ? User.logoutReason(data.reason): User.loginDialog(); 
+	    return false;
 	}
-	return false;
+	return true;
 };
 
 /**

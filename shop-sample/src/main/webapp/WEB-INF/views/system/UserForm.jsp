@@ -64,7 +64,7 @@
 		<tags:token/>
 		<form:hidden path="id"/>
 		<div class="control-group formSep">
-			<label class="control-label">用户姓名:</label>
+			<label class="control-label">用户姓名<span class="red">*</span>:</label>
 			<div class="controls">
 				<form:input path="name" htmlEscape="false" maxlength="50" class="required userName"/>
 			</div>

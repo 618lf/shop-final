@@ -16,7 +16,7 @@
 .l-tab-links-left-invalid { background-position: 0 0; }
 .l-tab-links-right-invalid { background-position: -16px 0; }
 .l-tab-links ul { padding: 2px 0 0 1px; list-style: none; width: 9999px; overflow: hidden; position: absolute; top: 0; left: 0; zoom: 1; margin: 0;}
-.l-tab-links li { float: left; margin: 0; padding: 0; display: inline; margin-left: -1px; height: 28px; line-height: 28px; cursor: pointer; position: relative; overflow: hidden; border: 1px solid #dedede; }
+.l-tab-links li { float: left; margin: 0; padding: 0; display: inline; margin-left: -1px; height: 28px; line-height: 28px; cursor: pointer; position: relative; border: 1px solid #dedede; }
 .l-tab-links li:first-child { border-top-left-radius: 2px; }
 .l-tab-links li:last-child { border-top-right-radius: 2px; }
 .l-tab-links li.l-selected { height: 30px; line-height: 30px; top: -2px; z-index: 10; border: 1px solid #CCC; border-bottom: 1px solid #f4f4f4; z-index: 10; border-top-left-radius: 2px; border-top-right-radius: 2px; background: #f4f4f4;

@@ -96,11 +96,11 @@ var THISPAGE = {
 				multiboxonly: false,
 				colNames: ['', '日志类型', '操作用户', '操作时间', '用户的IP地址', '操作的URI', '操作方式', '处理时长'],
 				colModel: [
-					{name:'options', index:'options',align:'center',width:40,sortable:false,formatter:optionsFmt,frozen:true},
-	                {name:'type', index:'type', align:'center',width:80,sortable:false,formatter:typesFmt,frozen:true},
-	                {name:'createName', index:'createName', align:'center',width:100,sortable:false,frozen:true},
-	                {name:'createDate', index:'createDate', align:'center',width:120,sortable:false,frozen:true},
-					{name:'remoteAddr', index:'remoteAddr', align:'center',width:100,sortable:false,frozen:true},
+					{name:'options', index:'options',align:'center',width:40,sortable:false,formatter:optionsFmt},
+	                {name:'type', index:'type', align:'center',width:80,sortable:false,formatter:typesFmt},
+	                {name:'createName', index:'createName', align:'center',width:100,sortable:false},
+	                {name:'createDate', index:'createDate', align:'center',width:120,sortable:false},
+					{name:'remoteAddr', index:'remoteAddr', align:'center',width:100,sortable:false},
 					{name:'requestUri', index:'requestUri',width:200,sortable:false},
 					{name:'method', index:'method',align:'center',width:80,sortable:false},
 					{name:'dealTime', index:'dealTime',align:'center',width:80,sortable:false}
