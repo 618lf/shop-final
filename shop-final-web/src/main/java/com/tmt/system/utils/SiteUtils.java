@@ -19,7 +19,10 @@ public class SiteUtils {
 		Site site = ThreadContext.get(Constants.SITE_KEY);
 		if (site == null) {
 			site = siteService.getSite();
-			ThreadContext.put(Constants.SITE_KEY, site);
+			try {
+				ThreadContext.put(Constants.SITE_KEY, site);
+			} catch (Exception e) {
+			}
 		}
 		return site;
 	}

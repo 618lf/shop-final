@@ -38,7 +38,7 @@ public class SecurityAutoConfiguration {
 	private SecurityConfigurationSupport securityConfig;
 	@Autowired
 	private ApplicationProperties properties;
-	
+
 	@Bean
 	public RememberMeManager rememberMeManager() {
 		DefaultRememberMeManager rememberMeManager = new DefaultRememberMeManager();
@@ -46,7 +46,7 @@ public class SecurityAutoConfiguration {
 		rememberMeManager.setPath(properties.getSecurity().getPath());
 		return rememberMeManager;
 	}
-	
+
 	@Bean
 	public SessionRespositoryFactoryBean sessionRepository(CacheManager cacheManager) {
 		SessionRespositoryFactoryBean sessionRepository = new SessionRespositoryFactoryBean();
@@ -54,7 +54,7 @@ public class SecurityAutoConfiguration {
 		sessionRepository.setCacheManager(cacheManager);
 		return sessionRepository;
 	}
-	
+
 	@Bean
 	public PrincipalStrategy principalStrategy(SessionRepository<? extends Session> sessionRepository) {
 		CookiePrincipalStrategy principalStrategy = new CookiePrincipalStrategy();
@@ -63,7 +63,7 @@ public class SecurityAutoConfiguration {
 		principalStrategy.setSessionRepository(sessionRepository);
 		return principalStrategy;
 	}
-	
+
 	@Bean
 	public AuthenticationRealm authenticationRealm(CacheManager cacheManager) {
 		AuthenticationRealm authenticationRealm = new AuthenticationRealm();
@@ -71,17 +71,17 @@ public class SecurityAutoConfiguration {
 		authenticationRealm.setCacheManager(cacheManager);
 		return authenticationRealm;
 	}
-	
+
 	@Bean
 	public DefaultSecurityManager securityManager(AuthenticationRealm authenticationRealm,
 			PrincipalStrategy principalStrategy, RememberMeManager rememberMeManager) {
 		DefaultSecurityManager securityManager = new DefaultSecurityManager();
 		securityManager.setPrincipalStrategy(principalStrategy);
-		securityManager.setRealm(authenticationRealm);
+		securityManager.setRealm(securityConfig.getRealm() == null ? authenticationRealm : securityConfig.getRealm());
 		securityManager.setRememberMeManager(rememberMeManager);
 		return securityManager;
 	}
-	
+
 	/**
 	 * 字符过滤
 	 * 
@@ -95,9 +95,9 @@ public class SecurityAutoConfiguration {
 		registrationBean.setUrlPatterns(properties.getSecurity().getUrlPatterns());
 		registrationBean.setName("encodingConvertFilter");
 		registrationBean.setOrder(FilterRegistrationBean.REQUEST_WRAPPER_FILTER_MAX_ORDER - 1);
-		return registrationBean; 
+		return registrationBean;
 	}
-	
+
 	/**
 	 * 安全的配置
 	 * 
@@ -106,7 +106,8 @@ public class SecurityAutoConfiguration {
 	 * @throws Exception
 	 */
 	@Bean
-	public FilterRegistrationBean<SecurityFilter> securityFilter(DefaultSecurityManager securityManager) throws Exception {
+	public FilterRegistrationBean<SecurityFilter> securityFilter(DefaultSecurityManager securityManager)
+			throws Exception {
 		SecurityFilterFactoryBean securityFilter = new SecurityFilterFactoryBean();
 		securityFilter.setSecurityManager(securityManager);
 		securityFilter.setFilterChainDefinitionMap(securityConfig.getChains());
