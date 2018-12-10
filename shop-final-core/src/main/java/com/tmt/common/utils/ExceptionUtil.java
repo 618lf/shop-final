@@ -3,10 +3,12 @@ package com.tmt.common.utils;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * 返回异常错误信息
- * @author liFeng
- * 2014年6月23日
+ * 
+ * @author liFeng 2014年6月23日
  */
 public class ExceptionUtil {
 
@@ -17,13 +19,17 @@ public class ExceptionUtil {
 	 *            Exception
 	 * @return 错误信息字符串
 	 */
-	public static String getExceptionMessage(Exception ex) {
+	public static String getMessage(Exception ex) {
 		StringWriter sw = new StringWriter();
-		PrintWriter pw = new PrintWriter(sw);
-		ex.printStackTrace(pw);
-		return sw.toString();
+		try {
+			PrintWriter pw = new PrintWriter(sw);
+			ex.printStackTrace(pw);
+			return sw.toString();
+		} finally {
+            IOUtils.closeQuietly(sw);
+		}
 	}
-	
+
 	/**
 	 * 将CheckedException转换为UncheckedException.
 	 */
@@ -33,15 +39,6 @@ public class ExceptionUtil {
 		} else {
 			return new RuntimeException(e);
 		}
-	}
-
-	/**
-	 * 将ErrorStack转化为String.
-	 */
-	public static String getStackTraceAsString(Exception e) {
-		StringWriter stringWriter = new StringWriter();
-		e.printStackTrace(new PrintWriter(stringWriter));
-		return stringWriter.toString();
 	}
 
 	/**

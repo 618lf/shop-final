@@ -14,10 +14,12 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.server.ErrorPage;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
+import org.springframework.http.HttpStatus;
 
 /**
  * 自定义的 Servlet 服务器自动配置
@@ -96,6 +98,12 @@ public class ServletWebServerFactoryAutoConfiguration {
 		@Override
 		public void customize(TomcatServletWebServerFactory factory) {
 			factory.getTldSkipPatterns().addAll(DEFAULT);
+			ErrorPage error401Page = new ErrorPage(HttpStatus.UNAUTHORIZED, "/WEB-INF/views/error/401");
+			ErrorPage error404Page = new ErrorPage(HttpStatus.NOT_FOUND, "/WEB-INF/views/error/404");
+			ErrorPage error500Page = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/WEB-INF/views/error/500");
+			factory.addErrorPages(error401Page);
+			factory.addErrorPages(error404Page);
+			factory.addErrorPages(error500Page);
 		}
 	}
 }
