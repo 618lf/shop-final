@@ -98,9 +98,9 @@ public class ServletWebServerFactoryAutoConfiguration {
 		@Override
 		public void customize(TomcatServletWebServerFactory factory) {
 			factory.getTldSkipPatterns().addAll(DEFAULT);
-			ErrorPage error401Page = new ErrorPage(HttpStatus.UNAUTHORIZED, "/WEB-INF/views/error/401");
-			ErrorPage error404Page = new ErrorPage(HttpStatus.NOT_FOUND, "/WEB-INF/views/error/404");
-			ErrorPage error500Page = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/WEB-INF/views/error/500");
+			ErrorPage error401Page = new ErrorPage(HttpStatus.UNAUTHORIZED, "/WEB-INF/views/error/401.jsp");
+			ErrorPage error404Page = new ErrorPage(HttpStatus.NOT_FOUND, "/WEB-INF/views/error/404.jsp");
+			ErrorPage error500Page = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/WEB-INF/views/error/500.jsp");
 			factory.addErrorPages(error401Page);
 			factory.addErrorPages(error404Page);
 			factory.addErrorPages(error500Page);
