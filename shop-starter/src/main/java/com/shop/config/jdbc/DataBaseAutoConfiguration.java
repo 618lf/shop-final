@@ -147,7 +147,8 @@ public class DataBaseAutoConfiguration {
 	@ConditionalOnClass({ JdbcTemplate.class, PlatformTransactionManager.class })
 	@ConditionalOnSingleCandidate(DataSource.class)
 	@Import({ DataSourceTransactionManagerAutoConfiguration.class, TransactionAutoConfiguration.class })
-	@AutoConfigureAfter(DataSourceAutoConfiguration.class)
+	@AutoConfigureAfter({DataSourceAutoConfiguration.class,SqlLiteDataSourceAutoConfiguration.class, DruidDataSourceAutoConfiguration.class,
+			HikariDataSourceAutoConfiguration.class})
 	public static class DataSourceTransactionManagerConfiguration {
 	}
 
@@ -160,7 +161,8 @@ public class DataBaseAutoConfiguration {
 	@ConditionalOnClass({ SqlSessionFactory.class, SqlSessionFactoryBean.class })
 	@ConditionalOnBean(DataSource.class)
 	@EnableConfigurationProperties(MybatisProperties.class)
-	@AutoConfigureAfter(DataSourceAutoConfiguration.class)
+	@AutoConfigureAfter({DataSourceAutoConfiguration.class,SqlLiteDataSourceAutoConfiguration.class, DruidDataSourceAutoConfiguration.class,
+		HikariDataSourceAutoConfiguration.class})
 	@ConditionalOnProperty(prefix = "spring.application", name = "enableMybatis", matchIfMissing = true)
 	public static class MybatisAutoConfiguration {
 		private final DataSourceProperties dbProperties;
