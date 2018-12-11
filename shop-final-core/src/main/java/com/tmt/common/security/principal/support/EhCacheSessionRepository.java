@@ -229,6 +229,7 @@ public class EhCacheSessionRepository implements SessionRepository<EhCacheSessio
 			delta.put(CREATION_TIME_ATTR, this.getCreationTime());
 			delta.put(PRINCIPAL_ATTR, this.getPrincipal());
 			delta.put(AUTHENTICATED_ATTR, this.isAuthenticated());
+			delta.put(RUNASPRINCIPALS_ATTR, this.getRunAsPrincipals());
 			if (sessionAttrs != null) {
 				Iterator<String> keys = sessionAttrs.keySet().iterator();
 				while (keys.hasNext()) {
