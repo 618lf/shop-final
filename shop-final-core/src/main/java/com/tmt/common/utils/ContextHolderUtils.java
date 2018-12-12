@@ -67,28 +67,28 @@ public class ContextHolderUtils {
 	}
 
 	public static String getFrontPath() {
-		return new StringBuilder(XSpringContextHolder.getServletContext().getContextPath())
-				.append(Globals.frontPath).toString();
+		return new StringBuilder(XSpringContextHolder.getServletContext().getContextPath()).append(Globals.frontPath)
+				.toString();
 	}
 
 	public static String getAdminPath() {
-		return new StringBuilder(XSpringContextHolder.getServletContext().getContextPath())
-				.append(Globals.adminPath).toString();
+		return new StringBuilder(XSpringContextHolder.getServletContext().getContextPath()).append(Globals.adminPath)
+				.toString();
 	}
 
 	// ---------------------物理路劲----------------------------------------
 	public static String getWebRootPath() {
-		return XSpringContextHolder.getServletContext().getRealPath(File.separator);
+		String path = XSpringContextHolder.getServletContext().getRealPath(File.separator);
+		return StringUtil3.endsWith(path, File.separator) ? path : path + File.separator;
 	}
 
+	/**
+	 * WEB-INF 目录
+	 * 
+	 * @return
+	 */
 	public static String getWebInfPath() {
-		return new StringBuilder(XSpringContextHolder.getServletContext().getRealPath(File.separator)).append("WEB-INF")
-				.append(File.separator).toString();
-	}
-
-	public static String getClassPath() {
-		return new StringBuilder(XSpringContextHolder.getServletContext().getRealPath(File.separator)).append("WEB-INF")
-				.append(File.separator).append("classes").append(File.separator).toString();
+		return new StringBuilder(getWebRootPath()).append("WEB-INF").append(File.separator).toString();
 	}
 
 	/**
@@ -97,8 +97,8 @@ public class ContextHolderUtils {
 	 * @return
 	 */
 	public static String getTemplatePath() {
-		return new StringBuilder(XSpringContextHolder.getServletContext().getRealPath(File.separator)).append("WEB-INF")
-				.append(File.separator).append("template").append(File.separator).toString();
+		return new StringBuilder(getWebRootPath()).append("WEB-INF").append(File.separator).append("template")
+				.append(File.separator).toString();
 	}
 
 	/**
@@ -107,8 +107,7 @@ public class ContextHolderUtils {
 	 * @return
 	 */
 	public static String getTempsPath() {
-		return new StringBuilder(XSpringContextHolder.getServletContext().getRealPath(File.separator)).append("temps")
-				.append(File.separator).toString();
+		return new StringBuilder(getWebRootPath()).append("temps").append(File.separator).toString();
 	}
 
 	/**
@@ -117,43 +116,7 @@ public class ContextHolderUtils {
 	 * @return
 	 */
 	public static String getStaticPath() {
-		return new StringBuilder(XSpringContextHolder.getServletContext().getRealPath(File.separator)).append("static")
-				.append(File.separator).toString();
-	}
-
-	/**
-	 * 得到 webRoot 目录下的资源
-	 * 
-	 * @param path
-	 * @return
-	 */
-	public static String getWebRootPathResource(String path) {
-		return new StringBuilder(XSpringContextHolder.getServletContext().getRealPath(File.separator)).append(path)
-				.toString();
-	}
-
-	/**
-	 * 得到webinf 目录下的资源
-	 * 
-	 * @param path
-	 * @return
-	 */
-	public static String getWebInfPathResource(String path) {
-		return new StringBuilder(XSpringContextHolder.getServletContext().getRealPath(File.separator))
-				.append(File.separator).append("WEB-INF").append(File.separator).append(path).toString();
-	}
-
-	/**
-	 * 得到classes 目录下的资源
-	 * 
-	 * @param path
-	 *            -- 行对于 classes 的资源
-	 * @return
-	 */
-	public static String getClassPathResource(String path) {
-		return new StringBuilder(XSpringContextHolder.getServletContext().getRealPath(File.separator))
-				.append(File.separator).append("WEB-INF").append(File.separator).append("classes")
-				.append(File.separator).append(path).toString();
+		return new StringBuilder(getWebRootPath()).append("static").append(File.separator).toString();
 	}
 
 	// ---------------------Web 文件服务----------------------------------------
