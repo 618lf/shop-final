@@ -96,13 +96,7 @@ public class DefaultExportFile implements IExportFile {
 	}
 
 	public File getExportExcelFile(Map<String, Object> data) {
-		String exportPath = ContextHolderUtils.getTempsPath();
-		try {
-			FileUtils.forceMkdir(new File(exportPath));
-		} catch (Exception e) {
-			throw new BaseRuntimeException(e);
-		}
-		return new File(exportPath + data.get(EXPORT_FILE_NAME) + XLS);
+		return ContextHolderUtils.getTempFile(data.get(EXPORT_FILE_NAME) + XLS);
 	}
 
 	public File getExportZipFile(Map<String, Object> data) {
