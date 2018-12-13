@@ -56,16 +56,6 @@ public class ContextHolderUtils {
 		return XSpringContextHolder.getServletContext().getContextPath();
 	}
 
-	public static String getWebInf() {
-		return new StringBuilder(XSpringContextHolder.getServletContext().getContextPath()).append(File.separator)
-				.append("WEB-INF").append(File.separator).toString();
-	}
-
-	public static String getTemp() {
-		return new StringBuilder(XSpringContextHolder.getServletContext().getContextPath()).append(File.separator)
-				.append("temps").append(File.separator).toString();
-	}
-
 	public static String getFrontPath() {
 		return new StringBuilder(XSpringContextHolder.getServletContext().getContextPath()).append(Globals.frontPath)
 				.toString();
@@ -100,23 +90,17 @@ public class ContextHolderUtils {
 		return new StringBuilder(getWebRootPath()).append("WEB-INF").append(File.separator).append("template")
 				.append(File.separator).toString();
 	}
-
+	
 	/**
 	 * 系统临时目录
 	 * 
 	 * @return
 	 */
 	public static String getTempsPath() {
-		return new StringBuilder(getWebRootPath()).append("temps").append(File.separator).toString();
-	}
-
-	/**
-	 * 得到静态的资源目录
-	 * 
-	 * @return
-	 */
-	public static String getStaticPath() {
-		return new StringBuilder(getWebRootPath()).append("static").append(File.separator).toString();
+		if (StringUtil3.isNotBlank(Globals.temps)) {
+			return Globals.temps;
+		}
+		return System.getProperty("java.io.tmpdir");
 	}
 
 	// ---------------------Web 文件服务----------------------------------------
