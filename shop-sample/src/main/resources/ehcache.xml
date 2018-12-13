@@ -6,7 +6,7 @@
     <cache name="sys" maxElementsInMemory="1000" eternal="true" overflowToDisk="true"></cache>
     <cache name="dict" maxElementsInMemory="1000" eternal="true" overflowToDisk="true"></cache>
     <cache name="sess" maxElementsInMemory="1000" timeToLiveSeconds="0" timeToIdleSeconds="1800" eternal="false" overflowToDisk="true"></cache>
-    <cache name="sessions" maxElementsInMemory="1" timeToLiveSeconds="0" timeToIdleSeconds="1800" eternal="false" 
+    <cache name="sessions" copyOnRead="true" copyOnWrite="true" maxElementsInMemory="1" timeToLiveSeconds="0" timeToIdleSeconds="1800" eternal="false" 
         overflowToDisk="true" diskSpoolBufferSizeMB="10" maxElementsOnDisk="1000000" 
         diskPersistent="true" memoryStoreEvictionPolicy="LRU">
        <bootstrapCacheLoaderFactory class="net.sf.ehcache.store.DiskStoreBootstrapCacheLoaderFactory" properties="bootstrapAsynchronously=true"/>

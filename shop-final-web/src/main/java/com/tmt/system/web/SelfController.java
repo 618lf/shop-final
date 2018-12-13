@@ -173,6 +173,20 @@ public class SelfController extends BaseController {
 		}
 		return AjaxResult.success(menus);
 	}
+	
+	/**
+	 * 用户菜单导航 json 格式的数据
+	 * 
+	 * @param id
+	 * @param response
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("menu.json")
+	public AjaxResult userMenus() {
+		User user = UserUtils.getUser();
+		return AjaxResult.success(UserUtils.getMenus(user));
+	}
 
 	/**
 	 * 默认返回用的系统菜单
