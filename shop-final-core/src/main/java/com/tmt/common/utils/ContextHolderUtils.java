@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -67,6 +68,12 @@ public class ContextHolderUtils {
 	}
 
 	// ---------------------物理路劲----------------------------------------
+
+	/**
+	 * 嵌入式： 不打包：指向的时webapp目录（这个目录很重要） 打包： 指向的是tomcat临时目录
+	 * 
+	 * @return
+	 */
 	public static String getWebRootPath() {
 		String path = XSpringContextHolder.getServletContext().getRealPath(File.separator);
 		return StringUtil3.endsWith(path, File.separator) ? path : path + File.separator;
@@ -83,14 +90,17 @@ public class ContextHolderUtils {
 
 	/**
 	 * 系统模版目录
+	 * 打包之后只能获取流
 	 * 
 	 * @return
+	 * @throws MalformedURLException 
 	 */
-	public static String getTemplatePath() {
-		return new StringBuilder(getWebRootPath()).append("WEB-INF").append(File.separator).append("template")
-				.append(File.separator).toString();
+	public static InputStream getTemplate(String template) {
+		String templatePath =  new StringBuilder(File.separator).append("WEB-INF").append(File.separator).append("template")
+				.append(File.separator).append(template).toString();
+		return XSpringContextHolder.getServletContext().getResourceAsStream(templatePath); 
 	}
-	
+
 	/**
 	 * 系统临时目录
 	 * 
@@ -100,7 +110,7 @@ public class ContextHolderUtils {
 		if (StringUtil3.isNotBlank(Globals.temps)) {
 			return Globals.temps;
 		}
-		return System.getProperty("java.io.tmpdir");
+		return new StringBuilder(getWebRootPath()).append("temps").append(File.separator).toString();
 	}
 
 	// ---------------------Web 文件服务----------------------------------------

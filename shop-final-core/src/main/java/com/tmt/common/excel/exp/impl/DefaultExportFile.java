@@ -3,7 +3,6 @@ package com.tmt.common.excel.exp.impl;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
@@ -103,10 +102,9 @@ public class DefaultExportFile implements IExportFile {
 		return ContextHolderUtils.getTempFile(data.get(EXPORT_FILE_NAME) + ZIP);
 	}
 
-	public File getTemplateFile(Map<String, Object> data) {
-		String templatePath = new StringBuilder(ContextHolderUtils.getTemplatePath()).append(EXPORT_TEMPLATE_PATH)
-				.toString();
-		return new File(templatePath + data.get(TEMPLATE_NAME));
+	public InputStream getTemplateFile(Map<String, Object> data) {
+		String template = EXPORT_TEMPLATE_PATH + String.valueOf(data.get(TEMPLATE_NAME));
+		return ContextHolderUtils.getTemplate(template);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -263,7 +261,7 @@ public class DefaultExportFile implements IExportFile {
 	// 创建文件
 	public File createFile(Map<String, Object> data) {
 		File outFile = getExportExcelFile(data);
-		File templateFile = getTemplateFile(data);
+		InputStream templateFile = getTemplateFile(data);
 		FileOutputStream out = null;
 		try {
 			Workbook template = ExcelUtils.loadExcelFile(templateFile);
@@ -271,9 +269,8 @@ public class DefaultExportFile implements IExportFile {
 			writeData(template, data);
 			// 写入数据
 			template.write(out);
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new BaseRuntimeException(e.getMessage());
+		} catch (Exception e) {
+			throw new BaseRuntimeException(e);
 		} finally {
 			IOUtils.closeQuietly(out);
 		}
