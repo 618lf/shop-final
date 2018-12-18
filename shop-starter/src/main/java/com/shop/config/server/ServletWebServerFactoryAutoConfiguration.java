@@ -125,6 +125,7 @@ public class ServletWebServerFactoryAutoConfiguration {
 				while (!useable(startPort)) {
 					startPort++;
 				}
+				properties.setPort(startPort);
 				factory.setPort(startPort);
 			} else if (!useable(port)) {
 				throw new PortUnUseableException();
