@@ -5,17 +5,20 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.tmt.common.persistence.datasource.DataSourceHolder;
+import org.springframework.core.Ordered;
 
 /**
  * 配置 Druid
  * @author lifeng
  */
+@AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
 @ConditionalOnClass({DruidDataSource.class})
 @ConditionalOnMissingBean(DataSource.class)
 public class DruidDataSourceAutoConfiguration {

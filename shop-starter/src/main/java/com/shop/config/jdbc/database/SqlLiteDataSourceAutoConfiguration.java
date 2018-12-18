@@ -1,22 +1,25 @@
 package com.shop.config.jdbc.database;
 
-import javax.sql.DataSource;
-
+import com.tmt.common.exception.BaseRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.Ordered;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.sqlite.SQLiteDataSource;
-import com.tmt.common.exception.BaseRuntimeException;
+
+import javax.sql.DataSource;
 
 /**
  * 配置 Druid
  * 
  * @author lifeng
  */
+@AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
 @ConditionalOnClass({ SQLiteDataSource.class })
 @ConditionalOnMissingBean(DataSource.class)
 @ConditionalOnProperty(prefix = "spring.datasource", name = "db", havingValue = "sqlite", matchIfMissing = false)

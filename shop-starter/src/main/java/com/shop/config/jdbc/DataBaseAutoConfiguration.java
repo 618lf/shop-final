@@ -1,10 +1,14 @@
 package com.shop.config.jdbc;
 
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-import javax.sql.DataSource;
-
+import com.shop.config.jdbc.database.*;
+import com.shop.config.jdbc.mybatis.MybatisProperties;
+import com.shop.config.jdbc.transaction.DataSourceTransactionManagerAutoConfiguration;
+import com.shop.config.jdbc.transaction.TransactionAutoConfiguration;
+import com.tmt.common.persistence.JdbcSqlExecutor;
+import com.tmt.common.persistence.QueryCondition;
+import com.tmt.common.persistence.dialect.*;
+import com.tmt.common.persistence.mybatis.ExecutorInterceptor;
+import com.tmt.common.security.utils.StringUtils;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.Configuration;
@@ -15,11 +19,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandidate;
+import org.springframework.boot.autoconfigure.condition.*;
 import org.springframework.boot.autoconfigure.jdbc.JdbcProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -37,25 +37,9 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
-import com.shop.config.jdbc.database.ConfigurationCustomizer;
-import com.shop.config.jdbc.database.DataSourceProperties;
-import com.shop.config.jdbc.database.Database;
-import com.shop.config.jdbc.database.DruidDataSourceAutoConfiguration;
-import com.shop.config.jdbc.database.HikariDataSourceAutoConfiguration;
-import com.shop.config.jdbc.database.SpringBootVFS;
-import com.shop.config.jdbc.database.SqlLiteDataSourceAutoConfiguration;
-import com.shop.config.jdbc.mybatis.MybatisProperties;
-import com.shop.config.jdbc.transaction.DataSourceTransactionManagerAutoConfiguration;
-import com.shop.config.jdbc.transaction.TransactionAutoConfiguration;
-import com.tmt.common.persistence.JdbcSqlExecutor;
-import com.tmt.common.persistence.QueryCondition;
-import com.tmt.common.persistence.dialect.Dialect;
-import com.tmt.common.persistence.dialect.H2Dialect;
-import com.tmt.common.persistence.dialect.MySQLDialect;
-import com.tmt.common.persistence.dialect.OracleDialect;
-import com.tmt.common.persistence.dialect.SqlLiteDialect;
-import com.tmt.common.persistence.mybatis.ExecutorInterceptor;
-import com.tmt.common.security.utils.StringUtils;
+import javax.annotation.PostConstruct;
+import javax.sql.DataSource;
+import java.util.List;
 
 /**
  * 会判断是否引入了数据库组件
@@ -90,7 +74,8 @@ public class DataBaseAutoConfiguration {
 	@org.springframework.context.annotation.Configuration
 	@ConditionalOnClass(JdbcTemplate.class)
 	@ConditionalOnSingleCandidate(DataSource.class)
-	@AutoConfigureAfter(DataSourceAutoConfiguration.class)
+	@AutoConfigureAfter({DataSourceAutoConfiguration.class,SqlLiteDataSourceAutoConfiguration.class, DruidDataSourceAutoConfiguration.class,
+			HikariDataSourceAutoConfiguration.class})
 	@EnableConfigurationProperties(JdbcProperties.class)
 	public static class JdbcTemplateAutoConfiguration {
 
@@ -142,7 +127,6 @@ public class DataBaseAutoConfiguration {
 	 * 
 	 * @author lifeng
 	 */
-	@AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
 	@org.springframework.context.annotation.Configuration
 	@ConditionalOnClass({ JdbcTemplate.class, PlatformTransactionManager.class })
 	@ConditionalOnSingleCandidate(DataSource.class)
@@ -159,9 +143,8 @@ public class DataBaseAutoConfiguration {
 	 */
 	@org.springframework.context.annotation.Configuration
 	@ConditionalOnClass({ SqlSessionFactory.class, SqlSessionFactoryBean.class })
-	@ConditionalOnBean(DataSource.class)
 	@EnableConfigurationProperties(MybatisProperties.class)
-	@AutoConfigureAfter({DataSourceAutoConfiguration.class,SqlLiteDataSourceAutoConfiguration.class, DruidDataSourceAutoConfiguration.class,
+	@AutoConfigureAfter({DataSourceAutoConfiguration.class, SqlLiteDataSourceAutoConfiguration.class, DruidDataSourceAutoConfiguration.class,
 		HikariDataSourceAutoConfiguration.class})
 	@ConditionalOnProperty(prefix = "spring.application", name = "enableMybatis", matchIfMissing = true)
 	public static class MybatisAutoConfiguration {
