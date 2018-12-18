@@ -1,5 +1,6 @@
 package com.shop.config.server;
 
+import java.net.Socket;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -20,6 +21,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpStatus;
+
+import com.tmt.common.exception.PortUnUseableException;
 
 /**
  * 自定义的 Servlet 服务器自动配置
@@ -42,8 +45,9 @@ public class ServletWebServerFactoryAutoConfiguration {
 	 */
 	@Bean
 	@ConditionalOnClass(name = "org.apache.catalina.startup.Tomcat")
-	public TomcatServletWebServerFactoryCustomizer shop_tomcatServletWebServerFactoryCustomizer() {
-		return new TomcatServletWebServerFactoryCustomizer();
+	public TomcatServletWebServerFactoryCustomizer shop_tomcatServletWebServerFactoryCustomizer(
+			ServerProperties properties) {
+		return new TomcatServletWebServerFactoryCustomizer(properties);
 	}
 
 	/**
@@ -55,8 +59,10 @@ public class ServletWebServerFactoryAutoConfiguration {
 			implements WebServerFactoryCustomizer<TomcatServletWebServerFactory>, Ordered {
 
 		private final Set<String> DEFAULT;
+		private final ServerProperties properties;
 
-		public TomcatServletWebServerFactoryCustomizer() {
+		public TomcatServletWebServerFactoryCustomizer(ServerProperties properties) {
+			this.properties = properties;
 			Set<String> patterns = new LinkedHashSet<>();
 			patterns.add("javax.*.jar");
 			patterns.add("cglib-*.jar");
@@ -89,7 +95,7 @@ public class ServletWebServerFactoryAutoConfiguration {
 			patterns.add("shop-*.jar");
 			DEFAULT = Collections.unmodifiableSet(patterns);
 		}
-		
+
 		@Override
 		public int getOrder() {
 			return 0;
@@ -104,6 +110,36 @@ public class ServletWebServerFactoryAutoConfiguration {
 			factory.addErrorPages(error401Page);
 			factory.addErrorPages(error404Page);
 			factory.addErrorPages(error500Page);
+
+			// 适配端口
+			adaptablePort(factory);
+		}
+
+		/**
+		 * 适配端口
+		 */
+		private void adaptablePort(TomcatServletWebServerFactory factory) {
+			int port = properties.getPort();
+			if (port == -1) {
+				int startPort = 80;
+				while (!useable(startPort)) {
+					startPort++;
+				}
+				factory.setPort(startPort);
+			} else if (!useable(port)) {
+				throw new PortUnUseableException();
+			}
+		}
+
+		// 校验是否可以用
+		private boolean useable(int port) {
+			try {
+				Socket socket = new Socket("127.0.0.1", port);
+				socket.close();
+				return false;
+			} catch (Exception e) {
+				return true;
+			}
 		}
 	}
 }
