@@ -160,6 +160,7 @@ public class GroupService extends BaseService<Group, Long> implements GroupServi
 	/**
 	 * 删除所有的菜单缓存
 	 */
+	@Transactional
 	public void removeGroupMenus() {
 		CacheUtils.evict(new StringBuilder(Constants.CACHE_GROUP_MENUS).append("*").toString());
 	}
