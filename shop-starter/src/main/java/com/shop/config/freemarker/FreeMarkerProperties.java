@@ -16,7 +16,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "spring.freemarker")
 public class FreeMarkerProperties extends AbstractTemplateViewResolverProperties {
 
-	public static final String DEFAULT_TEMPLATE_LOADER_PATH = "classpath:/WEB-INF/template/";
+	public static final String DEFAULT_TEMPLATE_LOADER_PATH = "classpath:/template/";
 	public static final String DEFAULT_PREFIX = "";
 	public static final String DEFAULT_SUFFIX = ".html";
 
