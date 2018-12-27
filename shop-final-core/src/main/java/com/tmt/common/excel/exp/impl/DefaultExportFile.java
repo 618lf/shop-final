@@ -104,7 +104,7 @@ public class DefaultExportFile implements IExportFile {
 
 	public InputStream getTemplateFile(Map<String, Object> data) {
 		String template = EXPORT_TEMPLATE_PATH + String.valueOf(data.get(TEMPLATE_NAME));
-		return ContextHolderUtils.getTemplate(template);
+		return SpringContextHolder.getTemplate(template);
 	}
 
 	@SuppressWarnings("unchecked")

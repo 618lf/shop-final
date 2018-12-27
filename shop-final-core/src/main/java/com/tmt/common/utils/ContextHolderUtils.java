@@ -7,7 +7,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -86,19 +85,6 @@ public class ContextHolderUtils {
 	 */
 	public static String getWebInfPath() {
 		return new StringBuilder(getWebRootPath()).append("WEB-INF").append(File.separator).toString();
-	}
-
-	/**
-	 * 系统模版目录
-	 * 打包之后只能获取流
-	 * 
-	 * @return
-	 * @throws MalformedURLException 
-	 */
-	public static InputStream getTemplate(String template) {
-		String templatePath =  new StringBuilder(File.separator).append("WEB-INF").append(File.separator).append("template")
-				.append(File.separator).append(template).toString();
-		return XSpringContextHolder.getServletContext().getResourceAsStream(templatePath); 
 	}
 
 	/**
