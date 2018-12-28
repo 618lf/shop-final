@@ -27,6 +27,7 @@ import com.tmt.common.utils.StringUtil3;
 import com.tmt.common.utils.TreeEntityUtils;
 import com.tmt.common.utils.WebUtils;
 import com.tmt.common.web.BaseController;
+import com.tmt.common.web.security.interceptor.Token;
 import com.tmt.system.entity.Menu;
 import com.tmt.system.service.MenuServiceFacade;
 import com.tmt.system.utils.UserUtils;
@@ -122,6 +123,7 @@ public class MenuController extends BaseController {
 	 * @param model
 	 * @return
 	 */
+	@Token(save = true)
 	@RequestMapping("form")
 	public String form(Menu menu, Model model) {
 		if (menu != null && menu.getId() != null) {
@@ -212,6 +214,7 @@ public class MenuController extends BaseController {
 	 * @param redirectAttributes
 	 * @return
 	 */
+	@Token
 	@RequestMapping("save")
 	public String save(Menu menu, Model model, RedirectAttributes redirectAttributes) {
 		menu.userOptions(UserUtils.getUser());

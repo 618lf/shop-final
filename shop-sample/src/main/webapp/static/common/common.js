@@ -59,7 +59,7 @@
     
     //ajax 全局设置
     $(document).ajaxSend(function(event, jqXHR, ajaxOptions) {
-    	jqXHR.setRequestHeader("token", Public.getCookie('token'));
+    	jqXHR.setRequestHeader("token", $('#token').val());
     });
     
     //普通的表格维护
