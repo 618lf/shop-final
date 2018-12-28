@@ -3,7 +3,10 @@
 
 # Shop only load Auto Configuration, look above
 com.shop.starter.ApplicationBoot=\
-com.shop.config.jdbc.DataBaseAutoConfiguration,\
+com.shop.config.jdbc.DataSourceAutoConfiguration,\
+com.shop.config.jdbc.JdbcTemplateAutoConfiguration,\
+com.shop.config.jdbc.DataSourceTransactionManagerConfiguration,\
+com.shop.config.jdbc.MybatisAutoConfiguration,\
 com.shop.config.security.SecurityAutoConfiguration,\
 com.shop.config.web.HttpMessageConvertersAutoConfiguration,\
 com.shop.config.freemarker.FreeMarkerAutoConfiguration,\
