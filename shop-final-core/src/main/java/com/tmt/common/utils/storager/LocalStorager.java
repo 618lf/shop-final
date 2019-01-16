@@ -18,7 +18,6 @@ public class LocalStorager implements Storager{
 	
 	private String chunkPath = "chunk";
 	private String storagePath; //存储的根目录
-	private String urlPath;//访问的前缀
 	private String domain;//域名
 	
 	/**
@@ -74,7 +73,7 @@ public class LocalStorager implements Storager{
 		} catch (IOException ioe) {
 			return null;
 		}
-		return new StringBuilder(urlPath).append(StringUtil3.remove(file.getAbsolutePath(), storagePath)).toString();
+		return new StringBuilder(StringUtil3.remove(file.getAbsolutePath(), storagePath)).toString();
 	}
 	
 	/**
@@ -95,7 +94,7 @@ public class LocalStorager implements Storager{
 		} catch (IOException ioe) {
 			return null;
 		}
-		return new StringBuilder(urlPath).append(StringUtil3.remove(file.getAbsolutePath(), storagePath)).toString();
+		return new StringBuilder(StringUtil3.remove(file.getAbsolutePath(), storagePath)).toString();
 	}
 
 	/**
@@ -105,7 +104,6 @@ public class LocalStorager implements Storager{
 	public int delete(String group, String fileName) {
 		String realFileName = fileName;
 		if (StringUtil3.isNotBlank(realFileName)) {
-			realFileName = StringUtil3.remove(realFileName, urlPath);
 			realFileName = new StringBuilder(storagePath).append(realFileName).toString();
 		}
 		File file = new File(realFileName);
@@ -129,7 +127,6 @@ public class LocalStorager implements Storager{
 	public InputStream download(String fileName) {
 		String realFileName = fileName;
 		if (StringUtil3.isNotBlank(realFileName)) {
-			realFileName = StringUtil3.remove(realFileName, urlPath);
 			realFileName = new StringBuilder(storagePath).append(realFileName).toString();
 		}
 		File file = new File(realFileName);
@@ -152,12 +149,6 @@ public class LocalStorager implements Storager{
 	}
 	public void setStoragePath(String storagePath) {
 		this.storagePath = storagePath;
-	}
-	public String getUrlPath() {
-		return urlPath;
-	}
-	public void setUrlPath(String urlPath) {
-		this.urlPath = urlPath;
 	}
 	public String getDomain() {
 		return domain;
