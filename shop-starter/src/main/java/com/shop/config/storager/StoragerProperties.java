@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("spring.storager")
 public class StoragerProperties {
 
-	private String storagePath;
+	private String storagePath = "file:statics/";
 	private String urlPath;
 	private String domain;
 	

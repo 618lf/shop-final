@@ -15,6 +15,7 @@ import com.tmt.common.excel.exp.IExportDataSource;
 import com.tmt.common.excel.exp.IExportFile;
 import com.tmt.common.excel.exp.impl.DefaultExportFile;
 import com.tmt.common.exception.BaseRuntimeException;
+import com.tmt.common.persistence.incrementer.IdGen;
 import com.tmt.common.utils.ExportUtils;
 import com.tmt.common.utils.FileUtils;
 import com.tmt.common.utils.JsonMapper;
@@ -105,7 +106,7 @@ public abstract class AbstractExportDataSource<T> implements IExportDataSource<T
 		String export_mode = request.getParameter(IExportFile.EXPORT_MODE);
 		if ("inapp".equals(export_mode)) {
 			String url = StorageUtils.upload(FileUtils.readFileToByteArray(file), null,
-					"/export_tmp/" + file.getName());
+					"/export_tmp/" + IdGen.stringKey() + ".tmp");
 			Map<String, String> data = Maps.newHashMap();
 			data.put("url", url);
 			data.put("name", file.getName());
