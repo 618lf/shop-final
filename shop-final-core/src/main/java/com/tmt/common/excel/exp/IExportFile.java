@@ -34,6 +34,9 @@ public interface IExportFile {
 	// 标准的文件格式名
 	String XLS = ".xls";
 	String ZIP = ".zip";
+	
+	// 导出的模式
+	String EXPORT_MODE = "export_mode"; // standard、inapp
 
 	/**
 	 * 导出 file
