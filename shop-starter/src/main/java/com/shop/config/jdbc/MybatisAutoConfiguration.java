@@ -1,5 +1,7 @@
 package com.shop.config.jdbc;
 
+import static com.shop.Application.APP_LOGGER;
+
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -66,6 +68,7 @@ public class MybatisAutoConfiguration {
 			ObjectProvider<Interceptor[]> interceptorsProvider, ResourceLoader resourceLoader,
 			ObjectProvider<DatabaseIdProvider> databaseIdProvider,
 			ObjectProvider<List<ConfigurationCustomizer>> configurationCustomizersProvider) {
+		APP_LOGGER.debug("Loading Mybatis");
 		this.properties = properties;
 		this.dbProperties = dbProperties;
 		this.interceptors = interceptorsProvider.getIfAvailable();

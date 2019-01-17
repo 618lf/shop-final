@@ -1,5 +1,7 @@
 package com.shop.config.jdbc.database;
 
+import static com.shop.Application.APP_LOGGER;
+
 import java.sql.SQLException;
 
 import javax.sql.DataSource;
@@ -32,6 +34,7 @@ public class DruidDataSourceAutoConfiguration {
 	 */
 	@Bean
 	public DataSource druidDataSource() {
+		APP_LOGGER.debug("Loading Druid DataSource");
 		DruidDataSource dataSource = new DruidDataSource();
 		dataSource.setUrl(properties.getUrl());
 		dataSource.setUsername(properties.getUsername());

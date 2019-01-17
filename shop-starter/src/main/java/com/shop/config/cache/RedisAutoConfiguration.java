@@ -1,5 +1,7 @@
 package com.shop.config.cache;
 
+import static com.shop.Application.APP_LOGGER;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,10 @@ public class RedisAutoConfiguration {
 
 	@Autowired
 	private CacheProperties properties;
+	
+	public RedisAutoConfiguration() {
+		APP_LOGGER.debug("Loading Redis");
+	}
 
 	@Bean
 	public RedisConnectionFactory jedisConnectionFactory() {

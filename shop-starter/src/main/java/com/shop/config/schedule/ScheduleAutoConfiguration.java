@@ -1,5 +1,7 @@
 package com.shop.config.schedule;
 
+import static com.shop.Application.APP_LOGGER;
+
 import java.util.Properties;
 
 import org.quartz.Scheduler;
@@ -11,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
 import com.tmt.system.service.TaskBoot;
+import com.tmt.system.service.TaskCommandService;
 
 /**
  * 
@@ -23,7 +26,21 @@ import com.tmt.system.service.TaskBoot;
 @EnableConfigurationProperties(ScheduleProperties.class)
 @ConditionalOnProperty(prefix = "spring.application", name = "enableSchedule", matchIfMissing = true)
 public class ScheduleAutoConfiguration {
+	
+	public ScheduleAutoConfiguration() {
+		APP_LOGGER.debug("Loading Schedule");
+	}
 
+	/**
+	 * 创建定时任务命令服务
+	 * 
+	 * @return
+	 */
+	@Bean
+	public TaskCommandService TaskCommandService() {
+		return new TaskCommandService();
+	}
+	
 	/**
 	 * 本地配置
 	 * 

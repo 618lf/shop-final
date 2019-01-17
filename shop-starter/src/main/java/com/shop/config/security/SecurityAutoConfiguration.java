@@ -1,5 +1,7 @@
 package com.shop.config.security;
 
+import static com.shop.Application.APP_LOGGER;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -38,6 +40,10 @@ public class SecurityAutoConfiguration {
 	private SecurityConfigurationSupport securityConfig;
 	@Autowired
 	private ApplicationProperties properties;
+	
+	public SecurityAutoConfiguration() {
+		APP_LOGGER.debug("Loading Security");
+	}
 
 	@Bean
 	public RememberMeManager rememberMeManager() {

@@ -13,7 +13,6 @@ import org.quartz.Scheduler;
 import org.quartz.TriggerKey;
 import org.quartz.impl.triggers.CronTriggerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tmt.Constants;
@@ -28,7 +27,6 @@ import com.tmt.system.entity.Task.TaskStatus;
  * 
  * @author lifeng
  */
-@Service
 public class TaskCommandService {
 
 	@Autowired

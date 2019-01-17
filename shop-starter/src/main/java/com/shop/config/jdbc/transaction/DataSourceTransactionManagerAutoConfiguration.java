@@ -16,6 +16,8 @@
 
 package com.shop.config.jdbc.transaction;
 
+import static com.shop.Application.APP_LOGGER;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.ObjectProvider;
@@ -49,6 +51,10 @@ import com.shop.config.jdbc.database.DataSourceProperties;
 @AutoConfigureOrder(Ordered.LOWEST_PRECEDENCE)
 @EnableConfigurationProperties(DataSourceProperties.class)
 public class DataSourceTransactionManagerAutoConfiguration {
+	
+	public DataSourceTransactionManagerAutoConfiguration() {
+		APP_LOGGER.debug("Loading Transaction");
+	}
 
 	@Configuration
 	@ConditionalOnSingleCandidate(DataSource.class)

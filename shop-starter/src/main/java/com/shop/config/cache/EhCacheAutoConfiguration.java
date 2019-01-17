@@ -1,5 +1,7 @@
 package com.shop.config.cache;
 
+import static com.shop.Application.APP_LOGGER;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -25,6 +27,10 @@ public class EhCacheAutoConfiguration {
 	private CacheProperties properties;
 	@Autowired
 	private ResourceLoader resourceLoader;
+
+	public EhCacheAutoConfiguration() {
+		APP_LOGGER.debug("Loading EhCache");
+	}
 
 	@Bean
 	public EhCacheManagerFactoryBean ehCacheManager() {

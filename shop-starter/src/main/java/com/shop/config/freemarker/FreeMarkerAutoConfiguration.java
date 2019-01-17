@@ -1,5 +1,7 @@
 package com.shop.config.freemarker;
 
+import static com.shop.Application.APP_LOGGER;
+
 import java.util.Map;
 import java.util.Properties;
 
@@ -36,6 +38,10 @@ public class FreeMarkerAutoConfiguration {
 
 	@Autowired
 	private FreeMarkerProperties properties;
+	
+	public FreeMarkerAutoConfiguration() {
+		APP_LOGGER.debug("Loading FreeMarker");
+	}
 
 	@Bean
 	@ConditionalOnMissingBean(FreeMarkerConfig.class)

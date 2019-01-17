@@ -1,5 +1,7 @@
 package com.shop.config.storager;
 
+import static com.shop.Application.APP_LOGGER;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -25,7 +27,11 @@ public class StoragerAutoConfiguration {
 
 	@Autowired
 	private ResourceLoader resourceLoader;
-
+	
+	public StoragerAutoConfiguration() {
+		APP_LOGGER.debug("Loading Storager");
+	}
+	
 	/**
 	 * 存储
 	 * 

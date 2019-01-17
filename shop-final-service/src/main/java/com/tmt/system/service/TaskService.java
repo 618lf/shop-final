@@ -30,7 +30,7 @@ public class TaskService extends BaseService<Task, Long> implements TaskServiceF
 
 	@Autowired
 	private TaskDao taskDao;
-	@Autowired
+	@Autowired(required = false)
 	private TaskCommandService commandService;
 
 	@Override
@@ -185,7 +185,7 @@ public class TaskService extends BaseService<Task, Long> implements TaskServiceF
 		if (tasks == null) {
 			tasks = Lists.newArrayList();
 			List<TaskExecutor> _tasks = SpringContextHolder.getBean(Constants.RUNNING_ABLE_TASKS);
-			for(TaskExecutor _task: _tasks) {
+			for (TaskExecutor _task : _tasks) {
 				String key = _task.getName();
 				String label = _task.getName();
 				tasks.add(LabelVO.newLabel(label, key));

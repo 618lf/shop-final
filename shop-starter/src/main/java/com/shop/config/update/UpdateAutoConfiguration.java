@@ -1,5 +1,7 @@
 package com.shop.config.update;
 
+import static com.shop.Application.APP_LOGGER;
+
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -20,6 +22,10 @@ import com.tmt.update.UpdateServiceFacade;
 @AutoConfigureAfter(DataBaseAutoConfiguration.class)
 @AutoConfigureBefore(WebMvcAutoConfiguration.class)
 public class UpdateAutoConfiguration {
+	
+	public UpdateAutoConfiguration() {
+		APP_LOGGER.debug("Loading Updater");
+	}
 
 	/**
 	 * 默认使用基于数据库的数据更新服务

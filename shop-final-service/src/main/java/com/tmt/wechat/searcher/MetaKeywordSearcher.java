@@ -18,7 +18,6 @@ import org.apache.lucene.search.SortField;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.WildcardQuery;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.tmt.common.searcher.BaseSearcher;
 import com.tmt.common.utils.Lists;
@@ -37,7 +36,6 @@ import com.tmt.wechat.service.MetaTextServiceFacade;
  * 
  * @author root
  */
-@Service
 public class MetaKeywordSearcher extends BaseSearcher<MetaKeyword> implements MetaKeywordServiceFacade {
 
 	@Autowired

@@ -1,5 +1,7 @@
 package com.shop.config.web;
 
+import static com.shop.Application.APP_LOGGER;
+
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.List;
@@ -87,6 +89,10 @@ public class WebMvcAutoConfiguration {
 
 	private static Logger logger = LoggerFactory.getLogger(WebMvcAutoConfiguration.class);
 	private static final String[] SERVLET_LOCATIONS = { "/" };
+	
+	public WebMvcAutoConfiguration() {
+		APP_LOGGER.debug("Loading WebMvc");
+	}
 
 	/**
 	 * flashMapManager

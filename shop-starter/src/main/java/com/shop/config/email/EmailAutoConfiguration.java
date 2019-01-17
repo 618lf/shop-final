@@ -1,5 +1,7 @@
 package com.shop.config.email;
 
+import static com.shop.Application.APP_LOGGER;
+
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +18,10 @@ import com.tmt.common.email.MimeMailService;
 @Configuration
 @ConditionalOnProperty(prefix = "spring.application", name = "enableEmail", matchIfMissing = true)
 public class EmailAutoConfiguration {
+	
+	public EmailAutoConfiguration() {
+		APP_LOGGER.debug("Loading Email");
+	}
 
 	/**
 	 * 创建一个邮件发送器
