@@ -94,7 +94,8 @@ public class LocalStorager implements Storager{
 		} catch (IOException ioe) {
 			return null;
 		}
-		return new StringBuilder(StringUtil3.remove(file.getAbsolutePath(), storagePath)).toString();
+		String url = new StringBuilder(StringUtil3.remove(file.getAbsolutePath(), storagePath)).toString();
+		return StringUtil3.replace(url, File.separator, "/");
 	}
 
 	/**
