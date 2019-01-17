@@ -2,6 +2,8 @@ package com.shop.config.schedule;
 
 import java.util.Properties;
 
+import org.quartz.Scheduler;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +19,7 @@ import com.tmt.system.service.TaskBoot;
  * @author lifeng
  */
 @Configuration
+@ConditionalOnClass(Scheduler.class)
 @EnableConfigurationProperties(ScheduleProperties.class)
 @ConditionalOnProperty(prefix = "spring.application", name = "enableSchedule", matchIfMissing = true)
 public class ScheduleAutoConfiguration {
