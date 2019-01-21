@@ -1,5 +1,6 @@
 package com.shop.config.server;
 
+import java.io.File;
 import java.net.Socket;
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -20,6 +21,8 @@ import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 
 import com.tmt.common.exception.PortUnUseableException;
@@ -46,8 +49,8 @@ public class ServletWebServerFactoryAutoConfiguration {
 	@Bean
 	@ConditionalOnClass(name = "org.apache.catalina.startup.Tomcat")
 	public TomcatServletWebServerFactoryCustomizer shop_tomcatServletWebServerFactoryCustomizer(
-			ServerProperties properties) {
-		return new TomcatServletWebServerFactoryCustomizer(properties);
+			ServerProperties properties, ResourceLoader resourceLoader) {
+		return new TomcatServletWebServerFactoryCustomizer(properties, resourceLoader);
 	}
 
 	/**
@@ -60,9 +63,11 @@ public class ServletWebServerFactoryAutoConfiguration {
 
 		private final Set<String> DEFAULT;
 		private final ServerProperties properties;
+		private final ResourceLoader resourceLoader;
 
-		public TomcatServletWebServerFactoryCustomizer(ServerProperties properties) {
+		public TomcatServletWebServerFactoryCustomizer(ServerProperties properties, ResourceLoader resourceLoader) {
 			this.properties = properties;
+			this.resourceLoader = resourceLoader;
 			Set<String> patterns = new LinkedHashSet<>();
 			patterns.add("javax.*.jar");
 			patterns.add("cglib-*.jar");
@@ -113,6 +118,9 @@ public class ServletWebServerFactoryAutoConfiguration {
 
 			// 适配端口
 			adaptablePort(factory);
+
+			// 设置基础的工作目录
+			this.baseWork(factory);
 		}
 
 		/**
@@ -141,6 +149,20 @@ public class ServletWebServerFactoryAutoConfiguration {
 			} catch (Exception e) {
 				return true;
 			}
+		}
+
+		// 基本的工作目录
+		private void baseWork(TomcatServletWebServerFactory factory) {
+			File baseDirectory = this.properties.getTomcat().getBasedir();
+			if (baseDirectory != null) {
+				try {
+					Resource resource = resourceLoader.getResource(baseDirectory.getName());
+					baseDirectory = resource.getFile().getAbsoluteFile();
+				} catch (Exception e) {
+				}
+			}
+			 this.properties.getTomcat().setBasedir(baseDirectory);
+			factory.setBaseDirectory(baseDirectory);
 		}
 	}
 }

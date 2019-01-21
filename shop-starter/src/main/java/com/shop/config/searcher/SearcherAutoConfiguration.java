@@ -36,8 +36,10 @@ public class SearcherAutoConfiguration {
 	}
 
 	private void setSearcherStorager() {
-		for (BaseSearcher searcher : searchers) {
-			searcher.setLUCENE_INDEX_PATH(properties.getStorager());
+		if (searchers != null) {
+			for (BaseSearcher searcher : searchers) {
+				searcher.setLUCENE_INDEX_PATH(properties.getStorager());
+			}
 		}
 	}
 }
