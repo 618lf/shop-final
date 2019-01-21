@@ -65,11 +65,12 @@ public class ContextHolderUtils {
 	 * 
 	 * @return
 	 */
-	public static String getTempsPath() {
-		if (StringUtil3.isNotBlank(Globals.temps)) {
-			return Globals.temps;
+	public static File getTempsPath() {
+		if (Globals.temps == null) {
+			Globals.temps = new File(
+					new StringBuilder(getWebRootPath()).append("temps").append(File.separator).toString());
 		}
-		return new StringBuilder(getWebRootPath()).append("temps").append(File.separator).toString();
+		return Globals.temps;
 	}
 
 	// ---------------------Web 文件服务----------------------------------------
@@ -79,7 +80,7 @@ public class ContextHolderUtils {
 	 * @return
 	 */
 	public static File getTempFile() {
-		File tmpDir = new File(ContextHolderUtils.getTempsPath());
+		File tmpDir = getTempsPath();
 		if (!tmpDir.exists()) {
 			tmpDir.mkdirs();
 		}
@@ -93,7 +94,7 @@ public class ContextHolderUtils {
 	 * @return
 	 */
 	public static File getTempFile(String fileName) {
-		File tmpDir = new File(ContextHolderUtils.getTempsPath());
+		File tmpDir = getTempsPath();
 		if (!tmpDir.exists()) {
 			tmpDir.mkdirs();
 		}

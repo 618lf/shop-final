@@ -68,8 +68,17 @@ public class ApplicationProperties {
 		private String admin = "/admin";
 		private String front = "/f";
 		private String domain = "";
+		private String temps = null;
 		private Integer maxUploadSize = 52428800;
 		private Integer maxInMemorySize = 4096;
+
+		public String getTemps() {
+			return temps;
+		}
+
+		public void setTemps(String temps) {
+			this.temps = temps;
+		}
 
 		public String getDomain() {
 			return domain;

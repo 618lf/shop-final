@@ -1,13 +1,19 @@
 package com.shop.config;
 
+import java.io.File;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 
 import com.shop.starter.ApplicationProperties;
 import com.tmt.common.config.Globals;
 import com.tmt.common.persistence.incrementer.IdGen;
+import com.tmt.common.utils.StringUtil3;
 import com.tmt.common.utils.XSpringContextHolder;
 import com.tmt.common.utils.serializer.JavaSerializer;
 import com.tmt.common.utils.serializer.KryoPoolSerializer;
@@ -23,7 +29,10 @@ import com.tmt.common.utils.serializer.Serializer;
 @Configuration
 @EnableConfigurationProperties(ApplicationProperties.class)
 public class ApplicationAutoConfiguration {
-	
+
+	@Autowired
+	private ResourceLoader resourceLoader;
+
 	public ApplicationAutoConfiguration(ApplicationProperties properties) {
 		serializer(properties);
 		globals(properties);
@@ -62,7 +71,7 @@ public class ApplicationAutoConfiguration {
 		// 公共引用
 		SerializationUtils.g_ser = g_ser;
 	}
-	
+
 	/**
 	 * 全局参数
 	 * 
@@ -74,5 +83,18 @@ public class ApplicationAutoConfiguration {
 		Globals.index = properties.getWeb().getIndex();
 		Globals.version = properties.getVersion();
 		Globals.domain = properties.getWeb().getDomain();
+		Globals.temps = this.tempsDiv(properties.getWeb().getTemps());
+	}
+
+	// 基本的工作目录
+	private File tempsDiv(String temp) {
+		if (StringUtil3.isNotBlank(temp)) {
+			try {
+				Resource resource = resourceLoader.getResource(temp);
+				return resource.getFile().getAbsoluteFile();
+			} catch (Exception e) {
+			}
+		}
+		return null;
 	}
 }
