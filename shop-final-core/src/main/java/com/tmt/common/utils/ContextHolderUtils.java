@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.IOUtils;
@@ -31,39 +30,13 @@ import com.tmt.common.utils.zip.ZipOutputStream;
  */
 public class ContextHolderUtils {
 
-	/**
-	 * SpringMvc下获取request
-	 * 
-	 * @return
-	 */
 	public static HttpServletRequest getRequest() {
 		ServletRequestAttributes _request = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 		return _request == null ? null : _request.getRequest();
 	}
 
-	/**
-	 * 获取ServletContext
-	 * 
-	 * @return
-	 */
-	public static ServletContext getServletContext() {
-		return XSpringContextHolder.getServletContext();
-	}
-
-	// -------------------URL路劲-------------------------------------
-
 	public static String getWebRoot() {
 		return XSpringContextHolder.getServletContext().getContextPath();
-	}
-
-	public static String getFrontPath() {
-		return new StringBuilder(XSpringContextHolder.getServletContext().getContextPath()).append(Globals.frontPath)
-				.toString();
-	}
-
-	public static String getAdminPath() {
-		return new StringBuilder(XSpringContextHolder.getServletContext().getContextPath()).append(Globals.adminPath)
-				.toString();
 	}
 
 	// ---------------------物理路劲----------------------------------------
