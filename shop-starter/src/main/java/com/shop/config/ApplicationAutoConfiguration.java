@@ -2,7 +2,6 @@ package com.shop.config;
 
 import java.io.File;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -30,10 +29,10 @@ import com.tmt.common.utils.serializer.Serializer;
 @EnableConfigurationProperties(ApplicationProperties.class)
 public class ApplicationAutoConfiguration {
 
-	@Autowired
 	private ResourceLoader resourceLoader;
 
-	public ApplicationAutoConfiguration(ApplicationProperties properties) {
+	public ApplicationAutoConfiguration(ApplicationProperties properties, ResourceLoader resourceLoader) {
+		this.resourceLoader = resourceLoader;
 		serializer(properties);
 		globals(properties);
 	}
