@@ -85,7 +85,9 @@ public class UserService extends BaseService<User, Long> implements UserServiceF
 	@Transactional
 	public Long save(User user) {
 		if (IdGen.isInvalidId(user.getId())) {
-			user.setPassword(Globals.entryptPassword("hello"));// 默认密码
+			if (StringUtil3.isBlank(user.getPassword())) {
+				user.setPassword(Globals.entryptPassword("hello"));
+			}
 			if (StringUtil3.isBlank(user.getNo())) {
 				user.setNo(this.createUserCode());
 			}
