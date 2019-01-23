@@ -68,7 +68,7 @@ public class SecurityConfigurationSupport {
 	 * @param filter
 	 * @return
 	 */
-	public SecurityConfigurationSupport addFilter(String name, Filter filter) {
+	public SecurityConfigurationSupport filter(String name, Filter filter) {
 		filters.put(name, filter);
 		return this;
 	}
