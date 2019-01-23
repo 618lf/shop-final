@@ -13,6 +13,7 @@ import com.tmt.common.config.Globals;
 import com.tmt.common.entity.TreeVO;
 import com.tmt.common.persistence.BaseDao;
 import com.tmt.common.persistence.incrementer.IdGen;
+import com.tmt.common.persistence.incrementer.UUIdGenerator;
 import com.tmt.common.service.BaseService;
 import com.tmt.common.utils.DateUtil3;
 import com.tmt.common.utils.Lists;
@@ -86,7 +87,7 @@ public class UserService extends BaseService<User, Long> implements UserServiceF
 	public Long save(User user) {
 		if (IdGen.isInvalidId(user.getId())) {
 			if (StringUtil3.isBlank(user.getPassword())) {
-				user.setPassword("hello");
+				user.setPassword(UUIdGenerator.uuid());
 			}
 			user.setPassword(Globals.entryptPassword(user.getPassword()));
 			if (StringUtil3.isBlank(user.getNo())) {
