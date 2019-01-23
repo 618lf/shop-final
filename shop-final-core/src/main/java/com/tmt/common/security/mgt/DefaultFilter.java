@@ -6,6 +6,7 @@ import com.tmt.common.security.filter.authc.AnonymousFilter;
 import com.tmt.common.security.filter.authc.AuthenticatingFilter;
 import com.tmt.common.security.filter.authc.LogoutFilter;
 import com.tmt.common.security.filter.authc.UserFilter;
+import com.tmt.common.security.filter.authz.IpsAuthorizationFilter;
 import com.tmt.common.security.filter.authz.PermissionsAuthorizationFilter;
 import com.tmt.common.security.filter.authz.RolesAuthorizationFilter;
 
@@ -16,6 +17,7 @@ public enum DefaultFilter {
 	logout(LogoutFilter.class), 
 	perms(PermissionsAuthorizationFilter.class), 
 	roles(RolesAuthorizationFilter.class), 
+	ips(IpsAuthorizationFilter.class), 
 	user(UserFilter.class);
 
 	private final Class<? extends Filter> filterClass;
