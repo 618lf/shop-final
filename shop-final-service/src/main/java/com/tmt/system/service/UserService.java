@@ -86,8 +86,9 @@ public class UserService extends BaseService<User, Long> implements UserServiceF
 	public Long save(User user) {
 		if (IdGen.isInvalidId(user.getId())) {
 			if (StringUtil3.isBlank(user.getPassword())) {
-				user.setPassword(Globals.entryptPassword("hello"));
+				user.setPassword("hello");
 			}
+			user.setPassword(Globals.entryptPassword(user.getPassword()));
 			if (StringUtil3.isBlank(user.getNo())) {
 				user.setNo(this.createUserCode());
 			}
