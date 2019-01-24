@@ -99,7 +99,7 @@ public class DataSourceProperties {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
+	
 	/**
 	 * 自动适配驱动
 	 * 

@@ -10,26 +10,38 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.jdbc.metadata.HikariDataSourcePoolMetadata;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.Ordered;
 
+import com.shop.config.jdbc.DataBaseSecurity;
 import com.tmt.common.persistence.datasource.DataSourceHolder;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import org.springframework.core.Ordered;
 
 /**
  * 配置 Hikari
+ * 
  * @author lifeng
  */
 @AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
-@ConditionalOnClass({HikariDataSource.class})
+@ConditionalOnClass({ HikariDataSource.class })
 @ConditionalOnMissingBean(DataSource.class)
 public class HikariDataSourceAutoConfiguration {
 
 	@Autowired
 	private DataSourceProperties properties;
-	
+	@Autowired(required = false)
+	private DataBaseSecurity dataBaseSecurity;
+
+	public HikariDataSourceAutoConfiguration() {
+		if (dataBaseSecurity == null) {
+			dataBaseSecurity = new DataBaseSecurity() {
+			};
+		}
+	}
+
 	/**
 	 * 构建 HikariDataSource
+	 * 
 	 * @return
 	 */
 	@Bean
@@ -39,34 +51,35 @@ public class HikariDataSourceAutoConfiguration {
 		config.setPoolName(properties.getName());
 		config.setJdbcUrl(properties.getUrl());
 		config.setUsername(properties.getUsername());
-		config.setPassword(properties.getPassword());
+		config.setPassword(dataBaseSecurity.decrypt(properties.getPassword()));
 		config.setDriverClassName(properties.getDriverClassName());
-		
+
 		config.addDataSourceProperty("cachePrepStmts", "true");
 		config.addDataSourceProperty("prepStmtCacheSize", properties.getPrepStmtCacheSize());
 		config.addDataSourceProperty("prepStmtCacheSqlLimit", properties.getPrepStmtCacheSqlLimit());
-	    config.addDataSourceProperty("useServerPrepStmts", "true");
-        config.addDataSourceProperty("useLocalSessionState", "true");
-        config.addDataSourceProperty("useLocalTransactionState", "true");
-        config.addDataSourceProperty("rewriteBatchedStatements", "true");
-        config.addDataSourceProperty("cacheResultSetMetadata", "true");
-        config.addDataSourceProperty("cacheServerConfiguration", "true");
-        config.addDataSourceProperty("elideSetAutoCommits", "true");
-        config.addDataSourceProperty("maintainTimeStats", "false");
-        config.setMinimumIdle(properties.getMinIdle());
-        config.setMaximumPoolSize(properties.getMaxActive());
-        config.setConnectionTimeout(properties.getMaxWait());
-        config.setIdleTimeout(properties.getMinEvictableIdleTimeMillis());
-        config.setMaxLifetime(properties.getMaxLifetime());
-        
-        // 创建连接
-        HikariDataSource dataSource = new HikariDataSource(config);
+		config.addDataSourceProperty("useServerPrepStmts", "true");
+		config.addDataSourceProperty("useLocalSessionState", "true");
+		config.addDataSourceProperty("useLocalTransactionState", "true");
+		config.addDataSourceProperty("rewriteBatchedStatements", "true");
+		config.addDataSourceProperty("cacheResultSetMetadata", "true");
+		config.addDataSourceProperty("cacheServerConfiguration", "true");
+		config.addDataSourceProperty("elideSetAutoCommits", "true");
+		config.addDataSourceProperty("maintainTimeStats", "false");
+		config.setMinimumIdle(properties.getMinIdle());
+		config.setMaximumPoolSize(properties.getMaxActive());
+		config.setConnectionTimeout(properties.getMaxWait());
+		config.setIdleTimeout(properties.getMinEvictableIdleTimeMillis());
+		config.setMaxLifetime(properties.getMaxLifetime());
+
+		// 创建连接
+		HikariDataSource dataSource = new HikariDataSource(config);
 		DataSourceHolder.setDataSource(dataSource);
 		return dataSource;
 	}
-	
+
 	/**
 	 * 提供 HikariDataSourcePool 指标查询
+	 * 
 	 * @return
 	 */
 	@Bean
