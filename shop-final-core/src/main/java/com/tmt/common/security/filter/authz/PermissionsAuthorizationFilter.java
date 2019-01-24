@@ -12,24 +12,25 @@ public class PermissionsAuthorizationFilter extends AuthorizationFilter {
 	 * 验证权限,必须有用户信息
 	 */
 	@Override
-	protected boolean isAccessAllowed(HttpServletRequest request, HttpServletResponse response, Object mappedValue) throws Exception {
+	protected boolean isAccessAllowed(HttpServletRequest request, HttpServletResponse response, Object mappedValue)
+			throws Exception {
 		Subject subject = SecurityUtils.getSubject();
 		if (subject.getPrincipal() == null) {
 			return false;
 		}
 		String[] perms = (String[]) mappedValue;
+		if (perms == null || perms.length == 0) {
+			return true;
+		}
 		boolean isPermitted = true;
-        if (perms != null && perms.length > 0) {
-            if (perms.length == 1) {
-                if (!subject.isPermitted(perms[0])) {
-                    isPermitted = false;
-                }
-            } else {
-                if (!subject.isPermittedAll(perms)) {
-                    isPermitted = false;
-                }
-            }
-        }
+		if (perms != null && perms.length > 0) {
+			for (String perm : perms) {
+				isPermitted = this.isPermitted(subject, perm);
+				if (isPermitted) {
+					break;
+				}
+			}
+		}
 		return isPermitted;
 	}
 }

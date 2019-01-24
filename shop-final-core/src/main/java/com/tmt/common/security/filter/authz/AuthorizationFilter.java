@@ -9,13 +9,15 @@ import com.tmt.common.exception.ErrorCode;
 import com.tmt.common.security.filter.AccessControllerFilter;
 import com.tmt.common.security.subjct.Subject;
 import com.tmt.common.security.utils.SecurityUtils;
+import com.tmt.common.utils.StringUtil3;
 import com.tmt.common.utils.WebUtils;
 
 /**
  * 权限验证器
+ * 
  * @author lifeng
  */
-public abstract class AuthorizationFilter extends AccessControllerFilter{
+public abstract class AuthorizationFilter extends AccessControllerFilter {
 
 	private String unauthorizedUrl;
 
@@ -26,7 +28,7 @@ public abstract class AuthorizationFilter extends AccessControllerFilter{
 	public void setUnauthorizedUrl(String unauthorizedUrl) {
 		this.unauthorizedUrl = unauthorizedUrl;
 	}
-	
+
 	/**
 	 * 权限验证
 	 */
@@ -42,5 +44,53 @@ public abstract class AuthorizationFilter extends AccessControllerFilter{
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * 权限的判断
+	 * 
+	 * @param subject
+	 * @param perm
+	 * @return
+	 */
+	protected boolean hasRoles(Subject subject, String perm) {
+		String[] perms = null;
+		if (StringUtil3.contains(perm, "&") && (perms = StringUtil3.split(perm, "&")) != null) {
+			return subject.hasAllRoles(perms);
+		} else if (StringUtil3.contains(perm, "|") && (perms = StringUtil3.split(perm, "|")) != null) {
+			boolean[] roles = subject.hasRoles(perms);
+			for (boolean r : roles) {
+				if (r) {
+					return r;
+				}
+			}
+			return false;
+		} else {
+			return subject.hasRole(perm);
+		}
+	}
+
+	/**
+	 * 权限的判断
+	 * 
+	 * @param subject
+	 * @param perm
+	 * @return
+	 */
+	protected boolean isPermitted(Subject subject, String perm) {
+		String[] perms = null;
+		if (StringUtil3.contains(perm, "&") && (perms = StringUtil3.split(perm, "&")) != null) {
+			return subject.isPermittedAll(perms);
+		} else if (StringUtil3.contains(perm, "|") && (perms = StringUtil3.split(perm, "|")) != null) {
+			boolean[] roles = subject.isPermitted(perms);
+			for (boolean r : roles) {
+				if (r) {
+					return r;
+				}
+			}
+			return false;
+		} else {
+			return subject.isPermitted(perm);
+		}
 	}
 }
