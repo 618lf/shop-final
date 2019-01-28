@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import net.sf.cglib.beans.BeanMap;
+
 /**
  * Maps 操作类
  * 
@@ -58,5 +60,18 @@ public class Maps {
 	public static Map<String, Object> fromBean(Object bean) {
 		String json = JsonMapper.toJson(bean);
 		return JsonMapper.fromJson(json, Map.class);
+	}
+	
+	/**
+	 * 复制map 的属性到bean
+	 * 
+	 * @param map
+	 * @param bean
+	 * @return
+	 */
+	public static <T> T toBean(Map<String, Object> map, T bean) {
+		BeanMap beanMap = BeanMap.create(bean);
+		beanMap.putAll(map);
+		return bean;
 	}
 }

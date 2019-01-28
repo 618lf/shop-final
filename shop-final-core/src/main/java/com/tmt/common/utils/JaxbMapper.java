@@ -1,6 +1,7 @@
 package com.tmt.common.utils;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -11,9 +12,14 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.Source;
+import javax.xml.transform.sax.SAXSource;
 
 import org.apache.poi.util.IOUtils;
 import org.springframework.util.Assert;
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 import com.sun.xml.internal.bind.marshaller.CharacterEscapeHandler;
 import com.tmt.common.exception.BaseRuntimeException;
@@ -76,6 +82,22 @@ public class JaxbMapper {
 			return (T) unmarshaller.unmarshal(reader);
 		} catch (JAXBException e) {
 			throw ExceptionUtil.unchecked(e);
+		}
+	}
+	
+	/**
+	 * Xml->Java Object.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T fromXml(InputStream xml, Class<T> clazz) {
+		Unmarshaller unmarshaller = null;
+		try {
+			unmarshaller = createUnmarshaller(clazz);
+			XMLReader xmlReader = XMLReaderFactory.createXMLReader();
+			Source Source = new SAXSource(xmlReader, new InputSource(xml));
+			return (T) unmarshaller.unmarshal(Source);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
 	}
 
