@@ -16,6 +16,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.tmt.common.utils.JsonMapper;
 
@@ -31,6 +32,11 @@ public class JsonHttpMessageConverter extends AbstractHttpMessageConverter<Objec
 		GenericHttpMessageConverter<Object> {
 
 	private FastJsonConfig fastJsonConfig = new FastJsonConfig();
+	
+	public JsonHttpMessageConverter() {
+		SerializerFeature[] FEATURES = { SerializerFeature.DisableCircularReferenceDetect };
+		fastJsonConfig.setSerializerFeatures(FEATURES);
+	}
 	 
 	@Override
 	public boolean canRead(Type type, Class<?> contextClass, MediaType mediaType) {
