@@ -60,8 +60,9 @@ public class SiteService extends BaseService<Site, Long> implements SiteServiceF
 		}
 		this.update("updateEmail", site);
 		CacheUtils.evict(Constants.CACHE_SITE);
-
+		
 		// Email 配置
+		_site = this.getSite();
 		CacheUtils.put(EmailParam.EMAIL_KEY, _site.getEmailParam());
 	}
 
