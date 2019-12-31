@@ -24,11 +24,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.Aware;
 import org.springframework.beans.factory.BeanClassLoaderAware;
@@ -39,7 +36,6 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.boot.autoconfigure.AutoConfigurationImportEvent;
 import org.springframework.boot.autoconfigure.AutoConfigurationImportFilter;
 import org.springframework.boot.autoconfigure.AutoConfigurationImportListener;
-import org.springframework.boot.autoconfigure.AutoConfigurationMetadata;
 import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.ResourceLoaderAware;
@@ -71,13 +67,8 @@ import com.shop.starter.ApplicationBoot;
  * @since 1.3.0
  * @see ApplicationBoot
  */
-public class AutoConfigurationImportSelector
-		implements DeferredImportSelector, BeanClassLoaderAware, ResourceLoaderAware,
-		BeanFactoryAware, EnvironmentAware, Ordered {
-
-	private static final String[] NO_IMPORTS = {};
-
-	private static final Logger logger = LoggerFactory.getLogger(AutoConfigurationImportSelector.class);
+public class AutoConfigurationImportSelector implements DeferredImportSelector, BeanClassLoaderAware,
+		ResourceLoaderAware, BeanFactoryAware, EnvironmentAware, Ordered {
 
 	private static final String PROPERTY_NAME_AUTOCONFIGURE_EXCLUDE = "spring.autoconfigure.exclude";
 
@@ -91,19 +82,12 @@ public class AutoConfigurationImportSelector
 
 	@Override
 	public String[] selectImports(AnnotationMetadata annotationMetadata) {
-		if (!isEnabled(annotationMetadata)) {
-			return NO_IMPORTS;
-		}
-		AutoConfigurationMetadata autoConfigurationMetadata = AutoConfigurationMetadataLoader
-				.loadMetadata(this.beanClassLoader);
 		AnnotationAttributes attributes = getAttributes(annotationMetadata);
-		List<String> configurations = getCandidateConfigurations(annotationMetadata,
-				attributes);
+		List<String> configurations = getCandidateConfigurations(annotationMetadata, attributes);
 		configurations = removeDuplicates(configurations);
 		Set<String> exclusions = getExclusions(annotationMetadata, attributes);
 		checkExcludedClasses(configurations, exclusions);
 		configurations.removeAll(exclusions);
-		configurations = filter(configurations, autoConfigurationMetadata);
 		fireAutoConfigurationImportEvents(configurations, exclusions);
 		return StringUtils.toStringArray(configurations);
 	}
@@ -115,9 +99,7 @@ public class AutoConfigurationImportSelector
 
 	protected boolean isEnabled(AnnotationMetadata metadata) {
 		if (getClass() == AutoConfigurationImportSelector.class) {
-			return getEnvironment().getProperty(
-					ApplicationBoot.ENABLED_OVERRIDE_PROPERTY, Boolean.class,
-					true);
+			return getEnvironment().getProperty(ApplicationBoot.ENABLED_OVERRIDE_PROPERTY, Boolean.class, true);
 		}
 		return true;
 	}
@@ -126,22 +108,22 @@ public class AutoConfigurationImportSelector
 	 * Return the appropriate {@link AnnotationAttributes} from the
 	 * {@link AnnotationMetadata}. By default this method will return attributes for
 	 * {@link #getAnnotationClass()}.
-	 * @param metadata the annotation metadata
+	 * 
+	 * @param metadata
+	 *            the annotation metadata
 	 * @return annotation attributes
 	 */
 	protected AnnotationAttributes getAttributes(AnnotationMetadata metadata) {
 		String name = getAnnotationClass().getName();
-		AnnotationAttributes attributes = AnnotationAttributes
-				.fromMap(metadata.getAnnotationAttributes(name, true));
-		Assert.notNull(attributes,
-				() -> "No auto-configuration attributes found. Is "
-						+ metadata.getClassName() + " annotated with "
-						+ ClassUtils.getShortName(name) + "?");
+		AnnotationAttributes attributes = AnnotationAttributes.fromMap(metadata.getAnnotationAttributes(name, true));
+		Assert.notNull(attributes, () -> "No auto-configuration attributes found. Is " + metadata.getClassName()
+				+ " annotated with " + ClassUtils.getShortName(name) + "?");
 		return attributes;
 	}
 
 	/**
 	 * Return the source annotation class used by the selector.
+	 * 
 	 * @return the annotation class
 	 */
 	protected Class<?> getAnnotationClass() {
@@ -149,39 +131,39 @@ public class AutoConfigurationImportSelector
 	}
 
 	/**
-	 * Return the auto-configuration class names that should be considered. By default
-	 * this method will load candidates using {@link SpringFactoriesLoader} with
-	 * {@link #getSpringFactoriesLoaderFactoryClass()}.
-	 * @param metadata the source metadata
-	 * @param attributes the {@link #getAttributes(AnnotationMetadata) annotation
-	 * attributes}
+	 * Return the auto-configuration class names that should be considered. By
+	 * default this method will load candidates using {@link SpringFactoriesLoader}
+	 * with {@link #getSpringFactoriesLoaderFactoryClass()}.
+	 * 
+	 * @param metadata
+	 *            the source metadata
+	 * @param attributes
+	 *            the {@link #getAttributes(AnnotationMetadata) annotation
+	 *            attributes}
 	 * @return a list of candidate configurations
 	 */
-	protected List<String> getCandidateConfigurations(AnnotationMetadata metadata,
-			AnnotationAttributes attributes) {
-		List<String> configurations = ShopFactoriesLoader.loadFactoryNames(
-				getSpringFactoriesLoaderFactoryClass(), getBeanClassLoader());
-		Assert.notEmpty(configurations,
-				"No auto configuration classes found in META-INF/shop.factories. If you "
-						+ "are using a custom packaging, make sure that file is correct.");
+	protected List<String> getCandidateConfigurations(AnnotationMetadata metadata, AnnotationAttributes attributes) {
+		List<String> configurations = ShopFactoriesLoader.loadFactoryNames(getSpringFactoriesLoaderFactoryClass(),
+				getBeanClassLoader());
+		Assert.notEmpty(configurations, "No auto configuration classes found in META-INF/shop.factories. If you "
+				+ "are using a custom packaging, make sure that file is correct.");
 		return configurations;
 	}
 
 	/**
 	 * Return the class used by {@link SpringFactoriesLoader} to load configuration
 	 * candidates.
+	 * 
 	 * @return the factory class
 	 */
 	protected Class<?> getSpringFactoriesLoaderFactoryClass() {
 		return ApplicationBoot.class;
 	}
 
-	private void checkExcludedClasses(List<String> configurations,
-			Set<String> exclusions) {
+	private void checkExcludedClasses(List<String> configurations, Set<String> exclusions) {
 		List<String> invalidExcludes = new ArrayList<>(exclusions.size());
 		for (String exclusion : exclusions) {
-			if (ClassUtils.isPresent(exclusion, getClass().getClassLoader())
-					&& !configurations.contains(exclusion)) {
+			if (ClassUtils.isPresent(exclusion, getClass().getClassLoader()) && !configurations.contains(exclusion)) {
 				invalidExcludes.add(exclusion);
 			}
 		}
@@ -192,28 +174,32 @@ public class AutoConfigurationImportSelector
 
 	/**
 	 * Handle any invalid excludes that have been specified.
-	 * @param invalidExcludes the list of invalid excludes (will always have at least one
-	 * element)
+	 * 
+	 * @param invalidExcludes
+	 *            the list of invalid excludes (will always have at least one
+	 *            element)
 	 */
 	protected void handleInvalidExcludes(List<String> invalidExcludes) {
 		StringBuilder message = new StringBuilder();
 		for (String exclude : invalidExcludes) {
 			message.append("\t- ").append(exclude).append(String.format("%n"));
 		}
-		throw new IllegalStateException(String
-				.format("The following classes could not be excluded because they are"
-						+ " not auto-configuration classes:%n%s", message));
+		throw new IllegalStateException(String.format(
+				"The following classes could not be excluded because they are" + " not auto-configuration classes:%n%s",
+				message));
 	}
 
 	/**
 	 * Return any exclusions that limit the candidate configurations.
-	 * @param metadata the source metadata
-	 * @param attributes the {@link #getAttributes(AnnotationMetadata) annotation
-	 * attributes}
+	 * 
+	 * @param metadata
+	 *            the source metadata
+	 * @param attributes
+	 *            the {@link #getAttributes(AnnotationMetadata) annotation
+	 *            attributes}
 	 * @return exclusions or an empty set
 	 */
-	protected Set<String> getExclusions(AnnotationMetadata metadata,
-			AnnotationAttributes attributes) {
+	protected Set<String> getExclusions(AnnotationMetadata metadata, AnnotationAttributes attributes) {
 		Set<String> excluded = new LinkedHashSet<>();
 		excluded.addAll(asList(attributes, "exclude"));
 		excluded.addAll(Arrays.asList(attributes.getStringArray("excludeName")));
@@ -224,51 +210,15 @@ public class AutoConfigurationImportSelector
 	private List<String> getExcludeAutoConfigurationsProperty() {
 		if (getEnvironment() instanceof ConfigurableEnvironment) {
 			Binder binder = Binder.get(getEnvironment());
-			return binder.bind(PROPERTY_NAME_AUTOCONFIGURE_EXCLUDE, String[].class)
-					.map(Arrays::asList).orElse(Collections.emptyList());
+			return binder.bind(PROPERTY_NAME_AUTOCONFIGURE_EXCLUDE, String[].class).map(Arrays::asList)
+					.orElse(Collections.emptyList());
 		}
-		String[] excludes = getEnvironment()
-				.getProperty(PROPERTY_NAME_AUTOCONFIGURE_EXCLUDE, String[].class);
+		String[] excludes = getEnvironment().getProperty(PROPERTY_NAME_AUTOCONFIGURE_EXCLUDE, String[].class);
 		return (excludes == null ? Collections.emptyList() : Arrays.asList(excludes));
 	}
 
-	private List<String> filter(List<String> configurations,
-			AutoConfigurationMetadata autoConfigurationMetadata) {
-		long startTime = System.nanoTime();
-		String[] candidates = StringUtils.toStringArray(configurations);
-		boolean[] skip = new boolean[candidates.length];
-		boolean skipped = false;
-		for (AutoConfigurationImportFilter filter : getAutoConfigurationImportFilters()) {
-			invokeAwareMethods(filter);
-			boolean[] match = filter.match(candidates, autoConfigurationMetadata);
-			for (int i = 0; i < match.length; i++) {
-				if (!match[i]) {
-					skip[i] = true;
-					skipped = true;
-				}
-			}
-		}
-		if (!skipped) {
-			return configurations;
-		}
-		List<String> result = new ArrayList<>(candidates.length);
-		for (int i = 0; i < candidates.length; i++) {
-			if (!skip[i]) {
-				result.add(candidates[i]);
-			}
-		}
-		if (logger.isTraceEnabled()) {
-			int numberFiltered = configurations.size() - result.size();
-			logger.trace("Filtered " + numberFiltered + " auto configuration class in "
-					+ TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime)
-					+ " ms");
-		}
-		return new ArrayList<>(result);
-	}
-
 	protected List<AutoConfigurationImportFilter> getAutoConfigurationImportFilters() {
-		return ShopFactoriesLoader.loadFactories(AutoConfigurationImportFilter.class,
-				this.beanClassLoader);
+		return ShopFactoriesLoader.loadFactories(AutoConfigurationImportFilter.class, this.beanClassLoader);
 	}
 
 	protected final <T> List<T> removeDuplicates(List<T> list) {
@@ -280,12 +230,10 @@ public class AutoConfigurationImportSelector
 		return Arrays.asList(value == null ? new String[0] : value);
 	}
 
-	private void fireAutoConfigurationImportEvents(List<String> configurations,
-			Set<String> exclusions) {
+	private void fireAutoConfigurationImportEvents(List<String> configurations, Set<String> exclusions) {
 		List<AutoConfigurationImportListener> listeners = getAutoConfigurationImportListeners();
 		if (!listeners.isEmpty()) {
-			AutoConfigurationImportEvent event = new AutoConfigurationImportEvent(this,
-					configurations, exclusions);
+			AutoConfigurationImportEvent event = new AutoConfigurationImportEvent(this, configurations, exclusions);
 			for (AutoConfigurationImportListener listener : listeners) {
 				invokeAwareMethods(listener);
 				listener.onAutoConfigurationImportEvent(event);
@@ -294,15 +242,13 @@ public class AutoConfigurationImportSelector
 	}
 
 	protected List<AutoConfigurationImportListener> getAutoConfigurationImportListeners() {
-		return ShopFactoriesLoader.loadFactories(AutoConfigurationImportListener.class,
-				this.beanClassLoader);
+		return ShopFactoriesLoader.loadFactories(AutoConfigurationImportListener.class, this.beanClassLoader);
 	}
 
 	private void invokeAwareMethods(Object instance) {
 		if (instance instanceof Aware) {
 			if (instance instanceof BeanClassLoaderAware) {
-				((BeanClassLoaderAware) instance)
-						.setBeanClassLoader(this.beanClassLoader);
+				((BeanClassLoaderAware) instance).setBeanClassLoader(this.beanClassLoader);
 			}
 			if (instance instanceof BeanFactoryAware) {
 				((BeanFactoryAware) instance).setBeanFactory(this.beanFactory);
@@ -358,21 +304,14 @@ public class AutoConfigurationImportSelector
 		return Ordered.LOWEST_PRECEDENCE - 1;
 	}
 
-	private static class AutoConfigurationGroup implements DeferredImportSelector.Group,
-			BeanClassLoaderAware, BeanFactoryAware, ResourceLoaderAware {
-
-		private ClassLoader beanClassLoader;
+	private static class AutoConfigurationGroup
+			implements DeferredImportSelector.Group, BeanFactoryAware, ResourceLoaderAware {
 
 		private BeanFactory beanFactory;
 
 		private ResourceLoader resourceLoader;
 
 		private final Map<String, AnnotationMetadata> entries = new LinkedHashMap<>();
-
-		@Override
-		public void setBeanClassLoader(ClassLoader classLoader) {
-			this.beanClassLoader = classLoader;
-		}
 
 		@Override
 		public void setBeanFactory(BeanFactory beanFactory) {
@@ -385,8 +324,7 @@ public class AutoConfigurationImportSelector
 		}
 
 		@Override
-		public void process(AnnotationMetadata annotationMetadata,
-				DeferredImportSelector deferredImportSelector) {
+		public void process(AnnotationMetadata annotationMetadata, DeferredImportSelector deferredImportSelector) {
 			String[] imports = deferredImportSelector.selectImports(annotationMetadata);
 			for (String importClassName : imports) {
 				this.entries.put(importClassName, annotationMetadata);
@@ -396,8 +334,7 @@ public class AutoConfigurationImportSelector
 		@Override
 		public Iterable<Entry> selectImports() {
 			return sortAutoConfigurations().stream()
-					.map((importClassName) -> new Entry(this.entries.get(importClassName),
-							importClassName))
+					.map((importClassName) -> new Entry(this.entries.get(importClassName), importClassName))
 					.collect(Collectors.toList());
 		}
 
@@ -406,19 +343,15 @@ public class AutoConfigurationImportSelector
 			if (this.entries.size() <= 1) {
 				return autoConfigurations;
 			}
-			AutoConfigurationMetadata autoConfigurationMetadata = AutoConfigurationMetadataLoader
-					.loadMetadata(this.beanClassLoader);
-			return new AutoConfigurationSorter(getMetadataReaderFactory(),
-					autoConfigurationMetadata).getInPriorityOrder(autoConfigurations);
+			return new AutoConfigurationSorter(getMetadataReaderFactory()).getInPriorityOrder(autoConfigurations);
 		}
 
 		private MetadataReaderFactory getMetadataReaderFactory() {
 			try {
 				return this.beanFactory.getBean(
-						SharedMetadataReaderFactoryContextInitializer.BEAN_NAME,
+						"org.springframework.boot.autoconfigure.internalCachingMetadataReaderFactory",
 						MetadataReaderFactory.class);
-			}
-			catch (NoSuchBeanDefinitionException ex) {
+			} catch (NoSuchBeanDefinitionException ex) {
 				return new CachingMetadataReaderFactory(this.resourceLoader);
 			}
 		}

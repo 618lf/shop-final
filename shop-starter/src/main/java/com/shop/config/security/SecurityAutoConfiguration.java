@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.filter.OrderedFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -100,7 +101,7 @@ public class SecurityAutoConfiguration {
 		registrationBean.setFilter(encodingConvertFilter);
 		registrationBean.setUrlPatterns(properties.getSecurity().getUrlPatterns());
 		registrationBean.setName("encodingConvertFilter");
-		registrationBean.setOrder(FilterRegistrationBean.REQUEST_WRAPPER_FILTER_MAX_ORDER - 1);
+		registrationBean.setOrder(OrderedFilter.REQUEST_WRAPPER_FILTER_MAX_ORDER - 1);
 		return registrationBean;
 	}
 
@@ -125,7 +126,7 @@ public class SecurityAutoConfiguration {
 		securityFilterBean.setFilter(securityFilter.getObject());
 		securityFilterBean.setUrlPatterns(properties.getSecurity().getUrlPatterns());
 		securityFilterBean.setName("securityFilter");
-		securityFilterBean.setOrder(FilterRegistrationBean.REQUEST_WRAPPER_FILTER_MAX_ORDER);
+		securityFilterBean.setOrder(OrderedFilter.REQUEST_WRAPPER_FILTER_MAX_ORDER);
 		return securityFilterBean;
 	}
 }

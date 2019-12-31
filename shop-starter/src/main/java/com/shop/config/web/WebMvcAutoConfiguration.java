@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 
 import javax.servlet.Servlet;
 
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -52,6 +54,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
+import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.DelegatingWebMvcConfiguration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
@@ -63,6 +66,7 @@ import org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver;
 import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+import org.springframework.web.servlet.resource.ResourceUrlProvider;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.shop.config.jdbc.DataBaseAutoConfiguration;
@@ -89,7 +93,7 @@ public class WebMvcAutoConfiguration {
 
 	private static Logger logger = LoggerFactory.getLogger(WebMvcAutoConfiguration.class);
 	private static final String[] SERVLET_LOCATIONS = { "/" };
-	
+
 	public WebMvcAutoConfiguration() {
 		APP_LOGGER.debug("Loading WebMvc");
 	}
@@ -171,6 +175,18 @@ public class WebMvcAutoConfiguration {
 		}
 
 		@Override
+		public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+			WebMvcProperties.Contentnegotiation contentnegotiation = this.mvcProperties.getContentnegotiation();
+			configurer.favorPathExtension(contentnegotiation.isFavorPathExtension());
+			configurer.favorParameter(contentnegotiation.isFavorParameter());
+			if (contentnegotiation.getParameterName() != null) {
+				configurer.parameterName(contentnegotiation.getParameterName());
+			}
+			Map<String, MediaType> mediaTypes = this.mvcProperties.getContentnegotiation().getMediaTypes();
+			mediaTypes.forEach(configurer::mediaType);
+		}
+
+		@Override
 		public void configureViewResolvers(ViewResolverRegistry registry) {
 			InternalResourceViewResolver resolver = new InternalResourceViewResolver();
 			resolver.setPrefix(this.mvcProperties.getView().getPrefix());
@@ -218,6 +234,17 @@ public class WebMvcAutoConfiguration {
 	}
 
 	/**
+	 * @param staticLocations
+	 * @return
+	 */
+	static String[] getResourceLocations(String[] staticLocations) {
+		String[] locations = new String[staticLocations.length + SERVLET_LOCATIONS.length];
+		System.arraycopy(staticLocations, 0, locations, 0, staticLocations.length);
+		System.arraycopy(SERVLET_LOCATIONS, 0, locations, staticLocations.length, SERVLET_LOCATIONS.length);
+		return locations;
+	}
+
+	/**
 	 * 這個是基礎， 業務部分可以通過配置 WebMvcConfigurer，來達到配置系统的目的
 	 * 
 	 * Configuration equivalent to {@code @EnableWebMvc}.
@@ -240,8 +267,12 @@ public class WebMvcAutoConfiguration {
 
 		@Bean
 		@Override
-		public RequestMappingHandlerAdapter requestMappingHandlerAdapter() {
-			RequestMappingHandlerAdapter adapter = super.requestMappingHandlerAdapter();
+		public RequestMappingHandlerAdapter requestMappingHandlerAdapter(
+				@Qualifier("mvcContentNegotiationManager") ContentNegotiationManager contentNegotiationManager,
+				@Qualifier("mvcConversionService") FormattingConversionService conversionService,
+				@Qualifier("mvcValidator") Validator validator) {
+			RequestMappingHandlerAdapter adapter = super.requestMappingHandlerAdapter(contentNegotiationManager,
+					conversionService, validator);
 			adapter.setIgnoreDefaultModelOnRedirect(
 					this.mvcProperties == null || this.mvcProperties.isIgnoreDefaultModelOnRedirect());
 			return adapter;
@@ -258,9 +289,13 @@ public class WebMvcAutoConfiguration {
 		@Bean
 		@Primary
 		@Override
-		public RequestMappingHandlerMapping requestMappingHandlerMapping() {
+		public RequestMappingHandlerMapping requestMappingHandlerMapping(
+				@Qualifier("mvcContentNegotiationManager") ContentNegotiationManager contentNegotiationManager,
+				@Qualifier("mvcConversionService") FormattingConversionService conversionService,
+				@Qualifier("mvcResourceUrlProvider") ResourceUrlProvider resourceUrlProvider) {
 			// Must be @Primary for MvcUriComponentsBuilder to work
-			return super.requestMappingHandlerMapping();
+			return super.requestMappingHandlerMapping(contentNegotiationManager, conversionService,
+					resourceUrlProvider);
 		}
 
 		@Bean
@@ -289,11 +324,12 @@ public class WebMvcAutoConfiguration {
 		}
 
 		@Override
-		protected ConfigurableWebBindingInitializer getConfigurableWebBindingInitializer() {
+		protected ConfigurableWebBindingInitializer getConfigurableWebBindingInitializer(
+				FormattingConversionService mvcConversionService, Validator mvcValidator) {
 			try {
 				return this.beanFactory.getBean(ConfigurableWebBindingInitializer.class);
 			} catch (NoSuchBeanDefinitionException ex) {
-				return super.getConfigurableWebBindingInitializer();
+				return super.getConfigurableWebBindingInitializer(mvcConversionService, mvcValidator);
 			}
 		}
 
@@ -306,11 +342,8 @@ public class WebMvcAutoConfiguration {
 		}
 
 		@Override
-		protected void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> exceptionResolvers) {
-			super.configureHandlerExceptionResolvers(exceptionResolvers);
-			if (exceptionResolvers.isEmpty()) {
-				addDefaultHandlerExceptionResolvers(exceptionResolvers);
-			}
+		protected void extendHandlerExceptionResolvers(List<HandlerExceptionResolver> exceptionResolvers) {
+			super.extendHandlerExceptionResolvers(exceptionResolvers);
 			if (this.mvcProperties.isLogResolvedException()) {
 				for (HandlerExceptionResolver resolver : exceptionResolvers) {
 					if (resolver instanceof AbstractHandlerExceptionResolver) {
@@ -359,16 +392,5 @@ public class WebMvcAutoConfiguration {
 			}
 			return this.delegate.resolveMediaTypes(webRequest);
 		}
-	}
-
-	/**
-	 * @param staticLocations
-	 * @return
-	 */
-	static String[] getResourceLocations(String[] staticLocations) {
-		String[] locations = new String[staticLocations.length + SERVLET_LOCATIONS.length];
-		System.arraycopy(staticLocations, 0, locations, 0, staticLocations.length);
-		System.arraycopy(SERVLET_LOCATIONS, 0, locations, staticLocations.length, SERVLET_LOCATIONS.length);
-		return locations;
 	}
 }

@@ -22,8 +22,8 @@ import java.util.List;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.http.HttpEncodingProperties;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
+import org.springframework.boot.autoconfigure.http.HttpProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,22 +39,20 @@ public class HttpMessageConvertersAutoConfiguration {
 
 	private final List<HttpMessageConverter<?>> converters;
 
-	public HttpMessageConvertersAutoConfiguration(
-			ObjectProvider<List<HttpMessageConverter<?>>> convertersProvider) {
+	public HttpMessageConvertersAutoConfiguration(ObjectProvider<List<HttpMessageConverter<?>>> convertersProvider) {
 		this.converters = convertersProvider.getIfAvailable();
 	}
 
 	@Bean
 	@ConditionalOnMissingBean
 	public HttpMessageConverters messageConverters() {
-		return new HttpMessageConverters(
-				this.converters != null ? this.converters : Collections.emptyList());
+		return new HttpMessageConverters(this.converters != null ? this.converters : Collections.emptyList());
 	}
-	
+
 	@Configuration
 	@ConditionalOnClass(JsonHttpMessageConverter.class)
 	protected static class JsonHttpMessageConverterConfiguration {
-		
+
 		@Bean
 		@ConditionalOnMissingBean
 		public JsonHttpMessageConverter jsonHttpMessageConverter() {
@@ -68,25 +66,22 @@ public class HttpMessageConvertersAutoConfiguration {
 			return converter;
 		}
 	}
-	
-	
+
 	@Configuration
 	@ConditionalOnClass(StringHttpMessageConverter.class)
-	@EnableConfigurationProperties(HttpEncodingProperties.class)
+	@EnableConfigurationProperties(HttpProperties.class)
 	protected static class StringHttpMessageConverterConfiguration {
 
-		private final HttpEncodingProperties encodingProperties;
+		private final HttpProperties.Encoding properties;
 
-		protected StringHttpMessageConverterConfiguration(
-				HttpEncodingProperties encodingProperties) {
-			this.encodingProperties = encodingProperties;
+		protected StringHttpMessageConverterConfiguration(HttpProperties properties) {
+			this.properties = properties.getEncoding();
 		}
 
 		@Bean
 		@ConditionalOnMissingBean
 		public StringHttpMessageConverter stringHttpMessageConverter() {
-			StringHttpMessageConverter converter = new StringHttpMessageConverter(
-					this.encodingProperties.getCharset());
+			StringHttpMessageConverter converter = new StringHttpMessageConverter(properties.getCharset());
 			converter.setWriteAcceptCharset(false);
 			return converter;
 		}
