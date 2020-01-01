@@ -1,5 +1,7 @@
 package com.shop;
 
+import java.util.Collection;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.Banner;
@@ -8,6 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import com.tmt.Constants;
 import com.tmt.OS;
 import com.tmt.common.utils.StringUtil3;
 
@@ -34,6 +37,22 @@ public class Application extends SpringApplication {
 	 */
 	public Application(Class<?>... primarySources) {
 		super(primarySources);
+		
+		// 设置启动的类
+		if (primarySources != null && primarySources.length >0) {
+			Constants.BOOT_CLASSES.add(primarySources[0]);
+		}
+	}
+	
+	/**
+	 * 设置启动的类
+	 */
+	@Override
+	public void addPrimarySources(Collection<Class<?>> additionalPrimarySources) {
+		super.addPrimarySources(additionalPrimarySources);
+		if (additionalPrimarySources != null && additionalPrimarySources.size() > 0) {
+			Constants.BOOT_CLASSES.add(additionalPrimarySources.iterator().next());
+		}
 	}
 
 	/**
@@ -85,6 +104,7 @@ public class Application extends SpringApplication {
 		if (CONTEXT != null) {
 			exit(CONTEXT, new ExitCodeGenerator[] {});
 			CONTEXT = null;
+			Constants.BOOT_CLASSES.clear();
 		}
 	}
 }

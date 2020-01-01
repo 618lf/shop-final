@@ -78,18 +78,24 @@ public class MybatisAutoConfiguration {
 		this.configurationCustomizers = configurationCustomizersProvider.getIfAvailable();
 	}
 
-	@PostConstruct
-	public void checkConfigFileExists() {
-		if (this.properties.isCheckConfigLocation() && StringUtil3.isNotBlank(this.properties.getConfigLocation())) {
-			Resource resource = this.resourceLoader.getResource(this.properties.getConfigLocation());
-			Assert.state(resource.exists(), "Cannot find config location: " + resource
-					+ " (please add config file or check your Mybatis configuration)");
+	@Bean
+	public Dialect dbDialect() {
+		Database db = this.dbProperties.getDb();
+		if (db == Database.h2) {
+			return new H2Dialect();
+		} else if (db == Database.mysql) {
+			return new MySQLDialect();
+		} else if (db == Database.oracle) {
+			return new OracleDialect();
+		} else if (db == Database.sqlite) {
+			return new SqlLiteDialect();
 		}
+		return new MySQLDialect();
 	}
 
 	@Bean
 	@ConditionalOnMissingBean
-	public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
+	public SqlSessionFactory sqlSessionFactory(DataSource dataSource, Dialect dialect) throws Exception {
 		SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
 		factory.setDataSource(dataSource);
 		factory.setVfs(SpringBootVFS.class);
@@ -126,33 +132,19 @@ public class MybatisAutoConfiguration {
 		}
 
 		// 默认配置
-		this.defaultConfiguration(configuration);
+		this.defaultConfiguration(configuration, dialect);
 		return factory.getObject();
 	}
 
-	private void defaultConfiguration(Configuration configuration) {
+	private void defaultConfiguration(Configuration configuration, Dialect dialect) {
 
 		// 默认的拦截器
 		ExecutorInterceptor interceptor = new ExecutorInterceptor();
-		interceptor.setDialect(getDialect());
+		interceptor.setDialect(dialect);
 		configuration.addInterceptor(interceptor);
 
 		// 默认的别名
 		configuration.getTypeAliasRegistry().registerAlias("queryCondition", QueryCondition.class);
-	}
-
-	private Dialect getDialect() {
-		Database db = this.dbProperties.getDb();
-		if (db == Database.h2) {
-			return new H2Dialect();
-		} else if (db == Database.mysql) {
-			return new MySQLDialect();
-		} else if (db == Database.oracle) {
-			return new OracleDialect();
-		} else if (db == Database.sqlite) {
-			return new SqlLiteDialect();
-		}
-		return new MySQLDialect();
 	}
 
 	@Bean
@@ -163,6 +155,15 @@ public class MybatisAutoConfiguration {
 			return new SqlSessionTemplate(sqlSessionFactory, executorType);
 		} else {
 			return new SqlSessionTemplate(sqlSessionFactory);
+		}
+	}
+	
+	@PostConstruct
+	public void checkConfigFileExists() {
+		if (this.properties.isCheckConfigLocation() && StringUtil3.isNotBlank(this.properties.getConfigLocation())) {
+			Resource resource = this.resourceLoader.getResource(this.properties.getConfigLocation());
+			Assert.state(resource.exists(), "Cannot find config location: " + resource
+					+ " (please add config file or check your Mybatis configuration)");
 		}
 	}
 }

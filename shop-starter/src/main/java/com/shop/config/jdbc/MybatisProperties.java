@@ -179,7 +179,7 @@ public class MybatisProperties {
 		if (Constants.BOOT_CLASSES.size() != 0) {
 			String mapperLocations = StringUtil3.format("classpath*:%s/**/dao/*.Mapper.xml", StringUtil3
 					.substringBeforeLast(Constants.BOOT_CLASSES.get(0).getName(), ".").replaceAll("\\.", "/"));
-			this.mapperLocations = new String[] { mapperLocations };
+			this.mapperLocations = new String[] { "classpath*:com/tmt/**/dao/*.Mapper.xml", mapperLocations };
 			for (String mapperLocation : this.mapperLocations) {
 				try {
 					Resource[] mappers = resourceResolver.getResources(mapperLocation);
@@ -192,8 +192,8 @@ public class MybatisProperties {
 
 		// 默认添加一层配置
 		try {
-			resources.addAll(Arrays
-					.asList(resourceResolver.getResources("classpath*:com/swak/persistence/config/*.Mapper.xml")));
+			resources.addAll(Arrays.asList(
+					resourceResolver.getResources("classpath*:com/tmt/common/persistence/config/*.Mapper.xml")));
 		} catch (IOException e) {
 			// ignore
 		}
