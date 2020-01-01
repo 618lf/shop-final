@@ -24,6 +24,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 
+import com.shop.config.tomcat.NoSessionManager;
 import com.tmt.common.exception.PortUnUseableException;
 
 /**
@@ -106,25 +107,35 @@ public class ServletWebServerFactoryAutoConfiguration {
 
 		@Override
 		public void customize(TomcatServletWebServerFactory factory) {
+			
+			// tld查找目录
 			factory.getTldSkipPatterns().addAll(DEFAULT);
+			
+			// 错误页面
+			this.customizeErrorPage(factory);
+
+			// 适配端口
+			this.customizeAdaptablePort(factory);
+
+			// 设置基础的工作目录
+			this.customizeBaseWork(factory);
+			
+			// 自定义session管理器
+			this.customizeSession(factory);
+		}
+		
+		// 适配ErrorPage
+		private void customizeErrorPage(TomcatServletWebServerFactory factory) {
 			ErrorPage error401Page = new ErrorPage(HttpStatus.UNAUTHORIZED, "/WEB-INF/views/error/401.jsp");
 			ErrorPage error404Page = new ErrorPage(HttpStatus.NOT_FOUND, "/WEB-INF/views/error/404.jsp");
 			ErrorPage error500Page = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/WEB-INF/views/error/500.jsp");
 			factory.addErrorPages(error401Page);
 			factory.addErrorPages(error404Page);
 			factory.addErrorPages(error500Page);
-
-			// 适配端口
-			adaptablePort(factory);
-
-			// 设置基础的工作目录
-			this.baseWork(factory);
 		}
 
-		/**
-		 * 适配端口
-		 */
-		private void adaptablePort(TomcatServletWebServerFactory factory) {
+		// 适配端口
+		private void customizeAdaptablePort(TomcatServletWebServerFactory factory) {
 			int port = properties.getPort();
 			if (port == -1) {
 				int startPort = 80;
@@ -150,7 +161,7 @@ public class ServletWebServerFactoryAutoConfiguration {
 		}
 
 		// 基本的工作目录
-		private void baseWork(TomcatServletWebServerFactory factory) {
+		private void customizeBaseWork(TomcatServletWebServerFactory factory) {
 			File baseDirectory = this.properties.getTomcat().getBasedir();
 			if (baseDirectory != null) {
 				try {
@@ -159,8 +170,12 @@ public class ServletWebServerFactoryAutoConfiguration {
 				} catch (Exception e) {
 				}
 			}
-			 this.properties.getTomcat().setBasedir(baseDirectory);
+			this.properties.getTomcat().setBasedir(baseDirectory);
 			factory.setBaseDirectory(baseDirectory);
+		}
+
+		private void customizeSession(TomcatServletWebServerFactory factory) {
+			factory.addContextCustomizers((context) -> context.setManager(new NoSessionManager()));
 		}
 	}
 }

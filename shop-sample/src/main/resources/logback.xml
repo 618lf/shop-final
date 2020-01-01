@@ -4,8 +4,7 @@
 	<!-- 控制台 -->
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
-			<pattern>%d{HH:mm:ss.SSS}-%msg%n
-			</pattern>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>
 		</encoder>
 	</appender>
 	
@@ -42,7 +41,8 @@
 	</appender>
 	
     <!-- 默认是错误级别 -->
-	<root level="ERROR">
+	<root level="DEBUG">
+	    <appender-ref ref="ERROR"/>
 	    <appender-ref ref="STDOUT"/>
 	</root>
 	
