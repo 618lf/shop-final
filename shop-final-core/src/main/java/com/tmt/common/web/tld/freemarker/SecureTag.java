@@ -6,7 +6,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.tmt.common.security.subjct.Subject;
+import com.tmt.common.security.subject.Subject;
 import com.tmt.common.security.utils.SecurityUtils;
 
 import freemarker.core.Environment;

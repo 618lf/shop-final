@@ -6,7 +6,7 @@ import com.tmt.common.cache.Cache;
 import com.tmt.common.cache.CacheManager;
 import com.tmt.common.security.context.AuthorizationInfo;
 import com.tmt.common.security.principal.Principal;
-import com.tmt.common.security.subjct.Subject;
+import com.tmt.common.security.subject.Subject;
 
 /**
  * 提供缓存支持

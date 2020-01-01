@@ -2,7 +2,7 @@ package com.tmt.common.security.context;
 
 import java.util.concurrent.Callable;
 
-import com.tmt.common.security.subjct.Subject;
+import com.tmt.common.security.subject.Subject;
 
 /**
  * 简单的执行器

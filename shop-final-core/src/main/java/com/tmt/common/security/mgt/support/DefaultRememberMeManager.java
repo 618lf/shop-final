@@ -10,7 +10,7 @@ import com.tmt.common.security.cookie.Cookie;
 import com.tmt.common.security.cookie.SimpleCookie;
 import com.tmt.common.security.mgt.RememberMeManager;
 import com.tmt.common.security.principal.Principal;
-import com.tmt.common.security.subjct.Subject;
+import com.tmt.common.security.subject.Subject;
 import com.tmt.common.utils.Encodes;
 
 /**

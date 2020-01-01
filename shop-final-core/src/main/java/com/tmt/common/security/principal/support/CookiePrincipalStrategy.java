@@ -10,7 +10,7 @@ import com.tmt.common.security.cookie.SimpleCookie;
 import com.tmt.common.security.principal.PrincipalStrategy;
 import com.tmt.common.security.principal.Session;
 import com.tmt.common.security.principal.SessionRepository;
-import com.tmt.common.security.subjct.Subject;
+import com.tmt.common.security.subject.Subject;
 
 /**
  * 基于cookie的身份策略一般用在后台

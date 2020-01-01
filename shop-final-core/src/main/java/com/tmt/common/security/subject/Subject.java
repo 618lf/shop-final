@@ -1,4 +1,4 @@
-package com.tmt.common.security.subjct;
+package com.tmt.common.security.subject;
 
 import java.util.Set;
 import java.util.concurrent.Callable;

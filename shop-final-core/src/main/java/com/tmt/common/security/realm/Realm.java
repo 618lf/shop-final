@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.tmt.common.security.context.AuthorizationInfo;
 import com.tmt.common.security.exception.AuthenticationException;
 import com.tmt.common.security.principal.Principal;
-import com.tmt.common.security.subjct.Subject;
+import com.tmt.common.security.subject.Subject;
 
 /**
  * 域 -- 先这样子

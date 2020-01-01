@@ -16,8 +16,8 @@ import com.tmt.common.security.mgt.SecurityManager;
 import com.tmt.common.security.principal.Principal;
 import com.tmt.common.security.principal.PrincipalStrategy;
 import com.tmt.common.security.realm.Realm;
-import com.tmt.common.security.subjct.Subject;
-import com.tmt.common.security.subjct.support.DefaultSubject;
+import com.tmt.common.security.subject.Subject;
+import com.tmt.common.security.subject.support.DefaultSubject;
 import com.tmt.common.security.utils.StringUtils;
 import com.tmt.common.utils.WebUtils;
 

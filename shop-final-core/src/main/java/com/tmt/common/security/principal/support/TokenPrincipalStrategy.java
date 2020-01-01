@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.tmt.common.cache.redis.RedisUtils;
 import com.tmt.common.security.principal.Principal;
 import com.tmt.common.security.principal.PrincipalStrategy;
-import com.tmt.common.security.subjct.Subject;
+import com.tmt.common.security.subject.Subject;
 import com.tmt.common.security.utils.StringUtils;
 import com.tmt.common.security.utils.TokenUtils;
 import com.tmt.common.utils.Digests;

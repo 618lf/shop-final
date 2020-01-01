@@ -2,7 +2,7 @@ package com.tmt.common.security.utils;
 
 import com.tmt.common.security.context.ThreadContext;
 import com.tmt.common.security.mgt.SecurityManager;
-import com.tmt.common.security.subjct.Subject;
+import com.tmt.common.security.subject.Subject;
 
 /**
  * 主要是获取Subject

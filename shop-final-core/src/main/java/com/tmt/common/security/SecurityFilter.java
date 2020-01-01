@@ -17,7 +17,7 @@ import com.tmt.common.security.filter.OncePerRequestFilter;
 import com.tmt.common.security.mgt.FilterChainResolver;
 import com.tmt.common.security.mgt.SecurityManager;
 import com.tmt.common.security.principal.Principal;
-import com.tmt.common.security.subjct.Subject;
+import com.tmt.common.security.subject.Subject;
 import com.tmt.common.utils.DateUtil3;
 import com.tmt.common.utils.StringUtil3;
 import com.tmt.common.utils.WebUtils;

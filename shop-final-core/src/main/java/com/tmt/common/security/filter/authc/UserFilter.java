@@ -9,7 +9,7 @@ import com.tmt.common.config.Globals;
 import com.tmt.common.entity.Result;
 import com.tmt.common.exception.ErrorCode;
 import com.tmt.common.security.filter.AccessControllerFilter;
-import com.tmt.common.security.subjct.Subject;
+import com.tmt.common.security.subject.Subject;
 import com.tmt.common.security.utils.SecurityUtils;
 import com.tmt.common.utils.Encodes;
 import com.tmt.common.utils.StringUtil3;

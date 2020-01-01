@@ -1,7 +1,7 @@
 package com.tmt.common.web.security.session;
 
 import com.tmt.common.security.principal.Session;
-import com.tmt.common.security.subjct.Subject;
+import com.tmt.common.security.subject.Subject;
 import com.tmt.common.security.utils.SecurityUtils;
 
 /**

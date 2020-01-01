@@ -16,7 +16,7 @@ import com.tmt.common.security.context.ThreadContext;
 import com.tmt.common.security.exception.AuthenticationException;
 import com.tmt.common.security.principal.Principal;
 import com.tmt.common.security.realm.CachedRealm;
-import com.tmt.common.security.subjct.Subject;
+import com.tmt.common.security.subject.Subject;
 import com.tmt.common.security.utils.SecurityUtils;
 import com.tmt.common.security.utils.StringUtils;
 import com.tmt.common.utils.CacheUtils;

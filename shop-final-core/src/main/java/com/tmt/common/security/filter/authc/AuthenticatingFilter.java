@@ -8,7 +8,7 @@ import com.tmt.common.entity.Result;
 import com.tmt.common.exception.ErrorCode;
 import com.tmt.common.security.context.AuthenticationToken;
 import com.tmt.common.security.exception.AuthenticationException;
-import com.tmt.common.security.subjct.Subject;
+import com.tmt.common.security.subject.Subject;
 import com.tmt.common.security.utils.SecurityUtils;
 import com.tmt.common.security.utils.StringUtils;
 import com.tmt.common.utils.WebUtils;

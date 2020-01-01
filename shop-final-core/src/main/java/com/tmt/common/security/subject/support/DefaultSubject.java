@@ -1,4 +1,4 @@
-package com.tmt.common.security.subjct.support;
+package com.tmt.common.security.subject.support;
 
 import java.util.Set;
 import java.util.Stack;
@@ -11,7 +11,7 @@ import com.tmt.common.security.context.SubjectCallable;
 import com.tmt.common.security.exception.AuthenticationException;
 import com.tmt.common.security.principal.Principal;
 import com.tmt.common.security.principal.Session;
-import com.tmt.common.security.subjct.Subject;
+import com.tmt.common.security.subject.Subject;
 import com.tmt.common.security.utils.SecurityUtils;
 import com.tmt.common.utils.Sets;
 

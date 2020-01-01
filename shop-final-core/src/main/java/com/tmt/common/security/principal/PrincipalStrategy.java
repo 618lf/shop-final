@@ -3,7 +3,7 @@ package com.tmt.common.security.principal;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.tmt.common.security.subjct.Subject;
+import com.tmt.common.security.subject.Subject;
 /**
  * Session 的存储策略
  * @author lifeng

@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.tmt.common.security.exception.AuthenticationException;
 import com.tmt.common.security.principal.Principal;
-import com.tmt.common.security.subjct.Subject;
+import com.tmt.common.security.subject.Subject;
 
 /**
  * 总体的控制器

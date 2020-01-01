@@ -3,7 +3,7 @@ package com.tmt.common.security.filter.authz;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.tmt.common.security.subjct.Subject;
+import com.tmt.common.security.subject.Subject;
 import com.tmt.common.security.utils.SecurityUtils;
 
 public class PermissionsAuthorizationFilter extends AuthorizationFilter {
