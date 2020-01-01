@@ -48,11 +48,6 @@ public class SystemService implements SystemServiceFacade {
 		return userService.findUserHeadimgById(userId);
 	}
 
-	@Override
-	public String getUserWechatOpenId(User user, String appId) {
-		return userService.getUserWechatOpenId(user, appId);
-	}
-
 	/**
 	 * 所有的菜单(单独或通过用户组分配)
 	 */

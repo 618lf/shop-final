@@ -15,18 +15,16 @@ import com.tmt.common.persistence.BaseDao;
 import com.tmt.common.persistence.incrementer.IdGen;
 import com.tmt.common.persistence.incrementer.UUIdGenerator;
 import com.tmt.common.service.BaseService;
-import com.tmt.common.utils.DateUtil3;
 import com.tmt.common.utils.Lists;
 import com.tmt.common.utils.Maps;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
+import com.tmt.common.utils.time.DateUtils;
 import com.tmt.system.dao.GroupUserDao;
 import com.tmt.system.dao.RoleUserDao;
 import com.tmt.system.dao.UserAccountDao;
 import com.tmt.system.dao.UserDao;
 import com.tmt.system.dao.UserNoDao;
 import com.tmt.system.dao.UserSessionDao;
-import com.tmt.system.dao.UserUnionDao;
-import com.tmt.system.dao.UserWechatDao;
 import com.tmt.system.entity.GroupUser;
 import com.tmt.system.entity.RoleUser;
 import com.tmt.system.entity.UpdateData;
@@ -36,8 +34,6 @@ import com.tmt.system.entity.User.UserType;
 import com.tmt.system.entity.UserAccount;
 import com.tmt.system.entity.UserNo;
 import com.tmt.system.entity.UserSession;
-import com.tmt.system.entity.UserUnion;
-import com.tmt.system.entity.UserWechat;
 import com.tmt.update.UpdateServiceFacade;
 
 /**
@@ -61,11 +57,7 @@ public class UserService extends BaseService<User, Long> implements UserServiceF
 	@Autowired
 	private UserAccountDao accountDao;
 	@Autowired
-	private UserUnionDao unionDao;
-	@Autowired
 	private UserNoDao userNoDao;
-	@Autowired
-	private UserWechatDao userWechatDao;
 	@Autowired
 	private UserSessionDao userSessionDao;
 	@Autowired
@@ -86,11 +78,11 @@ public class UserService extends BaseService<User, Long> implements UserServiceF
 	@Transactional
 	public Long save(User user) {
 		if (IdGen.isInvalidId(user.getId())) {
-			if (StringUtil3.isBlank(user.getPassword())) {
+			if (StringUtils.isBlank(user.getPassword())) {
 				user.setPassword(UUIdGenerator.uuid());
 			}
 			user.setPassword(Globals.entryptPassword(user.getPassword()));
-			if (StringUtil3.isBlank(user.getNo())) {
+			if (StringUtils.isBlank(user.getNo())) {
 				user.setNo(this.createUserCode());
 			}
 			user.preUpdate();
@@ -109,12 +101,12 @@ public class UserService extends BaseService<User, Long> implements UserServiceF
 		}
 		// 用户权限
 		String roleIdStrs = user.getRoleIds();
-		if (StringUtil3.isNotBlank(roleIdStrs)) {
+		if (StringUtils.isNotBlank(roleIdStrs)) {
 			List<RoleUser> roleUsers = Lists.newArrayList();
 			String[] roleIds = roleIdStrs.split(",");
 			RoleUser roleUser = null;
 			for (String roleId : roleIds) {
-				if (StringUtil3.isNotEmpty(roleId)) {
+				if (StringUtils.isNotEmpty(roleId)) {
 					roleUser = new RoleUser();
 					roleUser.setRoleId(Long.parseLong(roleId));
 					roleUser.setUserId(user.getId());
@@ -125,12 +117,12 @@ public class UserService extends BaseService<User, Long> implements UserServiceF
 		}
 		// 用户组
 		String groupIdStrs = user.getGroupIds();
-		if (StringUtil3.isNotBlank(groupIdStrs)) {
+		if (StringUtils.isNotBlank(groupIdStrs)) {
 			List<GroupUser> userGroups = Lists.newArrayList();
 			String[] groupIds = groupIdStrs.split(",");
 			GroupUser userGroup = null;
 			for (String groupId : groupIds) {
-				if (StringUtil3.isNotEmpty(groupId)) {
+				if (StringUtils.isNotEmpty(groupId)) {
 					userGroup = new GroupUser();
 					userGroup.setGroupId(Long.parseLong(groupId));
 					userGroup.setUserId(user.getId());
@@ -168,12 +160,12 @@ public class UserService extends BaseService<User, Long> implements UserServiceF
 		this.groupUserDao.batchDelete(userGroups);
 		// 用户组
 		String groupIdStrs = user.getGroupIds();
-		if (StringUtil3.isNotBlank(groupIdStrs)) {
+		if (StringUtils.isNotBlank(groupIdStrs)) {
 			userGroups = Lists.newArrayList();
 			String[] groupIds = groupIdStrs.split(",");
 			GroupUser userGroup = null;
 			for (String groupId : groupIds) {
-				if (StringUtil3.isNotEmpty(groupId)) {
+				if (StringUtils.isNotEmpty(groupId)) {
 					userGroup = new GroupUser();
 					userGroup.setGroupId(Long.parseLong(groupId));
 					userGroup.setUserId(user.getId());
@@ -250,7 +242,7 @@ public class UserService extends BaseService<User, Long> implements UserServiceF
 	@Override
 	@Transactional
 	public void updatePassWord(User user) {
-		if (StringUtil3.isNotBlank(user.getPassword())) {
+		if (StringUtils.isNotBlank(user.getPassword())) {
 			user.setPassword(Globals.entryptPassword(user.getPassword()));
 		}
 		this.userDao.update("updatePassWord", user);
@@ -264,7 +256,7 @@ public class UserService extends BaseService<User, Long> implements UserServiceF
 
 	@Transactional
 	public void updatePassWordAndStatus(User user) {
-		if (StringUtil3.isNotBlank(user.getPassword())) {
+		if (StringUtils.isNotBlank(user.getPassword())) {
 			user.setPassword(Globals.entryptPassword(user.getPassword()));
 		}
 		this.userDao.update("updatePassWordAndStatus", user);
@@ -279,7 +271,7 @@ public class UserService extends BaseService<User, Long> implements UserServiceF
 	@Transactional
 	public void memberUpdatePassword(User member) {
 		this.updatePassWord(member);
-		if (StringUtil3.isNotBlank(member.getSecretKey())) {
+		if (StringUtils.isNotBlank(member.getSecretKey())) {
 			member.setSecretKey(null);
 			member.setExpiresDate(null);
 			this.memberForgetPassword(member);
@@ -342,7 +334,7 @@ public class UserService extends BaseService<User, Long> implements UserServiceF
 		UserAccount _account = this.accountDao.get(email);
 		if (_account != null) {
 			User user = this.queryForObject("findForgetPasswordUser", _account.getUserId());
-			if (user != null && StringUtil3.isNotBlank(user.getSecretKey())) {
+			if (user != null && StringUtils.isNotBlank(user.getSecretKey())) {
 				return user;
 			}
 		}
@@ -400,7 +392,7 @@ public class UserService extends BaseService<User, Long> implements UserServiceF
 			Map<String, Object> map = Maps.newHashMap();
 			map.put("id", "O_" + e.getId());
 			map.put("pId", "O_" + e.getParent());
-			map.put("name", StringUtil3.isBlank(e.getTreeName()) ? "匿名" : e.getTreeName());
+			map.put("name", StringUtils.isBlank(e.getTreeName()) ? "匿名" : e.getTreeName());
 			map.put("chkDisabled", Boolean.TRUE);
 			map.put("selectAbled", Boolean.FALSE);
 			int iCount = this.countByCondition("officeSelectCheck", e.getId());
@@ -437,18 +429,7 @@ public class UserService extends BaseService<User, Long> implements UserServiceF
 	 */
 	private String createUserCode() {
 		String nextSeq = String.valueOf(numberGenerator.generateNumber(Constants.GLOBAL_MEMBER_CODE));
-		return StringUtil3.leftPad(nextSeq, 8, "0");
-	}
-
-	/**
-	 * 获得用户对应公众号的OPENID
-	 * 
-	 * @param appId
-	 * @return
-	 */
-	public String getUserWechatOpenId(User user, String appId) {
-		UserWechat wechat = this.userWechatDao.get(user, appId);
-		return wechat != null ? wechat.getOpenId() : null;
+		return StringUtils.leftPad(nextSeq, 8, "0");
 	}
 
 	/**
@@ -460,17 +441,6 @@ public class UserService extends BaseService<User, Long> implements UserServiceF
 	@Override
 	public UserAccount findByAccount(String account) {
 		return accountDao.get(account);
-	}
-
-	/**
-	 * 得到用户统一帐号
-	 * 
-	 * @param account
-	 * @return
-	 */
-	@Override
-	public UserUnion findByUnion(String union) {
-		return unionDao.get(union);
 	}
 
 	/**
@@ -504,7 +474,7 @@ public class UserService extends BaseService<User, Long> implements UserServiceF
 		}
 
 		// 用户基本信息
-		if (StringUtil3.isNotBlank(member.getPassword())) {
+		if (StringUtils.isNotBlank(member.getPassword())) {
 			member.setPassword(Globals.entryptPassword(member.getPassword()));
 		}
 		member.setStatus(UserStatus.NARMAL.getValue());
@@ -541,20 +511,6 @@ public class UserService extends BaseService<User, Long> implements UserServiceF
 	private void saveAccount(UserAccount account) {
 		// 添加账户信息
 		this.accountDao.insert(account);
-
-		// 如果有统一用户信息
-		UserUnion union = account.getUnion();
-		if (union != null) {
-			union.setUserId(account.getUserId());
-			unionDao.insert(union);
-		}
-
-		// 微信用户，添加
-		UserWechat wechat = account.getWechat();
-		if (wechat != null) {
-			wechat.setUserId(account.getUserId());
-			this.userWechatDao.save(wechat);
-		}
 	}
 
 	/**
@@ -585,16 +541,16 @@ public class UserService extends BaseService<User, Long> implements UserServiceF
 		// 之前
 		String oldSessionId = null;
 
-		Date now = DateUtil3.getTimeStampNow();
+		Date now = DateUtils.getTimeStampNow();
 
 		// 失效之前的
 		UserSession _old = this.userSessionDao.get(user.getId());
-		if (_old != null && StringUtil3.isNotBlank(_old.getSessionId())) {
+		if (_old != null && StringUtils.isNotBlank(_old.getSessionId())) {
 			oldSessionId = _old.getSessionId();
 		}
 
 		// 更新session信息
-		if (StringUtil3.isNotBlank(sessionId)) {
+		if (StringUtils.isNotBlank(sessionId)) {
 			UserSession session = new UserSession();
 			session.setUserId(user.getId());
 			session.setSessionId(sessionId);
@@ -616,7 +572,7 @@ public class UserService extends BaseService<User, Long> implements UserServiceF
 	private void _update(User user, byte module) {
 		UpdateData updateData = new UpdateData();
 		updateData.setId(user.getId());
-		updateData.setMsg(StringUtil3.abbr(user.getName(), 30));
+		updateData.setMsg(StringUtils.abbreviate(user.getName(), 30));
 		updateData.setModule(module);
 		updateData.setOpt((byte) 0);
 		updateService.save(updateData);

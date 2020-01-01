@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 import org.apache.poi.util.Beta;
 
 import com.tmt.common.utils.Preconditions;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * 分隔处理器
@@ -322,7 +322,7 @@ public final class Splitter {
 
 			@Override
 			public String toString() {
-				return StringUtil3.join(this, ", ");
+				return StringUtils.join(this, ", ");
 			}
 		};
 	}

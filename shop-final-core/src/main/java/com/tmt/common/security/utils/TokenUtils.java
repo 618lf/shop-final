@@ -5,6 +5,7 @@ import com.tmt.common.jwt.JWTVerifier;
 import com.tmt.common.jwt.algorithms.Algorithm;
 import com.tmt.common.security.principal.Principal;
 import com.tmt.common.utils.JsonMapper;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * 创建token

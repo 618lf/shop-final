@@ -11,7 +11,7 @@ import com.tmt.common.exception.BaseRuntimeException;
 import com.tmt.common.persistence.incrementer.IdGen;
 import com.tmt.common.utils.HtmlUtils;
 import com.tmt.common.utils.Lists;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.system.entity.Area;
 
 /**
@@ -104,10 +104,10 @@ public class AreaParse {
 	 * @return
 	 */
 	public Long parseId(String code) {
-		if (StringUtil3.contains(code, "/")) {
-			code = StringUtil3.substringAfterLast(code, "/");
+		if (StringUtils.contains(code, "/")) {
+			code = StringUtils.substringAfterLast(code, "/");
 		}
-		code = StringUtil3.substringBefore(code, ".html");
+		code = StringUtils.substringBefore(code, ".html");
 		return Long.parseLong(code);
 	}
 }

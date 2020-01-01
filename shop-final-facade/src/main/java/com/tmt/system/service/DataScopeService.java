@@ -10,7 +10,7 @@ import com.tmt.common.persistence.QueryCondition;
 import com.tmt.common.persistence.QueryCondition.Criteria;
 import com.tmt.common.service.BaseService;
 import com.tmt.common.utils.Lists;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.system.entity.Role;
 import com.tmt.system.entity.User;
 import com.tmt.system.entity.Role.DataScope;
@@ -80,7 +80,7 @@ public abstract class DataScopeService<T, PK> extends BaseService<T, PK>{
 	 * @return
 	 */
 	protected QueryCondition getDataScopeCondition(User user, String permissions, String tablePre, QueryCondition qc) {
-		String _tablePre = StringUtil3.isNotBlank(tablePre)?(tablePre + "."):"";
+		String _tablePre = StringUtils.isNotBlank(tablePre)?(tablePre + "."):"";
 		//需要考虑缓存的支持  -- 需要缓存支持
 		List<Role> roles = systemService.findByMenuPermission(user, permissions);
 		Role one = (roles != null && !roles.isEmpty())?roles.get(0):null;

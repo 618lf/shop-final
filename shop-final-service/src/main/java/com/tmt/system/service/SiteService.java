@@ -10,7 +10,7 @@ import com.tmt.common.persistence.BaseDao;
 import com.tmt.common.persistence.incrementer.IdGen;
 import com.tmt.common.service.BaseService;
 import com.tmt.common.utils.CacheUtils;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.system.dao.SiteDao;
 import com.tmt.system.entity.Site;
 
@@ -55,7 +55,7 @@ public class SiteService extends BaseService<Site, Long> implements SiteServiceF
 	@Transactional
 	public void emailSave(Site site) {
 		Site _site = this.getSite();
-		if (!StringUtil3.isNotBlank(site.getSmtpPassword())) {
+		if (!StringUtils.isNotBlank(site.getSmtpPassword())) {
 			site.setSmtpPassword(_site.getSmtpPassword());
 		}
 		this.update("updateEmail", site);

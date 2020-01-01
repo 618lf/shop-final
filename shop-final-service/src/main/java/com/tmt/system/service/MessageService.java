@@ -11,15 +11,13 @@ import com.tmt.common.entity.BaseEntity;
 import com.tmt.common.persistence.BaseDao;
 import com.tmt.common.persistence.incrementer.IdGen;
 import com.tmt.common.service.BaseService;
-import com.tmt.common.utils.DateUtil3;
 import com.tmt.common.utils.Lists;
 import com.tmt.common.utils.Maps;
+import com.tmt.common.utils.time.DateUtils;
 import com.tmt.system.dao.MessageDao;
 import com.tmt.system.entity.Message;
 import com.tmt.system.entity.Todo;
 import com.tmt.system.entity.User;
-import com.tmt.system.service.MessageServiceFacade;
-import com.tmt.system.service.TodoServiceFacade;
 
 @Service
 public class MessageService extends BaseService<Message, Long> implements MessageServiceFacade, TodoServiceFacade {
@@ -83,7 +81,7 @@ public class MessageService extends BaseService<Message, Long> implements Messag
 	@Transactional
 	public void read(Message message) {
 		message.setStatus(BaseEntity.YES);
-		message.setViewTime(DateUtil3.getTimeStampNow());
+		message.setViewTime(DateUtils.getTimeStampNow());
 		this.update("UpdateToRead", message);
 	}
 

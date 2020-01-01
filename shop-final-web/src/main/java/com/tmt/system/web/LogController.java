@@ -10,7 +10,7 @@ import com.tmt.common.persistence.Page;
 import com.tmt.common.persistence.PageParameters;
 import com.tmt.common.persistence.QueryCondition;
 import com.tmt.common.persistence.QueryCondition.Criteria;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.common.web.BaseController;
 import com.tmt.system.entity.Log;
 import com.tmt.system.service.LogServiceFacade;
@@ -51,19 +51,19 @@ public class LogController extends BaseController {
 		PageParameters param = page.getParam();
 		qc.setOrderByClause(" CREATE_DATE DESC ");
 		Criteria c = qc.getCriteria();
-		if (StringUtil3.isNotBlank(log.getCreateName())) {
+		if (StringUtils.isNotBlank(log.getCreateName())) {
 			c.andEqualTo("CREATE_ID", log.getCreateName());
 		}
 		if (log.getType() != null) {
 			c.andEqualTo("TYPE", log.getType());
 		}
-		if (StringUtil3.isNotBlank(log.getRemoteAddr())) {
+		if (StringUtils.isNotBlank(log.getRemoteAddr())) {
 			c.andEqualTo("REMOTE_ADDR", log.getRemoteAddr());
 		}
-		if (StringUtil3.isNotBlank(log.getRequestUri())) {
+		if (StringUtils.isNotBlank(log.getRequestUri())) {
 			c.andEqualTo("REQUEST_URI", log.getRequestUri());
 		}
-		if (StringUtil3.isNotBlank(log.getUserAgent())) {
+		if (StringUtils.isNotBlank(log.getUserAgent())) {
 			c.andEqualTo("USER_AGENT", log.getUserAgent());
 		}
 		page = this.logService.queryForPage(qc, param);

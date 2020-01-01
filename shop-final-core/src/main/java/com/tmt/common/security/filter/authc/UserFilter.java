@@ -5,25 +5,26 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.tmt.common.codec.Encodes;
 import com.tmt.common.config.Globals;
 import com.tmt.common.entity.Result;
 import com.tmt.common.exception.ErrorCode;
 import com.tmt.common.security.filter.AccessControllerFilter;
 import com.tmt.common.security.subject.Subject;
 import com.tmt.common.security.utils.SecurityUtils;
-import com.tmt.common.utils.Encodes;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.common.utils.WebUtils;
 
 /**
  * 用户访问权限, 有可能需要访问用户状态
+ * 
  * @author lifeng
  */
 public class UserFilter extends AccessControllerFilter {
 
 	@Override
-	protected boolean isAccessAllowed(HttpServletRequest request,
-			HttpServletResponse response, Object mappedValue) throws Exception {
+	protected boolean isAccessAllowed(HttpServletRequest request, HttpServletResponse response, Object mappedValue)
+			throws Exception {
 		Subject subject = SecurityUtils.getSubject();
 		return subject.getPrincipal() != null;
 	}
@@ -36,7 +37,7 @@ public class UserFilter extends AccessControllerFilter {
 		Subject subject = SecurityUtils.getSubject();
 		if (WebUtils.isAjax(request)) {
 			ErrorCode code = ErrorCode.NO_USER;
-			if (StringUtil3.isNotBlank(subject.getReason())) {
+			if (StringUtils.isNotBlank(subject.getReason())) {
 				code = code.clone();
 				code.setReason(subject.getReason());
 			}
@@ -55,9 +56,9 @@ public class UserFilter extends AccessControllerFilter {
 			throws IOException {
 		Subject subject = SecurityUtils.getSubject();
 		String loginUrl = getLoginUrl();
-		if (StringUtil3.isNotBlank(subject.getReason())) {
-			String reason = Encodes.encodeUrlSafeBase64(subject.getReason().getBytes(Globals.DEFAULT_ENCODING));
-			loginUrl = StringUtil3.format("%s?reason=%s", loginUrl, reason);
+		if (StringUtils.isNotBlank(subject.getReason())) {
+			String reason = Encodes.encodeBase64URLSafeString(subject.getReason().getBytes(Globals.DEFAULT_ENCODING));
+			loginUrl = StringUtils.format("%s?reason=%s", loginUrl, reason);
 		}
 		WebUtils.issueRedirect(request, response, loginUrl);
 	}

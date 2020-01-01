@@ -13,7 +13,7 @@ import com.tmt.common.persistence.PageParameters;
 import com.tmt.common.persistence.QueryCondition;
 import com.tmt.common.persistence.QueryCondition.Criteria;
 import com.tmt.common.utils.Lists;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.common.web.BaseController;
 import com.tmt.system.entity.Message;
 import com.tmt.system.entity.Message.MessageBox;
@@ -44,7 +44,7 @@ public class BaseMessageController extends BaseController {
 		QueryCondition qc = new QueryCondition();
 		PageParameters param = page.getParam();
 		Criteria c = qc.getCriteria();
-		if (StringUtil3.isNotBlank(message.getTitle())) {
+		if (StringUtils.isNotBlank(message.getTitle())) {
 			c.andLike("TITLE", message.getTitle());
 		}
 		c.andEqualTo("RECEIVER_USER_ID", UserUtils.getUser().getId());
@@ -68,7 +68,7 @@ public class BaseMessageController extends BaseController {
 		QueryCondition qc = new QueryCondition();
 		PageParameters param = page.getParam();
 		Criteria c = qc.getCriteria();
-		if (StringUtil3.isNotBlank(message.getTitle())) {
+		if (StringUtils.isNotBlank(message.getTitle())) {
 			c.andLike("TITLE", message.getTitle());
 		}
 		c.andEqualTo("SEND_USER_ID", UserUtils.getUser().getId());
@@ -92,7 +92,7 @@ public class BaseMessageController extends BaseController {
 		QueryCondition qc = new QueryCondition();
 		PageParameters param = page.getParam();
 		Criteria c = qc.getCriteria();
-		if (StringUtil3.isNotBlank(message.getTitle())) {
+		if (StringUtils.isNotBlank(message.getTitle())) {
 			c.andLike("TITLE", message.getTitle());
 		}
 		c.andEqualTo("SEND_USER_ID", UserUtils.getUser().getId());
@@ -120,7 +120,7 @@ public class BaseMessageController extends BaseController {
 				.append(" OR RECEIVER_USER_ID = '").append(UserUtils.getUser().getId()).append("')").toString());
 		c.andEqualTo("OWN", UserUtils.getUser().getId());
 		c.andEqualTo("MSG_BOX", MessageBox.TRASH);
-		if (StringUtil3.isNotBlank(message.getTitle())) {
+		if (StringUtils.isNotBlank(message.getTitle())) {
 			c.andLike("TITLE", message.getTitle());
 		}
 		qc.setOrderByClause("SEND_TIME DESC");
@@ -192,7 +192,7 @@ public class BaseMessageController extends BaseController {
 		if (messages != null && !messages.isEmpty()) {
 			for (Message message : messages) {
 				String content = message.getContent();
-				message.setContent(StringUtil3.abbrHtml(content, 200));
+				message.setContent(StringUtils.abbrHtml(content, 200));
 			}
 		}
 		return messages;

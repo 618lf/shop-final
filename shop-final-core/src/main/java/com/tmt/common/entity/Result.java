@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.tmt.common.exception.ErrorCode;
 import com.tmt.common.utils.JsonMapper;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * 前台和公用部分用户替代 AjaxResult
@@ -100,7 +100,7 @@ public class Result implements Serializable{
 	 * @return
 	 */
 	public static Result error(String template, Object...msg){
-		return error(StringUtil3.format(template, msg));
+		return error(StringUtils.format(template, msg));
 	}
 	
 	/**

@@ -110,7 +110,7 @@ public class WebUtils extends org.springframework.web.util.WebUtils{
      * @return
      */
     public static Boolean isRedirect(String url){
-    	return StringUtil3.startsWith(url, REDIRECT_URL_PREFIX);
+    	return StringUtils.startsWith(url, REDIRECT_URL_PREFIX);
     }
     
     
@@ -120,7 +120,7 @@ public class WebUtils extends org.springframework.web.util.WebUtils{
      * @return
      */
     public static Boolean isforward(String url){
-    	return StringUtil3.startsWith(url, FORWARD_URL_PREFIX);
+    	return StringUtils.startsWith(url, FORWARD_URL_PREFIX);
     }
     
 	/**
@@ -164,7 +164,7 @@ public class WebUtils extends org.springframework.web.util.WebUtils{
 	public static Boolean isWeixinPc(HttpServletRequest request) {
 		if (request == null) {request = ContextHolderUtils.getRequest();}
 		String userAgent = request.getHeader("User-Agent");
-		if (StringUtil3.isNotBlank(userAgent) && userAgent.indexOf("MicroMessenger") != -1
+		if (StringUtils.isNotBlank(userAgent) && userAgent.indexOf("MicroMessenger") != -1
             && userAgent.indexOf("WindowsWechat") != -1) {
 		    return Boolean.TRUE;
 		}
@@ -188,7 +188,7 @@ public class WebUtils extends org.springframework.web.util.WebUtils{
 	 * @return
 	 */
 	public static Boolean isWeixinByAgent(String userAgent) {
-		if (StringUtil3.isNotBlank(userAgent) && userAgent.indexOf("MicroMessenger") != -1) {
+		if (StringUtils.isNotBlank(userAgent) && userAgent.indexOf("MicroMessenger") != -1) {
 			return Boolean.TRUE;
 		}
 		return Boolean.FALSE;
@@ -211,7 +211,7 @@ public class WebUtils extends org.springframework.web.util.WebUtils{
 	 * @return
 	 */
 	public static Boolean isQQ(String userAgent) {
-		if( StringUtil3.isNotBlank(userAgent) && (userAgent.indexOf("QQ/") != -1 || userAgent.indexOf("QQ-") != -1) ) {
+		if( StringUtils.isNotBlank(userAgent) && (userAgent.indexOf("QQ/") != -1 || userAgent.indexOf("QQ-") != -1) ) {
 			return Boolean.TRUE;
 		}
 		return Boolean.FALSE;
@@ -306,11 +306,11 @@ public class WebUtils extends org.springframework.web.util.WebUtils{
 			request = ContextHolderUtils.getRequest();
 		}
 		String remoteAddr = request.getHeader("X-Real-IP");
-        if (StringUtil3.isBlank(remoteAddr)) {
+        if (StringUtils.isBlank(remoteAddr)) {
         	remoteAddr = request.getHeader("X-Forwarded-For");
-        }else if (StringUtil3.isBlank(remoteAddr)) {
+        }else if (StringUtils.isBlank(remoteAddr)) {
         	remoteAddr = request.getHeader("Proxy-Client-IP");
-        }else if (StringUtil3.isBlank(remoteAddr)) {
+        }else if (StringUtils.isBlank(remoteAddr)) {
         	remoteAddr = request.getHeader("WL-Proxy-Client-IP");
         }
         return remoteAddr != null ? remoteAddr : request.getRemoteAddr();
@@ -354,7 +354,7 @@ public class WebUtils extends org.springframework.web.util.WebUtils{
 	 */
 	public static String getCleanParam(ServletRequest request, String paramName) {
 		request = request == null?WebUtils.getRequest():request;
-		return StringUtil3.trimToNull(request.getParameter(paramName));
+		return StringUtils.trimToNull(request.getParameter(paramName));
 	}
 	
 	/**
@@ -413,8 +413,8 @@ public class WebUtils extends org.springframework.web.util.WebUtils{
 		Map<String,String[]> params = Maps.newOrderMap();
 		for (Object param : request.getParameterMap().keySet()){
 			 String key = String.valueOf(param);
-			 if(key != null && StringUtil3.startsWith(key, itemsParam)) {
-				 params.put(StringUtil3.substringAfter(key, itemsParam), request.getParameterValues(key));
+			 if(key != null && StringUtils.startsWith(key, itemsParam)) {
+				 params.put(StringUtils.substringAfter(key, itemsParam), request.getParameterValues(key));
 			 }
 		}
 		List<Map<String,String>> relas = Lists.newArrayList();
@@ -577,8 +577,8 @@ public class WebUtils extends org.springframework.web.util.WebUtils{
      */
     public static String getSafeParameter(String name) {
     	String value = WebUtils.getCleanParam(name);
-    	if (StringUtil3.isNotBlank(value)) {
-    	    return StringUtil3.removeScript(value);
+    	if (StringUtils.isNotBlank(value)) {
+    	    return StringUtils.removeScript(value);
     	}
     	return value;
     }
@@ -595,7 +595,7 @@ public class WebUtils extends org.springframework.web.util.WebUtils{
 		while (localIterator.hasNext()){
 			String[] arrayOfString = localIterator.next();
 			for(int i = 0; i < arrayOfString.length; i++) {
-				arrayOfString[i] = StringUtil3.removeScript(arrayOfString[i]);
+				arrayOfString[i] = StringUtils.removeScript(arrayOfString[i]);
 			}
 		}
 		return request.getParameterMap();
@@ -613,7 +613,7 @@ public class WebUtils extends org.springframework.web.util.WebUtils{
 			return null;
 		}
 		for(int i = 0; i < values.length; i++) {
-			values[i] = StringUtil3.removeScript(values[i]);
+			values[i] = StringUtils.removeScript(values[i]);
 		}
 		return values;
 	}
@@ -672,7 +672,7 @@ public class WebUtils extends org.springframework.web.util.WebUtils{
 	 * @param requestUrl
 	 */
 	public static void savedRequestUrl(HttpServletResponse response, String requestUrl) {
-		if (StringUtil3.isNotBlank(requestUrl)) {
+		if (StringUtils.isNotBlank(requestUrl)) {
 	        SavedRequestEx savedRequest = new SavedRequestEx(requestUrl);
 	        CookieProvider.setAttribute(null, response, SAVED_REQUEST_KEY, savedRequest);
 		}
@@ -716,7 +716,7 @@ public class WebUtils extends org.springframework.web.util.WebUtils{
      * @return
      */
     public static String preAppendScheme(String scheme, String url) {
-    	if (StringUtil3.startsWith(url, "http") || StringUtil3.startsWith(url, "https")) {
+    	if (StringUtils.startsWith(url, "http") || StringUtils.startsWith(url, "https")) {
     		return url;
     	}
     	return new StringBuilder(scheme).append(url).toString();
@@ -730,9 +730,9 @@ public class WebUtils extends org.springframework.web.util.WebUtils{
     public static String getPathWithinApplication(HttpServletRequest request) {
         String contextPath = getContextPath(request);
         String requestUri = getRequestUri(request);
-        if (StringUtil3.startsWithIgnoreCase(requestUri, contextPath)) {
+        if (StringUtils.startsWithIgnoreCase(requestUri, contextPath)) {
             String path = requestUri.substring(contextPath.length());
-            return (StringUtil3.isNotBlank(path) ? path : "/");
+            return (StringUtils.isNotBlank(path) ? path : "/");
         } else {
             return requestUri;
         }

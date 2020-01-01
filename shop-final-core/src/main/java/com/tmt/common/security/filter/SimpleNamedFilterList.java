@@ -9,7 +9,7 @@ import java.util.ListIterator;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 
 public class SimpleNamedFilterList implements NamedFilterList {
 
@@ -30,7 +30,7 @@ public class SimpleNamedFilterList implements NamedFilterList {
 	}
 
 	protected void setName(String name) {
-		if (!StringUtil3.isNotBlank(name)) {
+		if (!StringUtils.isNotBlank(name)) {
 			throw new IllegalArgumentException(
 					"Cannot specify a null or empty name.");
 		}

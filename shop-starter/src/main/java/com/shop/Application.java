@@ -12,7 +12,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import com.tmt.Constants;
 import com.tmt.OS;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * 
@@ -94,7 +94,7 @@ public class Application extends SpringApplication {
 		if (properties.getAddress() == null || !"127.0.0.1".equals(properties.getAddress().getHostAddress())) {
 			hostName = OS.ip();
 		}
-		return StringUtil3.format(address.toString(), hostName);
+		return StringUtils.format(address.toString(), hostName);
 	}
 
 	/**

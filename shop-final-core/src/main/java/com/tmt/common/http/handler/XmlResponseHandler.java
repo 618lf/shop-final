@@ -9,7 +9,7 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.util.EntityUtils;
 
 import com.tmt.common.utils.JaxbMapper;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * XML 处理
@@ -45,7 +45,7 @@ public class XmlResponseHandler{
                     String str = EntityUtils.toString(entity);
             		// encoding == null 则不编码
                     String xml = encoding == null?str:(new String(str.getBytes("iso-8859-1"), encoding));
-                    return StringUtil3.isNotBlank(str)?JaxbMapper.fromXml(xml, clazz):null;
+                    return StringUtils.isNotBlank(str)?JaxbMapper.fromXml(xml, clazz):null;
                 } else {
                     throw new ClientProtocolException("Unexpected response status: " + status);
                 }

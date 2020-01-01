@@ -8,7 +8,7 @@ import java.util.Comparator;
 
 import org.apache.commons.io.FileUtils;
 
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * 本地的存储服务
@@ -73,7 +73,7 @@ public class LocalStorager implements Storager{
 		} catch (IOException ioe) {
 			return null;
 		}
-		return new StringBuilder(StringUtil3.remove(file.getAbsolutePath(), storagePath)).toString();
+		return new StringBuilder(StringUtils.remove(file.getAbsolutePath(), storagePath)).toString();
 	}
 	
 	/**
@@ -94,8 +94,8 @@ public class LocalStorager implements Storager{
 		} catch (IOException ioe) {
 			return null;
 		}
-		String url = new StringBuilder(StringUtil3.remove(file.getAbsolutePath(), storagePath)).toString();
-		return StringUtil3.replace(url, File.separator, "/");
+		String url = new StringBuilder(StringUtils.remove(file.getAbsolutePath(), storagePath)).toString();
+		return StringUtils.replace(url, File.separator, "/");
 	}
 
 	/**
@@ -104,7 +104,7 @@ public class LocalStorager implements Storager{
 	@Override
 	public int delete(String group, String fileName) {
 		String realFileName = fileName;
-		if (StringUtil3.isNotBlank(realFileName)) {
+		if (StringUtils.isNotBlank(realFileName)) {
 			realFileName = new StringBuilder(storagePath).append(realFileName).toString();
 		}
 		File file = new File(realFileName);
@@ -127,7 +127,7 @@ public class LocalStorager implements Storager{
 	@Override
 	public InputStream download(String fileName) {
 		String realFileName = fileName;
-		if (StringUtil3.isNotBlank(realFileName)) {
+		if (StringUtils.isNotBlank(realFileName)) {
 			realFileName = new StringBuilder(storagePath).append(realFileName).toString();
 		}
 		File file = new File(realFileName);

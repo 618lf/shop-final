@@ -7,7 +7,7 @@ import com.tmt.common.persistence.incrementer.IdGen;
 import com.tmt.common.utils.CacheUtils;
 import com.tmt.common.utils.ContextHolderUtils;
 import com.tmt.common.utils.CookieUtils;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * cookie cache
@@ -38,7 +38,7 @@ public class CookieProvider {
 	public static void setAttribute(HttpServletRequest request, HttpServletResponse response, String key, Object value) {
 		request = request==null?ContextHolderUtils.getRequest():request;
 		String validateCodeKey = CookieUtils.getCookie(request, key);
-		if (StringUtil3.isBlank(validateCodeKey) ) {
+		if (StringUtils.isBlank(validateCodeKey) ) {
 			validateCodeKey = IdGen.stringKey();
 			CookieUtils.setCookie(response, key, validateCodeKey, -1);
 		}
@@ -55,7 +55,7 @@ public class CookieProvider {
 	public static <T> T getAttribute(HttpServletRequest request, String key) {
 		try{
 			String _key = CookieUtils.getCookie(request, key);
-			if( StringUtil3.isNotBlank(_key)) {
+			if( StringUtils.isNotBlank(_key)) {
 				Object obj =  CacheUtils.getSessCache().get(_key);
 				return (T)(obj);
 			}
@@ -83,7 +83,7 @@ public class CookieProvider {
 	 */
 	public static void removeAttribute(HttpServletRequest request, HttpServletResponse response, String key) {
 		String _key = CookieUtils.getCookie(request, key);
-		if( StringUtil3.isNotBlank(_key)) {
+		if( StringUtils.isNotBlank(_key)) {
 			CookieUtils.remove(ContextHolderUtils.getRequest(), response, key);
 			CacheUtils.getSessCache().delete(_key);
 		}

@@ -15,7 +15,7 @@ import com.shop.booter.AppBooter;
 import com.shop.starter.ApplicationProperties;
 import com.tmt.common.config.Globals;
 import com.tmt.common.persistence.incrementer.IdGen;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.common.utils.XSpringContextHolder;
 import com.tmt.common.utils.serializer.JavaSerializer;
 import com.tmt.common.utils.serializer.KryoPoolSerializer;
@@ -91,7 +91,7 @@ public class ApplicationAutoConfiguration {
 
 	// 基本的工作目录
 	private File tempsDiv(String temp) {
-		if (StringUtil3.isNotBlank(temp)) {
+		if (StringUtils.isNotBlank(temp)) {
 			try {
 				Resource resource = resourceLoader.getResource(temp);
 				return resource.getFile().getAbsoluteFile();

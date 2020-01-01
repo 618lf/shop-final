@@ -12,7 +12,7 @@ import com.tmt.common.persistence.Page;
 import com.tmt.common.persistence.PageParameters;
 import com.tmt.common.service.BaseService;
 import com.tmt.common.utils.Maps;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.gen.dao.TableColumnDao;
 import com.tmt.gen.entity.Table;
 import com.tmt.gen.entity.TableColumn;
@@ -46,7 +46,7 @@ public class TableColumnService extends BaseService<TableColumn, Long>{
 		List<TableColumn> columns = this.queryForList("findDbTableColumns", params);
 		for(TableColumn column: columns) {
 			column.setIsNull(column.getIsDbNull());
-			column.setJavaField(StringUtil3.convertColumn2Property(column.getName()));
+			column.setJavaField(StringUtils.convertColumn2Property(column.getName()));
 			//设置java类型和jdbc类型
 			GenUtils.convertDbType2JavaTypes(column);
 			//设置默认的显示类型和校验类型

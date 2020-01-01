@@ -13,7 +13,7 @@ import com.tmt.common.entity.BaseEntity;
 import com.tmt.common.entity.IdEntity;
 import com.tmt.common.exception.StaleObjectStateException;
 import com.tmt.common.utils.Lists;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * 数据库操作支持类
@@ -58,7 +58,7 @@ public class BaseDaoImpl<T, PK> implements BaseDao<T, PK>{
 	 */
     protected String getStatementName(String operate) {
         String namespace = getNamespace();
-        return StringUtil3.isNotBlank(namespace) ? (new StringBuilder(namespace).append(".").append(operate).toString()) : namespace;
+        return StringUtils.isNotBlank(namespace) ? (new StringBuilder(namespace).append(".").append(operate).toString()) : namespace;
     }
 
     /**

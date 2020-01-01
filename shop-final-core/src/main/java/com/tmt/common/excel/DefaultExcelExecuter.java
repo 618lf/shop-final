@@ -14,9 +14,9 @@ import org.apache.poi.ss.usermodel.Sheet;
 
 import com.tmt.common.entity.ColumnMapper;
 import com.tmt.common.entity.DataType;
-import com.tmt.common.utils.DateUtil3;
 import com.tmt.common.utils.ExcelUtils;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
+import com.tmt.common.utils.time.DateUtils;
 
 
 /**
@@ -96,23 +96,23 @@ public class DefaultExcelExecuter implements IExcelExecuter{
 					if (tempValue instanceof Date) {
 						String pattern = columnMapper.getDataFormat();
 						Date date = (Date)tempValue;
-						if (StringUtil3.isNotBlank(pattern)) {
-							cellvalue = DateUtil3.getFormatDate(date, pattern);
+						if (StringUtils.isNotBlank(pattern)) {
+							cellvalue = DateUtils.getFormatDate(date, pattern);
 						} else if(!isDefaultFormat){
-							cellvalue = DateUtil3.getFormatDate(date, "yyyy-MM-dd");
+							cellvalue = DateUtils.getFormatDate(date, "yyyy-MM-dd");
 							isDefaultFormat = Boolean.TRUE;
 						}
 					}
 					//去空
-					cellvalue = StringUtil3.trimToNull(cellvalue);
+					cellvalue = StringUtils.trimToNull(cellvalue);
 					//这列不为空
-					if (StringUtil3.isNotBlank(cellvalue)) {
+					if (StringUtils.isNotBlank(cellvalue)) {
 						isEmptyRow = Boolean.FALSE;
 					}
 					//特殊的验证
 					String msg = ExcelValidateUtils.validate(cellvalue, columnMapper.getVerifyFormat());
-					if (StringUtil3.isNotBlank(msg)) {
-						String _column = StringUtil3.format("%s[%s]", columnMapper.getTitle(), columnMapper.getColumn());
+					if (StringUtils.isNotBlank(msg)) {
+						String _column = StringUtils.format("%s[%s]", columnMapper.getTitle(), columnMapper.getColumn());
 						result.addError(iRow + 1, _column, msg);
 						return Boolean.TRUE;
 					}
@@ -162,11 +162,11 @@ public class DefaultExcelExecuter implements IExcelExecuter{
 		}
 		//处理特殊字符,去掉最后的.0
 		if ((Cell.CELL_TYPE_FORMULA == cell.getCellType() || Cell.CELL_TYPE_NUMERIC == cell.getCellType()) 
-		       && StringUtil3.endsWith(strValue, "\\.[0]?")) {
-			strValue = StringUtil3.substringBefore(strValue, ".");
+		       && StringUtils.endsWith(strValue, "\\.[0]?")) {
+			strValue = StringUtils.substringBefore(strValue, ".");
 		}
 		//处理特殊的字符
-		if (StringUtil3.isNotBlank(strValue)) {
+		if (StringUtils.isNotBlank(strValue)) {
 			//strValue = strValue.replace((char)12288, ' ');//全角空白
 			strValue = strValue.trim();//去掉首位空白
 		}
@@ -195,9 +195,9 @@ public class DefaultExcelExecuter implements IExcelExecuter{
 	
 	//现阶段只做了文本的转换
 	private Object formatCell(String cellvalue, ColumnMapper columnMapper) {
-		if (!StringUtil3.isNotBlank(cellvalue)) {
+		if (!StringUtils.isNotBlank(cellvalue)) {
 			return cellvalue;
-		} else if (columnMapper.getDataType() == DataType.STRING && StringUtil3.isNotBlank(columnMapper.getDataFormat())) {//是文本
+		} else if (columnMapper.getDataType() == DataType.STRING && StringUtils.isNotBlank(columnMapper.getDataFormat())) {//是文本
 			//文本转换
 			String pattern = columnMapper.getDataFormat();
 			String[] ps = pattern.split(";");

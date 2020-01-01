@@ -23,7 +23,7 @@ import com.tmt.common.persistence.incrementer.IdGen;
 import com.tmt.common.utils.JsonMapper;
 import com.tmt.common.utils.Lists;
 import com.tmt.common.utils.Maps;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.common.utils.TreeEntityUtils;
 import com.tmt.common.utils.WebUtils;
 import com.tmt.common.web.BaseController;
@@ -70,10 +70,10 @@ public class MenuController extends BaseController {
 	@RequestMapping("page")
 	public Page page(Menu menu, Model model) {
 		Map<String, Object> params = new HashMap<String, Object>();
-		if (menu != null && !StringUtil3.isBlank(menu.getName())) {
+		if (menu != null && !StringUtils.isBlank(menu.getName())) {
 			params.put("MENU_NAME", menu.getName());
 		}
-		if (menu != null && !StringUtil3.isBlank(menu.getHref())) {
+		if (menu != null && !StringUtils.isBlank(menu.getHref())) {
 			params.put("MENU_HREF", menu.getHref());
 		}
 		if (!params.isEmpty()) {

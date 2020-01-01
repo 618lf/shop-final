@@ -3,7 +3,7 @@ package com.tmt.common.email;
 import java.util.Properties;
 
 import com.tmt.common.entity.BaseEntity;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * 邮件服务
@@ -51,7 +51,7 @@ public class JavaMailSender extends org.springframework.mail.javamail.JavaMailSe
 		   javaMailProperties.remove("mail.smtp.socketFactory.fallback");
 		   javaMailProperties.remove("mail.smtp.socketFactory.class");
 		}
-		if(StringUtil3.isNotBlank(site.getSmtpTimeout())) {
+		if(StringUtils.isNotBlank(site.getSmtpTimeout())) {
 		   javaMailProperties.setProperty("mail.smtp.timeout", site.getSmtpTimeout());
 		} else {
 		   javaMailProperties.remove("mail.smtp.timeout");

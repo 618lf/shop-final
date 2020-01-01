@@ -2,10 +2,8 @@ package com.tmt.common.persistence;
 
 import java.io.Serializable;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.alibaba.fastjson.annotation.JSONField;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 
 public class PageParameters implements Serializable{
 	
@@ -124,8 +122,8 @@ public class PageParameters implements Serializable{
 	}
 	
 	public String getPageUrl(int pageIndex, int pageSize) {
-		String _url = StringUtil3.replace(this.pageUrl, "{pageIndex}", String.valueOf(pageIndex));
-	    return StringUtil3.replace(_url, "{pageSize}", String.valueOf(pageSize));
+		String _url = StringUtils.replace(this.pageUrl, "{pageIndex}", String.valueOf(pageIndex));
+	    return StringUtils.replace(_url, "{pageSize}", String.valueOf(pageSize));
 	}
 	public void setSerializePage(boolean serializePage) {
 		this.serializePage = serializePage;
@@ -180,7 +178,7 @@ public class PageParameters implements Serializable{
 	@JSONField(serialize=false)
 	public String getPagination(){
 		if (serializePage) {
-			if (StringUtil3.isNotBlank(this.getPageUrl())) {
+			if (StringUtils.isNotBlank(this.getPageUrl())) {
 				return this.getUrlPagination();
 			}
 			return this.getSimplePagination();
@@ -326,13 +324,13 @@ public class PageParameters implements Serializable{
 	 */
 	public String orderBy(String defaulOrder) {
 		StringBuilder orderBy = new StringBuilder();
-		if (StringUtil3.isNotBlank(this.getSortField())) {
-			orderBy.append(StringUtil3.convertProperty2Column(this.getSortField()));
-			if (StringUtil3.isNotBlank(this.getSortType())) {
-				orderBy.append(" ").append(StringUtil3.upperCase(this.getSortType()));
+		if (StringUtils.isNotBlank(this.getSortField())) {
+			orderBy.append(StringUtils.convertProperty2Column(this.getSortField()));
+			if (StringUtils.isNotBlank(this.getSortType())) {
+				orderBy.append(" ").append(StringUtils.upperCase(this.getSortType()));
 			}
 		}
-		if (orderBy.length() == 0 && StringUtil3.isNotBlank(defaulOrder)) {
+		if (orderBy.length() == 0 && StringUtils.isNotBlank(defaulOrder)) {
 			orderBy.append(defaulOrder);
 		}
 		return orderBy.toString();

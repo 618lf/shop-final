@@ -14,7 +14,7 @@ import com.tmt.common.persistence.incrementer.IdGen;
 import com.tmt.common.service.BaseService;
 import com.tmt.common.utils.Lists;
 import com.tmt.common.utils.Maps;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.system.dao.GroupRoleDao;
 import com.tmt.system.dao.RoleDao;
 import com.tmt.system.dao.RoleMenuDao;
@@ -89,11 +89,11 @@ public class RoleService extends BaseService<Role, Long> implements RoleServiceF
 		// 存储新权限
 		roleMenus = Lists.newArrayList();
 		// 菜单
-		if (StringUtil3.isNotEmpty(role.getMenuIds())) {
+		if (StringUtils.isNotEmpty(role.getMenuIds())) {
 			String[] menuIds = role.getMenuIds().split(",");
 			RoleMenu roleMenu = null;
 			for (String menuId : menuIds) {
-				if (StringUtil3.isNotEmpty(menuId)) {
+				if (StringUtils.isNotEmpty(menuId)) {
 					roleMenu = new RoleMenu();
 					roleMenu.setMenuId(Long.parseLong(menuId));
 					roleMenu.setRoleId(Id);
@@ -102,11 +102,11 @@ public class RoleService extends BaseService<Role, Long> implements RoleServiceF
 			}
 		}
 		// 操作
-		if (StringUtil3.isNotEmpty(role.getOptionIds())) {
+		if (StringUtils.isNotEmpty(role.getOptionIds())) {
 			String[] menuIds = role.getOptionIds().split(",");
 			RoleMenu roleMenu = null;
 			for (String menuId : menuIds) {
-				if (StringUtil3.isNotEmpty(menuId)) {
+				if (StringUtils.isNotEmpty(menuId)) {
 					roleMenu = new RoleMenu();
 					roleMenu.setMenuId(Long.parseLong(menuId));
 					roleMenu.setRoleId(Id);

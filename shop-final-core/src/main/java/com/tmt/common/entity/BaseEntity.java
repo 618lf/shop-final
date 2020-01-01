@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.tmt.common.utils.DateUtil3;
+import com.tmt.common.utils.time.DateUtils;
 
 /**
  * 基础实体类
@@ -101,7 +101,7 @@ public abstract class BaseEntity<PK> extends IdEntity<PK> implements Serializabl
 	 */
 	@Override
 	public PK prePersist() {
-		this.createDate = DateUtil3.getTimeStampNow();
+		this.createDate = DateUtils.getTimeStampNow();
 		this.updateDate = this.createDate;
 		return super.prePersist();
 	}
@@ -110,7 +110,7 @@ public abstract class BaseEntity<PK> extends IdEntity<PK> implements Serializabl
 	 * 修改操作
 	 */
 	public void preUpdate() {
-		this.updateDate = DateUtil3.getTimeStampNow();
+		this.updateDate = DateUtils.getTimeStampNow();
 	}
 	
 	/**

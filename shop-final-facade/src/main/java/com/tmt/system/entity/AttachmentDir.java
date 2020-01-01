@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.tmt.common.entity.BaseParentEntity;
 import com.tmt.common.persistence.incrementer.IdGen;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * 附件目录 管理
@@ -51,7 +51,7 @@ public class AttachmentDir extends BaseParentEntity<Long> implements Serializabl
 	 * @return
 	 */
 	public Boolean isSystemDir() {
-		return StringUtil3.isNotBlank(this.getCode()) && StringUtil3.startsWith(this.getCode(), "S");
+		return StringUtils.isNotBlank(this.getCode()) && StringUtils.startsWith(this.getCode(), "S");
 	}
 	
 	/**
@@ -105,9 +105,9 @@ public class AttachmentDir extends BaseParentEntity<Long> implements Serializabl
 	public static AttachmentDir newDefaultUserSpace(String code, String name, AttachmentDir root) {
 		AttachmentDir dir = new AttachmentDir();
 		dir.setParentId(root.getId());
-		dir.setParentIds(StringUtil3.format("%s%s,", root.getParentIds(), root.getId()));
+		dir.setParentIds(StringUtils.format("%s%s,", root.getParentIds(), root.getId()));
 		dir.setLevel(root.getLevel() + 1);
-		dir.setPath(StringUtil3.format("%s/%s", root.getPath(), name));
+		dir.setPath(StringUtils.format("%s/%s", root.getPath(), name));
 		dir.setCode(code);
 		dir.setName(name);
 		return dir;

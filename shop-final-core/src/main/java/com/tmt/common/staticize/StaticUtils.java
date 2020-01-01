@@ -6,10 +6,10 @@ import java.util.Map;
 
 import com.tmt.common.config.Globals;
 import com.tmt.common.entity.BaseEntity;
-import com.tmt.common.utils.DateUtil3;
 import com.tmt.common.utils.FileUtils;
 import com.tmt.common.utils.FreemarkerUtils;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
+import com.tmt.common.utils.time.DateUtils;
 
 /**
  * 静态化工具类
@@ -24,7 +24,7 @@ public class StaticUtils {
     */
    public static StringBuilder staticDomain(DomainSer ser) {
 	   String domain = ser.getDomain();
-	   if (StringUtil3.isBlank(domain)) {
+	   if (StringUtils.isBlank(domain)) {
 		   return new StringBuilder(Globals.domain);
 	   }
 	   return new StringBuilder("http://").append(domain);
@@ -118,7 +118,7 @@ public class StaticUtils {
    //----------------------静态话基础支持-----------------------
    private static void delete(Template template, Map<String, Object> root) {
 	   String staticUrl = getStaticFile(template, root);
-	   String _file = StringUtil3.substringBeforeLast(staticUrl,"?");
+	   String _file = StringUtils.substringBeforeLast(staticUrl,"?");
 	   String filePath = new StringBuilder(SettingUtils.getStoragePath()).append(_file).toString();
 	   File file = new File(filePath);
 	   if (file.exists()) {
@@ -127,7 +127,7 @@ public class StaticUtils {
    }
    private static String touchStorage(Template template, Map<String, Object> root){
 	   String staticUrl = getStaticFile(template, root);
-	   String _file = StringUtil3.substringBeforeLast(staticUrl,"?");
+	   String _file = StringUtils.substringBeforeLast(staticUrl,"?");
 	   String filePath = new StringBuilder(SettingUtils.getStoragePath()).append(_file).toString();
 	   File file = new File(filePath);
 	   if (!file.exists()) {
@@ -140,7 +140,7 @@ public class StaticUtils {
    }
    private static String storage(Template template, Map<String, Object> root){
 	   String staticUrl = getStaticFile(template, root);
-	   String _file = StringUtil3.substringBeforeLast(staticUrl,"?");
+	   String _file = StringUtils.substringBeforeLast(staticUrl,"?");
 	   String filePath = new StringBuilder(SettingUtils.getStoragePath()).append(_file).toString();
 	   String html = FreemarkerUtils.processUseTemplate(getTemplateFile(template,root), root);
 	   try {
@@ -163,7 +163,7 @@ public class StaticUtils {
 	   if (root != null && root.getUpdateDate() != null) {
 		   updateTime = root.getUpdateDate().getTime();
 	   }
-	   updateTime = updateTime == null ? DateUtil3.getTimeStampNow().getTime(): updateTime;
+	   updateTime = updateTime == null ? DateUtils.getTimeStampNow().getTime(): updateTime;
 	   rootMap.put("update_time", updateTime);
 	   return rootMap;
    }

@@ -91,7 +91,7 @@ public class StorageUtils {
 	 * @return
 	 */
 	public static String getFileName(String fileUrl) {
-		return StringUtil3.removeStart(StringUtil3.substringAfterLast(fileUrl, "/"), ".");
+		return StringUtils.removeStart(StringUtils.substringAfterLast(fileUrl, "/"), ".");
 	}
 	
 	/**
@@ -100,7 +100,7 @@ public class StorageUtils {
 	 * @return
 	 */
 	public static String getFileSuffix(String fileUrl) {
-		return StringUtil3.lowerCase(StringUtil3.substringAfterLast(fileUrl, "."));
+		return StringUtils.lowerCase(StringUtils.substringAfterLast(fileUrl, "."));
 	}
 	
 	

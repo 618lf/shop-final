@@ -29,7 +29,7 @@ import com.tmt.common.utils.Lists;
 import com.tmt.common.utils.Maps;
 import com.tmt.common.utils.RegexpUtil;
 import com.tmt.common.utils.StorageUtils;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.common.utils.WebUtils;
 import com.tmt.system.entity.Attachment;
 import com.tmt.system.entity.AttachmentDir;
@@ -53,7 +53,7 @@ public class AttachmentController extends BaseUploadController {
 	@RequestMapping("uploader")
 	public String initUploader(String dirId, Model model) {
 		User user = UserUtils.getUser();
-		model.addAttribute("dirId", StringUtil3.isBlank(dirId) ? this.getUserSpaceDir(user).getId() : dirId);
+		model.addAttribute("dirId", StringUtils.isBlank(dirId) ? this.getUserSpaceDir(user).getId() : dirId);
 		return "/system/AttachmentUploader";
 	}
 
@@ -116,7 +116,7 @@ public class AttachmentController extends BaseUploadController {
 		String name = WebUtils.getSafeParameter("name");
 		Criteria c = qc.getCriteria();
 		c.andEqualTo("DIR_ID", dirId);
-		if (StringUtil3.isNotBlank(name)) {
+		if (StringUtils.isNotBlank(name)) {
 			c.andLike("NAME", name);
 		}
 		PageParameters param = new PageParameters();

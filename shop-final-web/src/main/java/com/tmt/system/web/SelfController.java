@@ -12,9 +12,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.tmt.common.config.Globals;
 import com.tmt.common.entity.AjaxResult;
 import com.tmt.common.persistence.incrementer.IdGen;
-import com.tmt.common.utils.DateUtil3;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.common.utils.WebUtils;
+import com.tmt.common.utils.time.DateUtils;
 import com.tmt.common.web.BaseController;
 import com.tmt.system.entity.Group;
 import com.tmt.system.entity.Menu;
@@ -113,7 +113,7 @@ public class SelfController extends BaseController {
 		user.setId(UserUtils.getUser().getId());
 		this.userService.userUpdate(user);
 		UserUtils.removeUserCache(user.getId());
-		addMessage(redirectAttributes, StringUtil3.format("%s'%s'%s", "修改用户", user.getName(), "成功"));
+		addMessage(redirectAttributes, StringUtils.format("%s'%s'%s", "修改用户", user.getName(), "成功"));
 		redirectAttributes.addAttribute("id", user.getId());
 		return WebUtils.redirectTo(new StringBuilder(Globals.adminPath).append("/system/self/info").toString());
 	}
@@ -195,7 +195,7 @@ public class SelfController extends BaseController {
 	 */
 	@RequestMapping("homePage")
 	public String homePage(Model model) {
-		model.addAttribute("dateSx", DateUtil3.getDateSx());
+		model.addAttribute("dateSx", DateUtils.getDateSx());
 		return "system/HomePage";
 	}
 }

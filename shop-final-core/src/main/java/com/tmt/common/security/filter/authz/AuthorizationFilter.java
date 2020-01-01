@@ -9,7 +9,7 @@ import com.tmt.common.exception.ErrorCode;
 import com.tmt.common.security.filter.AccessControllerFilter;
 import com.tmt.common.security.subject.Subject;
 import com.tmt.common.security.utils.SecurityUtils;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.common.utils.WebUtils;
 
 /**
@@ -55,9 +55,9 @@ public abstract class AuthorizationFilter extends AccessControllerFilter {
 	 */
 	protected boolean hasRoles(Subject subject, String perm) {
 		String[] perms = null;
-		if (StringUtil3.contains(perm, "&") && (perms = StringUtil3.split(perm, "&")) != null) {
+		if (StringUtils.contains(perm, "&") && (perms = StringUtils.split(perm, "&")) != null) {
 			return subject.hasAllRoles(perms);
-		} else if (StringUtil3.contains(perm, "|") && (perms = StringUtil3.split(perm, "|")) != null) {
+		} else if (StringUtils.contains(perm, "|") && (perms = StringUtils.split(perm, "|")) != null) {
 			boolean[] roles = subject.hasRoles(perms);
 			for (boolean r : roles) {
 				if (r) {
@@ -79,9 +79,9 @@ public abstract class AuthorizationFilter extends AccessControllerFilter {
 	 */
 	protected boolean isPermitted(Subject subject, String perm) {
 		String[] perms = null;
-		if (StringUtil3.contains(perm, "&") && (perms = StringUtil3.split(perm, "&")) != null) {
+		if (StringUtils.contains(perm, "&") && (perms = StringUtils.split(perm, "&")) != null) {
 			return subject.isPermittedAll(perms);
-		} else if (StringUtil3.contains(perm, "|") && (perms = StringUtil3.split(perm, "|")) != null) {
+		} else if (StringUtils.contains(perm, "|") && (perms = StringUtils.split(perm, "|")) != null) {
 			boolean[] roles = subject.isPermitted(perms);
 			for (boolean r : roles) {
 				if (r) {

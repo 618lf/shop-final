@@ -10,7 +10,7 @@ import javax.script.ScriptEngineManager;
 import org.apache.commons.io.IOUtils;
 
 import com.tmt.common.config.Globals;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 
 
 /**
@@ -39,7 +39,7 @@ public class ExcelValidateUtils {
 	 * @return
 	 */
 	public static String validate(String value, String rules) {
-		if(StringUtil3.isBlank(rules)) {
+		if(StringUtils.isBlank(rules)) {
 			return null;
 		}
 		Bindings params = SE.getBindings(ScriptContext.ENGINE_SCOPE);

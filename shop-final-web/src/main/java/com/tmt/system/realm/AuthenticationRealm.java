@@ -18,11 +18,10 @@ import com.tmt.common.security.principal.Principal;
 import com.tmt.common.security.realm.CachedRealm;
 import com.tmt.common.security.subject.Subject;
 import com.tmt.common.security.utils.SecurityUtils;
-import com.tmt.common.security.utils.StringUtils;
 import com.tmt.common.utils.CacheUtils;
-import com.tmt.common.utils.DateUtil3;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.common.utils.WebUtils;
+import com.tmt.common.utils.time.DateUtils;
 import com.tmt.common.web.ValidateCodeService;
 import com.tmt.common.web.security.exception.AccountLockException;
 import com.tmt.common.web.security.exception.CaptchatAuthenException;
@@ -129,8 +128,8 @@ public class AuthenticationRealm extends CachedRealm {
 		// 是否允许同时在线
 		if (0 == isMultiLogin) {
 			// 将此 sessionId 失效
-			String reason = StringUtil3.format("您的帐号于%s在其他设备上登录，如果问题请及时联系管理员。设备IP【%s】",
-					DateUtil3.getTodayStr("yyyy-MM-dd HH:mm"), _remoteAddr);
+			String reason = StringUtils.format("您的帐号于%s在其他设备上登录，如果问题请及时联系管理员。设备IP【%s】",
+					DateUtils.getTodayStr("yyyy-MM-dd HH:mm"), _remoteAddr);
 			SecurityUtils.getSecurityManager().invalidate(sessionId, reason);
 		}
 	}
@@ -171,7 +170,7 @@ public class AuthenticationRealm extends CachedRealm {
 	public String resolveReason(String sessionId) {
 		String key = new StringBuilder("invalidate-reason:").append(sessionId).toString();
 		String reason = CacheUtils.getSessCache().get(key);
-		if (StringUtil3.isNotBlank(reason)) {
+		if (StringUtils.isNotBlank(reason)) {
 			CacheUtils.getSessCache().delete(key);
 		}
 		return reason;

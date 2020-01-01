@@ -17,8 +17,8 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.google.zxing.qrcode.encoder.ByteMatrix;
 import com.google.zxing.qrcode.encoder.Encoder;
 import com.google.zxing.qrcode.encoder.QRCode;
-import com.tmt.common.utils.Encodes;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.codec.Encodes;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * 二维码生成服务
@@ -64,7 +64,7 @@ public class QrcodeGen {
 
 
         // 绘制背景图
-        if (StringUtil3.isNotBlank(qrCodeConfig.getBackground())) {
+        if (StringUtils.isNotBlank(qrCodeConfig.getBackground())) {
             qrCode = ImageUtil.drawBackground(qrCode,
                     qrCodeConfig.getBackground(),
                     qrCodeConfig.getBgW(),

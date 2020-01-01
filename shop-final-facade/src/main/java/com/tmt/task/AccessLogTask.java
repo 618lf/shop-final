@@ -13,10 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.tmt.common.persistence.dialect.Dialect;
 import com.tmt.common.persistence.dialect.MySQLDialect;
-import com.tmt.common.utils.DateUtil3;
 import com.tmt.common.utils.FileUtils;
 import com.tmt.common.utils.Lists;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
+import com.tmt.common.utils.time.DateUtils;
 import com.tmt.system.entity.Task;
 import com.tmt.system.service.TaskExecutor;
 
@@ -52,7 +52,7 @@ public class AccessLogTask implements TaskExecutor {
 	public Boolean doTask(Task task) {
 
 		// 日志路径
-		if (!StringUtil3.isNoneBlank(logPath)) {
+		if (!StringUtils.isNoneBlank(logPath)) {
 			return Boolean.TRUE;
 		}
 
@@ -101,7 +101,7 @@ public class AccessLogTask implements TaskExecutor {
 			String line = null;
 			int size = 0;
 			while ((line = reader.readLine()) != null) {
-				String sql = StringUtil3.format(bulk_Load_Sql, this.parseLine(line));
+				String sql = StringUtils.format(bulk_Load_Sql, this.parseLine(line));
 				batchSql.add(sql);
 				if (size++ >= 1500) {
 					dialect.bulkSave(batchSql, null);
@@ -124,7 +124,7 @@ public class AccessLogTask implements TaskExecutor {
 			file = null;
 		} catch (Exception e) {
 			logger.error("保存日志文件异常", e);
-			File newFile = new File(file.getParent(), StringUtil3.substringBefore(file.getName(), ".lock"));
+			File newFile = new File(file.getParent(), StringUtils.substringBefore(file.getName(), ".lock"));
 			file.renameTo(newFile);
 		} finally {
 			IOUtils.closeQuietly(reader);
@@ -140,7 +140,7 @@ public class AccessLogTask implements TaskExecutor {
 			if (params[i].equals("\\N")) {
 				params[i] = null;
 			}
-			params[i] = StringUtil3.escapeDb(params[i]);
+			params[i] = StringUtils.escapeDb(params[i]);
 			if (params[i] != null) {
 				params[i] = "'" + params[i] + "'";
 			}
@@ -188,7 +188,7 @@ public class AccessLogTask implements TaskExecutor {
 			file = null;
 		} catch (Exception e) {
 			logger.error("保存日志文件异常", e);
-			File newFile = new File(file.getParent(), StringUtil3.substringBefore(file.getName(), ".lock"));
+			File newFile = new File(file.getParent(), StringUtils.substringBefore(file.getName(), ".lock"));
 			file.renameTo(newFile);
 		} finally {
 			IOUtils.closeQuietly(reader);
@@ -199,7 +199,7 @@ public class AccessLogTask implements TaskExecutor {
 	private synchronized List<File> getLogableFiles() {
 
 		// 获取需要日结的文件
-		final String nows = DateUtil3.getFormatDate(DateUtil3.addMinutes(DateUtil3.getTodayTime(), offsetMinute),
+		final String nows = DateUtils.getFormatDate(DateUtils.addMinutes(DateUtils.getTodayTime(), offsetMinute),
 				"yyyy-MM-dd-HH-mm");
 
 		String[] files = null;
@@ -207,12 +207,12 @@ public class AccessLogTask implements TaskExecutor {
 		files = parent.list(new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
-				if (!StringUtil3.endsWith(name, ".log")) {
+				if (!StringUtils.endsWith(name, ".log")) {
 					return false;
 				}
 
 				// 早于指定时间的
-				String _name = StringUtil3.substringBefore(name, ".");
+				String _name = StringUtils.substringBefore(name, ".");
 				if (_name.compareTo(nows) <= 0) {
 					return true;
 				}

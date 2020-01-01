@@ -8,14 +8,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.tmt.common.codec.Encodes;
 import com.tmt.common.config.Globals;
 import com.tmt.common.entity.BaseEntity;
 import com.tmt.common.exception.ErrorCode;
 import com.tmt.common.security.context.AuthenticationToken;
 import com.tmt.common.security.principal.Principal;
 import com.tmt.common.security.utils.SecurityUtils;
-import com.tmt.common.utils.Encodes;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.common.utils.WebUtils;
 import com.tmt.common.web.BaseController;
 import com.tmt.common.web.ValidateCodeService;
@@ -74,7 +74,7 @@ public class LoginController extends BaseController {
 
 		// 显示原因
 		String reason = WebUtils.getSafeParameter("reason");
-		if (StringUtil3.isNotBlank(reason)) {
+		if (StringUtils.isNotBlank(reason)) {
 			model.addAttribute("reason", Encodes.decodeBase64(reason, Globals.DEFAULT_ENCODING));
 		}
 		return "/system/SysLogin";

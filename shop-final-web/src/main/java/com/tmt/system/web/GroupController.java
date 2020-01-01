@@ -22,7 +22,7 @@ import com.tmt.common.persistence.QueryCondition.Criteria;
 import com.tmt.common.persistence.incrementer.IdGen;
 import com.tmt.common.utils.Lists;
 import com.tmt.common.utils.Maps;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.common.utils.WebUtils;
 import com.tmt.common.web.BaseController;
 import com.tmt.system.entity.Group;
@@ -69,7 +69,7 @@ public class GroupController extends BaseController {
 		QueryCondition qc = new QueryCondition();
 		PageParameters param = page.getParam();
 		Criteria c = qc.getCriteria();
-		if (StringUtil3.isNotBlank(group.getName())) {
+		if (StringUtils.isNotBlank(group.getName())) {
 			c.andEqualTo("NAME", group.getName());
 		}
 		page = this.groupService.queryForPage(qc, param);
@@ -121,7 +121,7 @@ public class GroupController extends BaseController {
 		group.userOptions(UserUtils.getUser());
 		this.groupService.save(group);
 		UserUtils.removeAllCache();
-		addMessage(redirectAttributes, StringUtil3.format("%s'%s'%s", "修改用户组", group.getName(), "成功"));
+		addMessage(redirectAttributes, StringUtils.format("%s'%s'%s", "修改用户组", group.getName(), "成功"));
 		redirectAttributes.addAttribute("id", group.getId());
 		return WebUtils.redirectTo(new StringBuilder(Globals.adminPath).append("/system/group/form").toString());
 	}

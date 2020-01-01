@@ -18,6 +18,7 @@ import com.tmt.common.converter.EnumConverter;
 import com.tmt.common.exception.BaseRuntimeException;
 import com.tmt.common.persistence.incrementer.IdGen;
 import com.tmt.common.utils.freemarker.FreeMarkerConfig;
+import com.tmt.common.utils.time.DateUtils;
 
 import freemarker.core.Environment;
 import freemarker.ext.beans.BeansWrapperBuilder;
@@ -198,8 +199,8 @@ public class FreemarkerUtils {
 	 */
 	private static Map<String, Object> getRootMap() {
 		Map<String, Object> root = Maps.newHashMap();
-		root.put("data", DateUtil3.getTodayStr("yyyy-MM-dd"));
-		root.put("datatime", DateUtil3.getTodayStr("yyyyMMddHHmmss"));
+		root.put("data", DateUtils.getTodayStr("yyyy-MM-dd"));
+		root.put("datatime", DateUtils.getTodayStr("yyyyMMddHHmmss"));
 		root.put("rand", IdGen.stringKey());
 		return root;
 	}

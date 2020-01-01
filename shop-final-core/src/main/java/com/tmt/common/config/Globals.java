@@ -2,9 +2,9 @@ package com.tmt.common.config;
 
 import java.io.File;
 
-import com.tmt.common.utils.Digests;
-import com.tmt.common.utils.Encodes;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.codec.Digests;
+import com.tmt.common.codec.Encodes;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * 全局配置类
@@ -70,7 +70,7 @@ public class Globals {
 	 * @return 验证成功返回true
 	 */
 	public static boolean validatePassword(String plainPassword, String password) {
-		if (StringUtil3.isBlank(plainPassword) || StringUtil3.isBlank(password)) {
+		if (StringUtils.isBlank(plainPassword) || StringUtils.isBlank(password)) {
 			return Boolean.FALSE;
 		}
 		byte[] salt = Encodes.decodeHex(password.substring(0, 16));

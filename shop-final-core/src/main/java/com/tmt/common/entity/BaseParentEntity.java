@@ -3,7 +3,7 @@ package com.tmt.common.entity;
 import java.io.Serializable;
 
 import com.tmt.common.persistence.incrementer.IdGen;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * 针对有 parent属性的实体
@@ -75,7 +75,7 @@ public abstract class BaseParentEntity<PK> extends BaseEntity<PK> implements Ser
 		String parentIds = parent == null ? String.valueOf(IdGen.INVALID_ID): (new StringBuilder(parent.getParentIds()).append(this.getParentId()).toString());
 		this.setLevel(level + 1);
 		this.setParentIds(new StringBuilder(parentIds).append(IDS_SEPARATE).toString());
-		this.setPath(new StringBuilder((parent == null?"":StringUtil3.defaultString(parent.getPath(), ""))).append(PATH_SEPARATE).append(this.getName()).toString());
+		this.setPath(new StringBuilder((parent == null?"":StringUtils.defaultString(parent.getPath(), ""))).append(PATH_SEPARATE).append(this.getName()).toString());
 	}
 
 	/**
@@ -86,11 +86,11 @@ public abstract class BaseParentEntity<PK> extends BaseEntity<PK> implements Ser
 	 */
 	public void updateIdsByParent(BaseParentEntity<PK> parent, String oldParentIds, String oldPaths, Integer oldLevel) {
 		String _parentIds = (IDS_SEPARATE + this.getParentIds()).replace(IDS_SEPARATE + oldParentIds, IDS_SEPARATE + parent.getParentIds());
-		if (StringUtil3.isBlank(_parentIds)) {
+		if (StringUtils.isBlank(_parentIds)) {
 			_parentIds = String.valueOf(IdGen.INVALID_ID);
 		}
-		if (StringUtil3.startsWith(_parentIds, IDS_SEPARATE) ) {
-			_parentIds = StringUtil3.removeStart(_parentIds, IDS_SEPARATE);
+		if (StringUtils.startsWith(_parentIds, IDS_SEPARATE) ) {
+			_parentIds = StringUtils.removeStart(_parentIds, IDS_SEPARATE);
 		}
 		this.setParentIds(_parentIds);
 		
@@ -99,9 +99,9 @@ public abstract class BaseParentEntity<PK> extends BaseEntity<PK> implements Ser
 		this.setLevel(this.getLevel() + changeLevel);
 		
 		//path
-		if (StringUtil3.isNotBlank(oldPaths)) {
+		if (StringUtils.isNotBlank(oldPaths)) {
 			String _paths = (this.getPath()).replace(oldPaths, parent.getPath());
-			if (StringUtil3.isBlank(_paths)) {
+			if (StringUtils.isBlank(_paths)) {
 				_paths = PATH_SEPARATE + this.getName();
 			}
 			this.setPath(_paths);

@@ -3,7 +3,7 @@ package com.tmt.common.cache.redis;
 import java.util.List;
 
 import com.tmt.common.utils.Lists;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 
 import redis.clients.util.SafeEncoder;
 
@@ -60,7 +60,7 @@ public class RedisCacheChannel extends RedisCache {
 		// 是否是批量删除
 		if (key != null && key instanceof String) {
 			String _key = String.valueOf(key);
-			if (StringUtil3.isNotBlank(_key) && StringUtil3.contains(_key, "*")) {
+			if (StringUtils.isNotBlank(_key) && StringUtils.contains(_key, "*")) {
 				this.deletePattern(_key); 
 				return;
 			}

@@ -2,11 +2,11 @@ package com.tmt.common.email;
 
 import java.io.File;
 
+import com.tmt.common.codec.Digests;
 import com.tmt.common.utils.CacheUtils;
-import com.tmt.common.utils.Digests;
 import com.tmt.common.utils.JsonMapper;
 import com.tmt.common.utils.SpringContextHolder;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * 邮件发送工具类
@@ -25,7 +25,7 @@ public class SendEmailUtils {
 	private synchronized static void md5Check() {
 		EmailParam emailParam = CacheUtils.get(EmailParam.EMAIL_KEY);
 		String md5 = Digests.md5(JsonMapper.toJson(emailParam));
-		if (emailParam != null && StringUtil3.isNotBlank(md5) && !md5.equals(md5Code)) {
+		if (emailParam != null && StringUtils.isNotBlank(md5) && !md5.equals(md5Code)) {
 		    md5Code = md5;
 		    try {
 			  JavaMailSender sender = SpringContextHolder.getBean(JavaMailSender.class);

@@ -5,7 +5,7 @@ import java.util.Date;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.tmt.common.entity.IdEntity;
-import com.tmt.common.utils.DateUtil3;
+import com.tmt.common.utils.time.DateUtils;
 
 /**
  * 日志
@@ -117,6 +117,6 @@ public class Log extends IdEntity<Long> implements Serializable{
 		this.updateDate = updateDate;
 	}
 	public void logOptions(){
-		this.createDate = DateUtil3.getTimeStampNow();
+		this.createDate = DateUtils.getTimeStampNow();
 	}
 }

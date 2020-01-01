@@ -20,7 +20,7 @@ import com.tmt.common.exception.SerializeException;
 import com.tmt.common.utils.Lists;
 import com.tmt.common.utils.Maps;
 import com.tmt.common.utils.Sets;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.common.utils.serializer.SerializationUtils;
 
 /**
@@ -329,7 +329,7 @@ public class RedisCacheUtils implements IRedisCacheUtils{
 				public boolean success(List<String> keys) {
 					for(String key: keys) {
 						T value = (T)SerializationUtils.deserialize(jedis.get(SafeEncoder.encode(key)));
-						values.put(StringUtil3.removeStart(key, prex), value);
+						values.put(StringUtils.removeStart(key, prex), value);
 					}
 					if (values.size() >= 100) {
 						return false;

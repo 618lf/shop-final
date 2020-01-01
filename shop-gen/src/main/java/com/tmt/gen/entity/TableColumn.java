@@ -3,7 +3,7 @@ package com.tmt.gen.entity;
 import java.io.Serializable;
 
 import com.tmt.common.entity.BaseEntity;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * 表列
@@ -191,7 +191,7 @@ public class TableColumn extends BaseEntity<Long> implements Serializable{
 	 * @return
 	 */
 	public Boolean getIsBaseEntity() {
-		if(StringUtil3.contains(",id,parentId,parentIds,level,version,createId,createName,createDate,updateId,updateName,updateDate,delFlag,remarks,", "," + this.getJavaField()+",")) {
+		if(StringUtils.contains(",id,parentId,parentIds,level,version,createId,createName,createDate,updateId,updateName,updateDate,delFlag,remarks,", "," + this.getJavaField()+",")) {
 			return Boolean.TRUE;
 		}
 		return Boolean.FALSE;
@@ -202,7 +202,7 @@ public class TableColumn extends BaseEntity<Long> implements Serializable{
 	 * @return
 	 */
 	public Boolean getIsInsertField() {
-		if(StringUtil3.contains(",id,version,createId,createName,createDate,", "," + this.getJavaField()+",")) {
+		if(StringUtils.contains(",id,version,createId,createName,createDate,", "," + this.getJavaField()+",")) {
 			return Boolean.TRUE;
 		}
 		return Boolean.FALSE;

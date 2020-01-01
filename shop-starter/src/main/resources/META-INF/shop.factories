@@ -14,7 +14,6 @@ com.shop.config.update.UpdateAutoConfiguration,\
 com.shop.config.email.EmailAutoConfiguration,\
 com.shop.config.schedule.ScheduleAutoConfiguration,\
 com.shop.config.searcher.SearcherAutoConfiguration,\
-com.shop.config.wechat.WechatAutoConfiguration,\
 com.shop.config.storager.StoragerAutoConfiguration,\
 com.shop.config.ApplicationAutoConfiguration,\
 com.shop.config.web.HttpMessageConvertersAutoConfiguration,\

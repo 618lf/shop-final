@@ -20,7 +20,7 @@ import com.tmt.common.persistence.PageParameters;
 import com.tmt.common.persistence.QueryCondition;
 import com.tmt.common.persistence.QueryCondition.Criteria;
 import com.tmt.common.persistence.incrementer.IdGen;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.common.web.BaseController;
 import com.tmt.system.entity.User;
 import com.tmt.system.service.AreaServiceFacade;
@@ -47,7 +47,7 @@ public class TagController extends BaseController {
 	@RequestMapping(value = "treeselect")
 	public String treeselect(HttpServletRequest request, Model model) {
 		String extId = request.getParameter("extId");
-		extId = StringUtil3.isBlank(extId) ? String.valueOf(IdGen.INVALID_ID) : extId;
+		extId = StringUtils.isBlank(extId) ? String.valueOf(IdGen.INVALID_ID) : extId;
 		model.addAttribute("id", request.getParameter("id")); // 编号
 		model.addAttribute("url", request.getParameter("url")); // 树结构数据URL
 		model.addAttribute("extId", extId); // 排除的编号ID
@@ -72,10 +72,10 @@ public class TagController extends BaseController {
 	 */
 	@RequestMapping(value = "qrcode")
 	public String qrcode(String title, String url, Model model) {
-		String _url = StringUtil3.startsWith(url, "http://")
-				? StringUtil3.format("http://%s", StringUtil3.replace(StringUtil3.remove(url, "http://"), "//", "/"))
+		String _url = StringUtils.startsWith(url, "http://")
+				? StringUtils.format("http://%s", StringUtils.replace(StringUtils.remove(url, "http://"), "//", "/"))
 						.toString()
-				: StringUtil3.replace(url, "//", "/");
+				: StringUtils.replace(url, "//", "/");
 		model.addAttribute("title", title);
 		model.addAttribute("url", _url);
 		return "/system/QrcodeOperator";
@@ -134,12 +134,12 @@ public class TagController extends BaseController {
 		QueryCondition qc = new QueryCondition();
 		PageParameters param = page.getParam();
 		Criteria c = qc.getCriteria();
-		if (user != null && StringUtil3.isNotEmpty(user.getName())) {
+		if (user != null && StringUtils.isNotEmpty(user.getName())) {
 			c.andLike("U.NAME", user.getName());
 		}
-		if (user != null && StringUtil3.isNotEmpty(user.getNo())) {
-			String sql = StringUtil3.format("((',%s,' LIKE CONCAT('%,', U.NO, ',%') ) OR (U.NO LIKE '%%s%'))",
-					StringUtil3.escapeDb(user.getNo()), StringUtil3.escapeDb(user.getNo()));
+		if (user != null && StringUtils.isNotEmpty(user.getNo())) {
+			String sql = StringUtils.format("((',%s,' LIKE CONCAT('%,', U.NO, ',%') ) OR (U.NO LIKE '%%s%'))",
+					StringUtils.escapeDb(user.getNo()), StringUtils.escapeDb(user.getNo()));
 			c.andConditionSql(sql);
 		}
 		qc.setOrderByClause("U.NO");
@@ -148,7 +148,7 @@ public class TagController extends BaseController {
 		if (page.getData() != null && page.getData().size() != 0) {
 			List<User> users = page.getData();
 			for (User u : users) {
-				u.setName(StringUtil3.isBlank(u.getName()) ? ("匿名 - " + u.getNo()) : u.getName() + " - " + u.getNo());
+				u.setName(StringUtils.isBlank(u.getName()) ? ("匿名 - " + u.getNo()) : u.getName() + " - " + u.getNo());
 			}
 		}
 		return page;

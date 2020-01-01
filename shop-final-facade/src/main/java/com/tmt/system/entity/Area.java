@@ -5,8 +5,8 @@ import java.util.List;
 
 import com.tmt.common.entity.BaseParentEntity;
 import com.tmt.common.persistence.incrementer.IdGen;
-import com.tmt.common.utils.DateUtil3;
 import com.tmt.common.utils.Lists;
+import com.tmt.common.utils.time.DateUtils;
 
 /**
  * 地区
@@ -61,7 +61,7 @@ public class Area extends BaseParentEntity<Long> implements Serializable{
 		if (IdGen.isInvalidId(this.id)) {
 			return super.prePersist();
 		}
-		this.createDate = DateUtil3.getTimeStampNow();
+		this.createDate = DateUtils.getTimeStampNow();
 		this.updateDate = this.createDate;
 		return this.id;
 	}

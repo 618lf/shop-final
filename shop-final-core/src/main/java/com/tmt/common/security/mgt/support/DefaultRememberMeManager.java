@@ -5,13 +5,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.util.SerializationUtils;
 
+import com.tmt.common.codec.Encodes;
 import com.tmt.common.security.context.AuthenticationToken;
 import com.tmt.common.security.cookie.Cookie;
 import com.tmt.common.security.cookie.SimpleCookie;
 import com.tmt.common.security.mgt.RememberMeManager;
 import com.tmt.common.security.principal.Principal;
 import com.tmt.common.security.subject.Subject;
-import com.tmt.common.utils.Encodes;
 
 /**
  * 默认的记住我， 先放入cookie中

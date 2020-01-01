@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.tmt.common.config.Globals;
 import com.tmt.common.utils.ContextHolderUtils;
-import com.tmt.common.utils.DateUtil3;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
+import com.tmt.common.utils.time.DateUtils;
 
 /**
  * 系统提供的一些常用的方法
@@ -97,7 +97,7 @@ public class Functions {
 	 * @return
 	 */
 	public static boolean isNotBlank(String cs) {
-		return StringUtil3.isNotBlank(cs);
+		return StringUtils.isNotBlank(cs);
 	}
 
 	/**
@@ -108,7 +108,7 @@ public class Functions {
 	 * @return
 	 */
 	public static boolean startsWith(String cs, String prefix) {
-		return StringUtil3.startsWith(cs, prefix);
+		return StringUtils.startsWith(cs, prefix);
 	}
 
 	/**
@@ -119,7 +119,7 @@ public class Functions {
 	 * @return
 	 */
 	public static boolean endsWith(String cs, String suffix) {
-		return StringUtil3.endsWith(cs, suffix);
+		return StringUtils.endsWith(cs, suffix);
 	}
 
 	/**
@@ -130,7 +130,7 @@ public class Functions {
 	 * @return
 	 */
 	public static String abbr(String cs, int length) {
-		return StringUtil3.abbr(cs, length);
+		return StringUtils.abbreviate(cs, length);
 	}
 
 	/**
@@ -141,7 +141,7 @@ public class Functions {
 	 * @return
 	 */
 	public static int indexOf(String sc, String searchSeq) {
-		return StringUtil3.indexOf(sc, searchSeq);
+		return StringUtils.indexOf(sc, searchSeq);
 	}
 
 	/**
@@ -152,7 +152,7 @@ public class Functions {
 	 * @return
 	 */
 	public static boolean contains(String sc, String searchSeq) {
-		return StringUtil3.contains(sc, searchSeq);
+		return StringUtils.contains(sc, searchSeq);
 	}
 
 	/**
@@ -166,6 +166,6 @@ public class Functions {
 		if (format == null) {
 			return "";
 		}
-		return DateUtil3.getFormatDate(format, pattern);
+		return DateUtils.getFormatDate(format, pattern);
 	}
 }

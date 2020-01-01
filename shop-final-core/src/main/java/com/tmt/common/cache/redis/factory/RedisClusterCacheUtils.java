@@ -22,7 +22,7 @@ import com.tmt.common.exception.CacheException;
 import com.tmt.common.utils.Lists;
 import com.tmt.common.utils.Maps;
 import com.tmt.common.utils.Sets;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.common.utils.serializer.SerializationUtils;
 
 /**
@@ -35,7 +35,7 @@ public class RedisClusterCacheUtils implements IRedisCacheUtils{
 	private static int numRetries = 30;
 	
 	public RedisClusterCacheUtils(JedisPoolConfig poolConfig, String hosts, String password, int timeout) {
-		if (StringUtil3.isBlank(password)) {
+		if (StringUtils.isBlank(password)) {
 			jedisCluster = new JedisCluster(getJedisClusterNodesSet(hosts), timeout, poolConfig);
 		} else {
 			// 使用了默认的 JedisCluster.DEFAULT_MAX_REDIRECTIONS
@@ -354,7 +354,7 @@ public class RedisClusterCacheUtils implements IRedisCacheUtils{
 					public boolean success(List<String> keys) {
 						for(String key: keys) {
 							T value = (T)SerializationUtils.deserialize(jedis.get(SafeEncoder.encode(key)));
-							values.put(StringUtil3.removeStart(key, prex), value);
+							values.put(StringUtils.removeStart(key, prex), value);
 						}
 						if (values.size() >= 100) {
 							return false;

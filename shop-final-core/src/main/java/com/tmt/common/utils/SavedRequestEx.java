@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * 扩展SavedRequest,可以在登录后跳转到指定的get页面，
@@ -45,14 +45,14 @@ public class SavedRequestEx implements Serializable{
 	//返回请求路径
 	public String getRequestUrl() {
 		String  _requestUrl = this.getRequestURI();
-		if( StringUtil3.isNotBlank(_requestUrl)) {
+		if( StringUtils.isNotBlank(_requestUrl)) {
 			StringBuilder requestUrl = new StringBuilder(_requestUrl);
 	        if (getQueryString() != null) {
 	            requestUrl.append("?").append(getQueryString());
 	        }
 	        _requestUrl = requestUrl.toString();
-	        if (StringUtil3.startsWith(_requestUrl, "//")) {
-	        	_requestUrl = StringUtil3.replace(_requestUrl, "//", "/");
+	        if (StringUtils.startsWith(_requestUrl, "//")) {
+	        	_requestUrl = StringUtils.replace(_requestUrl, "//", "/");
 			}
 	        return _requestUrl;
 		}

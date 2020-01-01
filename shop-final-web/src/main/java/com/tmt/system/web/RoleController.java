@@ -22,7 +22,7 @@ import com.tmt.common.persistence.QueryCondition;
 import com.tmt.common.persistence.QueryCondition.Criteria;
 import com.tmt.common.persistence.incrementer.IdGen;
 import com.tmt.common.utils.Lists;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.common.utils.WebUtils;
 import com.tmt.common.web.BaseController;
 import com.tmt.system.entity.Office;
@@ -79,7 +79,7 @@ public class RoleController extends BaseController {
 		if (role != null && role.getOfficeId() != null) {
 			c.andEqualTo("R.OFFICE_ID", role.getOfficeId());
 		}
-		if (role != null && role.getName() != null && !StringUtil3.isBlank(role.getName())) {
+		if (role != null && role.getName() != null && !StringUtils.isBlank(role.getName())) {
 			c.andLike("R.NAME", role.getName());
 		}
 		qc.setOrderByClause("R.CODE");
@@ -108,7 +108,7 @@ public class RoleController extends BaseController {
 			if (role == null) {
 				role = new Role();
 			}
-			if (role.getOfficeId() != null && StringUtil3.isNotBlank(role.getOfficeId().toString())) {
+			if (role.getOfficeId() != null && StringUtils.isNotBlank(role.getOfficeId().toString())) {
 				Office office = officeService.get(role.getOfficeId());
 				role.setOfficeId(office.getId());
 				role.setOfficeName(office.getName());

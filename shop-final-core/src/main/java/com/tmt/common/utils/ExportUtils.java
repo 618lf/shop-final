@@ -17,7 +17,7 @@ import org.apache.commons.io.IOUtils;
 
 import com.tmt.common.config.Globals;
 import com.tmt.common.exception.BaseRuntimeException;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.common.utils.zip.ZipEntry;
 import com.tmt.common.utils.zip.ZipOutputStream;
 
@@ -146,7 +146,7 @@ public class ExportUtils {
 					}
 					objZipOutputStream.closeEntry();
 				}
-				String _fileName = StringUtil3.substringBeforeLast(fileName, ".");
+				String _fileName = StringUtils.substringBeforeLast(fileName, ".");
 				ExportUtils.downloadFile(zipFile, _fileName + ".zip", response, encoding, Boolean.TRUE);
 			} catch (Exception e) {
 				throw new BaseRuntimeException(e.getMessage());

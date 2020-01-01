@@ -5,8 +5,8 @@ import java.util.Date;
 
 import com.tmt.common.utils.BigDecimalUtil;
 import com.tmt.common.utils.CacheUtils;
-import com.tmt.common.utils.DateUtil3;
 import com.tmt.common.utils.Ints;
+import com.tmt.common.utils.time.DateUtils;
 
 
 /**
@@ -71,7 +71,7 @@ public class TaskProgress implements Serializable{
 	 * @return
 	 */
 	public String getStartDate() {
-		return DateUtil3.getFormatDate(new Date(this.getStartTime()), "yyyy-MM-dd HH:mm:ss");
+		return DateUtils.getFormatDate(new Date(this.getStartTime()), "yyyy-MM-dd HH:mm:ss");
 	}
 	
 	/**
@@ -80,7 +80,7 @@ public class TaskProgress implements Serializable{
 	 */
 	public String getEndDate() {
 		if (this.getEndTime() != null) {
-			return DateUtil3.getFormatDate(new Date(this.getEndTime()), "yyyy-MM-dd HH:mm:ss");
+			return DateUtils.getFormatDate(new Date(this.getEndTime()), "yyyy-MM-dd HH:mm:ss");
 		}
 		return "";
 	}
@@ -91,8 +91,8 @@ public class TaskProgress implements Serializable{
 	 */
 	public String getPrettySeconds() {
 		if (this.getEndTime() != null) {
-			int time = (int) ((this.endTime - DateUtil3.getTimeStampNow().getTime())/1000);
-			return DateUtil3.prettySeconds(time);
+			int time = (int) ((this.endTime - DateUtils.getTimeStampNow().getTime())/1000);
+			return DateUtils.prettySeconds(time);
 		}
 		return "";
 	}
@@ -103,7 +103,7 @@ public class TaskProgress implements Serializable{
 	 */
 	public void done(Integer done) {
 		this.done = Ints.addI(this.getDone(), done);
-		Long time = DateUtil3.getTimeStampNow().getTime();
+		Long time = DateUtils.getTimeStampNow().getTime();
 		if (this.done != 0) {
 		    this.avgTime = (time - this.startTime) / this.done;
 		    this.endTime = this.startTime + this.total * this.avgTime;
@@ -119,7 +119,7 @@ public class TaskProgress implements Serializable{
 	public static TaskProgress newTaskProgress(Integer total, Integer done) {
 		TaskProgress progress = new TaskProgress();
 		progress.setTotal(Ints.nullToZero(total));
-		progress.setStartTime(DateUtil3.getTimeStampNow().getTime());
+		progress.setStartTime(DateUtils.getTimeStampNow().getTime());
 		progress.done(Ints.nullToZero(done));
 		return progress;
 	}

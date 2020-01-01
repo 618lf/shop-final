@@ -18,7 +18,6 @@ import com.tmt.task.SendEmailTask;
 import com.tmt.task.UpdateHandlerTask;
 import com.tmt.update.UpdateHandler;
 import com.tmt.update.UserOpsHandler;
-import com.tmt.update.WechatOpsHandler;
 
 import ch.qos.logback.classic.AsyncAppender;
 import ch.qos.logback.classic.LoggerContext;
@@ -45,7 +44,6 @@ public class AppConfiguration {
 	@Bean
 	public List<UpdateHandler> handlers() {
 		List<UpdateHandler> handlers = Lists.newArrayList();
-		handlers.add(new WechatOpsHandler());
 		handlers.add(new UserOpsHandler());
 		this.autowireBeans(handlers);
 		return handlers;

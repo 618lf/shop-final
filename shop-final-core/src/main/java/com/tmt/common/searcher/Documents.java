@@ -1,6 +1,5 @@
 package com.tmt.common.searcher;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Field.Store;
@@ -11,6 +10,8 @@ import org.apache.lucene.document.SortedDocValuesField;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.util.BytesRef;
+
+import com.tmt.common.utils.StringUtils;
 
 /**
  * 文档构建器

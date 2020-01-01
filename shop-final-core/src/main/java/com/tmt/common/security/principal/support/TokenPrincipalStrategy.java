@@ -6,12 +6,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.tmt.common.cache.redis.RedisUtils;
+import com.tmt.common.codec.Digests;
 import com.tmt.common.security.principal.Principal;
 import com.tmt.common.security.principal.PrincipalStrategy;
 import com.tmt.common.security.subject.Subject;
-import com.tmt.common.security.utils.StringUtils;
 import com.tmt.common.security.utils.TokenUtils;
-import com.tmt.common.utils.Digests;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * 基于 token 的身份解决方案

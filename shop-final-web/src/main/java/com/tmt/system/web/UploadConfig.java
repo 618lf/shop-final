@@ -11,7 +11,7 @@ import org.apache.commons.io.IOUtils;
 import com.tmt.common.utils.Ints;
 import com.tmt.common.utils.JsonMapper;
 import com.tmt.common.utils.Lists;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.system.entity.Site;
 
 /**
@@ -98,7 +98,7 @@ public class UploadConfig {
 			conf.put("allowFiles",
 					Lists.defaultList(site.getFileAllowFiles(), (List<String>) config.get("fileAllowFiles")));
 			conf.put("pathFormat",
-					StringUtil3.defaultString(site.getFileUploadPath(), (String) config.get("filePathFormat")));
+					StringUtils.defaultString(site.getFileUploadPath(), (String) config.get("filePathFormat")));
 			break;
 		case uploadimage:
 			conf.put("isBase64", "false");
@@ -110,7 +110,7 @@ public class UploadConfig {
 			conf.put("allowFiles",
 					Lists.defaultList(site.getImageAllowFiles(), (List<String>) config.get("imageAllowFiles")));
 			conf.put("pathFormat",
-					StringUtil3.defaultString(site.getImageUploadPath(), (String) config.get("imagePathFormat")));
+					StringUtils.defaultString(site.getImageUploadPath(), (String) config.get("imagePathFormat")));
 			break;
 		case uploadvideo:
 			conf.put("fieldName", config.get("videoFieldName"));
@@ -121,7 +121,7 @@ public class UploadConfig {
 			conf.put("allowFiles",
 					Lists.defaultList(site.getMediaAllowFiles(), (List<String>) config.get("videoAllowFiles")));
 			conf.put("pathFormat",
-					StringUtil3.defaultString(site.getMediaUploadPath(), (String) config.get("videoPathFormat")));
+					StringUtils.defaultString(site.getMediaUploadPath(), (String) config.get("videoPathFormat")));
 			break;
 		case uploadscrawl:
 			conf.put("isBase64", "true");
@@ -133,7 +133,7 @@ public class UploadConfig {
 			conf.put("allowFiles",
 					Lists.defaultList(site.getImageAllowFiles(), (List<String>) config.get("imageAllowFiles")));
 			conf.put("pathFormat",
-					StringUtil3.defaultString(site.getImageUploadPath(), (String) config.get("imagePathFormat")));
+					StringUtils.defaultString(site.getImageUploadPath(), (String) config.get("imagePathFormat")));
 			break;
 		case catchimage:
 			conf.put("fieldName", config.get("catcherFieldName"));
@@ -145,7 +145,7 @@ public class UploadConfig {
 			conf.put("allowFiles",
 					Lists.defaultList(site.getImageAllowFiles(), (List<String>) config.get("imageAllowFiles")));
 			conf.put("pathFormat",
-					StringUtil3.defaultString(site.getImageUploadPath(), (String) config.get("imagePathFormat")));
+					StringUtils.defaultString(site.getImageUploadPath(), (String) config.get("imagePathFormat")));
 			break;
 		default:
 			;

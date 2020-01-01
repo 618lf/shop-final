@@ -11,9 +11,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.tmt.common.utils.StorageUtils;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * Created by yihui on 2017/4/7.

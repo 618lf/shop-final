@@ -12,14 +12,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.tmt.common.utils.ContextHolderUtils;
-import com.tmt.common.utils.DateUtil3;
 import com.tmt.common.utils.FileUtils;
 import com.tmt.common.utils.FreemarkerUtils;
 import com.tmt.common.utils.JaxbMapper;
 import com.tmt.common.utils.Lists;
 import com.tmt.common.utils.Maps;
 import com.tmt.common.utils.SpringContextHolder;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
+import com.tmt.common.utils.time.DateUtils;
 import com.tmt.gen.entity.Category;
 import com.tmt.gen.entity.Config;
 import com.tmt.gen.entity.Scheme;
@@ -79,45 +79,45 @@ public class GenUtils {
 	 * @return
 	 */
 	public static void convertDbType2JavaTypes(TableColumn column) {
-		String _dbtype = StringUtil3.upperCase(StringUtil3.substringBefore(column.getDbType(), "("));
+		String _dbtype = StringUtils.upperCase(StringUtils.substringBefore(column.getDbType(), "("));
 		String _javaType = "";
 		String _jdbcType = "";
 		if ("ARRAY".equals(_dbtype)) {
 			_jdbcType = "ARRAY";
-			_javaType = StringUtil3.substringAfterLast(Object.class.getName(),".");
+			_javaType = StringUtils.substringAfterLast(Object.class.getName(),".");
 		} else if("BIGINT".equals(_dbtype)) {
 			_jdbcType = "BIGINT";
-			_javaType = StringUtil3.substringAfterLast(Long.class.getName(),".");
+			_javaType = StringUtils.substringAfterLast(Long.class.getName(),".");
 		} else if("BINARY".equals(_dbtype)) {
 			_jdbcType = "BINARY";
 			_javaType = "byte[]";
 		} else if("BIT".equals(_dbtype)) {
 			_jdbcType = "BIT";
-			_javaType = StringUtil3.substringAfterLast(Boolean.class.getName(),".");
+			_javaType = StringUtils.substringAfterLast(Boolean.class.getName(),".");
 		} else if("BLOB".equals(_dbtype)) {
 			_jdbcType = "BLOB";
 			_javaType = "byte[]";
 		} else if("TEXT".equals(_dbtype)) {
 			_jdbcType = "LONGVARCHAR";
-			_javaType = StringUtil3.substringAfterLast(String.class.getName(),".");
+			_javaType = StringUtils.substringAfterLast(String.class.getName(),".");
 		} else if("LONGTEXT".equals(_dbtype)) {
 			_jdbcType = "LONGVARCHAR";
-			_javaType = StringUtil3.substringAfterLast(String.class.getName(),".");
+			_javaType = StringUtils.substringAfterLast(String.class.getName(),".");
 		} else if("MEDIUMTEXT".equals(_dbtype)) {
 			_jdbcType = "LONGVARCHAR";
-			_javaType = StringUtil3.substringAfterLast(String.class.getName(),".");
+			_javaType = StringUtils.substringAfterLast(String.class.getName(),".");
 		} else if("BOOLEAN".equals(_dbtype)) {
 			_jdbcType = "BOOLEAN";
-			_javaType = StringUtil3.substringAfterLast(Boolean.class.getName(),".");
+			_javaType = StringUtils.substringAfterLast(Boolean.class.getName(),".");
 		} else if("CHAR".equals(_dbtype)) {
 			_jdbcType = "CHAR";
-			_javaType = StringUtil3.substringAfterLast(String.class.getName(),".");
+			_javaType = StringUtils.substringAfterLast(String.class.getName(),".");
 		} else if("CLOB".equals(_dbtype)) {
 			_jdbcType = "CLOB";
-			_javaType = StringUtil3.substringAfterLast(String.class.getName(),".");
+			_javaType = StringUtils.substringAfterLast(String.class.getName(),".");
 		} else if("DATALINK".equals(_dbtype)) {
 			_jdbcType = "DATALINK";
-			_javaType = StringUtil3.substringAfterLast(Object.class.getName(),".");
+			_javaType = StringUtils.substringAfterLast(Object.class.getName(),".");
 		} else if("DATE".equals(_dbtype)) {
 			_jdbcType = "DATE";
 			_javaType = Date.class.getName();
@@ -129,40 +129,40 @@ public class GenUtils {
 			_javaType = BigDecimal.class.getName();
 		} else if("DISTINCT".equals(_dbtype)) {
 			_jdbcType = "DISTINCT";
-			_javaType = StringUtil3.substringAfterLast(Object.class.getName(),".");
+			_javaType = StringUtils.substringAfterLast(Object.class.getName(),".");
 		} else if("DOUBLE".equals(_dbtype)) {
 			_jdbcType = "DOUBLE";
-			_javaType = StringUtil3.substringAfterLast(Double.class.getName(),".");
+			_javaType = StringUtils.substringAfterLast(Double.class.getName(),".");
 		} else if("FLOAT".equals(_dbtype)) {
 			_jdbcType = "FLOAT";
-			_javaType = StringUtil3.substringAfterLast(Double.class.getName(),".");
+			_javaType = StringUtils.substringAfterLast(Double.class.getName(),".");
 		} else if("INTEGER".equals(_dbtype)) {
 			_jdbcType = "INTEGER";
-			_javaType = StringUtil3.substringAfterLast(Integer.class.getName(),".");
+			_javaType = StringUtils.substringAfterLast(Integer.class.getName(),".");
 		} else if("LONGVARBINARY".equals(_dbtype)) {
 			_jdbcType = "LONGVARBINARY";
 			_javaType = "byte[]";
 		} else if("LONGVARCHAR".equals(_dbtype)) {
 			_jdbcType = "LONGVARCHAR";
-			_javaType = StringUtil3.substringAfterLast(String.class.getName(),".");
+			_javaType = StringUtils.substringAfterLast(String.class.getName(),".");
 		} else if("NULL".equals(_dbtype)) {
 			_jdbcType = "NULL";
-			_javaType = StringUtil3.substringAfterLast(Object.class.getName(),".");
+			_javaType = StringUtils.substringAfterLast(Object.class.getName(),".");
 		} else if("NUMERIC".equals(_dbtype)) { //需要获取长度,小数点数
 			_jdbcType = "NUMERIC";
 			_javaType = BigDecimal.class.getName();
 		} else if("REAL".equals(_dbtype)) {
 			_jdbcType = "REAL";
-			_javaType = StringUtil3.substringAfterLast(Double.class.getName(),".");
+			_javaType = StringUtils.substringAfterLast(Double.class.getName(),".");
 		} else if("REF".equals(_dbtype)) {
 			_jdbcType = "REF";
-			_javaType = StringUtil3.substringAfterLast(Object.class.getName(),".");
+			_javaType = StringUtils.substringAfterLast(Object.class.getName(),".");
 		} else if("SMALLINT".equals(_dbtype)) {
 			_jdbcType = "SMALLINT";
-			_javaType = StringUtil3.substringAfterLast(Short.class.getName(),".");
+			_javaType = StringUtils.substringAfterLast(Short.class.getName(),".");
 		} else if("STRUCT".equals(_dbtype)) {
 			_jdbcType = "STRUCT";
-			_javaType = StringUtil3.substringAfterLast(Object.class.getName(),".");
+			_javaType = StringUtils.substringAfterLast(Object.class.getName(),".");
 		} else if("TIME".equals(_dbtype)) {
 			_jdbcType = "TIME";
 			_javaType = Date.class.getName();
@@ -171,19 +171,19 @@ public class GenUtils {
 			_javaType = Date.class.getName();
 		} else if("TINYINT".equals(_dbtype)) {
 			_jdbcType = "TINYINT";
-			_javaType = StringUtil3.substringAfterLast(Byte.class.getName(),".");
+			_javaType = StringUtils.substringAfterLast(Byte.class.getName(),".");
 		} else if("VARBINARY".equals(_dbtype)) {
 			_jdbcType = "VARBINARY";
 			_javaType = "byte[]";
 		} else if("VARCHAR".equals(_dbtype)) {
 			_jdbcType = "VARCHAR";
-			_javaType = StringUtil3.substringAfterLast(String.class.getName(),".");
+			_javaType = StringUtils.substringAfterLast(String.class.getName(),".");
 		}  else if("MEDIUMINT".equals(_dbtype)) {
 			_jdbcType = "MEDIUMINT";
-			_javaType = StringUtil3.substringAfterLast(Integer.class.getName(),".");
+			_javaType = StringUtils.substringAfterLast(Integer.class.getName(),".");
 		} else if("INT".equals(_dbtype)) {
 			_jdbcType = "INTEGER";
-			_javaType = StringUtil3.substringAfterLast(Integer.class.getName(),".");
+			_javaType = StringUtils.substringAfterLast(Integer.class.getName(),".");
 		}
 		
 		//设置对应的类型
@@ -193,7 +193,7 @@ public class GenUtils {
 	
 	//设置默认的显示类型和校验类型
 	public static void convertDbType2ShowTypes(TableColumn column) {
-		String _dbtype = StringUtil3.upperCase(StringUtil3.substringBefore(column.getDbType(), "("));
+		String _dbtype = StringUtils.upperCase(StringUtils.substringBefore(column.getDbType(), "("));
 		String _showType = "";
 		String _checkType = "";
 		if ("TINYINT".equals(_dbtype)) {
@@ -207,20 +207,20 @@ public class GenUtils {
 		}
 		
 		String javaField = column.getJavaField();
-		if (StringUtil3.endsWith(javaField, "userId")
-				|| StringUtil3.endsWith(javaField, "officeId") 
-				|| StringUtil3.endsWith(javaField, "areaId")) {
+		if (StringUtils.endsWith(javaField, "userId")
+				|| StringUtils.endsWith(javaField, "officeId") 
+				|| StringUtils.endsWith(javaField, "areaId")) {
 			_showType = "treeselect";
-		}else if(StringUtil3.endsWith(javaField, "userIds")
-				|| StringUtil3.endsWith(javaField, "officeIds") 
-				|| StringUtil3.endsWith(javaField, "areaIds") 
-				|| StringUtil3.endsWith(javaField, "parentId") ) {
+		}else if(StringUtils.endsWith(javaField, "userIds")
+				|| StringUtils.endsWith(javaField, "officeIds") 
+				|| StringUtils.endsWith(javaField, "areaIds") 
+				|| StringUtils.endsWith(javaField, "parentId") ) {
 			_showType = "tanselect";
-		}else if(StringUtil3.indexOf(javaField, "icon") != -1) {
+		}else if(StringUtils.indexOf(javaField, "icon") != -1) {
 			_showType = "iconselect";
-		}else if(StringUtil3.indexOf(javaField, "images") != -1) {
+		}else if(StringUtils.indexOf(javaField, "images") != -1) {
 			_showType = "mutilimg";
-		}else if(StringUtil3.indexOf(javaField, "image") != -1){
+		}else if(StringUtils.indexOf(javaField, "image") != -1){
 			_showType = "singleimg";
 		}
 		column.setShowType(_showType);
@@ -242,8 +242,8 @@ public class GenUtils {
 					List<String> list = e.getTemplate();
 					if (list != null){
 						for (String s : list){
-							if (StringUtil3.startsWith(s, Category.CATEGORY_REF)){
-								templates.addAll(getTemplateList(StringUtil3.replace(s, Category.CATEGORY_REF, "")));
+							if (StringUtils.startsWith(s, Category.CATEGORY_REF)){
+								templates.addAll(getTemplateList(StringUtils.replace(s, Category.CATEGORY_REF, "")));
 							}else{
 								Template template = file2Object(s, Template.class);
 								if (template != null){
@@ -299,14 +299,14 @@ public class GenUtils {
 		model.put("packageName", scheme.getPackageName());
 		model.put("moduleName", scheme.getModuleName());
 		model.put("subModuleName", scheme.getSubModuleName());
-		model.put("functionName", StringUtil3.lowerCaseFirstOne(scheme.getFunctionName()));
+		model.put("functionName", StringUtils.lowerCaseFirstOne(scheme.getFunctionName()));
 		model.put("functionNameSimple", scheme.getFunctionNameSimple());
 		model.put("functionAuthor", scheme.getFunctionAuthor());
-		model.put("functionVersion", DateUtil3.getTodayStr());
+		model.put("functionVersion", DateUtils.getTodayStr());
 		
 		//功能名的大小
-		model.put("className", StringUtil3.upperCaseFirstOne(scheme.getFunctionName()));
-		model.put("tableName", StringUtil3.upperCase(scheme.getTable().getName()));
+		model.put("className", StringUtils.upperCaseFirstOne(scheme.getFunctionName()));
+		model.put("tableName", StringUtils.upperCase(scheme.getTable().getName()));
 		model.put("pk", scheme.getTable().getPkJavaType());
 		
 		//增强功能
@@ -321,12 +321,12 @@ public class GenUtils {
 		model.put("firstStringField", scheme.getTable().getFisrtStringField());
 		
 		//日期
-		model.put("date", DateUtil3.getTodayStr());
+		model.put("date", DateUtils.getTodayStr());
 		model.put("author", UserUtils.getUser().getName());
 		
 		//纠正相关问题
 		if(scheme.getModuleName().equals(scheme.getSubModuleName())
-				|| StringUtil3.isBlank(scheme.getSubModuleName())) {
+				|| StringUtils.isBlank(scheme.getSubModuleName())) {
 		   model.put("subModuleName", REMOVE);
 		}
 		
@@ -344,7 +344,7 @@ public class GenUtils {
 		if( srcFilePath == null ) {
 			String webInf = "WEB-INF";
 			String webInfPath = ContextHolderUtils.getWebInfPath();
-			String parentpath = StringUtil3.remove(webInfPath, webInf);
+			String parentpath = StringUtils.remove(webInfPath, webInf);
 			File parentFile = new File(parentpath);
 			if(parentFile != null && parentFile.exists()) {
 				parentFile = parentFile.getParentFile();
@@ -359,7 +359,7 @@ public class GenUtils {
 			String webInfPath = ContextHolderUtils.getWebInfPath();
 			viewFilePath = new File(webInfPath, "views").getAbsolutePath();
 		}
-		if(StringUtil3.contains(template.getName(), "view")) {
+		if(StringUtils.contains(template.getName(), "view")) {
 			return new File(viewFilePath);
 		}
 		return new File(srcFilePath);
@@ -370,16 +370,16 @@ public class GenUtils {
 		try{
 			File srcFile = getSrcFolder(template);
 			String fileName = new StringBuilder(srcFile.getAbsolutePath())
-			                .append(StringUtil3.replaceEach(FreemarkerUtils.processNoTemplate(template.getFilePath(), model),
+			                .append(StringUtils.replaceEach(FreemarkerUtils.processNoTemplate(template.getFilePath(), model),
 			                		new String[]{"//", "/", "."}, new String[]{File.separator, File.separator, File.separator}))
 			                .append(FreemarkerUtils.processNoTemplate(template.getFileName(), model)).toString();
-			fileName = StringUtil3.replace(fileName, File.separator + REMOVE, "");
+			fileName = StringUtils.replace(fileName, File.separator + REMOVE, "");
 			logger.debug(" fileName === " + fileName);
 			
 			String content = FreemarkerUtils.processNoTemplate(template.getContent(), model);
 			
 			//处理问题
-			content = StringUtil3.replaceEach(content, new String[]{"/" + REMOVE, "." + REMOVE}, new String[]{"", ""});
+			content = StringUtils.replaceEach(content, new String[]{"/" + REMOVE, "." + REMOVE}, new String[]{"", ""});
 			FileUtils.deleteFile(fileName);
 			
 			if (FileUtils.createFile(fileName)){

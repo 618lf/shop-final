@@ -48,7 +48,7 @@ public class ContextHolderUtils {
 	 */
 	public static String getWebRootPath() {
 		String path = XSpringContextHolder.getServletContext().getRealPath(File.separator);
-		return StringUtil3.endsWith(path, File.separator) ? path : path + File.separator;
+		return StringUtils.endsWith(path, File.separator) ? path : path + File.separator;
 	}
 
 	/**
@@ -98,7 +98,7 @@ public class ContextHolderUtils {
 		if (!tmpDir.exists()) {
 			tmpDir.mkdirs();
 		}
-		fileName = StringUtil3.isBlank(fileName) ? IdGen.stringKey() : fileName;
+		fileName = StringUtils.isBlank(fileName) ? IdGen.stringKey() : fileName;
 		return new File(tmpDir, fileName);
 	}
 

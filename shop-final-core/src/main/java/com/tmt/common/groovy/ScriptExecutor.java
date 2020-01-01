@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.runtime.InvokerHelper;
 
-import com.tmt.common.utils.Digests;
+import com.tmt.common.codec.Digests;
 
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;

@@ -11,7 +11,7 @@ import com.tmt.common.config.Globals;
 import com.tmt.common.email.SendEmailUtils;
 import com.tmt.common.entity.AjaxResult;
 import com.tmt.common.persistence.incrementer.IdGen;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.common.utils.WebUtils;
 import com.tmt.common.web.BaseController;
 import com.tmt.system.entity.Site;
@@ -80,7 +80,7 @@ public class SiteController extends BaseController {
 	@RequestMapping("save/base")
 	public String baseSave(Site site, Model model, RedirectAttributes redirectAttributes) {
 		this.siteService.baseSave(site);
-		addMessage(redirectAttributes, StringUtil3.format("%s'%s'%s", "修改站点设置", site.getName(), "成功"));
+		addMessage(redirectAttributes, StringUtils.format("%s'%s'%s", "修改站点设置", site.getName(), "成功"));
 		redirectAttributes.addAttribute("id", site.getId());
 		return WebUtils.redirectTo(new StringBuilder(Globals.adminPath).append("/system/site/form/base").toString());
 	}
@@ -96,7 +96,7 @@ public class SiteController extends BaseController {
 	@RequestMapping("save/safe")
 	public String safeSave(Site site, Model model, RedirectAttributes redirectAttributes) {
 		this.siteService.safeSave(site);
-		addMessage(redirectAttributes, StringUtil3.format("%s'%s'%s", "修改站点设置", site.getName(), "成功"));
+		addMessage(redirectAttributes, StringUtils.format("%s'%s'%s", "修改站点设置", site.getName(), "成功"));
 		redirectAttributes.addAttribute("id", site.getId());
 		return WebUtils.redirectTo(new StringBuilder(Globals.adminPath).append("/system/site/form/safe").toString());
 	}
@@ -112,7 +112,7 @@ public class SiteController extends BaseController {
 	@RequestMapping("save/email")
 	public String emailSave(Site site, Model model, RedirectAttributes redirectAttributes) {
 		this.siteService.emailSave(site);
-		addMessage(redirectAttributes, StringUtil3.format("%s'%s'%s", "修改站点设置", site.getName(), "成功"));
+		addMessage(redirectAttributes, StringUtils.format("%s'%s'%s", "修改站点设置", site.getName(), "成功"));
 		redirectAttributes.addAttribute("id", site.getId());
 		return WebUtils.redirectTo(new StringBuilder(Globals.adminPath).append("/system/site/form/email").toString());
 	}
@@ -126,7 +126,7 @@ public class SiteController extends BaseController {
 	@RequestMapping("email_test")
 	public AjaxResult test(String to) {
 		Site site = siteService.getSite();
-		String subject = StringUtil3.format("%s", site.getName());
+		String subject = StringUtils.format("%s", site.getName());
 		String[] toArray = new String[] { to };
 		String[] ccArray = null;
 		String content = "如果您收到这封邮件，说明邮件服务是正常！";

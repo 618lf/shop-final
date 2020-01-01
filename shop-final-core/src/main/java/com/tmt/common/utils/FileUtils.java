@@ -656,7 +656,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	}
 
 	private static void _listParents(File file, File toParent, List<File> files) {
-		if (file.exists() && StringUtil3.startsWith(file.getAbsolutePath(), toParent.getAbsolutePath())
+		if (file.exists() && StringUtils.startsWith(file.getAbsolutePath(), toParent.getAbsolutePath())
 				&& !file.getAbsolutePath().equals(toParent.getAbsolutePath())) {
 			files.add(file);
 			File parent = file.getParentFile();

@@ -1,12 +1,10 @@
 package com.tmt.common.excel;
 
-import java.text.ParseException;
-
 import org.apache.commons.beanutils.Converter;
 
 import com.tmt.common.config.Globals;
-import com.tmt.common.utils.DateUtil3;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
+import com.tmt.common.utils.time.DateUtils;
 
 public class DateConverter implements Converter{
 
@@ -22,15 +20,11 @@ public class DateConverter implements Converter{
 	@Override
 	public Object convert(Class type, Object source) {
 		String str = null;
-		if (source == null || StringUtil3.isBlank(str = String.valueOf(source))) {
+		if (source == null || StringUtils.isBlank(str = String.valueOf(source))) {
 			return null;
 		} else {
-			str = StringUtil3.trim(str);
-			try {
-				return DateUtil3.parseDate(str, dateFormats);
-			} catch (ParseException localParseException) {
-				return null;
-			}
+			str = StringUtils.trim(str);
+			return DateUtils.parseDate(str, dateFormats);
 		}
 	}
 	

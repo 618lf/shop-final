@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.tmt.common.config.Globals;
 import com.tmt.common.utils.ContextHolderUtils;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.common.utils.TreeEntityUtils;
 import com.tmt.common.utils.TreeEntityUtils.Filter;
 import com.tmt.system.entity.Menu;
@@ -146,9 +146,9 @@ public class YSMenuDisplay {
 		String href = "javascript:void(0)";
 		if (menu.getType() == 2) {
 			href = menu.getHref();
-			if (!StringUtil3.startsWithAny(href, new String[] { "http://", "https://" })) {
-				if (!StringUtil3.startsWithAny(href, new String[] { "http://", "https://" })
-						&& !StringUtil3.startsWith(href, Globals.adminPath)) {
+			if (!StringUtils.startsWithAny(href, new String[] { "http://", "https://" })) {
+				if (!StringUtils.startsWithAny(href, new String[] { "http://", "https://" })
+						&& !StringUtils.startsWith(href, Globals.adminPath)) {
 					href = Globals.adminPath + href;
 					menu.setHref(href);
 				}
@@ -195,9 +195,9 @@ public class YSMenuDisplay {
 		String icon = menu.getIconClass() == null ? "iconfont icon-menu" : menu.getIconClass();
 		StringBuilder icons = new StringBuilder("");
 		if (deep == 1) {
-			return StringUtil3.appendTo(icons, "<i class='menu ", icon, "'></i>&nbsp;").toString();
+			return StringUtils.appendTo(icons, "<i class='menu ", icon, "'></i>&nbsp;").toString();
 		}
-		return StringUtil3.appendTo(icons).toString();
+		return StringUtils.appendTo(icons).toString();
 	}
 
 	/**
@@ -209,8 +209,8 @@ public class YSMenuDisplay {
 	 * @throws IOException
 	 */
 	private static String getSpanTag(Menu menu, int deep) throws IOException {
-		return StringUtil3.appendTo(new StringBuilder(), "<span class='menu-text ",
-				StringUtil3.trimToEmpty(menu.getDegree()), "'>", menu.getName(), "</span>", menu.getSubMenu())
+		return StringUtils.appendTo(new StringBuilder(), "<span class='menu-text ",
+				StringUtils.trimToEmpty(menu.getDegree()), "'>", menu.getName(), "</span>", menu.getSubMenu())
 				.toString();
 	}
 }

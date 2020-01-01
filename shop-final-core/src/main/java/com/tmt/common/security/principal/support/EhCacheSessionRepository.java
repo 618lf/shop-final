@@ -12,8 +12,8 @@ import com.tmt.common.security.principal.Principal;
 import com.tmt.common.security.principal.Session;
 import com.tmt.common.security.principal.SessionRepository;
 import com.tmt.common.security.principal.support.EhCacheSessionRepository.EhCacheSession;
-import com.tmt.common.security.utils.StringUtils;
 import com.tmt.common.utils.Maps;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * 用 EhCache存储 用户信息

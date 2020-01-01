@@ -22,7 +22,7 @@ import com.tmt.common.utils.JsonMapper;
 import com.tmt.common.utils.Lists;
 import com.tmt.common.utils.Maps;
 import com.tmt.common.utils.StorageUtils;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.common.utils.WebUtils;
 
 /**
@@ -121,8 +121,8 @@ public abstract class AbstractExportDataSource<T> implements IExportDataSource<T
 		Map<String, String[]> params = Maps.newOrderMap();
 		for (Object param : request.getParameterMap().keySet()) {
 			String key = String.valueOf(param);
-			if (key != null && StringUtil3.startsWith(key, IExportFile.EXPORTS_PARAM)) {
-				params.put(StringUtil3.substringAfter(key, IExportFile.EXPORTS_PARAM), request.getParameterValues(key));
+			if (key != null && StringUtils.startsWith(key, IExportFile.EXPORTS_PARAM)) {
+				params.put(StringUtils.substringAfter(key, IExportFile.EXPORTS_PARAM), request.getParameterValues(key));
 			}
 		}
 		List<Map<String, String>> relas = Lists.newArrayList();

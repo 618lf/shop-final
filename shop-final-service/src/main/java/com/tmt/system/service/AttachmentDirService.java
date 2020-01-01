@@ -12,7 +12,7 @@ import com.tmt.common.persistence.QueryCondition;
 import com.tmt.common.persistence.QueryCondition.Criteria;
 import com.tmt.common.persistence.incrementer.IdGen;
 import com.tmt.common.utils.Lists;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.system.dao.AttachmentDirDao;
 import com.tmt.system.entity.AttachmentDir;
 import com.tmt.system.entity.User;
@@ -185,7 +185,7 @@ public class AttachmentDirService extends DataScopeService<AttachmentDir, Long> 
 	@Transactional
 	public AttachmentDir getUserSpaceDir(User user) {
 		String no = user.getNo();
-		String name = StringUtil3.format("%s(%s)", no, user.getName());
+		String name = StringUtils.format("%s(%s)", no, user.getName());
 		AttachmentDir parent = null;
 		if (user.isRoot()) {
 			no = "S2";
@@ -194,7 +194,7 @@ public class AttachmentDirService extends DataScopeService<AttachmentDir, Long> 
 		} else {
 			parent = AttachmentDir.getHomeDir();
 		}
-		if (StringUtil3.isNotBlank(no)) {
+		if (StringUtils.isNotBlank(no)) {
 			AttachmentDir dir = this.queryForObject("getByCode", no);
 			if (dir == null) {
 				dir = AttachmentDir.newDefaultUserSpace(no, name, parent);

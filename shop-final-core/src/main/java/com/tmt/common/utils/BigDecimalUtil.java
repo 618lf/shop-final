@@ -245,7 +245,7 @@ public class BigDecimalUtil {
 	public static long tenThoundsToCent(String money){
 		//去掉逗号
 		if (money.indexOf(',') > 0){
-			money = StringUtil3.remove(money, ',');
+			money = StringUtils.remove(money, ',');
 		}
 		BigDecimal moneyd = BigDecimal.valueOf(Double.valueOf(money));
 		moneyd = moneyd.multiply(BigDecimal.valueOf(1000000));
@@ -311,7 +311,7 @@ public class BigDecimalUtil {
 	 * @return
 	 */
 	public static BigDecimal valueOf(String value){
-		return StringUtil3.isEmpty(value)?BigDecimal.ZERO:new BigDecimal(value);
+		return StringUtils.isEmpty(value)?BigDecimal.ZERO:new BigDecimal(value);
 	}
 	
 	/**

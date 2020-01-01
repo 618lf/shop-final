@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.tmt.common.security.mgt.PatternMatcher;
 import com.tmt.common.security.mgt.support.AntPathMatcher;
-import com.tmt.common.security.utils.StringUtils;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.common.utils.WebUtils;
 
 /**

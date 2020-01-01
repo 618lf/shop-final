@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.zxing.EncodeHintType;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * 生成的属性
@@ -304,7 +304,7 @@ public class QrcodeOptions {
         }
 
         public static DrawStyle getDrawStyle(String name) {
-            if (StringUtil3.isBlank(name)) { // 默认返回矩形
+            if (StringUtils.isBlank(name)) { // 默认返回矩形
                 return RECT;
             }
 

@@ -59,7 +59,7 @@ import com.tmt.common.persistence.ScorePage;
 import com.tmt.common.utils.Lists;
 import com.tmt.common.utils.Maps;
 import com.tmt.common.utils.RegexpUtil;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * lunene 查询维护
@@ -262,7 +262,7 @@ public abstract class BaseSearcher<T extends IdEntity<Long>> {
 	 * @return
 	 */
 	private ScoreDoc getScoreDoc(String id, BooleanQuery query, Sort sort, IndexSearcher searcher) {
-		if (!StringUtil3.isNotBlank(id)) {return null;}
+		if (!StringUtils.isNotBlank(id)) {return null;}
 		try {
 			BooleanQuery.Builder builder = new BooleanQuery.Builder();
 			builder.add(query, BooleanClause.Occur.MUST);
@@ -658,12 +658,12 @@ public abstract class BaseSearcher<T extends IdEntity<Long>> {
 	 */
 	protected <E> E renderWrap(String[] fields, FastVectorHighlighter fast, FieldQuery fquery, Query query, Highlighter normal, IndexSearcher searcher, ScoreDoc sDoc, Document doc, Byte context) throws IOException {
 		Map<String, String> fastValues = Maps.newHashMap();
-		if (fast != null && !StringUtil3.contains(query.toString(), "spanNear")) { //执行高亮,高亮不支持SpanNear
+		if (fast != null && !StringUtils.contains(query.toString(), "spanNear")) { //执行高亮,高亮不支持SpanNear
 			for(String field: fields) {
 			   try {
 				   String[] values = fast.getBestFragments(fquery, searcher.getIndexReader(), sDoc.doc, field, this.getHighlightChars(fields), this.getHighlightFragments(fields));
 				   if(null != values && values.length != 0) {
-					  String value = StringUtil3.join(values, HL_FRAGMENT_DIVIDE);
+					  String value = StringUtils.join(values, HL_FRAGMENT_DIVIDE);
 					  fastValues.put(field, value);
 				   }
 			   } catch (Exception e) {}
@@ -729,7 +729,7 @@ public abstract class BaseSearcher<T extends IdEntity<Long>> {
 	 */
 	private Query idQuery(Serializable id) {
 		BooleanQuery.Builder builder = new BooleanQuery.Builder();
-		if (id != null && StringUtil3.isNotBlank(id.toString())) {
+		if (id != null && StringUtils.isNotBlank(id.toString())) {
 			TermQuery q = new TermQuery(new Term(ID, id.toString()));
 			builder.add(q, BooleanClause.Occur.MUST);
 		}
@@ -814,9 +814,9 @@ public abstract class BaseSearcher<T extends IdEntity<Long>> {
 	 * @return
 	 */
 	protected Query queryParser(String query, String[] fields) {
-		if (StringUtil3.isNotBlank(query)) {
+		if (StringUtils.isNotBlank(query)) {
 			//分割查询 ～
-			if(StringUtil3.containsAny(query, INTERVAL_CHARS)) {
+			if(StringUtils.containsAny(query, INTERVAL_CHARS)) {
 			   BooleanQuery.Builder builder = new BooleanQuery.Builder();
 			   String[] groups = RegexpUtil.newRegexpMatcher("([^~～]*)[~～](.*)").getArrayGroups(query);
 			   String _query = QueryParser.escape(groups[1]);
@@ -854,7 +854,7 @@ public abstract class BaseSearcher<T extends IdEntity<Long>> {
 	 * @return
 	 */
 	protected String idsQuery(String id) {
-		return StringUtil3.format("*,%s,*", id);
+		return StringUtils.format("*,%s,*", id);
 	}
 	
 	/**
@@ -862,10 +862,10 @@ public abstract class BaseSearcher<T extends IdEntity<Long>> {
 	 * @return
 	 */
 	protected String idsField(String value) {
-		if (StringUtil3.isBlank(value)) {
+		if (StringUtils.isBlank(value)) {
 			return "";
 		}
-		return StringUtil3.format(",%s,", value);
+		return StringUtils.format(",%s,", value);
 	}
 	public String getLUCENE_INDEX_PATH() {
 		return LUCENE_INDEX_PATH;

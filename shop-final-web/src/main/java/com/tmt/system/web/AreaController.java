@@ -29,7 +29,7 @@ import com.tmt.common.utils.FileUtils;
 import com.tmt.common.utils.FreemarkerUtils;
 import com.tmt.common.utils.Lists;
 import com.tmt.common.utils.Maps;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.common.utils.TreeEntityUtils;
 import com.tmt.common.utils.WebUtils;
 import com.tmt.common.web.BaseController;
@@ -159,7 +159,7 @@ public class AreaController extends BaseController {
 		String url = "http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2015/index.html";
 		HttpUriRequest request = RequestBuilder.get().setUri(url).build();
 		String html = LocalHttpClient.execute(request, Charset.forName("gb2312"));
-		if (StringUtil3.isBlank(html)) {
+		if (StringUtils.isBlank(html)) {
 			return AjaxResult.error("同步失败");
 		}
 
@@ -193,7 +193,7 @@ public class AreaController extends BaseController {
 				for (Area county : countys) {
 					String cocode = county.getCode();
 					county.setParentId(city.getId());
-					if (StringUtil3.endsWith(cocode, ".html")) {
+					if (StringUtils.endsWith(cocode, ".html")) {
 						url = baseUrl + province.getId() + "/" + cocode;
 						request = RequestBuilder.get().setUri(url).build();
 						html = LocalHttpClient.execute(request, Charset.forName("gb2312"));
@@ -201,7 +201,7 @@ public class AreaController extends BaseController {
 						county.setChildren(towns);
 						for (Area town : towns) {
 							town.setParentId(county.getId());
-							town.setName(StringUtil3.remove(town.getName(), "办事处"));
+							town.setName(StringUtils.remove(town.getName(), "办事处"));
 						}
 						areas.addAll(towns);
 					}

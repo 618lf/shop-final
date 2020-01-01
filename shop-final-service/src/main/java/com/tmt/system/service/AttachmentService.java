@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.tmt.common.persistence.BaseDao;
 import com.tmt.common.service.BaseService;
 import com.tmt.common.utils.StorageUtils;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.system.dao.AttachmentDao;
 import com.tmt.system.entity.Attachment;
 import com.tmt.system.entity.AttachmentDir;
@@ -89,7 +89,7 @@ public class AttachmentService extends BaseService<Attachment, Long> implements 
 	public String storage(byte[] data, String filePath, AttachmentDir dir, String originFileName, long length,
 			User user) {
 		String url = StorageUtils.upload(data, null, filePath);
-		if (StringUtil3.isNotBlank(url)) {
+		if (StringUtils.isNotBlank(url)) {
 			Attachment attachment = new Attachment();
 			attachment.setName(originFileName);
 			attachment.setSize(length);
@@ -104,7 +104,7 @@ public class AttachmentService extends BaseService<Attachment, Long> implements 
 	// 得到安全的存储目录(只能操作自己的存储空间)
 	private AttachmentDir getSafeDir(AttachmentDir dir, User user) {
 		AttachmentDir home = dirService.getUserSpaceDir(user);
-		if (!user.isRoot() && !StringUtil3.contains(dir.getParentIds(), home.getId().toString())) {
+		if (!user.isRoot() && !StringUtils.contains(dir.getParentIds(), home.getId().toString())) {
 			return home;
 		}
 		return dir;
@@ -125,7 +125,7 @@ public class AttachmentService extends BaseService<Attachment, Long> implements 
 	public String mergeChunks(String uuid, String filePath, AttachmentDir dir, String originFileName, long length,
 			User user) {
 		String url = StorageUtils.mergeChunks(uuid, null, filePath);
-		if (StringUtil3.isNotBlank(url)) {
+		if (StringUtils.isNotBlank(url)) {
 			Attachment attachment = new Attachment();
 			attachment.setName(originFileName);
 			attachment.setSize(length);

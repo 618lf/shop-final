@@ -11,7 +11,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.tmt.common.persistence.incrementer.IdGen;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.common.web.security.session.SessionProvider;
 
 /**
@@ -97,7 +97,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 	private Boolean isRepeatSubmit(String clinetToken) {
 
 		// 获取客户端的token
-		if (StringUtil3.isBlank(clinetToken)) {
+		if (StringUtils.isBlank(clinetToken)) {
 			return Boolean.TRUE;
 		}
 
@@ -121,7 +121,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 	 */
 	private String getClinetToken(HttpServletRequest request) {
 		String clinetToken = request.getParameter(TOKEN_KEY);
-		if (StringUtil3.isBlank(clinetToken)) {
+		if (StringUtils.isBlank(clinetToken)) {
 			clinetToken = request.getHeader(TOKEN_KEY);
 		}
 		return clinetToken;

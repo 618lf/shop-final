@@ -5,7 +5,7 @@ import java.util.Date;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.tmt.common.entity.BaseEntity;
-import com.tmt.common.utils.DateUtil3;
+import com.tmt.common.utils.time.DateUtils;
 
 /**
  * 站内信
@@ -151,7 +151,7 @@ public class Message extends BaseEntity<Long> implements Serializable{
 		msg.setTitle(this.getTitle());
 		msg.setSendUserId(this.getSendUserId());
 		msg.setSendUserName(this.getSendUserName());
-		msg.setSendTime(DateUtil3.getTimeStampNow());
+		msg.setSendTime(DateUtils.getTimeStampNow());
 		msg.setReceiverUserId(this.getReceiverUserId());
 		msg.setReceiverUserName(this.getReceiverUserName());
 		msg.setRelaTitle(this.getRelaTitle());

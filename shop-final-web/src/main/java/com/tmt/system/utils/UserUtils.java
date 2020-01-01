@@ -12,7 +12,7 @@ import com.tmt.common.utils.CacheUtils;
 import com.tmt.common.utils.Ints;
 import com.tmt.common.utils.Lists;
 import com.tmt.common.utils.SpringContextHolder;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.common.web.ValidateCodeService;
 import com.tmt.system.entity.Menu;
 import com.tmt.system.entity.Role;
@@ -64,25 +64,6 @@ public class UserUtils {
 	}
 
 	/**
-	 * 获得当前用户对应的APP的 UserWechat信息
-	 * 
-	 * @param appId
-	 * @return
-	 */
-	public static String getUserWechatOpenId(String appId) {
-		User user = UserUtils.getUser();
-		String openId = UserUtils.getAttribute(appId);
-		if (openId == null) {
-			openId = systemService.getUserWechatOpenId(user, appId);
-			if (openId == null) {
-				openId = "";
-			}
-			UserUtils.setAttribute(appId, openId);
-		}
-		return openId;
-	}
-
-	/**
 	 * 得到当前用户的权限
 	 * 
 	 * @return
@@ -91,7 +72,7 @@ public class UserUtils {
 		List<String> permissions = Lists.newArrayList();
 		List<Menu> menus = systemService.getMenus(user);
 		for (Menu menu : menus) {
-			if (StringUtil3.isNotBlank(menu.getPermission())) {
+			if (StringUtils.isNotBlank(menu.getPermission())) {
 				permissions.add(menu.getPermission());
 			}
 		}
@@ -108,7 +89,7 @@ public class UserUtils {
 		List<Role> roles = systemService.getRoles(user);
 		if (roles != null && roles.size() != 0) {
 			for (Role role : roles) {
-				if (StringUtil3.isNotBlank(role.getPermission())) {
+				if (StringUtils.isNotBlank(role.getPermission())) {
 					permissions.add(role.getPermission());
 				}
 			}

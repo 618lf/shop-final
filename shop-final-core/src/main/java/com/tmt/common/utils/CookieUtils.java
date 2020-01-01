@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.tmt.common.config.Globals;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * Cookie 操作类
@@ -59,9 +59,9 @@ public class CookieUtils {
 		Cookie cookie = new Cookie(name, null);
 		if (maxAge != null)
 			cookie.setMaxAge(maxAge.intValue());
-		if (StringUtil3.isNotEmpty(path))
+		if (StringUtils.isNotEmpty(path))
 			cookie.setPath(path);
-		if (StringUtil3.isNotEmpty(domain))
+		if (StringUtils.isNotEmpty(domain))
 			cookie.setDomain(domain);
 		if (secure != null)// 为true时 https才会转递到服务器
 			cookie.setSecure(secure);
@@ -122,7 +122,7 @@ public class CookieUtils {
 					}
 					if (isRemove) {
 						cookie.setMaxAge(0);
-						if (StringUtil3.isNotEmpty(Globals.domain))
+						if (StringUtils.isNotEmpty(Globals.domain))
 							cookie.setDomain(Globals.domain);
 						response.addCookie(cookie);
 					}
@@ -145,9 +145,9 @@ public class CookieUtils {
 			name = URLEncoder.encode(name, "UTF-8");
 			Cookie localCookie = new Cookie(name, "deleteMe");
 			localCookie.setMaxAge(0);
-			if (StringUtil3.isNotEmpty(path))
+			if (StringUtils.isNotEmpty(path))
 				localCookie.setPath(path);
-			if (StringUtil3.isNotEmpty(domain))
+			if (StringUtils.isNotEmpty(domain))
 				localCookie.setDomain(domain);
 			response.addCookie(localCookie);
 		} catch (UnsupportedEncodingException e) {

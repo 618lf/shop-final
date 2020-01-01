@@ -3,7 +3,7 @@ package com.tmt.common.entity;
 import java.io.Serializable;
 
 import com.tmt.common.utils.JsonMapper;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * $.ajax后需要接受的JSON
@@ -69,7 +69,7 @@ public class AjaxResult implements Serializable{
 	 * @return
 	 */
 	public static AjaxResult error(String template, Object...msg){
-		return error(StringUtil3.format(template, msg));
+		return error(StringUtils.format(template, msg));
 	}
 	/**
 	 * 得到json格式的数据

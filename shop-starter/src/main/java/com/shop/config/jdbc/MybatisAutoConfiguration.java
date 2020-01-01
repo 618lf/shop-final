@@ -43,7 +43,7 @@ import com.tmt.common.persistence.dialect.MySQLDialect;
 import com.tmt.common.persistence.dialect.OracleDialect;
 import com.tmt.common.persistence.dialect.SqlLiteDialect;
 import com.tmt.common.persistence.mybatis.ExecutorInterceptor;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * Mybatis
@@ -99,11 +99,11 @@ public class MybatisAutoConfiguration {
 		SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
 		factory.setDataSource(dataSource);
 		factory.setVfs(SpringBootVFS.class);
-		if (StringUtil3.isNotBlank(this.properties.getConfigLocation())) {
+		if (StringUtils.isNotBlank(this.properties.getConfigLocation())) {
 			factory.setConfigLocation(this.resourceLoader.getResource(this.properties.getConfigLocation()));
 		}
 		Configuration configuration = this.properties.getConfiguration();
-		if (configuration == null && !StringUtil3.isNotBlank(this.properties.getConfigLocation())) {
+		if (configuration == null && !StringUtils.isNotBlank(this.properties.getConfigLocation())) {
 			configuration = new Configuration();
 		}
 		if (configuration != null && !CollectionUtils.isEmpty(this.configurationCustomizers)) {
@@ -121,10 +121,10 @@ public class MybatisAutoConfiguration {
 		if (this.databaseIdProvider != null) {
 			factory.setDatabaseIdProvider(this.databaseIdProvider);
 		}
-		if (StringUtil3.isNotBlank(this.properties.getTypeAliasesPackage())) {
+		if (StringUtils.isNotBlank(this.properties.getTypeAliasesPackage())) {
 			factory.setTypeAliasesPackage(this.properties.getTypeAliasesPackage());
 		}
-		if (StringUtil3.isNotBlank(this.properties.getTypeHandlersPackage())) {
+		if (StringUtils.isNotBlank(this.properties.getTypeHandlersPackage())) {
 			factory.setTypeHandlersPackage(this.properties.getTypeHandlersPackage());
 		}
 		if (!ObjectUtils.isEmpty(this.properties.resolveMapperLocations())) {
@@ -160,7 +160,7 @@ public class MybatisAutoConfiguration {
 	
 	@PostConstruct
 	public void checkConfigFileExists() {
-		if (this.properties.isCheckConfigLocation() && StringUtil3.isNotBlank(this.properties.getConfigLocation())) {
+		if (this.properties.isCheckConfigLocation() && StringUtils.isNotBlank(this.properties.getConfigLocation())) {
 			Resource resource = this.resourceLoader.getResource(this.properties.getConfigLocation());
 			Assert.state(resource.exists(), "Cannot find config location: " + resource
 					+ " (please add config file or check your Mybatis configuration)");

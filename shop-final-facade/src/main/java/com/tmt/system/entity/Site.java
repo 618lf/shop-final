@@ -6,7 +6,7 @@ import java.util.List;
 import com.tmt.common.email.EmailParam;
 import com.tmt.common.entity.BaseEntity;
 import com.tmt.common.utils.Lists;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * 站点设置 管理
@@ -284,8 +284,8 @@ public class Site extends BaseEntity<Long> implements Serializable{
 	}
 	public void setUploadImageExtension(String uploadImageExtension) {
 		this.uploadImageExtension = uploadImageExtension;
-		if(StringUtil3.isNotBlank(this.uploadImageExtension)) {
-		   this.uploadImageExtension = StringUtil3.removeZ(this.uploadImageExtension);
+		if(StringUtils.isNotBlank(this.uploadImageExtension)) {
+		   this.uploadImageExtension = StringUtils.removeZ(this.uploadImageExtension);
 		   String[] files = this.uploadImageExtension.split(",");
 		   this.setImageAllowFiles(Lists.newArrayList(files));
 		}
@@ -295,8 +295,8 @@ public class Site extends BaseEntity<Long> implements Serializable{
 	}
 	public void setUploadMediaExtension(String uploadMediaExtension) {
 		this.uploadMediaExtension = uploadMediaExtension;
-		if(StringUtil3.isNotBlank(this.uploadMediaExtension)) {
-		   this.uploadMediaExtension = StringUtil3.removeZ(this.uploadMediaExtension);
+		if(StringUtils.isNotBlank(this.uploadMediaExtension)) {
+		   this.uploadMediaExtension = StringUtils.removeZ(this.uploadMediaExtension);
 		   String[] files = this.uploadMediaExtension.split(",");
 		   this.setMediaAllowFiles(Lists.newArrayList(files));
 		}
@@ -306,8 +306,8 @@ public class Site extends BaseEntity<Long> implements Serializable{
 	}
 	public void setUploadFileExtension(String uploadFileExtension) {
 		this.uploadFileExtension = uploadFileExtension;
-		if(StringUtil3.isNotBlank(this.uploadFileExtension)) {
-		   this.uploadFileExtension = StringUtil3.removeZ(this.uploadFileExtension);
+		if(StringUtils.isNotBlank(this.uploadFileExtension)) {
+		   this.uploadFileExtension = StringUtils.removeZ(this.uploadFileExtension);
 		   String[] files = this.uploadFileExtension.split(",");
 		   this.setFileAllowFiles(Lists.newArrayList(files));
 		}

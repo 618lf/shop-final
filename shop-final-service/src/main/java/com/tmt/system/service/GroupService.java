@@ -14,7 +14,7 @@ import com.tmt.common.persistence.incrementer.IdGen;
 import com.tmt.common.service.BaseService;
 import com.tmt.common.utils.CacheUtils;
 import com.tmt.common.utils.Lists;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.system.dao.GroupDao;
 import com.tmt.system.dao.GroupRoleDao;
 import com.tmt.system.dao.GroupUserDao;
@@ -63,7 +63,7 @@ public class GroupService extends BaseService<Group, Long> implements GroupServi
 			String[] roleIds = roleIdStrs.split(",");
 			GroupRole groupRole = null;
 			for (String roleId : roleIds) {
-				if (StringUtil3.isNotEmpty(roleId)) {
+				if (StringUtils.isNotEmpty(roleId)) {
 					groupRole = new GroupRole();
 					groupRole.setRoleId(Long.parseLong(roleId));
 					groupRole.setGroupId(group.getId());
@@ -132,7 +132,7 @@ public class GroupService extends BaseService<Group, Long> implements GroupServi
 			String[] _codes = codes.split(",");
 			List<String> lstCode = Lists.newArrayList();
 			for (String code : _codes) {
-				if (StringUtil3.isNotBlank(code)) {
+				if (StringUtils.isNotBlank(code)) {
 					lstCode.add(code);
 				}
 			}

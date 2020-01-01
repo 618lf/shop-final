@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.tmt.common.email.SendEmailUtils;
 import com.tmt.common.utils.Lists;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.system.entity.EmailTask;
 import com.tmt.system.entity.Task;
 import com.tmt.system.service.EmailTaskServiceFacade;
@@ -62,7 +62,7 @@ public class SendEmailTask implements TaskExecutor{
 		try{
 			String subject = email.getEmailTitle();
 			String[] toArray = email.getEmailTo().split(",");
-			String[] ccArray = StringUtil3.isNotBlank(email.getEmailCc())?email.getEmailCc().split(","):null;
+			String[] ccArray = StringUtils.isNotBlank(email.getEmailCc())?email.getEmailCc().split(","):null;
 			String content = email.getEmailContent();
 			return SendEmailUtils.sendNotificationMail(subject, toArray, ccArray, content);
 		}catch(Exception e){}

@@ -18,7 +18,7 @@ import com.tmt.common.persistence.QueryCondition;
 import com.tmt.common.persistence.QueryCondition.Criteria;
 import com.tmt.common.persistence.incrementer.IdGen;
 import com.tmt.common.utils.Lists;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.common.utils.WebUtils;
 import com.tmt.common.web.BaseController;
 import com.tmt.system.entity.Dict;
@@ -147,7 +147,7 @@ public class DictController extends BaseController {
 
 	// 查询条件
 	private void initQc(Dict app, Criteria c) {
-		if (StringUtil3.isNotBlank(app.getName())) {
+		if (StringUtils.isNotBlank(app.getName())) {
 			c.andEqualTo("NAME", app.getName());
 		}
 	}

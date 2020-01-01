@@ -17,7 +17,7 @@ import com.tmt.common.persistence.QueryCondition;
 import com.tmt.common.persistence.incrementer.IdGen;
 import com.tmt.common.utils.ContextHolderUtils;
 import com.tmt.common.utils.Lists;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.common.utils.WebUtils;
 import com.tmt.common.web.BaseController;
 import com.tmt.gen.entity.Table;
@@ -73,7 +73,7 @@ public class TableController extends BaseController{
 		if (table != null && !IdGen.isInvalidId(table.getId())) {
 		    table = this.tableService.getWithColumns(table.getId());
 		} else {
-		    if (table != null && StringUtil3.isNotBlank(table.getName())) {
+		    if (table != null && StringUtils.isNotBlank(table.getName())) {
 			    table = this.tableService.queryDbTableByTableName(table.getName());
 		    }
 		    table.setId(IdGen.INVALID_ID);
@@ -97,7 +97,7 @@ public class TableController extends BaseController{
 		List<TableColumn> columns = WebUtils.fetchItemsFromRequest(ContextHolderUtils.getRequest(), TableColumn.class,"items.");
 		table.setColumns(columns);
 		this.tableService.save(table);
-		addMessage(redirectAttributes, StringUtil3.format("%s'%s'%s", "保存业务表配置", table.getName(), "成功"));
+		addMessage(redirectAttributes, StringUtils.format("%s'%s'%s", "保存业务表配置", table.getName(), "成功"));
 		redirectAttributes.addAttribute("id", table.getId()); 
 		return "redirect:"+Globals.adminPath+"/gen/table/form";
 	}

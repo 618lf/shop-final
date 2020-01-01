@@ -15,7 +15,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
 import com.tmt.Constants;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * Configuration properties for MyBatis.
@@ -177,7 +177,7 @@ public class MybatisProperties {
 
 		// 默认的配置
 		if (Constants.BOOT_CLASSES.size() != 0) {
-			String mapperLocations = StringUtil3.format("classpath*:%s/**/dao/*.Mapper.xml", StringUtil3
+			String mapperLocations = StringUtils.format("classpath*:%s/**/dao/*.Mapper.xml", StringUtils
 					.substringBeforeLast(Constants.BOOT_CLASSES.get(0).getName(), ".").replaceAll("\\.", "/"));
 			this.mapperLocations = new String[] { "classpath*:com/tmt/**/dao/*.Mapper.xml", mapperLocations };
 			for (String mapperLocation : this.mapperLocations) {

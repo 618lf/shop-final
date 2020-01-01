@@ -22,11 +22,11 @@ import com.tmt.common.persistence.QueryCondition;
 import com.tmt.common.persistence.QueryCondition.Criteria;
 import com.tmt.common.persistence.incrementer.IdGen;
 import com.tmt.common.security.utils.SecurityUtils;
-import com.tmt.common.utils.DateUtil3;
 import com.tmt.common.utils.Lists;
 import com.tmt.common.utils.Maps;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.common.utils.WebUtils;
+import com.tmt.common.utils.time.DateUtils;
 import com.tmt.common.web.BaseController;
 import com.tmt.system.entity.Group;
 import com.tmt.system.entity.Office;
@@ -139,7 +139,7 @@ public class UserController extends BaseController {
 		user.userOptions(UserUtils.getUser());
 		this.userService.save(user);
 		UserUtils.removeUserCache(user.getId());
-		addMessage(redirectAttributes, StringUtil3.format("%s'%s'%s", "修改用户", user.getName(), "成功"));
+		addMessage(redirectAttributes, StringUtils.format("%s'%s'%s", "修改用户", user.getName(), "成功"));
 		redirectAttributes.addAttribute("id", user.getId());
 		return WebUtils.redirectTo(new StringBuilder(Globals.adminPath).append("/system/user/form").toString());
 	}
@@ -176,20 +176,20 @@ public class UserController extends BaseController {
 		if (user != null && user.getOfficeId() != null && !IdGen.isInvalidId(user.getOfficeId())) {
 			c.andEqualTo("U.OFFICE_ID", user.getOfficeId());
 		}
-		if (user != null && StringUtil3.isNotEmpty(user.getName())) {
+		if (user != null && StringUtils.isNotEmpty(user.getName())) {
 			c.andLike("U.NAME", user.getName());
 		}
-		if (user != null && StringUtil3.isNotEmpty(user.getNo())) {
-			String sql = StringUtil3.format("((',%s,' LIKE CONCAT('%,', U.NO, ',%') ) OR (U.NO LIKE '%%s%'))",
-					StringUtil3.escapeDb(user.getNo()), StringUtil3.escapeDb(user.getNo()));
+		if (user != null && StringUtils.isNotEmpty(user.getNo())) {
+			String sql = StringUtils.format("((',%s,' LIKE CONCAT('%,', U.NO, ',%') ) OR (U.NO LIKE '%%s%'))",
+					StringUtils.escapeDb(user.getNo()), StringUtils.escapeDb(user.getNo()));
 			c.andConditionSql(sql);
 		}
 		if (user != null && user.getUserType() != null) {
 			c.andEqualTo("U.USER_TYPE", user.getUserType());
 		}
 		if (user != null && user.getCreateDate() != null) {
-			Date d1 = DateUtil3.clearTime(user.getCreateDate());
-			Date d2 = DateUtil3.getDayLastTime(user.getCreateDate());
+			Date d1 = DateUtils.clearTime(user.getCreateDate());
+			Date d2 = DateUtils.getDayLastTime(user.getCreateDate());
 			c.andDateBetween("U.CREATE_DATE", d1, d2);
 		}
 		qc.setOrderByClause("U.LOGIN_DATE DESC, U.NO");
@@ -199,7 +199,7 @@ public class UserController extends BaseController {
 			List<User> users = page.getData();
 			for (User u : users) {
 				u.setGroupNames(this.groupService.findGroupNamesByUserId(u.getId()));
-				u.setName(StringUtil3.isBlank(u.getName()) ? ("匿名 - " + u.getNo()) : u.getName());
+				u.setName(StringUtils.isBlank(u.getName()) ? ("匿名 - " + u.getNo()) : u.getName());
 			}
 		}
 		return page;
@@ -258,9 +258,9 @@ public class UserController extends BaseController {
 		// 退出用户
 		List<UserSession> sessions = userService.userSessions(users);
 		for (UserSession session : sessions) {
-			if (StringUtil3.isNotBlank(session.getSessionId())) {
-				String reason = StringUtil3.format("您的帐号存在异常于%s在被管理员强制退出系统，如果问题请及时联系管理员。",
-						DateUtil3.getTodayStr("yyyy-MM-dd HH:mm"));
+			if (StringUtils.isNotBlank(session.getSessionId())) {
+				String reason = StringUtils.format("您的帐号存在异常于%s在被管理员强制退出系统，如果问题请及时联系管理员。",
+						DateUtils.getTodayStr("yyyy-MM-dd HH:mm"));
 				SecurityUtils.getSecurityManager().invalidate(session.getSessionId(), reason);
 			}
 		}
@@ -299,7 +299,7 @@ public class UserController extends BaseController {
 	@ResponseBody
 	@RequestMapping("initPassword")
 	public Boolean initPassword(User user, String newPassWord) {
-		if (user != null && !IdGen.isInvalidId(user.getId()) && !StringUtil3.isBlank(newPassWord)) {
+		if (user != null && !IdGen.isInvalidId(user.getId()) && !StringUtils.isBlank(newPassWord)) {
 			user.setPassword(newPassWord);
 			user.setUserStatus(UserStatus.MD_P);
 			this.userService.updatePassWord(user);

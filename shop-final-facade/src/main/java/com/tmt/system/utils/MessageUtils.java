@@ -2,7 +2,7 @@ package com.tmt.system.utils;
 
 import com.tmt.common.config.Globals;
 import com.tmt.common.utils.SpringContextHolder;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.system.entity.Message;
 import com.tmt.system.service.MessageServiceFacade;
 
@@ -22,7 +22,7 @@ public class MessageUtils {
 		Message template = new Message();
 		template.setReceiverUserId(Globals.ROOT);
 		template.setReceiverUserName("系统管理员");
-		template.setContent(StringUtil3.abbr(content, 1000));
+		template.setContent(StringUtils.abbreviate(content, 1000));
 		template.setTitle("系统错误");
 		template.setSendUserId(null);
 		template.setSendUserName("系统错误");

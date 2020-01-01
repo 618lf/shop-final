@@ -14,7 +14,7 @@ import com.tmt.common.persistence.incrementer.IdGen;
 import com.tmt.common.service.BaseService;
 import com.tmt.common.utils.CacheUtils;
 import com.tmt.common.utils.Lists;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.system.dao.MenuDao;
 import com.tmt.system.dao.RoleMenuDao;
 import com.tmt.system.entity.Menu;
@@ -49,7 +49,7 @@ public class MenuService extends BaseService<Menu, Long> implements MenuServiceF
 		Integer oldLevel = menu.getLevel();
 		String oldPath = menu.getPath();
 		menu.fillByParent(parent);
-		if (!StringUtil3.isBlank(menu.getHref())) {
+		if (!StringUtils.isBlank(menu.getHref())) {
 			menu.setType((byte) 2);
 		}
 		if (IdGen.isInvalidId(menu.getId())) {

@@ -12,14 +12,12 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
-
 import com.tmt.common.persistence.incrementer.IdGen;
 import com.tmt.common.security.context.AuthenticationToken;
 import com.tmt.common.utils.CacheUtils;
 import com.tmt.common.utils.CookieUtils;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.Ints;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * 验证码服务
@@ -66,8 +64,8 @@ public class ValidateCodeService {
 		String width = request.getParameter("width");
 		String height = request.getParameter("height");
 		if (StringUtils.isNumeric(width) && StringUtils.isNumeric(height)) {
-			W = NumberUtils.toInt(width);
-			H = NumberUtils.toInt(height);
+			W = Ints.toInt(width);
+			H = Ints.toInt(height);
 		}
 		
 		BufferedImage image = new BufferedImage(W, H, BufferedImage.TYPE_INT_RGB);
@@ -156,7 +154,7 @@ public class ValidateCodeService {
 	 */
 	public static Boolean validateCode(String validateCodeKey, String inputCode){
 		String validateCode = null;
-		if (StringUtil3.isNotBlank(validateCodeKey)) {
+		if (StringUtils.isNotBlank(validateCodeKey)) {
 			validateCode = CacheUtils.getSessCache().get(validateCodeKey);
 		}
 		if (inputCode != null && inputCode.toUpperCase().equals(validateCode)){

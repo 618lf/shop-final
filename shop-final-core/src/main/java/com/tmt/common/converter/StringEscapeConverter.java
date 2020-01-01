@@ -2,7 +2,7 @@ package com.tmt.common.converter;
 
 import org.springframework.core.convert.converter.Converter;
 
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * String 格式化
@@ -14,6 +14,6 @@ public class StringEscapeConverter implements Converter<String, String>{
 	 */
 	@Override
 	public String convert(String source) {
-		return source == null ? null : StringUtil3.removeScript(source.trim());
+		return source == null ? null : StringUtils.removeScript(source.trim());
 	}
 }

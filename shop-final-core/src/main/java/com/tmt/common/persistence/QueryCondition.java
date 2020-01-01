@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * 查询条件构造类
@@ -181,7 +181,7 @@ public class QueryCondition implements Serializable{
 
 		protected void addCriterionForJDBCDate(String condition, Date value1, Date value2) {
 			if (value1 == null || value2 == null) {
-				throw new RuntimeException(StringUtil3.format("Between values for condition cannot be null"));
+				throw new RuntimeException(StringUtils.format("Between values for condition cannot be null"));
 			}
 			addCriterion(condition, new java.sql.Timestamp(value1.getTime()), new java.sql.Timestamp(value2.getTime()));
 		}
@@ -361,7 +361,7 @@ public class QueryCondition implements Serializable{
 		//转义数据库的特殊字符
 		private Object escape(Object value) {
 			if (value != null && value instanceof String ) {
-				return StringUtil3.escapeDb((String)value);
+				return StringUtils.escapeDb((String)value);
 			}
 			return value;
 		}

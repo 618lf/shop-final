@@ -18,12 +18,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.tmt.common.entity.AjaxResult;
 import com.tmt.common.persistence.incrementer.IdGen;
 import com.tmt.common.utils.ContextHolderUtils;
-import com.tmt.common.utils.DateUtil3;
 import com.tmt.common.utils.FreemarkerUtils;
 import com.tmt.common.utils.JsonMapper;
 import com.tmt.common.utils.Maps;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.common.utils.WebUtils;
+import com.tmt.common.utils.time.DateUtils;
 import com.tmt.system.entity.AttachmentDir;
 import com.tmt.system.entity.Site;
 import com.tmt.system.entity.User;
@@ -63,8 +63,8 @@ public class BaseUploadController {
 		if (UserUtils.isUser()) {
 			Action _action = Action.valueBy("uploadfile");
 			Map<String, Object> config = this.getConfig(_action);
-			String suffix = StringUtil3.substringAfterLast(fileName, ".").toLowerCase();
-			suffix = "." + StringUtil3.defaultString(StringUtil3.trimToNull(suffix), "jpg").toLowerCase();
+			String suffix = StringUtils.substringAfterLast(fileName, ".").toLowerCase();
+			suffix = "." + StringUtils.defaultString(StringUtils.trimToNull(suffix), "jpg").toLowerCase();
 			if (!((List<String>) config.get("allowFiles")).contains(suffix)) {
 				return AjaxResult.error("不允许的文件类型");
 			}
@@ -74,7 +74,7 @@ public class BaseUploadController {
 			String url = attachmentService.mergeChunks(guid, path, _dir, fileName, size, UserUtils.getUser());
 			Map<String, String> rMap = Maps.newHashMap();
 			rMap.put("url", url);
-			rMap.put("title", StringUtil3.substringAfterLast(url, "/"));
+			rMap.put("title", StringUtils.substringAfterLast(url, "/"));
 			return AjaxResult.success(rMap);
 		}
 		return AjaxResult.error("无操作权限");
@@ -159,11 +159,11 @@ public class BaseUploadController {
 		String filename = (String) config.get("filename");
 		String fieldName = (String) config.get("fieldName");
 		String content = request.getParameter(fieldName);
-		if (StringUtil3.isNotBlank(content)) {
+		if (StringUtils.isNotBlank(content)) {
 			String suffix = WebUtils.getCleanParam("suffix");
-			suffix = StringUtil3.isBlank(suffix) ? ".jpg" : suffix;
+			suffix = StringUtils.isBlank(suffix) ? ".jpg" : suffix;
 			String original = WebUtils.getCleanParam(filename);
-			original = StringUtil3.isBlank(original) ? "截图" : original;
+			original = StringUtils.isBlank(original) ? "截图" : original;
 			byte[] data = Base64.decodeBase64(content);
 			long maxSize = ((Integer) config.get("maxSize")).longValue();
 			long length = data.length;
@@ -174,7 +174,7 @@ public class BaseUploadController {
 			Long dir = Long.parseLong(request.getParameter("dirId"));
 			AttachmentDir _dir = this.getUserSpaceDir(dir);
 			String url = attachmentService.storage(data, path, _dir, original, length, UserUtils.getUser());
-			if (StringUtil3.isBlank(url)) {
+			if (StringUtils.isBlank(url)) {
 				return AjaxResult.error("上传失败");
 			}
 			Map<String, Object> result = Maps.newHashMap();
@@ -182,7 +182,7 @@ public class BaseUploadController {
 			result.put("type", suffix);
 			result.put("original", original);
 			result.put("size", length);
-			result.put("title", StringUtil3.substringAfterLast(url, "/"));
+			result.put("title", StringUtils.substringAfterLast(url, "/"));
 			return AjaxResult.success(result);
 		}
 		return AjaxResult.error("没有找到数据");
@@ -214,8 +214,8 @@ public class BaseUploadController {
 		File tmpFile = null;
 		try {
 			String originFileName = file.getOriginalFilename();
-			String suffix = StringUtil3.substringAfterLast(originFileName, ".").toLowerCase();
-			suffix = "." + StringUtil3.defaultString(StringUtil3.trimToNull(suffix), "jpg").toLowerCase();
+			String suffix = StringUtils.substringAfterLast(originFileName, ".").toLowerCase();
+			suffix = "." + StringUtils.defaultString(StringUtils.trimToNull(suffix), "jpg").toLowerCase();
 			if (!((List<String>) config.get("allowFiles")).contains(suffix)) {
 				return AjaxResult.error("不允许的文件类型");
 			}
@@ -230,7 +230,7 @@ public class BaseUploadController {
 			Long dir = Long.parseLong(request.getParameter("dirId"));
 			AttachmentDir _dir = this.getUserSpaceDir(dir);
 			String url = attachmentService.storage(datas, path, _dir, originFileName, length, UserUtils.getUser());
-			if (StringUtil3.isBlank(url)) {
+			if (StringUtils.isBlank(url)) {
 				return AjaxResult.error("上传失败");
 			}
 			Map<String, Object> result = Maps.newHashMap();
@@ -238,7 +238,7 @@ public class BaseUploadController {
 			result.put("type", suffix);
 			result.put("original", originFileName);
 			result.put("size", length);
-			result.put("title", StringUtil3.substringAfterLast(url, "/"));
+			result.put("title", StringUtils.substringAfterLast(url, "/"));
 			return AjaxResult.success(result);
 		} catch (IOException e) {
 		} finally {
@@ -259,13 +259,13 @@ public class BaseUploadController {
 	private AjaxResult uploadChunkFile(Map<String, Object> config, MultipartFile file, HttpServletRequest request) {
 		try {
 			String originFileName = file.getOriginalFilename();
-			String suffix = StringUtil3.substringAfterLast(originFileName, ".").toLowerCase();
-			suffix = "." + StringUtil3.defaultString(StringUtil3.trimToNull(suffix), "jpg").toLowerCase();
+			String suffix = StringUtils.substringAfterLast(originFileName, ".").toLowerCase();
+			suffix = "." + StringUtils.defaultString(StringUtils.trimToNull(suffix), "jpg").toLowerCase();
 			String uuid = request.getParameter("guid");
 			String chunks = request.getParameter("chunks");
 			String chunk = request.getParameter("chunk");
 			byte[] datas = IOUtils.toByteArray(file.getInputStream());
-			String url = attachmentService.storageChunk(datas, null, StringUtil3.format("%s_%s", chunks, chunk), uuid);
+			String url = attachmentService.storageChunk(datas, null, StringUtils.format("%s_%s", chunks, chunk), uuid);
 			Map<String, Object> result = Maps.newHashMap();
 			result.put("url", url);
 			result.put("type", suffix);
@@ -312,15 +312,15 @@ public class BaseUploadController {
 
 	private Map<String, Object> getRootMap() {
 		Map<String, Object> root = Maps.newHashMap();
-		root.put("data", DateUtil3.getTodayStr("yyyy-MM-dd"));
-		root.put("datatime", DateUtil3.getTodayStr("yyyyMMddHHmmss"));
+		root.put("data", DateUtils.getTodayStr("yyyy-MM-dd"));
+		root.put("datatime", DateUtils.getTodayStr("yyyyMMddHHmmss"));
 		root.put("rand", IdGen.stringKey());
 		return root;
 	}
 
 	@SuppressWarnings("unchecked")
 	private FileType getFileType(String suffix) {
-		String _suffix = StringUtil3.lowerCase(suffix);
+		String _suffix = StringUtils.lowerCase(suffix);
 		List<String> files = (List<String>) config.get("imageAllowFiles");
 		if (files.contains(_suffix)) {
 			return FileType.IMAGE;
@@ -366,7 +366,7 @@ public class BaseUploadController {
 		} else {
 			// 如果是home下的目录才能访问
 			AttachmentDir home = getUserSpaceDir(user);
-			if (dirObj == null || !StringUtil3.contains(dirObj.getParentIds(), home.getId().toString())) {
+			if (dirObj == null || !StringUtils.contains(dirObj.getParentIds(), home.getId().toString())) {
 				dirObj = home;
 			}
 		}

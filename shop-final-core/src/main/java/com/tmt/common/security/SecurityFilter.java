@@ -18,9 +18,9 @@ import com.tmt.common.security.mgt.FilterChainResolver;
 import com.tmt.common.security.mgt.SecurityManager;
 import com.tmt.common.security.principal.Principal;
 import com.tmt.common.security.subject.Subject;
-import com.tmt.common.utils.DateUtil3;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.common.utils.WebUtils;
+import com.tmt.common.utils.time.DateUtils;
 
 /**
  * 安全过滤器
@@ -129,12 +129,12 @@ public class SecurityFilter extends OncePerRequestFilter implements Ordered {
 
 		// 记录下来
 		ACCESS_LOG.info("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}", IdGen.key(), (byte) (_ex == null ? 1 : 2),
-				createId == null ? "\\N" : createId, StringUtil3.defaultIfBlank(createName, "\\N"),
-				DateUtil3.getTimeStampNow(), WebUtils.getRemoteAddr(request),
-				StringUtil3.abbr(request.getHeader("user-agent"), 255), _url, request.getMethod(),
-				(int) (System.currentTimeMillis() - t1), StringUtil3.defaultIfBlank("", "\\N"),
-				StringUtil3.defaultIfBlank(StringUtil3.isNoneBlank(referer) ? StringUtil3.abbr(referer, 255) : null,
-						"\\N"));
+				createId == null ? "\\N" : createId, StringUtils.defaultIfBlank(createName, "\\N"),
+				DateUtils.getTimeStampNow(), WebUtils.getRemoteAddr(request),
+				StringUtils.abbreviate(request.getHeader("user-agent"), 255), _url, request.getMethod(),
+				(int) (System.currentTimeMillis() - t1), StringUtils.defaultIfBlank("", "\\N"),
+				StringUtils.defaultIfBlank(
+						StringUtils.isNoneBlank(referer) ? StringUtils.abbreviate(referer, 255) : null, "\\N"));
 
 		// 记录错误
 		if (_ex != null) {

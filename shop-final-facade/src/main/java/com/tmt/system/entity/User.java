@@ -6,7 +6,7 @@ import java.util.Date;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.tmt.common.config.Globals;
 import com.tmt.common.entity.BaseEntity;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * 系统用户
@@ -318,13 +318,13 @@ public class User extends BaseEntity<Long> implements Serializable{
 	@Override
 	public void preUpdate() {
 		super.preUpdate();
-		if (StringUtil3.isBlank(this.getEmail())) {
+		if (StringUtils.isBlank(this.getEmail())) {
 		   this.setEmail(null);
 		}
-		if (StringUtil3.isBlank(this.getLoginName())) {
+		if (StringUtils.isBlank(this.getLoginName())) {
 		   this.setLoginName(null);
 		}
-		if (StringUtil3.isBlank(this.getMobile())) {
+		if (StringUtils.isBlank(this.getMobile())) {
 		   this.setMobile(null);
 		}
 	}

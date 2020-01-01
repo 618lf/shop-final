@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.tmt.Constants;
 import com.tmt.common.utils.SpringContextHolder;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.system.dao.TaskDao;
 import com.tmt.system.entity.Task;
 import com.tmt.system.entity.Task.TaskStatus;
@@ -222,7 +222,7 @@ public class TaskCommandService {
 	// 构建任务
 	private JobDetail getJobDetail(Task task, boolean storeDurably) {
 		TaskExecutor executor = null;
-		if (StringUtil3.isBlank(task.getBusinessObject()) || (executor = this.getExecutor(task)) == null
+		if (StringUtils.isBlank(task.getBusinessObject()) || (executor = this.getExecutor(task)) == null
 				|| !this.isValidExpression(task)) {
 			return null;
 		}

@@ -17,9 +17,13 @@ import com.tmt.common.security.filter.PathConfigProcessor;
 import com.tmt.common.security.filter.SimpleNamedFilterList;
 import com.tmt.common.security.mgt.DefaultFilter;
 import com.tmt.common.security.mgt.FilterChainManager;
-import com.tmt.common.security.utils.StringUtils;
+import com.tmt.common.utils.StringUtils;
 
 public class DefaultFilterChainManager implements FilterChainManager {
+	
+	public static final String EMPTY_STRING = "";
+	public static final char DEFAULT_DELIMITER_CHAR = ',';
+	public static final char DEFAULT_QUOTE_CHAR = '"';
 
 	private FilterConfig filterConfig;
 
@@ -93,7 +97,7 @@ public class DefaultFilterChainManager implements FilterChainManager {
 	}
 
 	protected String[] splitChainDefinition(String chainDefinition) {
-		return StringUtils.split(chainDefinition, StringUtils.DEFAULT_DELIMITER_CHAR, '[', ']', true, true);
+		return StringUtils.split(chainDefinition, DEFAULT_DELIMITER_CHAR, '[', ']', true, true);
 	}
 
 	protected String[] toNameConfigPair(String token)

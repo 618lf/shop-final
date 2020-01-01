@@ -23,7 +23,7 @@ import com.tmt.common.persistence.QueryCondition.Criteria;
 import com.tmt.common.persistence.incrementer.IdGen;
 import com.tmt.common.utils.Lists;
 import com.tmt.common.utils.Maps;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.common.utils.WebUtils;
 import com.tmt.common.web.BaseController;
 import com.tmt.system.entity.Office;
@@ -69,7 +69,7 @@ public class OfficeController extends BaseController {
 	@RequestMapping("page")
 	public Page page(Office office, Model model) {
 		Map<String, Object> params = new HashMap<String, Object>();
-		if (office != null && !StringUtil3.isBlank(office.getName())) {
+		if (office != null && !StringUtils.isBlank(office.getName())) {
 			params.put("ORG_NAME", office.getName());
 			QueryCondition qc = new QueryCondition();
 			Criteria c = qc.getCriteria();

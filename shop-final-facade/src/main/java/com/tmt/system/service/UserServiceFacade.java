@@ -7,7 +7,6 @@ import com.tmt.common.service.BaseServiceFacade;
 import com.tmt.system.entity.User;
 import com.tmt.system.entity.UserAccount;
 import com.tmt.system.entity.UserSession;
-import com.tmt.system.entity.UserUnion;
 
 /**
  * 用户管理
@@ -163,13 +162,6 @@ public interface UserServiceFacade extends BaseServiceFacade<User, Long> {
 	 * @return
 	 */
     public UserAccount findByAccount(String account);
-    
-    /**
-     * 得到用户统一帐号
-     * @param union
-     * @return
-     */
-    public UserUnion findByUnion(String union);
     
     /**
      * 注册

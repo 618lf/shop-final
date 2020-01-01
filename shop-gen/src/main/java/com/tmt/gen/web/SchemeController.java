@@ -16,7 +16,7 @@ import com.tmt.common.persistence.PageParameters;
 import com.tmt.common.persistence.QueryCondition;
 import com.tmt.common.persistence.incrementer.IdGen;
 import com.tmt.common.utils.Lists;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.common.web.BaseController;
 import com.tmt.gen.entity.Scheme;
 import com.tmt.gen.service.SchemeService;
@@ -86,7 +86,7 @@ public class SchemeController extends BaseController{
 	@RequestMapping("save")
 	public String save(Scheme scheme, Model model, RedirectAttributes redirectAttributes) {
 		this.schemeService.save(scheme);
-		addMessage(redirectAttributes, StringUtil3.format("%s'%s'%s", "保存方案", scheme.getName(), "成功"));
+		addMessage(redirectAttributes, StringUtils.format("%s'%s'%s", "保存方案", scheme.getName(), "成功"));
 		redirectAttributes.addAttribute("id", scheme.getId()); 
 		return "redirect:"+Globals.adminPath+"/gen/scheme/form";
 	}

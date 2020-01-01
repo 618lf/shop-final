@@ -6,7 +6,7 @@ import java.util.Set;
 import com.tmt.common.cache.Cache;
 import com.tmt.common.exception.CacheException;
 import com.tmt.common.utils.Lists;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * Redis 需要在配置文件中配置,以后在添加详细的参数
@@ -126,8 +126,8 @@ public class RedisCache implements Cache {
 		List<Object> _keys = Lists.newArrayList();
 		String keyPrex = new StringBuilder(name).append(prex).toString();
 		for(String key: keys) {
-			if(StringUtil3.isNotBlank(key)) {
-			   key = StringUtil3.removeStart(key, keyPrex);
+			if(StringUtils.isNotBlank(key)) {
+			   key = StringUtils.removeStart(key, keyPrex);
 			}
 			_keys.add(key);
 		}
@@ -142,7 +142,7 @@ public class RedisCache implements Cache {
 	public void delete(Object key){
 		if (key != null && key instanceof String) {
 			String _key = String.valueOf(key);
-			if (StringUtil3.isNotBlank(_key) && StringUtil3.contains(_key, "*")) {
+			if (StringUtils.isNotBlank(_key) && StringUtils.contains(_key, "*")) {
 				this.deletePattern(_key); return;
 			}
 		}

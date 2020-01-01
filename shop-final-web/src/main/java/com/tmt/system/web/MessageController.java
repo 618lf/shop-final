@@ -17,10 +17,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.tmt.common.config.Globals;
 import com.tmt.common.entity.AjaxResult;
 import com.tmt.common.persistence.incrementer.IdGen;
-import com.tmt.common.utils.DateUtil3;
 import com.tmt.common.utils.FreemarkerUtils;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.common.utils.WebUtils;
+import com.tmt.common.utils.time.DateUtils;
 import com.tmt.system.entity.ExcelTemplate;
 import com.tmt.system.entity.Message;
 import com.tmt.system.entity.Message.MessageBox;
@@ -121,7 +121,7 @@ public class MessageController extends BaseMessageController {
 		message.setMsgBox(MessageBox.DRAFT);
 		message.setReceiverUserId(user.getId());
 		message.setReceiverUserName(user.getName());
-		message.setSendTime(DateUtil3.getTimeStampNow());
+		message.setSendTime(DateUtils.getTimeStampNow());
 		this.messageService.save(message);
 		redirectAttributes.addAttribute("id", message.getId());
 		return WebUtils.redirectTo(new StringBuilder(Globals.adminPath).append("/system/message/form").toString());
@@ -174,7 +174,7 @@ public class MessageController extends BaseMessageController {
 		message.setSendUserId(from.getId());
 		message.setSendUserName(from.getName());
 		this.messageService.send(message);
-		addMessage(redirectAttributes, StringUtil3.format("%s'%s'%s", "发送站内信", message.getTitle(), "成功"));
+		addMessage(redirectAttributes, StringUtils.format("%s'%s'%s", "发送站内信", message.getTitle(), "成功"));
 		return WebUtils.redirectTo(new StringBuilder(Globals.adminPath).append("/system/message/outBox").toString());
 	}
 
@@ -247,7 +247,7 @@ public class MessageController extends BaseMessageController {
 				for (Map<String, Object> map : maps) {
 					String code = String.valueOf(map.get("memberNo"));
 					User user = null;
-					if (StringUtil3.isNotBlank(code) && (user = UserUtils.getUserByNo(code)) != null) {
+					if (StringUtils.isNotBlank(code) && (user = UserUtils.getUserByNo(code)) != null) {
 						map.put("user", user);
 						String html = FreemarkerUtils.processNoTemplate(message.getContent(), map);
 						Message ma = new Message();
@@ -258,7 +258,7 @@ public class MessageController extends BaseMessageController {
 						ma.setMsgBox(MessageBox.DRAFT);
 						ma.setSendUserId(UserUtils.getUser().getId());
 						ma.setSendUserName(UserUtils.getUser().getName());
-						ma.setSendTime(DateUtil3.getTimeStampNow());
+						ma.setSendTime(DateUtils.getTimeStampNow());
 						this.messageService.save(ma);
 					}
 				}

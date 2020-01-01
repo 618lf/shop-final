@@ -10,7 +10,7 @@ import com.tmt.common.security.context.AuthenticationToken;
 import com.tmt.common.security.exception.AuthenticationException;
 import com.tmt.common.security.subject.Subject;
 import com.tmt.common.security.utils.SecurityUtils;
-import com.tmt.common.security.utils.StringUtils;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.common.utils.WebUtils;
 
 /**

@@ -3,7 +3,7 @@ package com.shop.config.jdbc.database;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import com.tmt.Constants;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * 数据库的配置
@@ -140,7 +140,7 @@ public class DataSourceProperties {
 	}
 
 	public void driverFit() {
-		if (!StringUtil3.isBlank(driverClassName) || db == null) {
+		if (!StringUtils.isBlank(driverClassName) || db == null) {
 			return;
 		}
 		if (db == Database.mysql || db == Database.sharding) {

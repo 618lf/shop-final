@@ -8,7 +8,7 @@ import java.io.IOException;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.common.utils.StringUtils;
 import com.tmt.common.web.tld.jsp.SecureTag;
 import com.tmt.system.entity.User;
 import com.tmt.system.utils.UserUtils;
@@ -43,7 +43,7 @@ public class UserTag extends SecureTag{
 	       }else if(NO.equals(property)){
 	    	  strValue = user.getNo();
 	       }else if(USER_NAME.equals(property)){//登录名可以是用户名或邮箱
-	    	  strValue = StringUtil3.isNotBlank(user.getLoginName())?user.getLoginName():user.getEmail();
+	    	  strValue = StringUtils.isNotBlank(user.getLoginName())?user.getLoginName():user.getEmail();
 	       }else {
 	    	  strValue = this.getUserProperty(user, property);
 	       }

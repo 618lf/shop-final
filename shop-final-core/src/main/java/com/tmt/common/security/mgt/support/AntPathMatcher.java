@@ -1,7 +1,7 @@
 package com.tmt.common.security.mgt.support;
 
 import com.tmt.common.security.mgt.PatternMatcher;
-import com.tmt.common.security.utils.StringUtils;
+import com.tmt.common.utils.StringUtils;
 
 public class AntPathMatcher implements PatternMatcher{
 
