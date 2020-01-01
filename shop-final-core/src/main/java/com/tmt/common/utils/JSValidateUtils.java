@@ -9,9 +9,7 @@ import javax.script.ScriptEngineManager;
 
 import org.apache.commons.io.IOUtils;
 
-import com.tmt.common.config.Globals;
-import com.tmt.common.utils.StringUtils;
-
+import com.tmt.Constants;
 
 /**
  * Excel 校验工具
@@ -24,16 +22,19 @@ public class JSValidateUtils {
 	private static ScriptEngine SE = SEM.getEngineByName("JavaScript");
 	static {
 		InputStreamReader reader = null;
-		try{
-			reader = new InputStreamReader(JSValidateUtils.class.getResourceAsStream("excel-validate.js"), Globals.DEFAULT_ENCODING);
+		try {
+			reader = new InputStreamReader(JSValidateUtils.class.getResourceAsStream("excel-validate.js"),
+					Constants.DEFAULT_ENCODING);
 			SE.eval(reader);
-		}catch(Exception e){}finally{
+		} catch (Exception e) {
+		} finally {
 			IOUtils.closeQuietly(reader);
 		}
 	}
-	
+
 	/**
 	 * 校验值的有效性
+	 * 
 	 * @param value
 	 * @param verifyFormat
 	 * @return
@@ -47,7 +48,9 @@ public class JSValidateUtils {
 		params.put("rules", rules);
 		try {
 			return (String) SE.eval(new StringBuilder("validator.doValidator(value, rules)").toString(), params);
-		} catch (Exception e) {e.printStackTrace();}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 }

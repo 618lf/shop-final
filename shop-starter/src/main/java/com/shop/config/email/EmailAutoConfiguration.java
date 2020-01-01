@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.tmt.common.config.Globals;
+import com.tmt.Constants;
 import com.tmt.common.email.JavaMailSender;
 import com.tmt.common.email.MimeMailService;
 
@@ -18,22 +18,23 @@ import com.tmt.common.email.MimeMailService;
 @Configuration
 @ConditionalOnProperty(prefix = "spring.application", name = "enableEmail", matchIfMissing = true)
 public class EmailAutoConfiguration {
-	
+
 	public EmailAutoConfiguration() {
 		APP_LOGGER.debug("Loading Email");
 	}
 
 	/**
 	 * 创建一个邮件发送器
+	 * 
 	 * @return
 	 */
 	@Bean
 	public JavaMailSender mailSender() {
 		JavaMailSender mailSender = new JavaMailSender();
-		mailSender.setDefaultEncoding(Globals.DEFAULT_ENCODING);
+		mailSender.setDefaultEncoding(Constants.DEFAULT_ENCODING.toString());
 		return mailSender;
 	}
-	
+
 	/**
 	 * 邮件服务
 	 * 

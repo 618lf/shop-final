@@ -21,8 +21,8 @@ import com.tmt.common.security.mgt.support.DefaultFilterChainManager;
 import com.tmt.common.security.mgt.support.DefaultSecurityManager;
 import com.tmt.common.security.mgt.support.PathMatchingFilterChainResolver;
 import com.tmt.common.security.utils.SecurityUtils;
-import com.tmt.common.security.utils.StringUtils;
 import com.tmt.common.utils.Maps;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * 初始化安全filter

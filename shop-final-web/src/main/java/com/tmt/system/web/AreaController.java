@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.tmt.Constants;
 import com.tmt.common.config.Globals;
 import com.tmt.common.entity.AjaxResult;
 import com.tmt.common.http.LocalHttpClient;
@@ -235,10 +236,11 @@ public class AreaController extends BaseController {
 		String content = FreemarkerUtils.processUseTemplate("/picker/jquery.citypicker.data.js.ftl", model);
 		File file = ContextHolderUtils.getTempFile();
 		try {
-			FileUtils.write(file, content, Globals.DEFAULT_ENCODING);
+			FileUtils.write(file, content, Constants.DEFAULT_ENCODING.toString());
 		} catch (IOException e) {
 		}
-		ExportUtils.downloadFile(file, "jquery.citypicker.data.js", response, Globals.DEFAULT_ENCODING, true);
+		ExportUtils.downloadFile(file, "jquery.citypicker.data.js", response, Constants.DEFAULT_ENCODING.toString(),
+				true);
 	}
 
 	private void fillChildren(Area parent, int level, Map<Integer, List<Area>> menuMap) {

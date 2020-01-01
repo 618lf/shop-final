@@ -15,9 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 
-import com.tmt.common.config.Globals;
+import com.tmt.Constants;
 import com.tmt.common.exception.BaseRuntimeException;
-import com.tmt.common.utils.StringUtils;
 import com.tmt.common.utils.zip.ZipEntry;
 import com.tmt.common.utils.zip.ZipOutputStream;
 
@@ -40,7 +39,7 @@ public class ExportUtils {
 	 * @param response
 	 */
 	public static void downloadFile(String filePath, String fileName, HttpServletResponse response) {
-		downloadFile(filePath, fileName, response, Globals.DEFAULT_ENCODING, Boolean.FALSE);
+		downloadFile(filePath, fileName, response, Constants.DEFAULT_ENCODING.toString(), Boolean.FALSE);
 	}
 
 	/**
@@ -51,7 +50,7 @@ public class ExportUtils {
 	 * @param response
 	 */
 	public static void downloadFileAndDel(String filePath, String fileName, HttpServletResponse response) {
-		downloadFile(filePath, fileName, response, Globals.DEFAULT_ENCODING, Boolean.TRUE);
+		downloadFile(filePath, fileName, response, Constants.DEFAULT_ENCODING.toString(), Boolean.TRUE);
 	}
 
 	/**

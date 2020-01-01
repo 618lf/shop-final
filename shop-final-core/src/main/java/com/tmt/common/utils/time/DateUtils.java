@@ -20,7 +20,7 @@ import com.tmt.common.utils.StringUtils;
  */
 public class DateUtils {
 
-	private static String[] parsePatterns = { "yyyy-MM-dd", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm", "yyyy/MM/dd",
+	public static final String[] parsePatterns = { "yyyy-MM-dd", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm", "yyyy/MM/dd",
 			"yyyy/MM/dd HH:mm:ss", "yyyy/MM/dd HH:mm" };
 
 	/**

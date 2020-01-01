@@ -6,7 +6,7 @@ import javax.mail.internet.MimeMessage;
 
 import org.springframework.mail.javamail.MimeMessageHelper;
 
-import com.tmt.common.config.Globals;
+import com.tmt.Constants;
 
 /**
  * MIME邮件服务类.
@@ -50,7 +50,7 @@ public class MimeMailService {
 	private MimeMessage generateMimeMessage(String subject, String[] toArray, String[] ccArray, String content, File[] attachments) {
 		try {
 			MimeMessage msg = mailSender.createMimeMessage();
-			MimeMessageHelper helper = new MimeMessageHelper(msg, true, Globals.DEFAULT_ENCODING);
+			MimeMessageHelper helper = new MimeMessageHelper(msg, true, Constants.DEFAULT_ENCODING.toString());
 			helper.setFrom(mailSender.getFrom());
 			helper.setTo(toArray);
 			helper.setCc(ccArray == null?new String[0]:ccArray);

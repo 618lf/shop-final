@@ -5,8 +5,8 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.tmt.Constants;
 import com.tmt.common.codec.Encodes;
-import com.tmt.common.config.Globals;
 import com.tmt.common.entity.Result;
 import com.tmt.common.exception.ErrorCode;
 import com.tmt.common.security.filter.AccessControllerFilter;
@@ -57,7 +57,7 @@ public class UserFilter extends AccessControllerFilter {
 		Subject subject = SecurityUtils.getSubject();
 		String loginUrl = getLoginUrl();
 		if (StringUtils.isNotBlank(subject.getReason())) {
-			String reason = Encodes.encodeBase64URLSafeString(subject.getReason().getBytes(Globals.DEFAULT_ENCODING));
+			String reason = Encodes.encodeBase64URLSafeString(subject.getReason().getBytes(Constants.DEFAULT_ENCODING));
 			loginUrl = StringUtils.format("%s?reason=%s", loginUrl, reason);
 		}
 		WebUtils.issueRedirect(request, response, loginUrl);

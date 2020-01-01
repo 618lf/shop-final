@@ -3,7 +3,7 @@ package com.tmt.common.security.filter.authc;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.tmt.common.config.Globals;
+import com.tmt.Constants;
 import com.tmt.common.entity.Result;
 import com.tmt.common.exception.ErrorCode;
 import com.tmt.common.security.context.AuthenticationToken;
@@ -101,7 +101,7 @@ public class AuthenticatingFilter extends AuthenticationFilter {
 		} 
 		
 		// 正常请求
-		request.setAttribute(Globals.REQUEST_ERROR_CODE_PARAM, code);
+		request.setAttribute(Constants.REQUEST_ERROR_CODE_PARAM, code);
 		return true;
 	}
 

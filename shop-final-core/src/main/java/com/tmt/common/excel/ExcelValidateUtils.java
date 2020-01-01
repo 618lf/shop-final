@@ -9,9 +9,8 @@ import javax.script.ScriptEngineManager;
 
 import org.apache.commons.io.IOUtils;
 
-import com.tmt.common.config.Globals;
+import com.tmt.Constants;
 import com.tmt.common.utils.StringUtils;
-
 
 /**
  * Excel 校验工具
@@ -24,22 +23,25 @@ public class ExcelValidateUtils {
 	private static ScriptEngine SE = SEM.getEngineByName("JavaScript");
 	static {
 		InputStreamReader reader = null;
-		try{
-			reader = new InputStreamReader(ExcelValidateUtils.class.getResourceAsStream("excel-validate.js"), Globals.DEFAULT_ENCODING);
+		try {
+			reader = new InputStreamReader(ExcelValidateUtils.class.getResourceAsStream("excel-validate.js"),
+					Constants.DEFAULT_ENCODING);
 			SE.eval(reader);
-		}catch(Exception e){}finally{
+		} catch (Exception e) {
+		} finally {
 			IOUtils.closeQuietly(reader);
 		}
 	}
-	
+
 	/**
 	 * 校验值的有效性
+	 * 
 	 * @param value
 	 * @param verifyFormat
 	 * @return
 	 */
 	public static String validate(String value, String rules) {
-		if(StringUtils.isBlank(rules)) {
+		if (StringUtils.isBlank(rules)) {
 			return null;
 		}
 		Bindings params = SE.getBindings(ScriptContext.ENGINE_SCOPE);
@@ -47,7 +49,9 @@ public class ExcelValidateUtils {
 		params.put("rules", rules);
 		try {
 			return (String) SE.eval(new StringBuilder("validator.doValidator(value, rules)").toString(), params);
-		} catch (Exception e) {e.printStackTrace();}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 }

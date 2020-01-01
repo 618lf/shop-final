@@ -1,6 +1,6 @@
 package com.tmt.system.utils;
 
-import com.tmt.common.config.Globals;
+import com.tmt.Constants;
 import com.tmt.common.utils.SpringContextHolder;
 import com.tmt.common.utils.StringUtils;
 import com.tmt.system.entity.Message;
@@ -20,7 +20,7 @@ public class MessageUtils {
 	 */
 	public static void sendErrorMessage(String content) {
 		Message template = new Message();
-		template.setReceiverUserId(Globals.ROOT);
+		template.setReceiverUserId(Constants.ROOT);
 		template.setReceiverUserName("系统管理员");
 		template.setContent(StringUtils.abbreviate(content, 1000));
 		template.setTitle("系统错误");

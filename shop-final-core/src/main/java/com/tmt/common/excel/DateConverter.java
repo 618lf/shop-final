@@ -2,7 +2,7 @@ package com.tmt.common.excel;
 
 import org.apache.commons.beanutils.Converter;
 
-import com.tmt.common.config.Globals;
+import com.tmt.Constants;
 import com.tmt.common.utils.StringUtils;
 import com.tmt.common.utils.time.DateUtils;
 
@@ -38,10 +38,10 @@ public class DateConverter implements Converter{
 	}
 	
 	private void initDateFormats() {
-		dateFormats = new String[Globals.DATE_PATTERNS.length+1];
+		dateFormats = new String[Constants.DATE_PATTERNS.length+1];
 		dateFormats[0] = this.dateFormat;
-		for(int i =0;i<Globals.DATE_PATTERNS.length; i++) {
-			dateFormats[i+1] = Globals.DATE_PATTERNS[i];
+		for(int i =0;i<Constants.DATE_PATTERNS.length; i++) {
+			dateFormats[i+1] = Constants.DATE_PATTERNS[i];
 		}
 	}
 }

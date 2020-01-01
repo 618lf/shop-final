@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.tmt.Constants;
 import com.tmt.common.codec.Encodes;
 import com.tmt.common.config.Globals;
 import com.tmt.common.entity.BaseEntity;
@@ -75,7 +76,7 @@ public class LoginController extends BaseController {
 		// 显示原因
 		String reason = WebUtils.getSafeParameter("reason");
 		if (StringUtils.isNotBlank(reason)) {
-			model.addAttribute("reason", Encodes.decodeBase64(reason, Globals.DEFAULT_ENCODING));
+			model.addAttribute("reason", Encodes.decodeBase64(reason, Constants.DEFAULT_ENCODING.toString()));
 		}
 		return "/system/SysLogin";
 	}
@@ -95,7 +96,7 @@ public class LoginController extends BaseController {
 		model.addAttribute(AuthenticationToken.username, username);
 		model.addAttribute(AuthenticationToken.password, password);
 		model.addAttribute("isValidateCodeLogin", UserUtils.isValidateLoginCode(username, false));
-		ErrorCode code = (ErrorCode) request.getAttribute(Globals.REQUEST_ERROR_CODE_PARAM);
+		ErrorCode code = (ErrorCode) request.getAttribute(Constants.REQUEST_ERROR_CODE_PARAM);
 		if (code != null) {
 			model.addAttribute("error", code);
 		}

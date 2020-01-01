@@ -12,7 +12,14 @@ import com.tmt.common.utils.Lists;
  * @author root
  */
 public interface Constants {
-	
+
+	/** 日期 */
+	String[] DATE_PATTERNS = { "yyyy-MM-dd", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm", "yyyy-MM-dd HH", "yyyy-MM",
+			"yyyy/MM/dd", "yyyy/MM/dd HH:mm:ss", "yyyy", "yyyyMM", "yyyy/MM", "yyyyMMddHHmmss", "yyyyMMdd" };
+
+	/** 系统错误码 **/
+	String REQUEST_ERROR_CODE_PARAM = "REQUEST_ERROR_CODE_PARAM";
+
 	/** 启动的类 */
 	List<Class<?>> BOOT_CLASSES = Lists.newArrayList(1);
 
@@ -34,15 +41,18 @@ public interface Constants {
 	String RABBITMQ_PREFIX = "spring.rabbitmq";
 	String ROCKETMQ_PREFIX = "spring.rocketmq";
 	String MONGO_PREFIX = "spring.mongo";
-	
+
 	/** 保留ID **/
 	long ROOT = 0L;
 	long INVALID_ID = -1;
-	
+
 	/** 是/否/删除 - TINYINT **/
 	byte YES = 1;
 	byte NO = 0;
 	byte DEL = -1;
+
+	/** 新用户 **/
+	String NEW_USER = "_nu";
 
 	/** 默认编码 **/
 	Charset DEFAULT_ENCODING = StandardCharsets.UTF_8;
@@ -51,8 +61,8 @@ public interface Constants {
 	String security_OR_DIVIDER_TOKEN = "|";
 	String security_AND_DIVIDER_TOKEN = ",";
 	String security_WILDCARD_TOKEN = "*";
-    String security_PART_DIVIDER_TOKEN = ":";
-    
+	String security_PART_DIVIDER_TOKEN = ":";
+
 	/** 目录 **/
 	default String temp() {
 		return System.getProperty("java.io.tmpdir");
@@ -86,7 +96,7 @@ public interface Constants {
 	String RUNNING_ABLE_TASKS = "SYS-TASKS";
 	String JOB_TASK_KEY = "TASK_KEY";
 	String JOB_EXECUTOR_KEY = "EXECUTOR_KEY";
-	
+
 	// 日志
 	String SYS_ACCESS = "sys-access";
 

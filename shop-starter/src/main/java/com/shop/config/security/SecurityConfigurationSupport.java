@@ -5,8 +5,8 @@ import java.util.Map;
 import javax.servlet.Filter;
 
 import com.tmt.common.security.realm.Realm;
-import com.tmt.common.security.utils.StringUtils;
 import com.tmt.common.utils.Maps;
+import com.tmt.common.utils.StringUtils;
 
 /**
  * 业务代码需要继承这个类

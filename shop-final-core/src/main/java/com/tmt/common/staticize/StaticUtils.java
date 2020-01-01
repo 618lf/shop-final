@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
+import com.tmt.Constants;
 import com.tmt.common.config.Globals;
 import com.tmt.common.entity.BaseEntity;
 import com.tmt.common.utils.FileUtils;
@@ -133,7 +134,7 @@ public class StaticUtils {
 	   if (!file.exists()) {
 		   String html = FreemarkerUtils.processUseTemplate(getTemplateFile(template,root), root);
 		   try {
-				FileUtils.write(new File(filePath), html, Globals.DEFAULT_ENCODING);
+				FileUtils.write(new File(filePath), html, Constants.DEFAULT_ENCODING);
 		   } catch (IOException e) {}
 	   }
 	   return new StringBuilder(SettingUtils.getUrlPath()).append(staticUrl).toString();
@@ -144,7 +145,7 @@ public class StaticUtils {
 	   String filePath = new StringBuilder(SettingUtils.getStoragePath()).append(_file).toString();
 	   String html = FreemarkerUtils.processUseTemplate(getTemplateFile(template,root), root);
 	   try {
-			FileUtils.write(new File(filePath), html, Globals.DEFAULT_ENCODING);
+			FileUtils.write(new File(filePath), html, Constants.DEFAULT_ENCODING);
 	   } catch (IOException e) {}
 	   return new StringBuilder(SettingUtils.getUrlPath()).append(staticUrl).toString();
    }

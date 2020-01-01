@@ -13,7 +13,7 @@ import org.apache.commons.beanutils.converters.ArrayConverter;
 import org.apache.commons.beanutils.converters.DateConverter;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
-import com.tmt.common.config.Globals;
+import com.tmt.Constants;
 import com.tmt.common.converter.EnumConverter;
 import com.tmt.common.exception.BaseRuntimeException;
 import com.tmt.common.persistence.incrementer.IdGen;
@@ -31,9 +31,10 @@ import freemarker.template.utility.DeepUnwrap;
 
 /**
  * 统一的使用
- * @ClassName: FreemarkerUtils 
+ * 
+ * @ClassName: FreemarkerUtils
  * @author 李锋
- * @date Jul 1, 2016 11:25:46 AM 
+ * @date Jul 1, 2016 11:25:46 AM
  */
 public class FreemarkerUtils {
 
@@ -43,12 +44,13 @@ public class FreemarkerUtils {
 
 	static {
 		DateConverter localDateConverter = new DateConverter();
-		localDateConverter.setPatterns(Globals.DATE_PATTERNS);
+		localDateConverter.setPatterns(Constants.DATE_PATTERNS);
 		convertBean.register(localDateConverter, Date.class);
 	}
-	
+
 	/**
 	 * 基于模板来生成数据
+	 * 
 	 * @param templateName
 	 * @param model
 	 * @return
@@ -56,15 +58,18 @@ public class FreemarkerUtils {
 	public static String processUseTemplate(String templateName, Map<String, ?> model) {
 		try {
 			Configuration configuration = getLocalConfiguration();
-			return FreeMarkerTemplateUtils.processTemplateIntoString(configuration.getTemplate(templateName, Globals.DEFAULT_ENCODING), model);
+			return FreeMarkerTemplateUtils.processTemplateIntoString(
+					configuration.getTemplate(templateName, Constants.DEFAULT_ENCODING.toString()), model);
 		} catch (Exception localIOException) {
 			throw new BaseRuntimeException("生成模版错误", localIOException);
 		}
 	}
-	
+
 	/**
 	 * 生成html页面，模版名称和 model数据
-	 * @param template 模版内容
+	 * 
+	 * @param template
+	 *            模版内容
 	 * @param model
 	 * @return
 	 */
@@ -78,32 +83,34 @@ public class FreemarkerUtils {
 		}
 		return out.toString();
 	}
-	
+
 	/**
 	 * 1.优先尝试加载 XFreemarkerUtils 的配置，如果没有在加载自己的配置
+	 * 
 	 * @return
-	 * @throws TemplateException 
-	 * @throws IOException 
+	 * @throws TemplateException
+	 * @throws IOException
 	 */
 	public static Configuration getLocalConfiguration() throws IOException, TemplateException {
 		if (localConfiguration == null) {
-			FreeMarkerConfig localFreeMarkerConfigurer = (FreeMarkerConfig) SpringContextHolder.getBean("freeMarkerConfigurer", FreeMarkerConfig.class);
-		    if (localFreeMarkerConfigurer != null) {
-			    localConfiguration = localFreeMarkerConfigurer.getConfiguration();
-		    }
+			FreeMarkerConfig localFreeMarkerConfigurer = (FreeMarkerConfig) SpringContextHolder
+					.getBean("freeMarkerConfigurer", FreeMarkerConfig.class);
+			if (localFreeMarkerConfigurer != null) {
+				localConfiguration = localFreeMarkerConfigurer.getConfiguration();
+			}
 		}
 		return localConfiguration;
 	}
-	
-	//----------其他的操作----------------------------
+
+	// ----------其他的操作----------------------------
 	@SuppressWarnings("unchecked")
-	public static <T> T getParameter(String name, Class<T> type,
-			Map<String, TemplateModel> params) throws TemplateModelException {
+	public static <T> T getParameter(String name, Class<T> type, Map<String, TemplateModel> params)
+			throws TemplateModelException {
 		TemplateModel localTemplateModel = (TemplateModel) params.get(name);
 		if (localTemplateModel == null)
 			return null;
 		Object localObject = DeepUnwrap.unwrap(localTemplateModel);
-		return (T)convertBean.convert(localObject, type);
+		return (T) convertBean.convert(localObject, type);
 	}
 
 	public static TemplateModel getVariable(String name, Environment env) throws TemplateModelException {
@@ -140,12 +147,13 @@ public class FreemarkerUtils {
 					super.register(new EnumConverter(localClass), localClass);
 				} else if ((localClass.isArray()) && (localClass.getComponentType().isEnum())) {
 					if (super.lookup(localClass) == null) {
-						Object localObject = new ArrayConverter( localClass, new EnumConverter(localClass.getComponentType()), 0);
-						((ArrayConverter) localObject) .setOnlyFirstToString(false);
+						Object localObject = new ArrayConverter(localClass,
+								new EnumConverter(localClass.getComponentType()), 0);
+						((ArrayConverter) localObject).setOnlyFirstToString(false);
 						super.register((Converter) localObject, localClass);
 					}
 					Object localObject = super.lookup(localClass);
-					return (String) ((Converter) localObject).convert( String.class, value);
+					return (String) ((Converter) localObject).convert(String.class, value);
 				}
 			}
 			return super.convert(value);
@@ -162,8 +170,7 @@ public class FreemarkerUtils {
 		public Object convert(String[] values, Class clazz) {
 			if ((clazz.isArray()) && (clazz.getComponentType().isEnum())
 					&& (super.lookup(clazz.getComponentType()) == null))
-				super.register(new EnumConverter(clazz.getComponentType()),
-						clazz.getComponentType());
+				super.register(new EnumConverter(clazz.getComponentType()), clazz.getComponentType());
 			return super.convert(values, clazz);
 		}
 
@@ -172,29 +179,30 @@ public class FreemarkerUtils {
 			if (super.lookup(targetType) == null)
 				if (targetType.isEnum()) {
 					super.register(new EnumConverter(targetType), targetType);
-				} else if ((targetType.isArray())
-						&& (targetType.getComponentType().isEnum())) {
-					ArrayConverter localArrayConverter = new ArrayConverter(
-							targetType, new EnumConverter(
-									targetType.getComponentType()), 0);
+				} else if ((targetType.isArray()) && (targetType.getComponentType().isEnum())) {
+					ArrayConverter localArrayConverter = new ArrayConverter(targetType,
+							new EnumConverter(targetType.getComponentType()), 0);
 					localArrayConverter.setOnlyFirstToString(false);
 					super.register(localArrayConverter, targetType);
 				}
 			return super.convert(value, targetType);
 		}
 	}
-	
+
 	/**
 	 * 生成随机路径
-	 * @param format 类似  /qrcode/tmp/${data}/${datatime}${rand}.jpg
+	 * 
+	 * @param format
+	 *            类似 /qrcode/tmp/${data}/${datatime}${rand}.jpg
 	 * @return
 	 */
 	public static String getFormatePath(String format) {
 		return FreemarkerUtils.processNoTemplate(format, getRootMap());
 	}
-	
+
 	/**
 	 * 用户创建随机文件名的ROOT
+	 * 
 	 * @return
 	 */
 	private static Map<String, Object> getRootMap() {
@@ -204,23 +212,23 @@ public class FreemarkerUtils {
 		root.put("rand", IdGen.stringKey());
 		return root;
 	}
-	
+
 	/**
 	 * 有些属性，是freemarker 不支持的，需要转义
 	 */
 	public static Map<String, Object> escape(Map<String, Object> context) {
-		
+
 		// 基本的校验
 		if (context == null || context.isEmpty()) {
 			return context;
 		}
-		
+
 		// size
 		if (context.containsKey("size")) {
 			Object v = context.remove("size");
 			context.put("_size", v);
 		}
-		
+
 		return context;
 	}
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.tmt.Constants;
 import com.tmt.common.config.Globals;
 import com.tmt.common.entity.AjaxResult;
 import com.tmt.common.entity.TreeVO;
@@ -289,8 +290,8 @@ public class AttachmentController extends BaseUploadController {
 			if (attachment != null) {
 				File tempfile = ContextHolderUtils.getTempFile(StorageUtils.download(attachment.getStorageUrl()));
 				if (tempfile != null) {
-					ExportUtils.downloadFile(tempfile, attachment.getName(), response, Globals.DEFAULT_ENCODING,
-							Boolean.TRUE);
+					ExportUtils.downloadFile(tempfile, attachment.getName(), response,
+							Constants.DEFAULT_ENCODING.toString(), Boolean.TRUE);
 				}
 			}
 		}
