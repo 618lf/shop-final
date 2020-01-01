@@ -13,7 +13,6 @@ import javax.servlet.Servlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ListableBeanFactory;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -47,12 +46,10 @@ import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.accept.ContentNegotiationManager;
 import org.springframework.web.accept.ContentNegotiationStrategy;
 import org.springframework.web.accept.PathExtensionContentNegotiationStrategy;
-import org.springframework.web.bind.support.ConfigurableWebBindingInitializer;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.DispatcherServlet;
-import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.DelegatingWebMvcConfiguration;
@@ -62,8 +59,6 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver;
-import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.servlet.resource.ResourceUrlProvider;
@@ -120,16 +115,6 @@ public class WebMvcAutoConfiguration {
 		commonsMultipartResolver.setMaxUploadSize(properties.getWeb().getMaxUploadSize());
 		commonsMultipartResolver.setMaxInMemorySize(properties.getWeb().getMaxInMemorySize());
 		return commonsMultipartResolver;
-	}
-
-	/**
-	 * 异常处理
-	 * 
-	 * @return
-	 */
-	@Bean(name = DispatcherServlet.HANDLER_EXCEPTION_RESOLVER_BEAN_NAME)
-	public DefaultExceptionHandler exceptionHandler() {
-		return new DefaultExceptionHandler();
 	}
 
 	/**
@@ -253,18 +238,49 @@ public class WebMvcAutoConfiguration {
 	public static class EnableWebMvcConfiguration extends DelegatingWebMvcConfiguration {
 
 		private final WebMvcProperties mvcProperties;
-
-		private final ListableBeanFactory beanFactory;
-
 		private final WebMvcRegistrations mvcRegistrations;
 
 		public EnableWebMvcConfiguration(ObjectProvider<WebMvcProperties> mvcPropertiesProvider,
 				ObjectProvider<WebMvcRegistrations> mvcRegistrationsProvider, ListableBeanFactory beanFactory) {
 			this.mvcProperties = mvcPropertiesProvider.getIfAvailable();
 			this.mvcRegistrations = mvcRegistrationsProvider.getIfUnique();
-			this.beanFactory = beanFactory;
+		}
+		
+		@Bean
+		@Override
+		public ContentNegotiationManager mvcContentNegotiationManager() {
+			ContentNegotiationManager manager = super.mvcContentNegotiationManager();
+			List<ContentNegotiationStrategy> strategies = manager.getStrategies();
+			ListIterator<ContentNegotiationStrategy> iterator = strategies.listIterator();
+			while (iterator.hasNext()) {
+				ContentNegotiationStrategy strategy = iterator.next();
+				if (strategy instanceof PathExtensionContentNegotiationStrategy) {
+					iterator.set(new OptionalPathExtensionContentNegotiationStrategy(strategy));
+				}
+			}
+			return manager;
 		}
 
+		@Bean
+		@Override
+		public FormattingConversionService mvcConversionService() {
+			WebConversionService conversionService = new WebConversionService(this.mvcProperties.getDateFormat());
+			addFormatters(conversionService);
+			return conversionService;
+		}
+
+		@Bean
+		@Override
+		public Validator mvcValidator() {
+			if (!ClassUtils.isPresent("javax.validation.Validator", getClass().getClassLoader())) {
+				return super.mvcValidator();
+			}
+			return ValidatorAdapter.get(getApplicationContext(), getValidator());
+		}
+
+		/**
+		 * 替换默认的 Adapter
+		 */
 		@Bean
 		@Override
 		public RequestMappingHandlerAdapter requestMappingHandlerAdapter(
@@ -285,7 +301,10 @@ public class WebMvcAutoConfiguration {
 			}
 			return super.createRequestMappingHandlerAdapter();
 		}
-
+		
+		/**
+		 * Mapping
+		 */
 		@Bean
 		@Primary
 		@Override
@@ -293,26 +312,8 @@ public class WebMvcAutoConfiguration {
 				@Qualifier("mvcContentNegotiationManager") ContentNegotiationManager contentNegotiationManager,
 				@Qualifier("mvcConversionService") FormattingConversionService conversionService,
 				@Qualifier("mvcResourceUrlProvider") ResourceUrlProvider resourceUrlProvider) {
-			// Must be @Primary for MvcUriComponentsBuilder to work
 			return super.requestMappingHandlerMapping(contentNegotiationManager, conversionService,
 					resourceUrlProvider);
-		}
-
-		@Bean
-		@Override
-		public FormattingConversionService mvcConversionService() {
-			WebConversionService conversionService = new WebConversionService(this.mvcProperties.getDateFormat());
-			addFormatters(conversionService);
-			return conversionService;
-		}
-
-		@Bean
-		@Override
-		public Validator mvcValidator() {
-			if (!ClassUtils.isPresent("javax.validation.Validator", getClass().getClassLoader())) {
-				return super.mvcValidator();
-			}
-			return ValidatorAdapter.get(getApplicationContext(), getValidator());
 		}
 
 		@Override
@@ -323,49 +324,14 @@ public class WebMvcAutoConfiguration {
 			return super.createRequestMappingHandlerMapping();
 		}
 
-		@Override
-		protected ConfigurableWebBindingInitializer getConfigurableWebBindingInitializer(
-				FormattingConversionService mvcConversionService, Validator mvcValidator) {
-			try {
-				return this.beanFactory.getBean(ConfigurableWebBindingInitializer.class);
-			} catch (NoSuchBeanDefinitionException ex) {
-				return super.getConfigurableWebBindingInitializer(mvcConversionService, mvcValidator);
-			}
-		}
-
-		@Override
-		protected ExceptionHandlerExceptionResolver createExceptionHandlerExceptionResolver() {
-			if (this.mvcRegistrations != null && this.mvcRegistrations.getExceptionHandlerExceptionResolver() != null) {
-				return this.mvcRegistrations.getExceptionHandlerExceptionResolver();
-			}
-			return super.createExceptionHandlerExceptionResolver();
-		}
-
-		@Override
-		protected void extendHandlerExceptionResolvers(List<HandlerExceptionResolver> exceptionResolvers) {
-			super.extendHandlerExceptionResolvers(exceptionResolvers);
-			if (this.mvcProperties.isLogResolvedException()) {
-				for (HandlerExceptionResolver resolver : exceptionResolvers) {
-					if (resolver instanceof AbstractHandlerExceptionResolver) {
-						((AbstractHandlerExceptionResolver) resolver).setWarnLogCategory(resolver.getClass().getName());
-					}
-				}
-			}
-		}
-
-		@Bean
-		@Override
-		public ContentNegotiationManager mvcContentNegotiationManager() {
-			ContentNegotiationManager manager = super.mvcContentNegotiationManager();
-			List<ContentNegotiationStrategy> strategies = manager.getStrategies();
-			ListIterator<ContentNegotiationStrategy> iterator = strategies.listIterator();
-			while (iterator.hasNext()) {
-				ContentNegotiationStrategy strategy = iterator.next();
-				if (strategy instanceof PathExtensionContentNegotiationStrategy) {
-					iterator.set(new OptionalPathExtensionContentNegotiationStrategy(strategy));
-				}
-			}
-			return manager;
+		/**
+		 * 替代默认 --  异常处理
+		 * 
+		 * @return
+		 */
+		@Bean(name = DispatcherServlet.HANDLER_EXCEPTION_RESOLVER_BEAN_NAME)
+		public DefaultExceptionHandler exceptionHandler() {
+			return new DefaultExceptionHandler();
 		}
 	}
 
