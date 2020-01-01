@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tmt.Constants;
-import com.tmt.common.config.Globals;
 import com.tmt.common.entity.TreeVO;
 import com.tmt.common.persistence.BaseDao;
 import com.tmt.common.persistence.incrementer.IdGen;
 import com.tmt.common.persistence.incrementer.UUIdGenerator;
+import com.tmt.common.security.utils.PasswordUtils;
 import com.tmt.common.service.BaseService;
 import com.tmt.common.utils.Lists;
 import com.tmt.common.utils.Maps;
@@ -81,7 +81,7 @@ public class UserService extends BaseService<User, Long> implements UserServiceF
 			if (StringUtils.isBlank(user.getPassword())) {
 				user.setPassword(UUIdGenerator.uuid());
 			}
-			user.setPassword(Globals.entryptPassword(user.getPassword()));
+			user.setPassword(PasswordUtils.entryptPassword(user.getPassword()));
 			if (StringUtils.isBlank(user.getNo())) {
 				user.setNo(this.createUserCode());
 			}
@@ -243,7 +243,7 @@ public class UserService extends BaseService<User, Long> implements UserServiceF
 	@Transactional
 	public void updatePassWord(User user) {
 		if (StringUtils.isNotBlank(user.getPassword())) {
-			user.setPassword(Globals.entryptPassword(user.getPassword()));
+			user.setPassword(PasswordUtils.entryptPassword(user.getPassword()));
 		}
 		this.userDao.update("updatePassWord", user);
 	}
@@ -257,7 +257,7 @@ public class UserService extends BaseService<User, Long> implements UserServiceF
 	@Transactional
 	public void updatePassWordAndStatus(User user) {
 		if (StringUtils.isNotBlank(user.getPassword())) {
-			user.setPassword(Globals.entryptPassword(user.getPassword()));
+			user.setPassword(PasswordUtils.entryptPassword(user.getPassword()));
 		}
 		this.userDao.update("updatePassWordAndStatus", user);
 	}
@@ -475,7 +475,7 @@ public class UserService extends BaseService<User, Long> implements UserServiceF
 
 		// 用户基本信息
 		if (StringUtils.isNotBlank(member.getPassword())) {
-			member.setPassword(Globals.entryptPassword(member.getPassword()));
+			member.setPassword(PasswordUtils.entryptPassword(member.getPassword()));
 		}
 		member.setStatus(UserStatus.NARMAL.getValue());
 		member.setNo(this.createUserCode());

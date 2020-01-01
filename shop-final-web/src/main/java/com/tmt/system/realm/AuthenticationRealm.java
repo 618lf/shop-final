@@ -6,7 +6,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 import com.tmt.Constants;
-import com.tmt.common.config.Globals;
 import com.tmt.common.exception.CaptchaException;
 import com.tmt.common.exception.ErrorCode;
 import com.tmt.common.security.context.AuthenticationToken;
@@ -17,6 +16,7 @@ import com.tmt.common.security.exception.AuthenticationException;
 import com.tmt.common.security.principal.Principal;
 import com.tmt.common.security.realm.CachedRealm;
 import com.tmt.common.security.subject.Subject;
+import com.tmt.common.security.utils.PasswordUtils;
 import com.tmt.common.security.utils.SecurityUtils;
 import com.tmt.common.utils.CacheUtils;
 import com.tmt.common.utils.StringUtils;
@@ -75,7 +75,7 @@ public class AuthenticationRealm extends CachedRealm {
 		}
 
 		// 验证密码
-		boolean flag = Globals.validatePassword(password, user.getPassword());
+		boolean flag = PasswordUtils.validatePassword(password, user.getPassword());
 		if (flag) {
 			ThreadContext.put(Constants.USER_KEY, user);
 			return new Principal(user.getId(), username);
