@@ -1,4 +1,4 @@
-package com.shop.config.jdbc.mybatis;
+package com.shop.config.jdbc;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,13 +14,16 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
+import com.tmt.Constants;
+import com.tmt.common.utils.StringUtil3;
+
 /**
  * Configuration properties for MyBatis.
  *
  * @author Eddú Meléndez
  * @author Kazuki Shimizu
  */
-@ConfigurationProperties(prefix = "spring.mybatis")
+@ConfigurationProperties(prefix = Constants.MYBATIS_PREFIX)
 public class MybatisProperties {
 
 	/**
@@ -31,7 +34,7 @@ public class MybatisProperties {
 	/**
 	 * Locations of MyBatis mapper files.
 	 */
-	private String[] mapperLocations = new String[] { "classpath*:com/tmt/**/dao/*.Mapper.xml" };
+	private String[] mapperLocations;
 
 	/**
 	 * Packages to search type aliases. (Package delimiters are ",; \t\n")
@@ -151,10 +154,32 @@ public class MybatisProperties {
 		this.configuration = configuration;
 	}
 
+	/**
+	 * 获取 Mappers
+	 * 
+	 * @return
+	 */
 	public Resource[] resolveMapperLocations() {
 		ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
 		List<Resource> resources = new ArrayList<Resource>();
+
+		// 自定义的配置
 		if (this.mapperLocations != null) {
+			for (String mapperLocation : this.mapperLocations) {
+				try {
+					Resource[] mappers = resourceResolver.getResources(mapperLocation);
+					resources.addAll(Arrays.asList(mappers));
+				} catch (IOException e) {
+					// ignore
+				}
+			}
+		}
+
+		// 默认的配置
+		if (Constants.BOOT_CLASSES.size() != 0) {
+			String mapperLocations = StringUtil3.format("classpath*:%s/**/dao/*.Mapper.xml", StringUtil3
+					.substringBeforeLast(Constants.BOOT_CLASSES.get(0).getName(), ".").replaceAll("\\.", "/"));
+			this.mapperLocations = new String[] { mapperLocations };
 			for (String mapperLocation : this.mapperLocations) {
 				try {
 					Resource[] mappers = resourceResolver.getResources(mapperLocation);
@@ -168,7 +193,7 @@ public class MybatisProperties {
 		// 默认添加一层配置
 		try {
 			resources.addAll(Arrays
-					.asList(resourceResolver.getResources("classpath*:com/tmt/common/persistence/config/*.Mapper.xml")));
+					.asList(resourceResolver.getResources("classpath*:com/swak/persistence/config/*.Mapper.xml")));
 		} catch (IOException e) {
 			// ignore
 		}

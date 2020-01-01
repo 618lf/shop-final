@@ -7,36 +7,23 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.shop.config.jdbc.DataBaseSecurity;
 import com.tmt.common.persistence.datasource.DataSourceHolder;
-import org.springframework.core.Ordered;
 
 /**
  * 配置 Druid
  * @author lifeng
  */
-@AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
 @ConditionalOnClass({DruidDataSource.class})
 @ConditionalOnMissingBean(DataSource.class)
 public class DruidDataSourceAutoConfiguration {
 
 	@Autowired
 	private DataSourceProperties properties;
-	@Autowired(required = false)
-	private DataBaseSecurity dataBaseSecurity;
-
-	public DruidDataSourceAutoConfiguration() {
-		if (dataBaseSecurity == null) {
-			dataBaseSecurity = new DataBaseSecurity() {
-			};
-		}
-	}
 	
 	/**
 	 * 构建 DruidDataSource
@@ -48,7 +35,7 @@ public class DruidDataSourceAutoConfiguration {
 		DruidDataSource dataSource = new DruidDataSource();
 		dataSource.setUrl(properties.getUrl());
 		dataSource.setUsername(properties.getUsername());
-		dataSource.setPassword(dataBaseSecurity.decrypt(properties.getPassword()));
+		dataSource.setPassword(properties.getPassword());
 
 		dataSource.setDriverClassName(properties.getDriverClassName());
 		dataSource.setInitialSize(properties.getInitialSize()); // 定义初始连接数

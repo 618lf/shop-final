@@ -1,5 +1,7 @@
 package com.shop.config;
 
+import static com.shop.Application.APP_LOGGER;
+
 import java.io.File;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -9,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
+import com.shop.booter.AppBooter;
 import com.shop.starter.ApplicationProperties;
 import com.tmt.common.config.Globals;
 import com.tmt.common.persistence.incrementer.IdGen;
@@ -32,6 +35,7 @@ public class ApplicationAutoConfiguration {
 	private ResourceLoader resourceLoader;
 
 	public ApplicationAutoConfiguration(ApplicationProperties properties, ResourceLoader resourceLoader) {
+		APP_LOGGER.debug("Loading App Booter");
 		this.resourceLoader = resourceLoader;
 		serializer(properties);
 		globals(properties);
@@ -95,5 +99,10 @@ public class ApplicationAutoConfiguration {
 			}
 		}
 		return null;
+	}
+	
+	@Bean
+	public AppBooter appBooter() {
+		return new AppBooter();
 	}
 }

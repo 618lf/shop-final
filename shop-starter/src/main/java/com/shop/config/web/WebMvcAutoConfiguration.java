@@ -64,7 +64,6 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import org.springframework.web.servlet.resource.ResourceUrlProvider;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-import com.shop.config.jdbc.DataBaseAutoConfiguration;
 import com.shop.starter.ApplicationProperties;
 import com.tmt.common.converter.DateConverter;
 import com.tmt.common.converter.StringEscapeConverter;
@@ -82,7 +81,7 @@ import com.tmt.common.web.security.interceptor.TokenInterceptor;
 @ConditionalOnWebApplication(type = Type.SERVLET)
 @ConditionalOnClass({ Servlet.class, DispatcherServlet.class, WebMvcConfigurer.class })
 @ConditionalOnMissingBean(WebMvcConfigurationSupport.class)
-@AutoConfigureAfter({ DispatcherServletAutoConfiguration.class, DataBaseAutoConfiguration.class })
+@AutoConfigureAfter({ DispatcherServletAutoConfiguration.class})
 @EnableConfigurationProperties({ WebMvcProperties.class, ResourceProperties.class, ApplicationProperties.class })
 public class WebMvcAutoConfiguration {
 

@@ -2,6 +2,7 @@ package com.shop.config.jdbc.database;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import com.tmt.Constants;
 import com.tmt.common.utils.StringUtil3;
 
 /**
@@ -9,21 +10,21 @@ import com.tmt.common.utils.StringUtil3;
  * 
  * @author lifeng
  */
-@ConfigurationProperties(prefix = "spring.datasource")
+@ConfigurationProperties(prefix = Constants.DATASOURCE_PREFIX)
 public class DataSourceProperties {
 
-	private String name = "SHOP - DB";
+	private String name = "DB";
 	private Database db = Database.mysql;
 	private String url;
 	private String username;
 	private String password;
 	private String driverClassName;
 	private Integer initialSize = 10;
-	private Integer minIdle = 10;
+	private Integer minIdle = 10; // 最小空闲连接数量
 	private Integer maxActive = 20; // 连接池中允许的最大连接数。缺省值：10；推荐的公式：((core_count * 2) + effective_spindle_count)
 	private Integer maxWait = 60000; // 获取连接时最大等待时间，单位毫秒。
 	private Integer timeBetweenEvictionRunsMillis = 60000; // 多久检查一次
-	private Integer minEvictableIdleTimeMillis = 300000; // 最小的生存时间
+	private Integer minEvictableIdleTimeMillis = 600000; // 空闲连接存活最大时间 10分钟
 	private String validationQuery = "SELECT 1";
 	private Boolean testWhileIdle = true;
 	private Boolean testOnBorrow = false;
@@ -35,6 +36,34 @@ public class DataSourceProperties {
 	private Integer prepStmtCacheSize = 250;
 	private Integer prepStmtCacheSqlLimit = 2048;
 	private Integer maxLifetime = 1800000; // 一个连接的生命时长（毫秒），超时而且没被使用则被释放（retired），缺省:30分钟，建议设置比数据库超时时长少30秒
+
+	public DataSourceProperties() {
+	}
+
+	public DataSourceProperties(DataSourceProperties copy) {
+		this.name = copy.getName();
+		this.db = copy.getDb();
+		this.url = copy.getUrl();
+		this.username = copy.getUsername();
+		this.password = copy.getPassword();
+		this.driverClassName = copy.getDriverClassName();
+		this.initialSize = copy.getInitialSize();
+		this.minIdle = copy.getMinIdle();
+		this.maxActive = copy.getMaxActive();
+		this.maxWait = copy.getMaxWait();
+		this.timeBetweenEvictionRunsMillis = copy.getTimeBetweenEvictionRunsMillis();
+		this.minEvictableIdleTimeMillis = copy.getMinEvictableIdleTimeMillis();
+		this.validationQuery = copy.getValidationQuery();
+		this.testWhileIdle = copy.getTestWhileIdle();
+		this.testOnBorrow = copy.getTestOnBorrow();
+		this.testOnReturn = copy.getTestOnReturn();
+		this.poolPreparedStatements = copy.getPoolPreparedStatements();
+		this.maxPoolPreparedStatementPerConnectionSize = copy.getMaxPoolPreparedStatementPerConnectionSize();
+		this.filters = copy.getFilters();
+		this.prepStmtCacheSize = copy.getPrepStmtCacheSize();
+		this.prepStmtCacheSqlLimit = copy.getPrepStmtCacheSqlLimit();
+		this.maxLifetime = copy.getMaxLifetime();
+	}
 
 	public Database getDb() {
 		return db;
@@ -99,7 +128,7 @@ public class DataSourceProperties {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
 	/**
 	 * 自动适配驱动
 	 * 
@@ -114,7 +143,7 @@ public class DataSourceProperties {
 		if (!StringUtil3.isBlank(driverClassName) || db == null) {
 			return;
 		}
-		if (db == Database.mysql) {
+		if (db == Database.mysql || db == Database.sharding) {
 			this.driverFitMysql();
 		} else if (db == Database.h2) {
 			this.driverClassName = "org.h2.Driver";

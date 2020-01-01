@@ -16,6 +16,7 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -27,7 +28,6 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
-import com.shop.config.jdbc.DataBaseAutoConfiguration.DataSourceAutoConfiguration;
 import com.shop.config.jdbc.database.ConfigurationCustomizer;
 import com.shop.config.jdbc.database.DataSourceProperties;
 import com.shop.config.jdbc.database.Database;
@@ -35,7 +35,7 @@ import com.shop.config.jdbc.database.DruidDataSourceAutoConfiguration;
 import com.shop.config.jdbc.database.HikariDataSourceAutoConfiguration;
 import com.shop.config.jdbc.database.SpringBootVFS;
 import com.shop.config.jdbc.database.SqlLiteDataSourceAutoConfiguration;
-import com.shop.config.jdbc.mybatis.MybatisProperties;
+import com.tmt.Constants;
 import com.tmt.common.persistence.QueryCondition;
 import com.tmt.common.persistence.dialect.Dialect;
 import com.tmt.common.persistence.dialect.H2Dialect;
@@ -43,7 +43,7 @@ import com.tmt.common.persistence.dialect.MySQLDialect;
 import com.tmt.common.persistence.dialect.OracleDialect;
 import com.tmt.common.persistence.dialect.SqlLiteDialect;
 import com.tmt.common.persistence.mybatis.ExecutorInterceptor;
-import com.tmt.common.security.utils.StringUtils;
+import com.tmt.common.utils.StringUtil3;
 
 /**
  * Mybatis
@@ -52,10 +52,11 @@ import com.tmt.common.security.utils.StringUtils;
  */
 @org.springframework.context.annotation.Configuration
 @ConditionalOnClass({ SqlSessionFactory.class, SqlSessionFactoryBean.class })
+@ConditionalOnBean(DataSource.class)
 @EnableConfigurationProperties(MybatisProperties.class)
-@AutoConfigureAfter({DataSourceAutoConfiguration.class, SqlLiteDataSourceAutoConfiguration.class, DruidDataSourceAutoConfiguration.class,
-	HikariDataSourceAutoConfiguration.class})
-@ConditionalOnProperty(prefix = "spring.application", name = "enableMybatis", matchIfMissing = true)
+@AutoConfigureAfter({ DataSourceAutoConfiguration.class, SqlLiteDataSourceAutoConfiguration.class,
+		DruidDataSourceAutoConfiguration.class, HikariDataSourceAutoConfiguration.class })
+@ConditionalOnProperty(prefix = Constants.APPLICATION_PREFIX, name = "enableMybatis", matchIfMissing = true)
 public class MybatisAutoConfiguration {
 	private final DataSourceProperties dbProperties;
 	private final MybatisProperties properties;
@@ -79,44 +80,24 @@ public class MybatisAutoConfiguration {
 
 	@PostConstruct
 	public void checkConfigFileExists() {
-		if (this.properties.isCheckConfigLocation() && StringUtils.hasText(this.properties.getConfigLocation())) {
+		if (this.properties.isCheckConfigLocation() && StringUtil3.isNotBlank(this.properties.getConfigLocation())) {
 			Resource resource = this.resourceLoader.getResource(this.properties.getConfigLocation());
 			Assert.state(resource.exists(), "Cannot find config location: " + resource
 					+ " (please add config file or check your Mybatis configuration)");
 		}
 	}
 
-	/**
-	 * 数据库的方言
-	 * 
-	 * @return
-	 */
-	@Bean
-	public Dialect getDialect() {
-		Database db = this.dbProperties.getDb();
-		if (db == Database.h2) {
-			return new H2Dialect();
-		} else if (db == Database.mysql) {
-			return new MySQLDialect();
-		} else if (db == Database.oracle) {
-			return new OracleDialect();
-		} else if (db == Database.sqlite) {
-			return new SqlLiteDialect();
-		}
-		return new MySQLDialect();
-	}
-
 	@Bean
 	@ConditionalOnMissingBean
-	public SqlSessionFactory sqlSessionFactory(DataSource dataSource, Dialect dialect) throws Exception {
+	public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
 		SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
 		factory.setDataSource(dataSource);
 		factory.setVfs(SpringBootVFS.class);
-		if (StringUtils.hasText(this.properties.getConfigLocation())) {
+		if (StringUtil3.isNotBlank(this.properties.getConfigLocation())) {
 			factory.setConfigLocation(this.resourceLoader.getResource(this.properties.getConfigLocation()));
 		}
 		Configuration configuration = this.properties.getConfiguration();
-		if (configuration == null && !StringUtils.hasText(this.properties.getConfigLocation())) {
+		if (configuration == null && !StringUtil3.isNotBlank(this.properties.getConfigLocation())) {
 			configuration = new Configuration();
 		}
 		if (configuration != null && !CollectionUtils.isEmpty(this.configurationCustomizers)) {
@@ -134,10 +115,10 @@ public class MybatisAutoConfiguration {
 		if (this.databaseIdProvider != null) {
 			factory.setDatabaseIdProvider(this.databaseIdProvider);
 		}
-		if (StringUtils.hasLength(this.properties.getTypeAliasesPackage())) {
+		if (StringUtil3.isNotBlank(this.properties.getTypeAliasesPackage())) {
 			factory.setTypeAliasesPackage(this.properties.getTypeAliasesPackage());
 		}
-		if (StringUtils.hasLength(this.properties.getTypeHandlersPackage())) {
+		if (StringUtil3.isNotBlank(this.properties.getTypeHandlersPackage())) {
 			factory.setTypeHandlersPackage(this.properties.getTypeHandlersPackage());
 		}
 		if (!ObjectUtils.isEmpty(this.properties.resolveMapperLocations())) {
@@ -145,11 +126,33 @@ public class MybatisAutoConfiguration {
 		}
 
 		// 默认配置
-		ExecutorInterceptor interceptor = new ExecutorInterceptor();
-		interceptor.setDialect(dialect);
-		configuration.addInterceptor(interceptor);
-		configuration.getTypeAliasRegistry().registerAlias("queryCondition", QueryCondition.class);
+		this.defaultConfiguration(configuration);
 		return factory.getObject();
+	}
+
+	private void defaultConfiguration(Configuration configuration) {
+
+		// 默认的拦截器
+		ExecutorInterceptor interceptor = new ExecutorInterceptor();
+		interceptor.setDialect(getDialect());
+		configuration.addInterceptor(interceptor);
+
+		// 默认的别名
+		configuration.getTypeAliasRegistry().registerAlias("queryCondition", QueryCondition.class);
+	}
+
+	private Dialect getDialect() {
+		Database db = this.dbProperties.getDb();
+		if (db == Database.h2) {
+			return new H2Dialect();
+		} else if (db == Database.mysql) {
+			return new MySQLDialect();
+		} else if (db == Database.oracle) {
+			return new OracleDialect();
+		} else if (db == Database.sqlite) {
+			return new SqlLiteDialect();
+		}
+		return new MySQLDialect();
 	}
 
 	@Bean

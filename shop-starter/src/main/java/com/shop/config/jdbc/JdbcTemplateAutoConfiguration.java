@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandi
 import org.springframework.boot.autoconfigure.jdbc.JdbcProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcOperations;
@@ -16,7 +17,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
-import com.shop.config.jdbc.DataBaseAutoConfiguration.DataSourceAutoConfiguration;
 import com.shop.config.jdbc.database.DruidDataSourceAutoConfiguration;
 import com.shop.config.jdbc.database.HikariDataSourceAutoConfiguration;
 import com.shop.config.jdbc.database.SqlLiteDataSourceAutoConfiguration;
@@ -27,14 +27,13 @@ import com.tmt.common.persistence.JdbcSqlExecutor;
  * 
  * @author lifeng
  */
-@org.springframework.context.annotation.Configuration
+@Configuration
 @ConditionalOnClass(JdbcTemplate.class)
 @ConditionalOnSingleCandidate(DataSource.class)
 @AutoConfigureAfter({ DataSourceAutoConfiguration.class, SqlLiteDataSourceAutoConfiguration.class,
 		DruidDataSourceAutoConfiguration.class, HikariDataSourceAutoConfiguration.class })
 @EnableConfigurationProperties(JdbcProperties.class)
 public class JdbcTemplateAutoConfiguration {
-
 	@org.springframework.context.annotation.Configuration
 	static class JdbcTemplateConfiguration {
 

@@ -4,44 +4,32 @@ import static com.shop.Application.APP_LOGGER;
 
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.jdbc.metadata.HikariDataSourcePoolMetadata;
 import org.springframework.context.annotation.Bean;
-import org.springframework.core.Ordered;
 
-import com.shop.config.jdbc.DataBaseSecurity;
 import com.tmt.common.persistence.datasource.DataSourceHolder;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 /**
  * 配置 Hikari
- * 
  * @author lifeng
  */
-@AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
-@ConditionalOnClass({ HikariDataSource.class })
+@ConditionalOnClass({HikariDataSource.class})
 @ConditionalOnMissingBean(DataSource.class)
 public class HikariDataSourceAutoConfiguration {
 
-	@Autowired
+	// 数据库属性
 	private DataSourceProperties properties;
-	@Autowired(required = false)
-	private DataBaseSecurity dataBaseSecurity;
-
-	public HikariDataSourceAutoConfiguration() {
-		if (dataBaseSecurity == null) {
-			dataBaseSecurity = new DataBaseSecurity() {
-			};
-		}
+	
+	public HikariDataSourceAutoConfiguration(DataSourceProperties properties) {
+		this.properties = properties;
 	}
-
+	
 	/**
 	 * 构建 HikariDataSource
-	 * 
 	 * @return
 	 */
 	@Bean
@@ -51,9 +39,9 @@ public class HikariDataSourceAutoConfiguration {
 		config.setPoolName(properties.getName());
 		config.setJdbcUrl(properties.getUrl());
 		config.setUsername(properties.getUsername());
-		config.setPassword(dataBaseSecurity.decrypt(properties.getPassword()));
+		config.setPassword(properties.getPassword());
 		config.setDriverClassName(properties.getDriverClassName());
-
+		
 		config.addDataSourceProperty("cachePrepStmts", "true");
 		config.addDataSourceProperty("prepStmtCacheSize", properties.getPrepStmtCacheSize());
 		config.addDataSourceProperty("prepStmtCacheSqlLimit", properties.getPrepStmtCacheSqlLimit());
@@ -69,16 +57,15 @@ public class HikariDataSourceAutoConfiguration {
         config.setMaximumPoolSize(properties.getMaxActive()); // 连接池最大连接数，默认是10
         config.setConnectionTimeout(properties.getMaxWait()); // 数据库连接超时时间,默认30秒，即30000
         config.setMaxLifetime(properties.getMaxLifetime()); //连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
-
-		// 创建连接
-		HikariDataSource dataSource = new HikariDataSource(config);
+        
+        // 创建连接
+        HikariDataSource dataSource = new HikariDataSource(config);
 		DataSourceHolder.setDataSource(dataSource);
 		return dataSource;
 	}
-
+	
 	/**
 	 * 提供 HikariDataSourcePool 指标查询
-	 * 
 	 * @return
 	 */
 	@Bean
