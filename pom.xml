@@ -18,6 +18,7 @@
 		<springboot.version>2.2.2.RELEASE</springboot.version>
 		<spring.version>5.2.2.RELEASE</spring.version>
 		<cglib.version>3.3.0</cglib.version>
+		<javassist.version>3.25.0-GA</javassist.version>
 		<fastjson.version>1.2.62</fastjson.version>
 		<commons-lang3.version>3.3.2</commons-lang3.version>
 		<commons-io.version>2.4</commons-io.version>
