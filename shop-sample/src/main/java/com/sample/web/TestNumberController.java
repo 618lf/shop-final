@@ -1,4 +1,4 @@
-package com.tmt.web;
+package com.sample.web;
 
 import java.util.Map;
 

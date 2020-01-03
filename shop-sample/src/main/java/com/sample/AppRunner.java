@@ -1,4 +1,4 @@
-package com.tmt;
+package com.sample;
 
 import org.springframework.context.annotation.ComponentScan;
 

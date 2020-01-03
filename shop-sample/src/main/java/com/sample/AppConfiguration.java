@@ -1,4 +1,4 @@
-package com.tmt;
+package com.sample;
 
 import java.io.File;
 import java.util.List;
@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.shop.config.security.SecurityConfigurationSupport;
+import com.tmt.Constants;
 import com.tmt.common.entity.AutowireBean;
 import com.tmt.common.utils.Lists;
 import com.tmt.system.service.TaskExecutor;
