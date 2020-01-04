@@ -9,8 +9,10 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.tmt.Constants;
 import com.tmt.core.persistence.dialect.Dialect;
 import com.tmt.core.persistence.dialect.MySQLDialect;
 import com.tmt.core.utils.FileUtils;
@@ -19,6 +21,12 @@ import com.tmt.core.utils.StringUtils;
 import com.tmt.core.utils.time.DateUtils;
 import com.tmt.system.entity.Task;
 import com.tmt.system.service.TaskExecutor;
+
+import ch.qos.logback.classic.AsyncAppender;
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.Appender;
+import ch.qos.logback.core.FileAppender;
 
 /**
  * 访问统计（为避免冲突，处理前两分钟的文件） 例如：2016-08-30-14-55 时处理(结尾的文件) 2016-08-30-14-53 的文件
@@ -44,8 +52,8 @@ public class AccessLogTask implements TaskExecutor {
 	 * 
 	 * @param logPath
 	 */
-	public AccessLogTask(String logPath) {
-		this.logPath = logPath;
+	public AccessLogTask() {
+		this.logPath = this.getLogPath();
 	}
 
 	@Override
@@ -69,6 +77,19 @@ public class AccessLogTask implements TaskExecutor {
 		files.clear();
 		files = null;
 		return Boolean.TRUE;
+	}
+
+	/**
+	 * 日志路径
+	 * 
+	 * @return
+	 */
+	private String getLogPath() {
+		LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+		Appender<ILoggingEvent> appender = loggerContext.getLogger(Constants.SYS_ACCESS).getAppender("ASYNC_ACCESS");
+		AsyncAppender asyncAppender = (AsyncAppender) appender;
+		FileAppender<ILoggingEvent> fileAppender = (FileAppender<ILoggingEvent>) asyncAppender.getAppender("ACCESS");
+		return new File(fileAppender.getFile()).getParent();
 	}
 
 	/**
