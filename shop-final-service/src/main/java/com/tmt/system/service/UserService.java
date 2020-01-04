@@ -27,14 +27,12 @@ import com.tmt.system.dao.UserNoDao;
 import com.tmt.system.dao.UserSessionDao;
 import com.tmt.system.entity.GroupUser;
 import com.tmt.system.entity.RoleUser;
-import com.tmt.system.entity.UpdateData;
 import com.tmt.system.entity.User;
 import com.tmt.system.entity.User.UserStatus;
 import com.tmt.system.entity.User.UserType;
 import com.tmt.system.entity.UserAccount;
 import com.tmt.system.entity.UserNo;
 import com.tmt.system.entity.UserSession;
-import com.tmt.update.UpdateServiceFacade;
 
 /**
  * 用户管理
@@ -60,8 +58,6 @@ public class UserService extends BaseService<User, Long> implements UserServiceF
 	private UserNoDao userNoDao;
 	@Autowired
 	private UserSessionDao userSessionDao;
-	@Autowired
-	private UpdateServiceFacade updateService;
 
 	@Override
 	protected BaseDao<User, Long> getBaseDao() {
@@ -487,9 +483,6 @@ public class UserService extends BaseService<User, Long> implements UserServiceF
 
 		// 保存帐号信息
 		this.saveAccount(account);
-
-		// 发送信号量
-		this._update(member, Constants.USER_UP);
 	}
 
 	/**
@@ -562,19 +555,6 @@ public class UserService extends BaseService<User, Long> implements UserServiceF
 		user.setLoginDate(now);
 		user.setLoginIp(loginIp);
 		this.update("updateUserLoginAction", user);
-
-		// 发送信号量
-		this._update(user, Constants.USER_IN);
 		return oldSessionId;
-	}
-
-	// 用户更新
-	private void _update(User user, byte module) {
-		UpdateData updateData = new UpdateData();
-		updateData.setId(user.getId());
-		updateData.setMsg(StringUtils.abbreviate(user.getName(), 30));
-		updateData.setModule(module);
-		updateData.setOpt((byte) 0);
-		updateService.save(updateData);
 	}
 }

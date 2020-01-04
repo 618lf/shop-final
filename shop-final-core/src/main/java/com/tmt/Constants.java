@@ -57,11 +57,6 @@ public interface Constants {
 	String security_WILDCARD_TOKEN = "*";
 	String security_PART_DIVIDER_TOKEN = ":";
 
-	/** 目录 **/
-	default String temp() {
-		return System.getProperty("java.io.tmpdir");
-	}
-
 	// 字典缓存名称
 	String T = "T#";
 	String C = "V";
@@ -109,16 +104,4 @@ public interface Constants {
 	String USER_KEY = "USER_KEY";
 	String SITE_KEY = "SITE_KEY";
 
-	// ######### update #########
-	// Wechat
-	Byte META = 21;
-	Byte META_TEXT = 22;
-	Byte META_IMAGE = 23;
-	Byte USER_OPS = 24;
-
-	// System
-	Byte USER_IN = 1; // 登录
-	Byte USER_UP = 2; // 注册
-	Byte USER_OUT = 3; // 退出
-	Byte TASK_UPDATE = 4; // 定时任务
 }

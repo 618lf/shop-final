@@ -10,7 +10,6 @@ com.shop.config.jdbc.MybatisAutoConfiguration,\
 com.shop.config.security.SecurityAutoConfiguration,\
 com.shop.config.freemarker.FreeMarkerAutoConfiguration,\
 com.shop.config.cache.CacheAutoConfiguration,\
-com.shop.config.update.UpdateAutoConfiguration,\
 com.shop.config.email.EmailAutoConfiguration,\
 com.shop.config.schedule.ScheduleAutoConfiguration,\
 com.shop.config.searcher.SearcherAutoConfiguration,\

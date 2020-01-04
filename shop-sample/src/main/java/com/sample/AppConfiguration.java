@@ -16,9 +16,6 @@ import com.tmt.common.utils.Lists;
 import com.tmt.system.service.TaskExecutor;
 import com.tmt.task.AccessLogTask;
 import com.tmt.task.SendEmailTask;
-import com.tmt.task.UpdateHandlerTask;
-import com.tmt.update.UpdateHandler;
-import com.tmt.update.UserOpsHandler;
 
 import ch.qos.logback.classic.AsyncAppender;
 import ch.qos.logback.classic.LoggerContext;
@@ -38,29 +35,15 @@ public class AppConfiguration {
 	private ApplicationContext context;
 
 	/**
-	 * 处理器
-	 * 
-	 * @return
-	 */
-	@Bean
-	public List<UpdateHandler> handlers() {
-		List<UpdateHandler> handlers = Lists.newArrayList();
-		handlers.add(new UserOpsHandler());
-		this.autowireBeans(handlers);
-		return handlers;
-	}
-
-	/**
 	 * 批量设置定时任务
 	 * 
 	 * @return
 	 */
 	@Bean(name = Constants.RUNNING_ABLE_TASKS)
-	public List<TaskExecutor> tasks(List<UpdateHandler> handlers) {
+	public List<TaskExecutor> tasks() {
 		List<TaskExecutor> tasks = Lists.newArrayList();
 		tasks.add(new AccessLogTask(getLogPath()));
 		tasks.add(new SendEmailTask());
-		tasks.add(new UpdateHandlerTask(handlers));
 		this.autowireBeans(tasks);
 		return tasks;
 	}
