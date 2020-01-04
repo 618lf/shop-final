@@ -53,6 +53,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
+import com.shop.autoconfigure.EnableAutoConfiguration;
 import com.shop.starter.ApplicationBoot;
 
 /**
@@ -99,7 +100,7 @@ public class AutoConfigurationImportSelector implements DeferredImportSelector, 
 
 	protected boolean isEnabled(AnnotationMetadata metadata) {
 		if (getClass() == AutoConfigurationImportSelector.class) {
-			return getEnvironment().getProperty(ApplicationBoot.ENABLED_OVERRIDE_PROPERTY, Boolean.class, true);
+			return getEnvironment().getProperty(EnableAutoConfiguration.ENABLED_OVERRIDE_PROPERTY, Boolean.class, true);
 		}
 		return true;
 	}

@@ -1,8 +1,7 @@
 package com.sample;
 
-import org.springframework.context.annotation.ComponentScan;
-
 import com.shop.Application;
+import com.shop.autoconfigure.EnableSystemAutoConfiguration;
 import com.shop.starter.ApplicationBoot;
 
 /**
@@ -11,7 +10,7 @@ import com.shop.starter.ApplicationBoot;
  * 
  * @author lifeng
  */
-@ComponentScan
+@EnableSystemAutoConfiguration
 @ApplicationBoot
 public class AppRunner {
 

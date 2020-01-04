@@ -1,6 +1,6 @@
 package com.shop;
 
-import java.util.Collection;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,9 +9,11 @@ import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.core.annotation.AnnotationUtils;
 
-import com.tmt.Constants;
 import com.tmt.OS;
+import com.tmt.common.utils.Sets;
 import com.tmt.common.utils.StringUtils;
 
 /**
@@ -30,29 +32,19 @@ public class Application extends SpringApplication {
 	/**
 	 * 全局的 context
 	 */
-	public static ConfigurableApplicationContext CONTEXT;
+	private static Application ME;
+	private static ConfigurableApplicationContext _CONTEXT;
 
 	/**
 	 * 初始化
 	 */
 	public Application(Class<?>... primarySources) {
+
+		// 默认的扫描
 		super(primarySources);
-		
-		// 设置启动的类
-		if (primarySources != null && primarySources.length >0) {
-			Constants.BOOT_CLASSES.add(primarySources[0]);
-		}
-	}
-	
-	/**
-	 * 设置启动的类
-	 */
-	@Override
-	public void addPrimarySources(Collection<Class<?>> additionalPrimarySources) {
-		super.addPrimarySources(additionalPrimarySources);
-		if (additionalPrimarySources != null && additionalPrimarySources.size() > 0) {
-			Constants.BOOT_CLASSES.add(additionalPrimarySources.iterator().next());
-		}
+
+		// 指向唯一
+		ME = this;
 	}
 
 	/**
@@ -66,10 +58,10 @@ public class Application extends SpringApplication {
 		long start = System.currentTimeMillis();
 		Application application = new Application(primarySource);
 		application.setBannerMode(Banner.Mode.OFF);
-		CONTEXT = (ConfigurableApplicationContext) application.run(args);
+		_CONTEXT = (ConfigurableApplicationContext) application.run(args);
 		long end = System.currentTimeMillis();
 		APP_LOGGER.debug("Server start success in " + (end - start) / 1000 + "s, Listen on [" + getAddresses() + "]");
-		return CONTEXT;
+		return _CONTEXT;
 	}
 
 	/**
@@ -78,7 +70,7 @@ public class Application extends SpringApplication {
 	 * @return
 	 */
 	public static String getAddresses() {
-		ServerProperties properties = CONTEXT.getBean(ServerProperties.class);
+		ServerProperties properties = _CONTEXT.getBean(ServerProperties.class);
 		StringBuilder address = new StringBuilder();
 		if (properties.getSsl() != null) {
 			address.append("https");
@@ -101,10 +93,58 @@ public class Application extends SpringApplication {
 	 * 停止服务
 	 */
 	public static void stop() {
-		if (CONTEXT != null) {
-			exit(CONTEXT, new ExitCodeGenerator[] {});
-			CONTEXT = null;
-			Constants.BOOT_CLASSES.clear();
+		if (_CONTEXT != null) {
+			exit(_CONTEXT, new ExitCodeGenerator[] {});
+			_CONTEXT = null;
+			ME = null;
 		}
+	}
+
+	/**
+	 * 当前应用
+	 * 
+	 * @return
+	 */
+	public static Application me() {
+		return ME;
+	}
+
+	/**
+	 * 返回扫描的包
+	 * 
+	 * @return
+	 */
+	@SuppressWarnings("deprecation")
+	public static Set<String> getScanPackages() {
+		Set<String> packages = Sets.newHashSet();
+		Set<Object> sources = Application.me().getAllSources();
+		if (sources != null && !sources.isEmpty()) {
+			for (Object source : sources) {
+				if (source instanceof Class<?>) {
+					Class<?> sourceClass = ((Class<?>) source);
+					Set<ComponentScan> scans = AnnotationUtils.getRepeatableAnnotations(sourceClass,
+							ComponentScan.class);
+					for (ComponentScan scan : scans) {
+						packages.addAll(parseComponentScan(sourceClass, scan));
+					}
+				}
+			}
+		}
+		return packages;
+	}
+
+	/**
+	 * 简单的处理扫描的包
+	 * 
+	 * @param sourceClass
+	 * @param scan
+	 * @return
+	 */
+	static Set<String> parseComponentScan(Class<?> sourceClass, ComponentScan scan) {
+		String[] packages = scan.basePackages();
+		if (packages == null || packages.length == 0) {
+			return Sets.newHashSet(sourceClass.getPackage().getName());
+		}
+		return Sets.newHashSet(packages);
 	}
 }

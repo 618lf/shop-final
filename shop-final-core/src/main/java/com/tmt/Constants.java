@@ -2,9 +2,6 @@ package com.tmt;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
-
-import com.tmt.common.utils.Lists;
 
 /**
  * 系统常量
@@ -19,9 +16,6 @@ public interface Constants {
 
 	/** 系统错误码 **/
 	String REQUEST_ERROR_CODE_PARAM = "REQUEST_ERROR_CODE_PARAM";
-
-	/** 启动的类 */
-	List<Class<?>> BOOT_CLASSES = Lists.newArrayList(1);
 
 	/** 配置项前缀 */
 	String APPLICATION_PREFIX = "spring.application";
