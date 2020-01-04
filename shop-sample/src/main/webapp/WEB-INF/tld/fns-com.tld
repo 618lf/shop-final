@@ -16,7 +16,7 @@
     <function>
 		<description>获取Excel列序号</description>
 		<name>getExcelColumns</name>
-		<function-class>com.tmt.common.utils.ExcelUtils</function-class>
+		<function-class>com.tmt.core.utils.ExcelUtils</function-class>
 		<function-signature>java.util.List getExcelColumns(int)</function-signature>
 		<example>${fnc:getExcelColumns(int)}</example>
 	</function>
@@ -24,7 +24,7 @@
     <function>
 		<description>获取Excel列数据类型</description>
 		<name>getDataTypes</name>
-		<function-class>com.tmt.common.utils.ExcelUtils</function-class>
+		<function-class>com.tmt.core.utils.ExcelUtils</function-class>
 		<function-signature>java.util.List getDataTypes()</function-signature>
 		<example>${fnc:getDataTypes()}</example>
 	</function>
@@ -32,7 +32,7 @@
 	<function>
 		<description>获取Excel列验证类型</description>
 		<name>getVerifyTypes</name>
-		<function-class>com.tmt.common.utils.ExcelUtils</function-class>
+		<function-class>com.tmt.core.utils.ExcelUtils</function-class>
 		<function-signature>java.util.List getVerifyTypes()</function-signature>
 		<example>${fnc:getVerifyTypes()}</example>
 	</function>

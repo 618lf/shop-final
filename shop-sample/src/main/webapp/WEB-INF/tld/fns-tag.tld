@@ -35,7 +35,7 @@
 	<!-- 用户是否拥有指定的角色 -->
 	<tag>
 		<name>hasRole</name>
-		<tagclass>com.tmt.common.web.tld.jsp.HasRoleTag</tagclass>
+		<tagclass>com.tmt.core.web.tld.jsp.HasRoleTag</tagclass>
 		<bodycontent>JSP</bodycontent>
 		<description>是否具有指定的角色</description>
 		<attribute>
@@ -48,7 +48,7 @@
     <!-- 用户是否拥有指定的权限 -->
 	<tag>
 		<name>hasPermission</name>
-		<tagclass>com.tmt.common.web.tld.jsp.HasPermissionTag</tagclass>
+		<tagclass>com.tmt.core.web.tld.jsp.HasPermissionTag</tagclass>
 		<bodycontent>JSP</bodycontent>
 		<description>是否具有指定的权限</description>
 		<attribute>
@@ -61,7 +61,7 @@
 	<!-- 用户是否不拥有指定的权限 -->
 	<tag>
 		<name>lacksPermission</name>
-		<tagclass>com.tmt.common.web.tld.jsp.LacksPermissionTag</tagclass>
+		<tagclass>com.tmt.core.web.tld.jsp.LacksPermissionTag</tagclass>
 		<bodycontent>JSP</bodycontent>
 		<description>是否不具有指定的权限</description>
 		<attribute>
@@ -74,7 +74,7 @@
 	<!-- 登录用户 -->
 	<tag>
 		<name>authenticated</name>
-		<tagclass>com.tmt.common.web.tld.jsp.AuthenticatedTag</tagclass>
+		<tagclass>com.tmt.core.web.tld.jsp.AuthenticatedTag</tagclass>
 		<bodycontent>JSP</bodycontent>
 		<description>登录用户 </description>
 	</tag>
@@ -90,7 +90,7 @@
 	<!-- 用户（登录或记住我） -->
 	<tag>
 		<name>isUser</name>
-		<tagclass>com.tmt.common.web.tld.jsp.IsUser</tagclass>
+		<tagclass>com.tmt.core.web.tld.jsp.IsUser</tagclass>
 		<bodycontent>JSP</bodycontent>
 		<description>登录或记住我用户 </description>
 	</tag>
@@ -98,7 +98,7 @@
 	<!-- 用户（记住我） -->
 	<tag>
 		<name>rememberMe</name>
-		<tagclass>com.tmt.common.web.tld.jsp.RememberMeTag</tagclass>
+		<tagclass>com.tmt.core.web.tld.jsp.RememberMeTag</tagclass>
 		<bodycontent>JSP</bodycontent>
 		<description>记住我用户 </description>
 	</tag>
@@ -106,7 +106,7 @@
 	<!-- 不是登录用户 (未登录或记住我)-->
 	<tag>
 		<name>notAuthenticated</name>
-		<tagclass>com.tmt.common.web.tld.jsp.NotAuthenticatedTag</tagclass>
+		<tagclass>com.tmt.core.web.tld.jsp.NotAuthenticatedTag</tagclass>
 		<bodycontent>JSP</bodycontent>
 		<description>不是登录用户 </description>
 	</tag>
@@ -114,7 +114,7 @@
 	<!-- 游客（登录或记住我） -->
 	<tag>
 		<name>isGuest</name>
-		<tagclass>com.tmt.common.web.tld.jsp.IsGuest</tagclass>
+		<tagclass>com.tmt.core.web.tld.jsp.IsGuest</tagclass>
 		<bodycontent>JSP</bodycontent>
 		<description>游客 </description>
 	</tag>
@@ -122,7 +122,7 @@
 	<!-- RUN AS -->
 	<tag>
 		<name>isRunAs</name>
-		<tagclass>com.tmt.common.web.tld.jsp.IsRunAs</tagclass>
+		<tagclass>com.tmt.core.web.tld.jsp.IsRunAs</tagclass>
 		<bodycontent>JSP</bodycontent>
 		<description>RUN AS</description>
 	</tag>
