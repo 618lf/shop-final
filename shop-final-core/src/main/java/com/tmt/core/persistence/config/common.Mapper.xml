@@ -4,7 +4,7 @@
 <sql id="andClause"><if test="criteria.valid">AND (1 = 1 <foreach collection="criteria.criteriaWithoutValue" item="item" separator="AND" open="AND">${item}</foreach><foreach collection="criteria.criteriaWithSingleValue" item="item" separator="AND" open="AND">${item.condition} #{item.value}</foreach><foreach collection="criteria.criteriaWithListValue" item="item" separator="AND" open="AND">${item.condition} <foreach collection="item.values" item="value" open="(" close=")" separator=",">#{value}</foreach></foreach><foreach collection="criteria.criteriaWithBetweenValue" item="item" separator="AND" open="AND">${item.condition} #{item.first} AND #{item.second}</foreach>)</if></sql>
 <sql id="whereClause"><if test="criteria.valid">WHERE (1 = 1 <foreach collection="criteria.criteriaWithoutValue" item="item" separator="AND" open="AND">${item}</foreach><foreach collection="criteria.criteriaWithSingleValue" item="item" separator="AND" open="AND">${item.condition} #{item.value}</foreach><foreach collection="criteria.criteriaWithListValue" item="item" separator="AND" open="AND">${item.condition} <foreach collection="item.values" item="value" open="(" close=")" separator=",">#{value}</foreach></foreach><foreach collection="criteria.criteriaWithBetweenValue" item="item" separator="AND" open="AND">${item.condition} #{item.first} AND #{item.second}</foreach>)</if> </sql>
 
-<resultMap id="BaseTreeResult" type="com.tmt.common.entity.TreeVO">
+<resultMap id="BaseTreeResult" type="com.tmt.core.entity.TreeVO">
    <result property="id" column="ID"/>
    <result property="parent" column="PARENT"/>
    <result property="parentIds" column="PARENT_IDS"/>
