@@ -13,11 +13,13 @@ import com.google.common.eventbus.AsyncEventBus;
  */
 public class EventBus {
 	private final com.google.common.eventbus.EventBus eventBus;
+	private static EventBus me = null;
 	private volatile boolean inited = false;
 
 	public EventBus(Integer coreThreads) {
 		eventBus = new AsyncEventBus("EventBus",
 				Executors.newFixedThreadPool(coreThreads, new EventLoopFactory(true, "EventBus", new AtomicLong())));
+		me = this;
 	}
 
 	/**
@@ -55,5 +57,23 @@ public class EventBus {
 	 */
 	public void register(Object object) {
 		eventBus.register(object);
+	}
+
+	/**
+	 * 发送事件
+	 * 
+	 * @param event
+	 */
+	public void post(Event event) {
+		eventBus.post(event);
+	}
+
+	/**
+	 * 当前对象
+	 * 
+	 * @return
+	 */
+	public static EventBus me() {
+		return me;
 	}
 }
