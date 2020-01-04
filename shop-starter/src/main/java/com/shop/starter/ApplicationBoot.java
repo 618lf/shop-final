@@ -13,8 +13,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.stereotype.Repository;
 
-import com.shop.autoconfigure.EnableAutoConfiguration;
-
 /**
  * 添加需要的配置类
  * 

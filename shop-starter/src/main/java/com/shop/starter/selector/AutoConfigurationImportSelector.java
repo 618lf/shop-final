@@ -53,8 +53,8 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
-import com.shop.autoconfigure.EnableAutoConfiguration;
 import com.shop.starter.ApplicationBoot;
+import com.shop.starter.EnableAutoConfiguration;
 
 /**
  * {@link DeferredImportSelector} to handle {@link ApplicationBoot

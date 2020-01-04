@@ -2,6 +2,9 @@ package com.tmt;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Set;
+
+import com.tmt.core.utils.Sets;
 
 /**
  * 系统常量
@@ -16,6 +19,9 @@ public interface Constants {
 
 	/** 系统错误码 **/
 	String REQUEST_ERROR_CODE_PARAM = "REQUEST_ERROR_CODE_PARAM";
+
+	/** 系统包 **/
+	Set<String> SYSTEM_PACKAGES = Sets.newHashSet("com.tmt.system", "com.tmt.gen");
 
 	/** 配置项前缀 */
 	String APPLICATION_PREFIX = "spring.application";

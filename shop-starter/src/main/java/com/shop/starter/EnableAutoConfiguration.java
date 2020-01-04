@@ -1,4 +1,4 @@
-package com.shop.autoconfigure;
+package com.shop.starter;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

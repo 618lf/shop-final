@@ -12,6 +12,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.annotation.AnnotationUtils;
 
+import com.shop.starter.EnableSystemAutoConfiguration;
+import com.tmt.Constants;
 import com.tmt.OS;
 import com.tmt.core.utils.Sets;
 import com.tmt.core.utils.StringUtils;
@@ -121,11 +123,18 @@ public class Application extends SpringApplication {
 		if (sources != null && !sources.isEmpty()) {
 			for (Object source : sources) {
 				if (source instanceof Class<?>) {
+
+					// 默认扫描的包
 					Class<?> sourceClass = ((Class<?>) source);
 					Set<ComponentScan> scans = AnnotationUtils.getRepeatableAnnotations(sourceClass,
 							ComponentScan.class);
 					for (ComponentScan scan : scans) {
 						packages.addAll(parseComponentScan(sourceClass, scan));
+					}
+
+					// 扫描系统包
+					if (AnnotationUtils.isAnnotationDeclaredLocally(EnableSystemAutoConfiguration.class, sourceClass)) {
+						packages.addAll(Constants.SYSTEM_PACKAGES);
 					}
 				}
 			}
