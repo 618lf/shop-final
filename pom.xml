@@ -66,7 +66,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.version>${project.version}</project.version>
 	</properties>
-	
+
 	<repositories>
 		<repository>
 			<id>oschina-repos</id>
@@ -181,4 +181,27 @@
 			</resource>
 		</resources>
 	</build>
+
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<scm>
+		<tag>master</tag>
+		<url>git@gitee.com:snowheart/dingtalk-robot.git</url>
+		<connection>scm:git:git@gitee.com:snowheart/dingtalk-robot.git</connection>
+		<developerConnection>scm:git:git@gitee.com:snowheart/dingtalk-robot.git</developerConnection>
+	</scm>
+	
+	<developers>
+		<developer>
+			<name>Feng Li</name>
+			<email>618lf@163.com</email>
+			<organization>tmt</organization>
+		</developer>
+	</developers>
 </project>
