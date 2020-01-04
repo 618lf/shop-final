@@ -19,21 +19,14 @@ public interface Constants {
 
 	/** 配置项前缀 */
 	String APPLICATION_PREFIX = "spring.application";
-	String VERTX_SERVER_PREFIX = "spring.vertx";
-	String FLUX_SERVER_PREFIX = "spring.http-server";
 	String CACHE_PREFIX = "spring.cache";
 	String HTTP_CLIENT_PREFIX = "spring.http-client";
 	String SECURITY_PREFIX = "spring.security";
 	String MYBATIS_PREFIX = "spring.mybatis";
 	String DATASOURCE_PREFIX = "spring.datasource";
-	String ACTUATOR_METRICS = "spring.metrics";
-	String ACTUATOR_ENDPOINT_WEB = "spring.endpoints.web";
-	String ACTUATOR_TRACE = "spring.trace";
 	String STORAGE_PREFIX = "spring.storage";
-	String MOTAN_PREFIX = "spring.motan";
 	String QUARTZ_PREFIX = "spring.quartz";
-	String RABBITMQ_PREFIX = "spring.rabbitmq";
-	String ROCKETMQ_PREFIX = "spring.rocketmq";
+	String EVENT_BUS_PREFIX = "spring.eventbus";
 	String MONGO_PREFIX = "spring.mongo";
 
 	/** 保留ID **/
