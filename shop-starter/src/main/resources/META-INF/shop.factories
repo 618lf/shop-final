@@ -7,7 +7,7 @@ com.shop.config.jdbc.DataSourceAutoConfiguration,\
 com.shop.config.jdbc.JdbcTemplateAutoConfiguration,\
 com.shop.config.jdbc.DataSourceTransactionManagerConfiguration,\
 com.shop.config.jdbc.MybatisAutoConfiguration,\
-com.shop.config.eventbus.SecurityAutoConfiguration,\
+com.shop.config.eventbus.EventBusAutoConfiguration,\
 com.shop.config.security.SecurityAutoConfiguration,\
 com.shop.config.freemarker.FreeMarkerAutoConfiguration,\
 com.shop.config.cache.CacheAutoConfiguration,\
