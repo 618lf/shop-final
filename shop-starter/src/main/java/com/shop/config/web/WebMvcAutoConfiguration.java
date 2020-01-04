@@ -65,11 +65,11 @@ import org.springframework.web.servlet.resource.ResourceUrlProvider;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.shop.starter.ApplicationProperties;
-import com.tmt.common.converter.DateConverter;
-import com.tmt.common.converter.StringEscapeConverter;
-import com.tmt.common.exception.DefaultExceptionHandler;
-import com.tmt.common.web.SessionFlashMapManager;
-import com.tmt.common.web.security.interceptor.TokenInterceptor;
+import com.tmt.core.converter.DateConverter;
+import com.tmt.core.converter.StringEscapeConverter;
+import com.tmt.core.exception.DefaultExceptionHandler;
+import com.tmt.core.web.SessionFlashMapManager;
+import com.tmt.core.web.security.interceptor.TokenInterceptor;
 
 /**
  * 

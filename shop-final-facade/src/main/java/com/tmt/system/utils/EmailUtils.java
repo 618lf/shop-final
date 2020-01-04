@@ -1,7 +1,7 @@
 package com.tmt.system.utils;
 
-import com.tmt.common.persistence.incrementer.IdGen;
-import com.tmt.common.utils.SpringContextHolder;
+import com.tmt.core.persistence.incrementer.IdGen;
+import com.tmt.core.utils.SpringContextHolder;
 import com.tmt.system.entity.EmailTask;
 import com.tmt.system.service.EmailTaskServiceFacade;
 

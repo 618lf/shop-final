@@ -1,6 +1,6 @@
 package com.tmt.system.utils;
 
-import com.tmt.common.utils.SpringContextHolder;
+import com.tmt.core.utils.SpringContextHolder;
 import com.tmt.system.entity.Dict;
 import com.tmt.system.service.DictServiceFacade;
 

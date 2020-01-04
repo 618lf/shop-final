@@ -3,7 +3,7 @@ package com.tmt.system.service;
 import java.util.List;
 import java.util.Map;
 
-import com.tmt.common.service.BaseServiceFacade;
+import com.tmt.core.service.BaseServiceFacade;
 import com.tmt.system.entity.Role;
 
 public interface RoleServiceFacade extends BaseServiceFacade<Role, Long>{

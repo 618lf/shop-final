@@ -12,7 +12,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.tmt.common.persistence.datasource.DataSourceHolder;
+import com.tmt.core.persistence.datasource.DataSourceHolder;
 
 /**
  * 配置 Druid

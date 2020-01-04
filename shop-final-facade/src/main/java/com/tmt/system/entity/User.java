@@ -5,8 +5,8 @@ import java.util.Date;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.tmt.Constants;
-import com.tmt.common.entity.BaseEntity;
-import com.tmt.common.utils.StringUtils;
+import com.tmt.core.entity.BaseEntity;
+import com.tmt.core.utils.StringUtils;
 
 /**
  * 系统用户

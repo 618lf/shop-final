@@ -1,6 +1,6 @@
 package com.tmt.system.service;
 
-import com.tmt.common.service.BaseServiceFacade;
+import com.tmt.core.service.BaseServiceFacade;
 import com.tmt.system.entity.Log;
 
 public interface LogServiceFacade extends BaseServiceFacade<Log, Long>{

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.tmt.common.entity.BaseEntity;
+import com.tmt.core.entity.BaseEntity;
 
 /**
  * 任务

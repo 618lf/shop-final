@@ -7,9 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.tmt.common.entity.Result;
-import com.tmt.common.utils.FreemarkerUtils;
-import com.tmt.common.utils.Maps;
+import com.tmt.core.entity.Result;
+import com.tmt.core.utils.FreemarkerUtils;
+import com.tmt.core.utils.Maps;
 import com.tmt.system.service.NumberGeneratorFacade;
 
 /**

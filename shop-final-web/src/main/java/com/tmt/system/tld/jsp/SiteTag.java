@@ -8,7 +8,7 @@ import java.io.IOException;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 
-import com.tmt.common.web.tld.jsp.SecureTag;
+import com.tmt.core.web.tld.jsp.SecureTag;
 import com.tmt.system.entity.Site;
 import com.tmt.system.utils.SiteUtils;
 

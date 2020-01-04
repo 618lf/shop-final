@@ -4,13 +4,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.tmt.common.persistence.Page;
-import com.tmt.common.persistence.PageParameters;
-import com.tmt.common.persistence.QueryCondition;
-import com.tmt.common.persistence.QueryCondition.Criteria;
-import com.tmt.common.service.BaseService;
-import com.tmt.common.utils.Lists;
-import com.tmt.common.utils.StringUtils;
+import com.tmt.core.persistence.Page;
+import com.tmt.core.persistence.PageParameters;
+import com.tmt.core.persistence.QueryCondition;
+import com.tmt.core.persistence.QueryCondition.Criteria;
+import com.tmt.core.service.BaseService;
+import com.tmt.core.utils.Lists;
+import com.tmt.core.utils.StringUtils;
 import com.tmt.system.entity.Role;
 import com.tmt.system.entity.User;
 import com.tmt.system.entity.Role.DataScope;

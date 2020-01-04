@@ -17,8 +17,8 @@ import org.springframework.core.io.support.ResourcePatternResolver;
 
 import com.shop.Application;
 import com.tmt.Constants;
-import com.tmt.common.utils.Sets;
-import com.tmt.common.utils.StringUtils;
+import com.tmt.core.utils.Sets;
+import com.tmt.core.utils.StringUtils;
 
 /**
  * Configuration properties for MyBatis.

@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import com.tmt.common.entity.TreeVO;
-import com.tmt.common.service.BaseServiceFacade;
+import com.tmt.core.entity.TreeVO;
+import com.tmt.core.service.BaseServiceFacade;
 import com.tmt.system.entity.AttachmentDir;
 import com.tmt.system.entity.User;
 

@@ -2,9 +2,9 @@ package com.tmt.system.entity;
 
 import java.io.Serializable;
 
-import com.tmt.common.entity.BaseEntity;
-import com.tmt.common.entity.ColumnMapper;
-import com.tmt.common.entity.DataType;
+import com.tmt.core.entity.BaseEntity;
+import com.tmt.core.entity.ColumnMapper;
+import com.tmt.core.entity.DataType;
 
 public class ExcelItem extends BaseEntity<Long> implements Serializable{
     

@@ -12,7 +12,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.sqlite.SQLiteDataSource;
 
 import com.tmt.Constants;
-import com.tmt.common.exception.BaseRuntimeException;
+import com.tmt.core.exception.BaseRuntimeException;
 
 /**
  * 配置 Druid

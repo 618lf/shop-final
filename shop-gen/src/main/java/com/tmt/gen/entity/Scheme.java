@@ -2,7 +2,7 @@ package com.tmt.gen.entity;
 
 import java.io.Serializable;
 
-import com.tmt.common.entity.BaseEntity;
+import com.tmt.core.entity.BaseEntity;
 
 /**
  * 方案

@@ -18,7 +18,7 @@ import org.springframework.http.converter.HttpMessageNotWritableException;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
-import com.tmt.common.utils.JsonMapper;
+import com.tmt.core.utils.JsonMapper;
 
 /**
  * 处理 Long 转 String 的问题

@@ -8,9 +8,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.tmt.common.persistence.Page;
-import com.tmt.common.persistence.PageParameters;
-import com.tmt.common.web.BaseController;
+import com.tmt.core.persistence.Page;
+import com.tmt.core.persistence.PageParameters;
+import com.tmt.core.web.BaseController;
 import com.tmt.gen.entity.TableColumn;
 import com.tmt.gen.service.TableColumnService;
 

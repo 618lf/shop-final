@@ -18,11 +18,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.ui.freemarker.FreeMarkerConfigurationFactory;
 
 import com.shop.config.web.WebMvcAutoConfiguration;
-import com.tmt.common.utils.Maps;
-import com.tmt.common.utils.freemarker.FreeMarkerConfig;
-import com.tmt.common.utils.freemarker.FreeMarkerConfigurer;
-import com.tmt.common.web.SimpleFreeMarkerViewResolver;
-import com.tmt.common.web.tld.functions.Functions;
+import com.tmt.core.utils.Maps;
+import com.tmt.core.utils.freemarker.FreeMarkerConfig;
+import com.tmt.core.utils.freemarker.FreeMarkerConfigurer;
+import com.tmt.core.web.SimpleFreeMarkerViewResolver;
+import com.tmt.core.web.tld.functions.Functions;
 
 /**
  * Configuration for FreeMarker when used in a servlet web context.

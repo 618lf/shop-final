@@ -3,8 +3,8 @@ package com.tmt.system.service;
 import java.util.List;
 import java.util.Map;
 
-import com.tmt.common.entity.TreeVO;
-import com.tmt.common.service.BaseServiceFacade;
+import com.tmt.core.entity.TreeVO;
+import com.tmt.core.service.BaseServiceFacade;
 import com.tmt.system.entity.Office;
 
 public interface OfficeServiceFacade extends BaseServiceFacade<Office, Long>{

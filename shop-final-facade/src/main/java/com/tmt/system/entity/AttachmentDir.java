@@ -2,9 +2,9 @@ package com.tmt.system.entity;
 
 import java.io.Serializable;
 
-import com.tmt.common.entity.BaseParentEntity;
-import com.tmt.common.persistence.incrementer.IdGen;
-import com.tmt.common.utils.StringUtils;
+import com.tmt.core.entity.BaseParentEntity;
+import com.tmt.core.persistence.incrementer.IdGen;
+import com.tmt.core.utils.StringUtils;
 
 /**
  * 附件目录 管理

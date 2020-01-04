@@ -9,12 +9,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tmt.Constants;
-import com.tmt.common.persistence.BaseDao;
-import com.tmt.common.persistence.incrementer.IdGen;
-import com.tmt.common.service.BaseService;
-import com.tmt.common.utils.CacheUtils;
-import com.tmt.common.utils.Lists;
-import com.tmt.common.utils.StringUtils;
+import com.tmt.core.persistence.BaseDao;
+import com.tmt.core.persistence.incrementer.IdGen;
+import com.tmt.core.service.BaseService;
+import com.tmt.core.utils.CacheUtils;
+import com.tmt.core.utils.Lists;
+import com.tmt.core.utils.StringUtils;
 import com.tmt.system.dao.MenuDao;
 import com.tmt.system.dao.RoleMenuDao;
 import com.tmt.system.entity.Menu;

@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import com.tmt.common.config.Globals;
-import com.tmt.common.utils.ContextHolderUtils;
-import com.tmt.common.utils.StringUtils;
-import com.tmt.common.utils.TreeEntityUtils;
-import com.tmt.common.utils.TreeEntityUtils.Filter;
+import com.tmt.core.config.Globals;
+import com.tmt.core.utils.ContextHolderUtils;
+import com.tmt.core.utils.StringUtils;
+import com.tmt.core.utils.TreeEntityUtils;
+import com.tmt.core.utils.TreeEntityUtils.Filter;
 import com.tmt.system.entity.Menu;
 
 /**

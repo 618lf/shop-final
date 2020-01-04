@@ -12,18 +12,18 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.shop.starter.ApplicationProperties;
-import com.tmt.common.cache.CacheManager;
-import com.tmt.common.security.SecurityFilter;
-import com.tmt.common.security.SecurityFilterFactoryBean;
-import com.tmt.common.security.mgt.RememberMeManager;
-import com.tmt.common.security.mgt.support.DefaultRememberMeManager;
-import com.tmt.common.security.mgt.support.DefaultSecurityManager;
-import com.tmt.common.security.principal.PrincipalStrategy;
-import com.tmt.common.security.principal.Session;
-import com.tmt.common.security.principal.SessionRepository;
-import com.tmt.common.security.principal.support.CookiePrincipalStrategy;
-import com.tmt.common.security.principal.support.SessionRespositoryFactoryBean;
-import com.tmt.common.web.filter.EncodingConvertFilter;
+import com.tmt.core.cache.CacheManager;
+import com.tmt.core.security.SecurityFilter;
+import com.tmt.core.security.SecurityFilterFactoryBean;
+import com.tmt.core.security.mgt.RememberMeManager;
+import com.tmt.core.security.mgt.support.DefaultRememberMeManager;
+import com.tmt.core.security.mgt.support.DefaultSecurityManager;
+import com.tmt.core.security.principal.PrincipalStrategy;
+import com.tmt.core.security.principal.Session;
+import com.tmt.core.security.principal.SessionRepository;
+import com.tmt.core.security.principal.support.CookiePrincipalStrategy;
+import com.tmt.core.security.principal.support.SessionRespositoryFactoryBean;
+import com.tmt.core.web.filter.EncodingConvertFilter;
 import com.tmt.system.realm.AuthenticationRealm;
 
 /**

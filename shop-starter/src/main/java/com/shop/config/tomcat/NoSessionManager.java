@@ -7,7 +7,7 @@ import org.apache.catalina.LifecycleState;
 import org.apache.catalina.Session;
 import org.apache.catalina.session.ManagerBase;
 
-import com.tmt.common.exception.NoSessionException;
+import com.tmt.core.exception.NoSessionException;
 
 /**
  * 无 Session

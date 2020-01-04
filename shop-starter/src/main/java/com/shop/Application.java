@@ -13,8 +13,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.annotation.AnnotationUtils;
 
 import com.tmt.OS;
-import com.tmt.common.utils.Sets;
-import com.tmt.common.utils.StringUtils;
+import com.tmt.core.utils.Sets;
+import com.tmt.core.utils.StringUtils;
 
 /**
  * 

@@ -31,7 +31,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 
-import com.tmt.common.utils.Lists;
+import com.tmt.core.utils.Lists;
 
 @Configuration
 @ConditionalOnClass(HttpMessageConverter.class)

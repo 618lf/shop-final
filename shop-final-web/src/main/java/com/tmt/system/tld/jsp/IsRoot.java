@@ -2,7 +2,7 @@ package com.tmt.system.tld.jsp;
 
 import javax.servlet.jsp.JspException;
 
-import com.tmt.common.web.tld.jsp.SecureTag;
+import com.tmt.core.web.tld.jsp.SecureTag;
 import com.tmt.system.entity.User;
 import com.tmt.system.utils.UserUtils;
 

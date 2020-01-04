@@ -11,8 +11,8 @@ import org.springframework.context.annotation.Configuration;
 
 import com.shop.config.security.SecurityConfigurationSupport;
 import com.tmt.Constants;
-import com.tmt.common.entity.AutowireBean;
-import com.tmt.common.utils.Lists;
+import com.tmt.core.entity.AutowireBean;
+import com.tmt.core.utils.Lists;
 import com.tmt.system.service.TaskExecutor;
 import com.tmt.task.AccessLogTask;
 import com.tmt.task.SendEmailTask;

@@ -20,7 +20,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import com.shop.config.jdbc.database.DruidDataSourceAutoConfiguration;
 import com.shop.config.jdbc.database.HikariDataSourceAutoConfiguration;
 import com.shop.config.jdbc.database.SqlLiteDataSourceAutoConfiguration;
-import com.tmt.common.persistence.JdbcSqlExecutor;
+import com.tmt.core.persistence.JdbcSqlExecutor;
 
 /**
  * JDBC 操作模板

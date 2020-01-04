@@ -3,7 +3,7 @@ package com.tmt.system.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.tmt.common.entity.AutowireBean;
+import com.tmt.core.entity.AutowireBean;
 import com.tmt.system.entity.Task;
 
 /**

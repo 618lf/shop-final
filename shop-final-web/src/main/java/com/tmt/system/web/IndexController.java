@@ -6,8 +6,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.tmt.common.config.Globals;
-import com.tmt.common.utils.WebUtils;
+import com.tmt.core.config.Globals;
+import com.tmt.core.utils.WebUtils;
 
 /**
  * 访问首页

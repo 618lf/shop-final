@@ -2,8 +2,8 @@ package com.tmt.system.service;
 
 import java.util.List;
 
-import com.tmt.common.entity.LabelVO;
-import com.tmt.common.service.BaseServiceFacade;
+import com.tmt.core.entity.LabelVO;
+import com.tmt.core.service.BaseServiceFacade;
 import com.tmt.system.entity.Task;
 
 /**

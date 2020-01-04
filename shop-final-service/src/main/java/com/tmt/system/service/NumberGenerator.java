@@ -10,8 +10,8 @@ import java.util.LinkedList;
 import org.springframework.jdbc.support.JdbcUtils;
 import org.springframework.stereotype.Service;
 
-import com.tmt.common.exception.DataAccessException;
-import com.tmt.common.persistence.datasource.DataSourceHolder;
+import com.tmt.core.exception.DataAccessException;
+import com.tmt.core.persistence.datasource.DataSourceHolder;
 
 /**
  * 自增长服务

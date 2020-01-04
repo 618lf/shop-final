@@ -6,9 +6,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.tmt.common.persistence.BaseDao;
-import com.tmt.common.service.BaseService;
-import com.tmt.common.utils.Maps;
+import com.tmt.core.persistence.BaseDao;
+import com.tmt.core.service.BaseService;
+import com.tmt.core.utils.Maps;
 import com.tmt.system.dao.LogDao;
 import com.tmt.system.entity.Log;
 

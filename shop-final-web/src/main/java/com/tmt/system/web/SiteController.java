@@ -7,13 +7,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.tmt.common.config.Globals;
-import com.tmt.common.email.SendEmailUtils;
-import com.tmt.common.entity.AjaxResult;
-import com.tmt.common.persistence.incrementer.IdGen;
-import com.tmt.common.utils.StringUtils;
-import com.tmt.common.utils.WebUtils;
-import com.tmt.common.web.BaseController;
+import com.tmt.core.config.Globals;
+import com.tmt.core.email.SendEmailUtils;
+import com.tmt.core.entity.AjaxResult;
+import com.tmt.core.persistence.incrementer.IdGen;
+import com.tmt.core.utils.StringUtils;
+import com.tmt.core.utils.WebUtils;
+import com.tmt.core.web.BaseController;
 import com.tmt.system.entity.Site;
 import com.tmt.system.service.SiteServiceFacade;
 

@@ -36,14 +36,14 @@ import com.shop.config.jdbc.database.HikariDataSourceAutoConfiguration;
 import com.shop.config.jdbc.database.SpringBootVFS;
 import com.shop.config.jdbc.database.SqlLiteDataSourceAutoConfiguration;
 import com.tmt.Constants;
-import com.tmt.common.persistence.QueryCondition;
-import com.tmt.common.persistence.dialect.Dialect;
-import com.tmt.common.persistence.dialect.H2Dialect;
-import com.tmt.common.persistence.dialect.MySQLDialect;
-import com.tmt.common.persistence.dialect.OracleDialect;
-import com.tmt.common.persistence.dialect.SqlLiteDialect;
-import com.tmt.common.persistence.mybatis.ExecutorInterceptor;
-import com.tmt.common.utils.StringUtils;
+import com.tmt.core.persistence.QueryCondition;
+import com.tmt.core.persistence.dialect.Dialect;
+import com.tmt.core.persistence.dialect.H2Dialect;
+import com.tmt.core.persistence.dialect.MySQLDialect;
+import com.tmt.core.persistence.dialect.OracleDialect;
+import com.tmt.core.persistence.dialect.SqlLiteDialect;
+import com.tmt.core.persistence.mybatis.ExecutorInterceptor;
+import com.tmt.core.utils.StringUtils;
 
 /**
  * Mybatis

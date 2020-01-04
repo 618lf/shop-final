@@ -8,7 +8,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
-import com.tmt.common.boot.Boot;
+import com.tmt.core.boot.Boot;
 
 /**
  * 系统启动后需要做的工作

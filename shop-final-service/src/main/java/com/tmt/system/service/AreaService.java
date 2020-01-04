@@ -7,12 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.tmt.common.persistence.BaseDao;
-import com.tmt.common.persistence.QueryCondition;
-import com.tmt.common.persistence.QueryCondition.Criteria;
-import com.tmt.common.persistence.incrementer.IdGen;
-import com.tmt.common.service.BaseService;
-import com.tmt.common.utils.Maps;
+import com.tmt.core.persistence.BaseDao;
+import com.tmt.core.persistence.QueryCondition;
+import com.tmt.core.persistence.QueryCondition.Criteria;
+import com.tmt.core.persistence.incrementer.IdGen;
+import com.tmt.core.service.BaseService;
+import com.tmt.core.utils.Maps;
 import com.tmt.system.dao.AreaDao;
 import com.tmt.system.entity.Area;
 

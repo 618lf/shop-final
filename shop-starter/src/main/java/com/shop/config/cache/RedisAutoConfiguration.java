@@ -10,11 +10,11 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.tmt.common.cache.Cache;
-import com.tmt.common.cache.redis.RedisCache;
-import com.tmt.common.cache.redis.RedisCacheManager;
-import com.tmt.common.cache.redis.factory.RedisConnectionFactory;
-import com.tmt.common.utils.Lists;
+import com.tmt.core.cache.Cache;
+import com.tmt.core.cache.redis.RedisCache;
+import com.tmt.core.cache.redis.RedisCacheManager;
+import com.tmt.core.cache.redis.factory.RedisConnectionFactory;
+import com.tmt.core.utils.Lists;
 
 import redis.clients.jedis.JedisPoolConfig;
 

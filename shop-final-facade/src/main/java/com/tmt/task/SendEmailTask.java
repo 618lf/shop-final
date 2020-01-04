@@ -6,9 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.tmt.common.email.SendEmailUtils;
-import com.tmt.common.utils.Lists;
-import com.tmt.common.utils.StringUtils;
+import com.tmt.core.email.SendEmailUtils;
+import com.tmt.core.utils.Lists;
+import com.tmt.core.utils.StringUtils;
 import com.tmt.system.entity.EmailTask;
 import com.tmt.system.entity.Task;
 import com.tmt.system.service.EmailTaskServiceFacade;

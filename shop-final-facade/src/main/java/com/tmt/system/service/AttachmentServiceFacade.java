@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.tmt.common.service.BaseServiceFacade;
+import com.tmt.core.service.BaseServiceFacade;
 import com.tmt.system.entity.Attachment;
 import com.tmt.system.entity.AttachmentDir;
 import com.tmt.system.entity.User;

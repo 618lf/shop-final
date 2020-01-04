@@ -3,8 +3,8 @@ package com.tmt.system.entity;
 import java.io.Serializable;
 import java.util.List;
 
-import com.tmt.common.entity.BaseTreeEntity;
-import com.tmt.common.utils.Lists;
+import com.tmt.core.entity.BaseTreeEntity;
+import com.tmt.core.utils.Lists;
 
 /**
  * 菜单

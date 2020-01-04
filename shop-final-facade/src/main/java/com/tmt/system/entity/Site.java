@@ -3,10 +3,10 @@ package com.tmt.system.entity;
 import java.io.Serializable;
 import java.util.List;
 
-import com.tmt.common.email.EmailParam;
-import com.tmt.common.entity.BaseEntity;
-import com.tmt.common.utils.Lists;
-import com.tmt.common.utils.StringUtils;
+import com.tmt.core.email.EmailParam;
+import com.tmt.core.entity.BaseEntity;
+import com.tmt.core.utils.Lists;
+import com.tmt.core.utils.StringUtils;
 
 /**
  * 站点设置 管理

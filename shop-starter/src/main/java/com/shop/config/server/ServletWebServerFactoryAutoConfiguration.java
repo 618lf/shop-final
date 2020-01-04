@@ -25,7 +25,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 
 import com.shop.config.tomcat.NoSessionManager;
-import com.tmt.common.exception.PortUnUseableException;
+import com.tmt.core.exception.PortUnUseableException;
 
 /**
  * 自定义的 Servlet 服务器自动配置

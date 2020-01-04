@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.tmt.Constants;
-import com.tmt.common.utils.SpringContextHolder;
+import com.tmt.core.utils.SpringContextHolder;
 import com.tmt.system.entity.Task;
 import com.tmt.system.entity.TaskProgress;
 

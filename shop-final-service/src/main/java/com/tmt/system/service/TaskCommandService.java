@@ -16,8 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tmt.Constants;
-import com.tmt.common.utils.SpringContextHolder;
-import com.tmt.common.utils.StringUtils;
+import com.tmt.core.utils.SpringContextHolder;
+import com.tmt.core.utils.StringUtils;
 import com.tmt.system.dao.TaskDao;
 import com.tmt.system.entity.Task;
 import com.tmt.system.entity.Task.TaskStatus;

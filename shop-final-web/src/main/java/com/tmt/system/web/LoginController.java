@@ -9,17 +9,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.tmt.Constants;
-import com.tmt.common.codec.Encodes;
-import com.tmt.common.config.Globals;
-import com.tmt.common.entity.BaseEntity;
-import com.tmt.common.exception.ErrorCode;
-import com.tmt.common.security.context.AuthenticationToken;
-import com.tmt.common.security.principal.Principal;
-import com.tmt.common.security.utils.SecurityUtils;
-import com.tmt.common.utils.StringUtils;
-import com.tmt.common.utils.WebUtils;
-import com.tmt.common.web.BaseController;
-import com.tmt.common.web.ValidateCodeService;
+import com.tmt.core.codec.Encodes;
+import com.tmt.core.config.Globals;
+import com.tmt.core.entity.BaseEntity;
+import com.tmt.core.exception.ErrorCode;
+import com.tmt.core.security.context.AuthenticationToken;
+import com.tmt.core.security.principal.Principal;
+import com.tmt.core.security.utils.SecurityUtils;
+import com.tmt.core.utils.StringUtils;
+import com.tmt.core.utils.WebUtils;
+import com.tmt.core.web.BaseController;
+import com.tmt.core.web.ValidateCodeService;
 import com.tmt.system.utils.UserUtils;
 
 /**

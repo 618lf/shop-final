@@ -7,8 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.tmt.Constants;
-import com.tmt.common.email.JavaMailSender;
-import com.tmt.common.email.MimeMailService;
+import com.tmt.core.email.JavaMailSender;
+import com.tmt.core.email.MimeMailService;
 
 /**
  * 邮箱配置

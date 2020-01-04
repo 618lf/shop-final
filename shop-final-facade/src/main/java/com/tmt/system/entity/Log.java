@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.tmt.common.entity.IdEntity;
-import com.tmt.common.utils.time.DateUtils;
+import com.tmt.core.entity.IdEntity;
+import com.tmt.core.utils.time.DateUtils;
 
 /**
  * 日志

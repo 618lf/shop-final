@@ -2,7 +2,7 @@ package com.tmt.system.entity;
 
 import java.io.Serializable;
 
-import com.tmt.common.entity.BaseParentEntity;
+import com.tmt.core.entity.BaseParentEntity;
 
 /**
  * 机构

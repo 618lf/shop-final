@@ -7,12 +7,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tmt.Constants;
-import com.tmt.common.lock.Handler;
-import com.tmt.common.lock.impl.ResourceLockServiceFacade;
-import com.tmt.common.persistence.BaseDao;
-import com.tmt.common.persistence.incrementer.IdGen;
-import com.tmt.common.service.BaseService;
-import com.tmt.common.utils.CacheUtils;
+import com.tmt.core.lock.Handler;
+import com.tmt.core.lock.impl.ResourceLockServiceFacade;
+import com.tmt.core.persistence.BaseDao;
+import com.tmt.core.persistence.incrementer.IdGen;
+import com.tmt.core.service.BaseService;
+import com.tmt.core.utils.CacheUtils;
 import com.tmt.system.dao.DictDao;
 import com.tmt.system.entity.Dict;
 

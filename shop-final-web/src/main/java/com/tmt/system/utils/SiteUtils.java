@@ -1,8 +1,8 @@
 package com.tmt.system.utils;
 
 import com.tmt.Constants;
-import com.tmt.common.security.context.ThreadContext;
-import com.tmt.common.utils.SpringContextHolder;
+import com.tmt.core.security.context.ThreadContext;
+import com.tmt.core.utils.SpringContextHolder;
 import com.tmt.system.entity.Site;
 import com.tmt.system.service.SiteServiceFacade;
 

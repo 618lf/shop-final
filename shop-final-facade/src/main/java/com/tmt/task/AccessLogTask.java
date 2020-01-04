@@ -11,12 +11,12 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.tmt.common.persistence.dialect.Dialect;
-import com.tmt.common.persistence.dialect.MySQLDialect;
-import com.tmt.common.utils.FileUtils;
-import com.tmt.common.utils.Lists;
-import com.tmt.common.utils.StringUtils;
-import com.tmt.common.utils.time.DateUtils;
+import com.tmt.core.persistence.dialect.Dialect;
+import com.tmt.core.persistence.dialect.MySQLDialect;
+import com.tmt.core.utils.FileUtils;
+import com.tmt.core.utils.Lists;
+import com.tmt.core.utils.StringUtils;
+import com.tmt.core.utils.time.DateUtils;
 import com.tmt.system.entity.Task;
 import com.tmt.system.service.TaskExecutor;
 

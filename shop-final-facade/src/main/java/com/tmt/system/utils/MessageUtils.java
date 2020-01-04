@@ -1,8 +1,8 @@
 package com.tmt.system.utils;
 
 import com.tmt.Constants;
-import com.tmt.common.utils.SpringContextHolder;
-import com.tmt.common.utils.StringUtils;
+import com.tmt.core.utils.SpringContextHolder;
+import com.tmt.core.utils.StringUtils;
 import com.tmt.system.entity.Message;
 import com.tmt.system.service.MessageServiceFacade;
 

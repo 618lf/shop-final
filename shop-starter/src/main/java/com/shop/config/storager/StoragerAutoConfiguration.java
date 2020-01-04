@@ -11,9 +11,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
-import com.tmt.common.exception.BaseRuntimeException;
-import com.tmt.common.utils.storager.LocalStorager;
-import com.tmt.common.utils.storager.Storager;
+import com.tmt.core.exception.BaseRuntimeException;
+import com.tmt.core.utils.storager.LocalStorager;
+import com.tmt.core.utils.storager.Storager;
 
 /**
  * 存储的配置

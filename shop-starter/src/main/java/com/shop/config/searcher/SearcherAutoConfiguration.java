@@ -11,7 +11,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import com.tmt.common.searcher.BaseSearcher;
+import com.tmt.core.searcher.BaseSearcher;
 
 /**
  * 查询的配置

@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
-import com.tmt.common.cache.ehcache.EhCacheCacheManager;
+import com.tmt.core.cache.ehcache.EhCacheCacheManager;
 
 /**
  * 缓存配置

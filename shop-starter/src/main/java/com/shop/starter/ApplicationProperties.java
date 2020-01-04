@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import com.tmt.common.utils.Lists;
+import com.tmt.core.utils.Lists;
 
 /**
  * 系统配置

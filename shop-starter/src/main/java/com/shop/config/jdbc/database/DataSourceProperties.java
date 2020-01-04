@@ -3,7 +3,7 @@ package com.shop.config.jdbc.database;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import com.tmt.Constants;
-import com.tmt.common.utils.StringUtils;
+import com.tmt.core.utils.StringUtils;
 
 /**
  * 数据库的配置

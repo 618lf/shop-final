@@ -13,15 +13,15 @@ import org.springframework.core.io.ResourceLoader;
 
 import com.shop.booter.AppBooter;
 import com.shop.starter.ApplicationProperties;
-import com.tmt.common.config.Globals;
-import com.tmt.common.persistence.incrementer.IdGen;
-import com.tmt.common.utils.StringUtils;
-import com.tmt.common.utils.XSpringContextHolder;
-import com.tmt.common.utils.serializer.JavaSerializer;
-import com.tmt.common.utils.serializer.KryoPoolSerializer;
-import com.tmt.common.utils.serializer.KryoSerializer;
-import com.tmt.common.utils.serializer.SerializationUtils;
-import com.tmt.common.utils.serializer.Serializer;
+import com.tmt.core.config.Globals;
+import com.tmt.core.persistence.incrementer.IdGen;
+import com.tmt.core.utils.StringUtils;
+import com.tmt.core.utils.XSpringContextHolder;
+import com.tmt.core.utils.serializer.JavaSerializer;
+import com.tmt.core.utils.serializer.KryoPoolSerializer;
+import com.tmt.core.utils.serializer.KryoSerializer;
+import com.tmt.core.utils.serializer.SerializationUtils;
+import com.tmt.core.utils.serializer.Serializer;
 
 /**
  * 基础组件

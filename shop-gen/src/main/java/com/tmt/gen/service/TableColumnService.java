@@ -7,12 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.tmt.common.persistence.BaseDao;
-import com.tmt.common.persistence.Page;
-import com.tmt.common.persistence.PageParameters;
-import com.tmt.common.service.BaseService;
-import com.tmt.common.utils.Maps;
-import com.tmt.common.utils.StringUtils;
+import com.tmt.core.persistence.BaseDao;
+import com.tmt.core.persistence.Page;
+import com.tmt.core.persistence.PageParameters;
+import com.tmt.core.service.BaseService;
+import com.tmt.core.utils.Maps;
+import com.tmt.core.utils.StringUtils;
 import com.tmt.gen.dao.TableColumnDao;
 import com.tmt.gen.entity.Table;
 import com.tmt.gen.entity.TableColumn;

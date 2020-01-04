@@ -9,10 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.tmt.common.entity.AjaxResult;
-import com.tmt.common.utils.Lists;
-import com.tmt.common.utils.SpringContextHolder;
-import com.tmt.common.web.BaseController;
+import com.tmt.core.entity.AjaxResult;
+import com.tmt.core.utils.Lists;
+import com.tmt.core.utils.SpringContextHolder;
+import com.tmt.core.web.BaseController;
 import com.tmt.system.entity.Todo;
 import com.tmt.system.entity.User;
 import com.tmt.system.service.MessageServiceFacade;

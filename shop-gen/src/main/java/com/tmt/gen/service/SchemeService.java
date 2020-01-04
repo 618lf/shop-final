@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.tmt.common.persistence.BaseDao;
-import com.tmt.common.persistence.incrementer.IdGen;
-import com.tmt.common.service.BaseService;
+import com.tmt.core.persistence.BaseDao;
+import com.tmt.core.persistence.incrementer.IdGen;
+import com.tmt.core.service.BaseService;
 import com.tmt.gen.dao.SchemeDao;
 import com.tmt.gen.entity.Scheme;
 import com.tmt.gen.entity.Table;
