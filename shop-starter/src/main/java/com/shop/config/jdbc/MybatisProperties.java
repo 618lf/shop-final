@@ -201,7 +201,7 @@ public class MybatisProperties {
 			}
 
 			// 基础配置
-			mapperLocations.add("classpath*:com/tmt/common/persistence/config/*.Mapper.xml");
+			mapperLocations.add("classpath*:com/tmt/core/persistence/config/*.Mapper.xml");
 
 			// 返回需要扫描的地址
 			_mapperLocations = mapperLocations;
