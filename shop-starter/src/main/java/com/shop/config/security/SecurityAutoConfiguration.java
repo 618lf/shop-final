@@ -24,7 +24,6 @@ import com.tmt.core.security.principal.SessionRepository;
 import com.tmt.core.security.principal.support.CookiePrincipalStrategy;
 import com.tmt.core.security.principal.support.SessionRespositoryFactoryBean;
 import com.tmt.core.web.filter.EncodingConvertFilter;
-import com.tmt.system.realm.AuthenticationRealm;
 
 /**
  * 安全配置
@@ -72,19 +71,10 @@ public class SecurityAutoConfiguration {
 	}
 
 	@Bean
-	public AuthenticationRealm authenticationRealm(CacheManager cacheManager) {
-		AuthenticationRealm authenticationRealm = new AuthenticationRealm();
-		authenticationRealm.setCacheName(properties.getSecurity().getCacheName());
-		authenticationRealm.setCacheManager(cacheManager);
-		return authenticationRealm;
-	}
-
-	@Bean
-	public DefaultSecurityManager securityManager(AuthenticationRealm authenticationRealm,
-			PrincipalStrategy principalStrategy, RememberMeManager rememberMeManager) {
+	public DefaultSecurityManager securityManager(PrincipalStrategy principalStrategy, RememberMeManager rememberMeManager) {
 		DefaultSecurityManager securityManager = new DefaultSecurityManager();
 		securityManager.setPrincipalStrategy(principalStrategy);
-		securityManager.setRealm(securityConfig.getRealm() == null ? authenticationRealm : securityConfig.getRealm());
+		securityManager.setRealm(securityConfig.getRealm());
 		securityManager.setRememberMeManager(rememberMeManager);
 		return securityManager;
 	}
