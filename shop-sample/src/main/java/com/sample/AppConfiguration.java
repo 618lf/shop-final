@@ -8,9 +8,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.shop.config.security.SecurityConfigurationSupport;
+import com.shop.starter.ApplicationProperties;
 import com.tmt.Constants;
+import com.tmt.core.cache.CacheManager;
 import com.tmt.core.entity.AutowireBean;
 import com.tmt.core.utils.Lists;
+import com.tmt.system.realm.AuthenticationRealm;
 import com.tmt.system.service.TaskExecutor;
 import com.tmt.task.AccessLogTask;
 import com.tmt.task.SendEmailTask;
@@ -46,6 +49,22 @@ public class AppConfiguration {
 			context.getAutowireCapableBeanFactory().autowireBean(bean);
 		}
 	}
+	
+	/**
+	 * 默认的数据域
+	 * 
+	 * @param properties
+	 * @param cacheManager
+	 * @return
+	 */
+	@Bean
+	public AuthenticationRealm authenticationRealm(ApplicationProperties properties, CacheManager cacheManager) {
+		AuthenticationRealm authenticationRealm = new AuthenticationRealm();
+		authenticationRealm.setCacheName(properties.getSecurity().getCacheName());
+		authenticationRealm.setCacheManager(cacheManager);
+		return authenticationRealm;
+	}
+	
 
 	/**
 	 * 安全配置
@@ -53,12 +72,12 @@ public class AppConfiguration {
 	 * @return
 	 */
 	@Bean
-	public SecurityConfigurationSupport securityConfiguration() {
+	public SecurityConfigurationSupport securityConfiguration(AuthenticationRealm authenticationRealm) {
 		SecurityConfigurationSupport securityConfiguration = new SecurityConfigurationSupport();
 		securityConfiguration.definition("/admin/validate/code = anon").definition("/admin/login = authc")
 				.definition("/admin/logout = logout").definition("/admin/** = user, roles[\"admin\"]")
 				.definition("/** = anon").loginUrl("/admin/login").successUrl("/admin/")
 				.unauthorizedUrl("/admin/login");
-		return securityConfiguration;
+		return securityConfiguration.realm(authenticationRealm);
 	}
 }
