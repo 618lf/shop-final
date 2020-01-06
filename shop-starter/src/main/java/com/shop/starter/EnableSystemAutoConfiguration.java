@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Import;
 import com.shop.starter.selector.AutoConfigurationSystemComponents;
 
 /**
- * 启用基础系统： 必须放在 @ApplicationBoot 的前面
+ * 启用基础系统
  * 
  * @author lifeng
  */

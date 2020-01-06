@@ -10,10 +10,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.AnnotationUtils;
 
-import com.shop.starter.EnableSystemAutoConfiguration;
-import com.tmt.Constants;
 import com.tmt.OS;
 import com.tmt.core.utils.Sets;
 import com.tmt.core.utils.StringUtils;
@@ -116,28 +115,38 @@ public class Application extends SpringApplication {
 	 * 
 	 * @return
 	 */
-	@SuppressWarnings("deprecation")
 	public static Set<String> getScanPackages() {
 		Set<String> packages = Sets.newHashSet();
 		Set<Object> sources = Application.me().getAllSources();
 		if (sources != null && !sources.isEmpty()) {
 			for (Object source : sources) {
 				if (source instanceof Class<?>) {
-
-					// 默认扫描的包
 					Class<?> sourceClass = ((Class<?>) source);
-					Set<ComponentScan> scans = AnnotationUtils.getRepeatableAnnotations(sourceClass,
-							ComponentScan.class);
-					for (ComponentScan scan : scans) {
-						packages.addAll(parseComponentScan(sourceClass, scan));
-					}
-
-					// 扫描系统包
-					if (AnnotationUtils.isAnnotationDeclaredLocally(EnableSystemAutoConfiguration.class, sourceClass)) {
-						packages.addAll(Constants.SYSTEM_PACKAGES);
-					}
+					packages.addAll(parseComponent(sourceClass));
 				}
 			}
+		}
+		return packages;
+	}
+
+	/**
+	 * 处理启动类
+	 * 
+	 * @param sourceClass
+	 * @return
+	 */
+	@SuppressWarnings("deprecation")
+	static Set<String> parseComponent(Class<?> sourceClass) {
+		Set<String> packages = Sets.newHashSet();
+		Set<ComponentScan> scans = AnnotationUtils.getRepeatableAnnotations(sourceClass, ComponentScan.class);
+		for (ComponentScan scan : scans) {
+			packages.addAll(parseComponentScan(sourceClass, scan));
+		}
+
+		// 扫描引入的包
+		Set<Import> imports = AnnotationUtils.getRepeatableAnnotations(sourceClass, Import.class);
+		for (Import scan : imports) {
+			packages.addAll(parseComponentImport(sourceClass, scan));
 		}
 		return packages;
 	}
@@ -155,5 +164,23 @@ public class Application extends SpringApplication {
 			return Sets.newHashSet(sourceClass.getPackage().getName());
 		}
 		return Sets.newHashSet(packages);
+	}
+
+	/**
+	 * 简单的处理引入的包
+	 * 
+	 * @param sourceClass
+	 * @param scan
+	 * @return
+	 */
+	static Set<String> parseComponentImport(Class<?> sourceClass, Import scan) {
+		Set<String> packages = Sets.newHashSet();
+		Class<?>[] imports = scan.value();
+		if (imports != null && imports.length > 0) {
+			for (Class<?> source : imports) {
+				packages.addAll(parseComponent(source));
+			}
+		}
+		return packages;
 	}
 }
