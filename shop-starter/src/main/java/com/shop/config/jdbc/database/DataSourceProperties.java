@@ -140,26 +140,59 @@ public class DataSourceProperties {
 	}
 
 	public void driverFit() {
-		if (!StringUtils.isBlank(driverClassName) || db == null) {
+
+		// 没有指定驱动，则自动发现
+		if (StringUtils.isBlank(driverClassName) && db == null) {
+			this.driverFitDb();
 			return;
 		}
+
+		// 指定了類型，則強制按照類型发现
 		if (db == Database.mysql || db == Database.sharding) {
 			this.driverFitMysql();
 		} else if (db == Database.h2) {
 			this.driverClassName = "org.h2.Driver";
+		} else if (db == Database.mssql) {
+			this.driverClassName = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+		}
+	}
+
+	// 发现驱动
+	private void driverFitDb() {
+
+		// 优先使用mysql
+		this.driverFitMysql();
+
+		// 使用mssql
+		try {
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			this.driverClassName = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+			this.db = Database.mssql;
+		} catch (ClassNotFoundException e) {
+		}
+
+		// 使用h2
+		try {
+			Class.forName("org.h2.Driver");
+			this.driverClassName = "org.h2.Driver";
+			this.db = Database.h2;
+		} catch (ClassNotFoundException e) {
 		}
 	}
 
 	// mysql 驱动的自动发现
 	private void driverFitMysql() {
 		try {
+			
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			this.driverClassName = "com.mysql.cj.jdbc.Driver";
+			this.db = Database.mysql;
 		} catch (ClassNotFoundException e) {
 		}
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			this.driverClassName = "com.mysql.jdbc.Driver";
+			this.db = Database.mysql;
 		} catch (ClassNotFoundException e) {
 		}
 	}

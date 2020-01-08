@@ -7,5 +7,5 @@ package com.shop.config.jdbc.database;
  */
 public enum Database {
 
-	h2, mysql, sqlite, oracle, sharding
+	h2, mssql, mysql, sqlite, oracle, sharding
 }
