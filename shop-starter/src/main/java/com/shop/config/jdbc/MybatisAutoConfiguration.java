@@ -39,6 +39,7 @@ import com.tmt.Constants;
 import com.tmt.core.persistence.QueryCondition;
 import com.tmt.core.persistence.dialect.Dialect;
 import com.tmt.core.persistence.dialect.H2Dialect;
+import com.tmt.core.persistence.dialect.MsSQLDialect;
 import com.tmt.core.persistence.dialect.MySQLDialect;
 import com.tmt.core.persistence.dialect.OracleDialect;
 import com.tmt.core.persistence.dialect.SqlLiteDialect;
@@ -89,6 +90,8 @@ public class MybatisAutoConfiguration {
 			return new OracleDialect();
 		} else if (db == Database.sqlite) {
 			return new SqlLiteDialect();
+		} else if (db == Database.mssql) {
+			return new MsSQLDialect();
 		}
 		return new MySQLDialect();
 	}
@@ -157,7 +160,7 @@ public class MybatisAutoConfiguration {
 			return new SqlSessionTemplate(sqlSessionFactory);
 		}
 	}
-	
+
 	@PostConstruct
 	public void checkConfigFileExists() {
 		if (this.properties.isCheckConfigLocation() && StringUtils.isNotBlank(this.properties.getConfigLocation())) {
