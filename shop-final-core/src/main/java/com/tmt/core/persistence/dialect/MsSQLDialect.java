@@ -1,5 +1,8 @@
 package com.tmt.core.persistence.dialect;
 
+import java.util.Map;
+
+import com.google.common.collect.Maps;
 import com.tmt.core.persistence.Database;
 
 /**
@@ -30,5 +33,15 @@ public class MsSQLDialect implements Dialect {
 	@Override
 	public Database getDatabase() {
 		return Database.mssql;
+	}
+
+	/**
+	 * 变量
+	 */
+	@Override
+	public Map<String, String> variables() {
+		Map<String, String> variables = Maps.newHashMap();
+		variables.put("X_LEN", "LEN");
+		return variables;
 	}
 }

@@ -44,6 +44,7 @@ import com.tmt.core.persistence.dialect.MySQLDialect;
 import com.tmt.core.persistence.dialect.OracleDialect;
 import com.tmt.core.persistence.dialect.SqlLiteDialect;
 import com.tmt.core.persistence.mybatis.ExecutorInterceptor;
+import com.tmt.core.utils.Maps;
 import com.tmt.core.utils.StringUtils;
 
 /**
@@ -136,6 +137,10 @@ public class MybatisAutoConfiguration {
 
 		// 默认配置
 		this.defaultConfiguration(configuration, dialect);
+
+		// 配置全局变量
+		configuration.setVariables(Maps.toProperties(dialect.variables()));
+
 		return factory.getObject();
 	}
 

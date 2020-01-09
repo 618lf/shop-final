@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -12,6 +13,7 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.jdbc.support.JdbcUtils;
 
+import com.google.common.collect.Maps;
 import com.tmt.core.persistence.Database;
 import com.tmt.core.persistence.datasource.DataSourceHolder;
 
@@ -47,14 +49,13 @@ public class MySQLDialect implements Dialect {
 	/**
 	 * 高效的插入数据
 	 * 
-	 * @param bytes
-	 *            bytes 构建： StringBuilder values = new StringBuilder();
-	 *            values.append("1").append("\t").append("lifeng1").append("\n")
-	 *            .append("2").append("\t").append("lifeng2").append("\n"); bytes =
-	 *            values.toString().getBytes();
+	 * @param bytes bytes 构建： StringBuilder values = new StringBuilder();
+	 *              values.append("1").append("\t").append("lifeng1").append("\n")
+	 *              .append("2").append("\t").append("lifeng2").append("\n"); bytes
+	 *              = values.toString().getBytes();
 	 * 
-	 *            sql 构建： LOAD DATA LOCAL INFILE 'LOGS.SQL' IGNORE INTO TABLE
-	 *            SYS_LOG (ID, NAME)
+	 *              sql 构建： LOAD DATA LOCAL INFILE 'LOGS.SQL' IGNORE INTO TABLE
+	 *              SYS_LOG (ID, NAME)
 	 */
 	@Override
 	public int bulkSave(List<String> sqls, byte[] bytes) {
@@ -80,9 +81,19 @@ public class MySQLDialect implements Dialect {
 		}
 		return 0;
 	}
-	
+
 	@Override
 	public Database getDatabase() {
 		return Database.mysql;
+	}
+
+	/**
+	 * 变量
+	 */
+	@Override
+	public Map<String, String> variables() {
+		Map<String, String> variables = Maps.newHashMap();
+		variables.put("X_LEN", "LENGHT");
+		return variables;
 	}
 }

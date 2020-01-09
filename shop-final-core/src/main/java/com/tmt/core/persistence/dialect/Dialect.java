@@ -3,12 +3,14 @@ package com.tmt.core.persistence.dialect;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.jdbc.support.JdbcUtils;
 
+import com.google.common.collect.Maps;
 import com.tmt.core.persistence.Database;
 import com.tmt.core.persistence.datasource.DataSourceHolder;
 
@@ -71,5 +73,14 @@ public interface Dialect {
 	 */
 	default Database getDatabase() {
 		return Database.mysql;
+	}
+
+	/**
+	 * 定义一些特殊的全局变量
+	 * 
+	 * @return
+	 */
+	default Map<String, String> variables() {
+		return Maps.newHashMap();
 	}
 }

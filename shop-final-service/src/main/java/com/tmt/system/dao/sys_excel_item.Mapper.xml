@@ -17,7 +17,7 @@
           VERIFY_FORMAT
      FROM SYS_EXCEL_ITEM
     WHERE TEMPLATE_ID = #{TEMPLATE_ID} 
-    ORDER BY LENGTH(COLUMN_NAME) ASC , COLUMN_NAME
+    ORDER BY ${X_LEN}(COLUMN_NAME) ASC , COLUMN_NAME
   </select>
   
   <delete id="delete" parameterType="com.tmt.system.entity.ExcelItem" >

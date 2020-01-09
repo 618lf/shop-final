@@ -3,6 +3,7 @@ package com.tmt.core.utils;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import net.sf.cglib.beans.BeanMap;
 
@@ -12,9 +13,10 @@ import net.sf.cglib.beans.BeanMap;
  * @author lifeng
  */
 public class Maps {
-	
+
 	/**
 	 * 获取第一个元素
+	 * 
 	 * @param map
 	 * @return
 	 */
@@ -27,14 +29,16 @@ public class Maps {
 
 	/**
 	 * 创建一个Map
+	 * 
 	 * @return
 	 */
 	public static <K, V> HashMap<K, V> newHashMap() {
 		return new HashMap<K, V>();
 	}
-	
+
 	/**
 	 * 创建一个有序的Map
+	 * 
 	 * @return
 	 */
 	public static <K, V> LinkedHashMap<K, V> newOrderMap() {
@@ -50,9 +54,10 @@ public class Maps {
 		}
 		return Integer.MAX_VALUE;
 	}
-	
+
 	/**
 	 * 将 bean 转为 map, 忽略为 null 的属性
+	 * 
 	 * @param bean
 	 * @return
 	 */
@@ -61,7 +66,7 @@ public class Maps {
 		String json = JsonMapper.toJson(bean);
 		return JsonMapper.fromJson(json, Map.class);
 	}
-	
+
 	/**
 	 * 复制map 的属性到bean
 	 * 
@@ -73,5 +78,17 @@ public class Maps {
 		BeanMap beanMap = BeanMap.create(bean);
 		beanMap.putAll(map);
 		return bean;
+	}
+
+	/**
+	 * 转换为 Properties
+	 * 
+	 * @param map
+	 * @return
+	 */
+	public static Properties toProperties(Map<String, String> map) {
+		Properties properties = new Properties();
+		properties.putAll(map);
+		return properties;
 	}
 }
