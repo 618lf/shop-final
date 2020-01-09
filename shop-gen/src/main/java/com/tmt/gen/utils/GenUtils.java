@@ -383,7 +383,6 @@ public class GenUtils {
 			fileName = StringUtils.replace(fileName, File.separator + REMOVE, "");
 			logger.debug(" fileName === " + fileName);
 
-			System.out.println("文件：" + template.getFileName());
 			String content = FreemarkerUtils.processNoTemplate(template.getContent(), model);
 
 			// 处理问题
