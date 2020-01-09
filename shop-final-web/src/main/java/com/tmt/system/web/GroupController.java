@@ -72,6 +72,7 @@ public class GroupController extends BaseController {
 		if (StringUtils.isNotBlank(group.getName())) {
 			c.andEqualTo("NAME", group.getName());
 		}
+		qc.setOrderByClause(" CREATE_DATE DESC ");
 		page = this.groupService.queryForPage(qc, param);
 		return page;
 	}

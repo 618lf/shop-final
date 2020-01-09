@@ -102,6 +102,7 @@ public class DictController extends BaseController {
 		PageParameters param = page.getParam();
 		Criteria c = qc.getCriteria();
 		this.initQc(dict, c);
+		qc.setOrderByClause(" CREATE_DATE DESC ");
 		return this.dictService.queryForPage(qc, param);
 	}
 
