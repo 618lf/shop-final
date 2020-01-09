@@ -12,26 +12,27 @@ import com.tmt.core.utils.StringUtils;
 
 /**
  * 本地的存储服务
+ * 
  * @author root
  */
-public class LocalStorager implements Storager{
-	
+public class LocalStorager implements Storager {
+
 	private String chunkPath = "chunk";
-	private String storagePath; //存储的根目录
-	private String domain;//域名
-	
+	private String storagePath; // 存储的根目录
+	private String domain;// 域名
+
 	/**
 	 * 合并分片
 	 */
 	@Override
 	public String mergeChunks(String uuid, String group, String fileName) {
 		File chunkFile = new File(storagePath, chunkPath);
-		if((!chunkFile.exists()) && (!chunkFile.mkdirs())) {
+		if ((!chunkFile.exists()) && (!chunkFile.mkdirs())) {
 			return null;
 		}
 		File parentPath = new File(chunkFile, uuid);
-		if(!parentPath.exists()) {
-		   return null;
+		if (!parentPath.exists()) {
+			return null;
 		}
 		File[] files = parentPath.listFiles();
 		Arrays.sort(files, new Comparator<File>() {
@@ -42,14 +43,16 @@ public class LocalStorager implements Storager{
 		});
 		try {
 			File temp = new File(parentPath, uuid);
-			for(File file: files) {
-		       FileUtils.writeByteArrayToFile(temp, FileUtils.readFileToByteArray(file), true);
+			for (File file : files) {
+				FileUtils.writeByteArrayToFile(temp, FileUtils.readFileToByteArray(file), true);
 			}
 			return this.upload(FileUtils.readFileToByteArray(temp), group, fileName);
-		} catch (IOException e) { } finally {
+		} catch (IOException e) {
+		} finally {
 			try {
 				FileUtils.deleteDirectory(parentPath);
-			} catch (IOException e) {}
+			} catch (IOException e) {
+			}
 		}
 		return null;
 	}
@@ -60,11 +63,11 @@ public class LocalStorager implements Storager{
 	@Override
 	public String uploadChunk(byte[] datas, String group, String chunk, String uuid) {
 		File chunkFile = new File(storagePath, chunkPath);
-		if((!chunkFile.exists()) && (!chunkFile.mkdirs())) {
+		if ((!chunkFile.exists()) && (!chunkFile.mkdirs())) {
 			return null;
 		}
 		File parentPath = new File(chunkFile, uuid);
-		if((!parentPath.exists()) && (!parentPath.mkdirs())) {
+		if ((!parentPath.exists()) && (!parentPath.mkdirs())) {
 			return null;
 		}
 		File file = new File(parentPath, chunk);
@@ -75,7 +78,7 @@ public class LocalStorager implements Storager{
 		}
 		return new StringBuilder(StringUtils.remove(file.getAbsolutePath(), storagePath)).toString();
 	}
-	
+
 	/**
 	 * 上传一个文件
 	 */
@@ -108,7 +111,11 @@ public class LocalStorager implements Storager{
 			realFileName = new StringBuilder(storagePath).append(realFileName).toString();
 		}
 		File file = new File(realFileName);
-		if(file.exists()&& file.isFile()) {file.delete();} else {return 0;}
+		if (file.exists() && file.isFile()) {
+			file.delete();
+		} else {
+			return 0;
+		}
 		return 1;
 	}
 
@@ -131,15 +138,19 @@ public class LocalStorager implements Storager{
 			realFileName = new StringBuilder(storagePath).append(realFileName).toString();
 		}
 		File file = new File(realFileName);
-		if(file != null && file.exists()) {
-		   try { return FileUtils.openInputStream(file);} catch (IOException e) {return null;}
+		if (file != null && file.exists()) {
+			try {
+				return FileUtils.openInputStream(file);
+			} catch (IOException e) {
+				return null;
+			}
 		}
 		return null;
 	}
-	
-    /**
-     * 得到可以显示的地址
-     */
+
+	/**
+	 * 得到可以显示的地址
+	 */
 	@Override
 	public String getShowUrl(String url) {
 		return new StringBuilder(domain).append(url).toString();
@@ -148,13 +159,16 @@ public class LocalStorager implements Storager{
 	public String getStoragePath() {
 		return storagePath;
 	}
+
 	public void setStoragePath(String storagePath) {
 		this.storagePath = storagePath;
 	}
+
 	public String getDomain() {
 		return domain;
 	}
+
 	public void setDomain(String domain) {
-		this.domain = domain;
+		this.domain = StringUtils.defaultIfBlank(domain, StringUtils.EMPTY);
 	}
 }
