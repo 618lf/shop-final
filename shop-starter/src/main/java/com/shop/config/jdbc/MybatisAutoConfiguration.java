@@ -30,12 +30,12 @@ import org.springframework.util.ObjectUtils;
 
 import com.shop.config.jdbc.database.ConfigurationCustomizer;
 import com.shop.config.jdbc.database.DataSourceProperties;
-import com.shop.config.jdbc.database.Database;
 import com.shop.config.jdbc.database.DruidDataSourceAutoConfiguration;
 import com.shop.config.jdbc.database.HikariDataSourceAutoConfiguration;
 import com.shop.config.jdbc.database.SpringBootVFS;
 import com.shop.config.jdbc.database.SqlLiteDataSourceAutoConfiguration;
 import com.tmt.Constants;
+import com.tmt.core.persistence.Database;
 import com.tmt.core.persistence.QueryCondition;
 import com.tmt.core.persistence.dialect.Dialect;
 import com.tmt.core.persistence.dialect.H2Dialect;

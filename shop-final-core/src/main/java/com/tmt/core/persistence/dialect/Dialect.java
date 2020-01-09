@@ -9,6 +9,7 @@ import javax.sql.DataSource;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.jdbc.support.JdbcUtils;
 
+import com.tmt.core.persistence.Database;
 import com.tmt.core.persistence.datasource.DataSourceHolder;
 
 /**
@@ -55,11 +56,20 @@ public interface Dialect {
 			int[] result = stmt.executeBatch();
 			return result.length;
 		} catch (Exception e) {
-		    e.printStackTrace();
+			e.printStackTrace();
 		} finally {
 			JdbcUtils.closeStatement(stmt);
 			DataSourceUtils.releaseConnection(conn, dataSource);
 		}
 		return 0;
+	}
+
+	/**
+	 * 默认 Mysql ，会根据mysql 定义一些必要的命令集
+	 * 
+	 * @return
+	 */
+	default Database getDatabase() {
+		return Database.mysql;
 	}
 }

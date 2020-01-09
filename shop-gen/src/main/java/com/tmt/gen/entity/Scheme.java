@@ -123,25 +123,25 @@ public class Scheme extends BaseEntity<Long> implements Serializable{
 		this.genTableId = genTableId;
 	}
 	public Byte getIsImport() {
-		return isImport;
+		return isImport == null?0:isImport;
 	}
 	public void setIsImport(Byte isImport) {
 		this.isImport = isImport;
 	}
 	public Byte getIsExport() {
-		return isExport;
+		return isExport == null?0:isExport;
 	}
 	public void setIsExport(Byte isExport) {
 		this.isExport = isExport;
 	}
 	public Byte getTreeSelect() {
-		return treeSelect;
+		return treeSelect == null?0:treeSelect;
 	}
 	public void setTreeSelect(Byte treeSelect) {
 		this.treeSelect = treeSelect;
 	}
 	public Byte getTableSelect() {
-		return tableSelect;
+		return tableSelect == null?0:tableSelect;
 	}
 	public void setTableSelect(Byte tableSelect) {
 		this.tableSelect = tableSelect;

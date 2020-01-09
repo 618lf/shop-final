@@ -1,4 +1,4 @@
-package com.shop.config.jdbc.database;
+package com.tmt.core.persistence;
 
 /**
  * 主持的 - 数据库类型

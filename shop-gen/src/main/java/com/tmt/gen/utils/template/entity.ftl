@@ -3,13 +3,13 @@ package ${packageName}.${moduleName}.${subModuleName}.entity;
 import java.io.Serializable;
 
 <#if schemeCategory?contains('treeTable')>
-import com.tmt.common.entity.BaseTreeEntity;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.core.entity.BaseTreeEntity;
+import com.tmt.core.utils.StringUtils;
 <#else>
-import com.tmt.common.entity.BaseEntity;
+import com.tmt.core.entity.BaseEntity;
 </#if>
 <#if table.hasDate>
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.alibaba.fastjson.annotation.JSONField;
 </#if>
 /**
  * ${functionNameSimple} 管理
@@ -20,7 +20,6 @@ public class ${className} extends <#if schemeCategory?contains('treeTable')>Base
 	
 	private static final long serialVersionUID = 1L;
 	
-	<#assign enumField=null>
 	<#-- 生成字段属性 -->
 	<#list table.columns as c>
 	<#-- 如果不是基类属性 -->
@@ -68,7 +67,7 @@ public class ${className} extends <#if schemeCategory?contains('treeTable')>Base
 	<#list table.columns as c> 
     <#-- 如果不是基类属性 -->
     <#if !c.isBaseEntity && c.showType != 'enum'>
-    <#if c.showType == 'date'>@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")</#if>
+    <#if c.showType == 'date'>@JSONField(format="yyyy-MM-dd HH:mm:ss")</#if>
     public ${c.javaType} get${c.javaField?cap_first}() {
 		return ${c.javaField};
 	}
@@ -80,7 +79,7 @@ public class ${className} extends <#if schemeCategory?contains('treeTable')>Base
 		return ${c.javaField};
 	}
 	public String get${c.javaField?cap_first}Name() {
-		return ${c.javaField}!=null?${c.javaField}.getName():"";
+		return (${c.javaField}??)?${c.javaField}.getName():"";
 	}
 	public void set${c.javaField?cap_first}(${c.javaField?cap_first} ${c.javaField}) {
 		this.${c.javaField} = ${c.javaField};
@@ -156,13 +155,13 @@ public class ${className} extends <#if schemeCategory?contains('treeTable')>Base
 	public void updatePathByParent(${className} parent, String oldParentIds, String oldPaths, Integer oldLevel) {
 		super.updateIdsByParent(parent, oldParentIds, oldPaths, oldLevel);
 		String _paths = (this.getPath()).replace(oldPaths, parent.getPath());
-		if(StringUtil3.isBlank(_paths)) {
+		if(StringUtils.isBlank(_paths)) {
 			_paths = new StringBuilder(PATH_SEPARATE).append(this.getName()).toString() ;
 		}
 		this.setPath(_paths);
 	}
     </#if> 
-	<#if enumField != null>
+	<#if enumField??>
 	${'//定义枚举,自行定义枚举具体值'}
 	public enum ${enumField?cap_first} {
 	  ENUM_1("ENUM_1"), ENUM_2("ENUM_2");

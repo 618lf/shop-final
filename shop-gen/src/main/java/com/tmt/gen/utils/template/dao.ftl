@@ -1,7 +1,7 @@
 package ${packageName}.${moduleName}.${subModuleName}.dao; 
 
 import org.springframework.stereotype.Repository;
-import com.tmt.common.persistence.BaseDaoImpl;
+import com.tmt.core.persistence.BaseDaoImpl;
 import ${packageName}.${moduleName}.${subModuleName}.entity.${className};
 
 /**

@@ -32,18 +32,18 @@
 	        C.LEVEL TREE_LEVEL, '' TREE_PATH
 	   FROM ${tableName} C
 	  WHERE 1 = 1
-	  <if test="NAME != null">AND C.NAME = ${r'#{NAME}'}</if> 
-	  <if test="IDS != null">AND ${r'#{IDS}'} LIKE CONCAT(CONCAT('%,',C.ID),',%')</if> 
+	  <if test="NAME ??">AND C.NAME = ${r'#{NAME}'}</if> 
+	  <if test="IDS ??">AND ${r'#{IDS}'} LIKE CONCAT(CONCAT('%,',C.ID),',%')</if> 
 	  )A
   </select>
   <select id="findByCondition" resultMap="BaseResult" parameterType="java.util.Map">
    SELECT ${columnFields}
      FROM ${tableName}
     WHERE LEVEL != 0
-    <if test="IDS != null">AND ${r'#{IDS}'} LIKE CONCAT(CONCAT('%,',ID),',%')</if> 
-	<if test="NAME != null">AND NAME LIKE CONCAT(CONCAT('%',${r'#{NAME}'}),'%')</if> 
-	<if test="PARENT_ID != null">AND PARENT_ID = ${PARENT_ID}</if> 
-	<if test="PARENT_IDS != null">AND PARENT_IDS LIKE CONCAT(CONCAT('%,',${r'#{PARENT_IDS}'}), ',%')</if> 
+    <if test="IDS ??">AND ${r'#{IDS}'} LIKE CONCAT(CONCAT('%,',ID),',%')</if> 
+	<if test="NAME ??">AND NAME LIKE CONCAT(CONCAT('%',${r'#{NAME}'}),'%')</if> 
+	<if test="PARENT_ID ??">AND PARENT_ID = ${PARENT_ID}</if> 
+	<if test="PARENT_IDS ??">AND PARENT_IDS LIKE CONCAT(CONCAT('%,',${r'#{PARENT_IDS}'}), ',%')</if> 
     ORDER BY LEVEL, SORT
   </select>
   <select id="delete${className}Check" parameterType="${packageName}.${moduleName}.${subModuleName}.entity.${className}" resultType="java.lang.Integer">
@@ -56,7 +56,7 @@
    SELECT ${columnFields}
      FROM ${tableName}
     <include refid="COMMON.whereClause"/>
-    <if test="orderByClause != null">ORDER BY ${r'${'}orderByClause${r'}'}</if>
+    <if test="orderByClause ??">ORDER BY ${r'${'}orderByClause${r'}'}</if>
   </select>
   <select id="findByConditionStat" parameterType="queryCondition" resultType="java.lang.Integer">
     SELECT COUNT(1) C FROM ${tableName}
@@ -95,7 +95,7 @@
   </update>
   </#if>
   
-  <#if table.publishColumn != null>
+  <#if table.publishColumn??>
   <update id="updatePublish" parameterType="${packageName}.${moduleName}.${subModuleName}.entity.${className}">
    UPDATE ${tableName}
       SET ${table.publishColumn.name?upper_case} = ${r'#{'}${table.publishColumn.javaField}${r'}'}

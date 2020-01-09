@@ -1,5 +1,7 @@
 package com.tmt.core.persistence.dialect;
 
+import com.tmt.core.persistence.Database;
+
 /**
  * ORACLE 的 分页设计
  * 
@@ -26,5 +28,10 @@ public class OracleDialect implements Dialect {
 			sql = sql.substring(0, sql.length() - 1 - SQL_END_DELIMITER.length());
 		}
 		return sql;
+	}
+	
+	@Override
+	public Database getDatabase() {
+		return Database.oracle;
 	}
 }

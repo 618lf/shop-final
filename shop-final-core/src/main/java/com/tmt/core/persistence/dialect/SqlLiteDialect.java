@@ -1,5 +1,7 @@
 package com.tmt.core.persistence.dialect;
 
+import com.tmt.core.persistence.Database;
+
 /**
  * SqlLite 数据库操作
  * 
@@ -27,5 +29,10 @@ public class SqlLiteDialect implements Dialect {
 			sql = sql.substring(0, sql.length() - 1 - SQL_END_DELIMITER.length());
 		}
 		return sql;
+	}
+
+	@Override
+	public Database getDatabase() {
+		return Database.sqlite;
 	}
 }
