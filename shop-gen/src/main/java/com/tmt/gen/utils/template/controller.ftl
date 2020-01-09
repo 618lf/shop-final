@@ -30,42 +30,42 @@ import com.tmt.system.entity.TreeVO;
 <#if schemeCategory?contains('treeTable')>
 import com.tmt.system.utils.TreeEntityUtils;
 </#if>
-<#if table.hasSort || chemeCategory?contains('treeTable')>
-import com.tmt.common.utils.JsonMapper;
+<#if table.hasSort || schemeCategory?contains('treeTable')>
+import com.tmt.core.utils.JsonMapper;
 </#if>
-import com.tmt.common.persistence.Page;
+import com.tmt.core.persistence.Page;
 <#if !schemeCategory?contains('treeTable')>
-import com.tmt.common.persistence.PageParameters;
-import com.tmt.common.persistence.QueryCondition;
-import com.tmt.common.persistence.QueryCondition.Criteria;
+import com.tmt.core.persistence.PageParameters;
+import com.tmt.core.persistence.QueryCondition;
+import com.tmt.core.persistence.QueryCondition.Criteria;
 </#if>
-import com.tmt.common.utils.Lists;
+import com.tmt.core.utils.Lists;
 <#if isExport == 1 || treeSelect == 1 || schemeCategory?contains('treeTable')>
-import com.tmt.common.utils.Maps;
+import com.tmt.core.utils.Maps;
 </#if>
-import com.tmt.common.entity.AjaxResult;
-import com.tmt.common.config.Globals;
-import com.tmt.common.persistence.incrementer.IdGen;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.core.entity.AjaxResult;
+import com.tmt.core.config.Globals;
+import com.tmt.core.persistence.incrementer.IdGen;
+import com.tmt.core.utils.StringUtils;
 <#if isImport != 1 && isExport != 1>
-import com.tmt.common.web.BaseController;
+import com.tmt.core.web.BaseController;
 </#if>
 <#if isImport == 1 && isExport != 1>
-import com.tmt.common.web.BaseImpController;
+import com.tmt.core.web.BaseImpController;
 </#if>
 <#if isImport != 1 && isExport == 1>
-import com.tmt.common.web.ExportController;
+import com.tmt.core.web.ExportController;
 </#if>
 <#if isExport_Import == 1>
-import com.tmt.common.web.BaseImpExportController;
+import com.tmt.core.web.BaseImpExportController;
 </#if>
 <#if isImport == 1>
-import com.tmt.common.utils.TemplateExcelUtil;
+import com.tmt.core.utils.TemplateExcelUtil;
 import com.tmt.system.entity.ExcelTemplate;
 import com.tmt.system.service.ExcelTemplateService;
 </#if>
 
-import com.tmt.common.utils.WebUtils;
+import com.tmt.core.utils.WebUtils;
 import ${packageName}.${moduleName}.${subModuleName}.entity.${className};
 import ${packageName}.${moduleName}.${subModuleName}.service.${className}Service;
 <#list table.columns as c>
@@ -107,7 +107,7 @@ public class ${className}Controller extends <#if isExport_Import == 1>BaseImpExp
 		</#if>
 		</#list>
         <#if schemeCategory?contains('treeTable')>
-        if(${functionName} != null && !IdGen.isInvalidId(${functionName}.getId())) {
+        if(${functionName} ?? && !IdGen.isInvalidId(${functionName}.getId())) {
 			model.addAttribute("id", ${functionName}.getId());
 		}
         </#if>
@@ -126,12 +126,12 @@ public class ${className}Controller extends <#if isExport_Import == 1>BaseImpExp
 	public Page page(${className} ${functionName}, Model model<#if !schemeCategory?contains('treeTable')>, Page page</#if>){
 	    <#if schemeCategory?contains('treeTable')>
         Map<String,Object> params = Maps.newHashMap();
-		if(${functionName}!=null && !StringUtil3.isBlank(${functionName}.getName())) {
+		if(${functionName}?? && !StringUtils.isBlank(${functionName}.getName())) {
 		   params.put("NAME", ${functionName}.getName());
 		}
 		if(!params.isEmpty()) {
 		   List<${className}> menus = this.${functionName}Service.findByCondition(params);
-		   if( menus != null && menus.size() != 0 ) {
+		   if( menus ?? && menus.size() != 0 ) {
 			  StringBuffer sb = new StringBuffer(100);
 			  for( ${className} menuItem: menus ) {
 				 sb.append(menuItem.getParentIds());
@@ -142,11 +142,11 @@ public class ${className}Controller extends <#if isExport_Import == 1>BaseImpExp
 			  params.put("IDS", sb.toString());
 		   }
 		}
-		if(${functionName}!=null && ${functionName}.getId() != null){
+		if(${functionName}?? && ${functionName}.getId() ??){
 		   ${functionName} = this.${functionName}Service.get(${functionName}.getId());
 		}
 		List<${className}> ${functionName}s = this.${functionName}Service.findByCondition(params);
-		if( ${functionName}s != null) {
+		if( ${functionName}s ??) {
 			for(${className} categoryItem : ${functionName}s){
 				categoryItem.setId(categoryItem.getId());
 				categoryItem.setParent(categoryItem.getParentId());
@@ -154,13 +154,13 @@ public class ${className}Controller extends <#if isExport_Import == 1>BaseImpExp
 				categoryItem.setExpanded(Boolean.TRUE);
 				categoryItem.setLoaded(Boolean.TRUE);
 				categoryItem.setIsLeaf(Boolean.TRUE);
-				if( categoryItem!=null && categoryItem.getId() != null && ( (","+categoryItem.getParentIds()+",").indexOf(","+categoryItem.getId()+",") != -1)) {
+				if( categoryItem?? && categoryItem.getId() ?? && ( (","+categoryItem.getParentIds()+",").indexOf(","+categoryItem.getId()+",") != -1)) {
 					categoryItem.setExpanded(Boolean.TRUE);
 				}
 			}
 		}
 		List<${className}> copyMenus = TreeEntityUtils.sort(${functionName}s);
-		if( copyMenus != null && copyMenus.size() != 0 && !(${functionName}!=null && ${functionName}.getId() != null)) {
+		if( copyMenus ?? && copyMenus.size() != 0 && !(${functionName}?? && ${functionName}.getId() ??)) {
 			copyMenus.get(0).setExpanded(Boolean.TRUE);
 		}
 		Page page = new Page();
@@ -182,7 +182,7 @@ public class ${className}Controller extends <#if isExport_Import == 1>BaseImpExp
 	 */
 	@RequestMapping("form")
 	public String form(${className} ${functionName}, Model model) {
-	    if(${functionName} != null && !IdGen.isInvalidId(${functionName}.getId())) {
+	    if(!IdGen.isInvalidId(${functionName}.getId())) {
 		   ${functionName} = this.${functionName}Service.get(${functionName}.getId());
 		} else {
 		   if(${functionName} == null) {
@@ -222,9 +222,9 @@ public class ${className}Controller extends <#if isExport_Import == 1>BaseImpExp
 			return form(${functionName}, model);
 		}
 		this.${functionName}Service.save(${functionName});
-		addMessage(redirectAttributes, StringUtil3.format("%s'%s'%s", "修改${functionNameSimple}", ${functionName}.get${firstStringField?cap_first}(), "成功"));
+		addMessage(redirectAttributes, StringUtils.format("%s'%s'%s", "修改${functionNameSimple}", ${functionName}.get${firstStringField?cap_first}(), "成功"));
 		redirectAttributes.addAttribute("id", ${functionName}.getId());
-		return WebUtils.redirectTo(Globals.getAdminPath(), "/${moduleName}/${subModuleName}/${functionName}/form");
+		return WebUtils.redirectTo(Globals.adminPath, "/${moduleName}/${subModuleName}/${functionName}/form");
 	}
 	
 	/**
@@ -258,7 +258,7 @@ public class ${className}Controller extends <#if isExport_Import == 1>BaseImpExp
 		return AjaxResult.success();
 	}
 	
-	<#if table.publishColumn != null>
+	<#if table.publishColumn??>
 	/**
 	 * 启用
 	 * @param idList
@@ -312,7 +312,7 @@ public class ${className}Controller extends <#if isExport_Import == 1>BaseImpExp
 	public AjaxResult updateSort(Model model, HttpServletRequest request, HttpServletResponse response) {
 		String postData = request.getParameter("postData");
 		List<Map<String,String>> maps = JsonMapper.fromJson(postData, ArrayList.class);
-		if(maps != null && maps.size() != 0){
+		if(maps ?? && maps.size() != 0){
 			List<${className}> menus = Lists.newArrayList();
 			for(Map<String,String> map: maps) {
 				${className} menu = new ${className}();
@@ -334,10 +334,10 @@ public class ${className}Controller extends <#if isExport_Import == 1>BaseImpExp
 	   <#if c.isQuery == 1>
 	   <#if c.javaType != 'java.util.Date' && c.showType != 'enum'> 
 	   <#if c.javaType == 'String'> 
-        if(StringUtil3.isNotBlank(${functionName}.get${c.javaField?cap_first}())) {
+        if(StringUtils.isNotBlank(${functionName}.get${c.javaField?cap_first}())) {
        </#if>
        <#if c.javaType != 'String'> 
-        if(${functionName}.get${c.javaField?cap_first}() != null) {
+        if(${functionName}.get${c.javaField?cap_first}() ??) {
        </#if>
            <#if c.queryType == '＝'>
            c.andEqualTo("${c.name}", ${functionName}.get${c.javaField?cap_first}());
@@ -371,7 +371,7 @@ public class ${className}Controller extends <#if isExport_Import == 1>BaseImpExp
            </#if>
         }
 	   <#elseif c.javaType == 'java.util.Date'> 
-        if(${functionName}.get${c.javaField?cap_first}() != null) {
+        if(${functionName}.get${c.javaField?cap_first}() ??) {
            <#if c.queryType == '＝'>
            c.andDateEqualTo("${c.name}", ${functionName}.get${c.javaField?cap_first}());
            </#if>
@@ -395,7 +395,7 @@ public class ${className}Controller extends <#if isExport_Import == 1>BaseImpExp
            </#if>
         }
        <#else> 
-        if(${functionName}.get${c.javaField?cap_first}() != null) {
+        if(${functionName}.get${c.javaField?cap_first}() ??) {
            <#if c.queryType == '＝'>
            c.andEqualTo("${c.name}", ${functionName}.get${c.javaField?cap_first}());
            </#if>
@@ -444,7 +444,7 @@ public class ${className}Controller extends <#if isExport_Import == 1>BaseImpExp
 	 @Override
     public AjaxResult doImport(Long templateId, HttpServletRequest request, MultipartFile file) {
 		AjaxResult result = TemplateExcelUtil.fetchObjectFromTemplate(templateId, file);
-		if(result != null && result.getSuccess()) {
+		if(result ?? && result.getSuccess()) {
 		   List<${className}> items = result.getObj();
 		   this.${functionName}Service.batchImport(items);
 		}
@@ -510,7 +510,7 @@ public class ${className}Controller extends <#if isExport_Import == 1>BaseImpExp
 		List<TreeVO> trees = this.${functionName}Service.findTreeList(params);
 		for(int i=0; i<trees.size(); i++){
 			TreeVO e = trees.get(i);
-			if (extId == null || (extId!=null && !extId.equals(e.getId()) && e.getParentIds().indexOf(","+extId+",")==-1)){
+			if (extId == null || (extId?? && !extId.equals(e.getId()) && e.getParentIds().indexOf(","+extId+",")==-1)){
 				Map<String, Object> map = Maps.newHashMap();
 				map.put("id", e.getId());
 				map.put("pId", e.getParent());

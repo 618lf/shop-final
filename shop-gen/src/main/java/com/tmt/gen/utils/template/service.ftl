@@ -10,12 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 <#if schemeCategory?contains('treeTable')>
-import com.tmt.common.utils.Maps;
+import com.tmt.core.utils.Maps;
 import com.tmt.system.entity.TreeVO;
 </#if>
-import com.tmt.common.persistence.BaseDao;
-import com.tmt.common.persistence.incrementer.IdGen;
-import com.tmt.common.service.BaseService;
+import com.tmt.core.persistence.BaseDao;
+import com.tmt.core.persistence.incrementer.IdGen;
+import com.tmt.core.service.BaseService;
 import ${packageName}.${moduleName}.${subModuleName}.dao.${className}Dao;
 import ${packageName}.${moduleName}.${subModuleName}.entity.${className};
 
@@ -91,7 +91,7 @@ public class ${className}Service extends BaseService<${className},${pk}> {
 	public void delete(List<${className}> ${functionName}s) {
 		this.batchDelete(${functionName}s);
 	}
-	<#if table.publishColumn != null>
+	<#if table.publishColumn??>
 	/**
 	 * 修改发布状态
 	 */
@@ -108,7 +108,7 @@ public class ${className}Service extends BaseService<${className},${pk}> {
 	 */
 	@Transactional
 	public void batchImport(List<${className}> ${functionName}s){
-		if( ${functionName}s != null && ${functionName}s.size() != 0) {
+		if( ${functionName}s ?? && ${functionName}s.size() != 0) {
 			List<${className}> olds = this.getAll();
 			this.batchDelete(olds);
 			this.batchInsert(${functionName}s);

@@ -77,7 +77,7 @@
 				   <#if table.hasSort>
                    <input type="button" id="sortBtn" class="btn" value="&nbsp;保存排序&nbsp;">
                    </#if>
-                   <#if table.publishColumn != null>
+                   <#if table.publishColumn??>
                    <input type="button" class="btn btn-success" id="publishBtn" value="&nbsp;启&nbsp;用&nbsp;">&nbsp;
 				   <input type="button" class="btn" id="unpublishBtn" value="&nbsp;停&nbsp;用&nbsp;">&nbsp;
                    </#if>
@@ -198,7 +198,7 @@ var THISPAGE = {
 			});
 		});
 		</#if>
-		<#if table.publishColumn != null>
+		<#if table.publishColumn??>
         $(document).on('click','#publishBtn',function(e){
 			var params = Public.selectedRowIds();
 			if( !!params && params.length >=1 ) {

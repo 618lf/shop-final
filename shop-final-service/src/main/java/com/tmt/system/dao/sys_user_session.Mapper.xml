@@ -13,8 +13,20 @@
     WHERE USER_ID = #{userId}
   </select>
   
-  <insert id="insert" parameterType="com.tmt.system.entity.UserSession">
+  <insert id="insert_mssql" parameterType="com.tmt.system.entity.UserSession">
+   MERGE INTO SYS_USER_SESSION T1 USING(SELECT #{userId} USER_ID, #{sessionId} SESSION_ID, #{updateTime} 
+   UPDATE_TIME FROM SYS_DUAL) T2 ON T1.USER_ID = T2.USER_ID
+   WHEN MATCHED THEN UPDATE SET T1.SESSION_ID = T2.SESSION_ID, T1.UPDATE_TIME = T2.UPDATE_TIME
+   WHEN NOT MATCHED THEN INSERT (USER_ID,SESSION_ID,UPDATE_TIME) VALUES (T2.USER_ID,T2.SESSION_ID,T2.UPDATE_TIME);
+  </insert>
+  
+  <insert id="insert_h2" parameterType="com.tmt.system.entity.UserSession">
    MERGE INTO SYS_USER_SESSION KEY(USER_ID) VALUES (#{userId}, #{sessionId}, #{updateTime})
+  </insert>
+  
+  <insert id="insert" parameterType="com.tmt.system.entity.UserSession">
+   INSERT INTO SYS_USER_SESSION(USER_ID,SESSION_ID,UPDATE_TIME) VALUES (USER_ID,SESSION_ID,UPDATE_TIME)
+   ON DUPLICATE KEY UPDATE SESSION_ID =  #{sessionId}, UPDATE_TIME = #{updateTime}
   </insert>
   
   <delete id="delete" parameterType="com.tmt.system.entity.UserSession">

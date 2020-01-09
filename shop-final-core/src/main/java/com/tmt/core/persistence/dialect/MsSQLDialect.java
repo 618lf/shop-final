@@ -3,22 +3,19 @@ package com.tmt.core.persistence.dialect;
 import com.tmt.core.persistence.Database;
 
 /**
- * ORACLE 的 分页设计
+ * mysql 的分页
  * 
  * @author lifeng
  */
-public class OracleDialect implements Dialect {
+public class MsSQLDialect implements Dialect {
 
-	protected final static String PAGE_SQL_PREFIX = "SELECT * FROM (SELECT M.*,ROWNUM NUM FROM (";
-	protected final static String PAGE_SQL_END = ") M WHERE ROWNUM <= ";
 	protected static final String SQL_END_DELIMITER = ";";
 
-	@Override
 	public String getLimitString(String sql, int offset, int limit) {
 		sql = trim(sql);
-		StringBuffer sb = new StringBuffer(sql.length() + 100);
-		sb.append(PAGE_SQL_PREFIX).append(sql).append(PAGE_SQL_END).append(limit + offset).append(") WHERE NUM >")
-				.append(offset);
+		StringBuffer sb = new StringBuffer(sql.length() + 64);
+		sb.append(sql).append(" OFFSET ").append(offset).append(" ROWS FETCH NEXT ").append(limit).append(" ROWS ONLY")
+				.append(SQL_END_DELIMITER);
 		return sb.toString();
 	}
 
@@ -29,9 +26,9 @@ public class OracleDialect implements Dialect {
 		}
 		return sql;
 	}
-	
+
 	@Override
 	public Database getDatabase() {
-		return Database.oracle;
+		return Database.mssql;
 	}
 }

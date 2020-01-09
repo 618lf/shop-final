@@ -3,6 +3,7 @@ package com.shop.config.jdbc.database;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import com.tmt.Constants;
+import com.tmt.core.persistence.Database;
 import com.tmt.core.utils.StringUtils;
 
 /**
@@ -183,7 +184,6 @@ public class DataSourceProperties {
 	// mysql 驱动的自动发现
 	private void driverFitMysql() {
 		try {
-			
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			this.driverClassName = "com.mysql.cj.jdbc.Driver";
 			this.db = Database.mysql;

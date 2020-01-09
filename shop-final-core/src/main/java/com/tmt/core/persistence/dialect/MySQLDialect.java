@@ -12,6 +12,7 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.jdbc.support.JdbcUtils;
 
+import com.tmt.core.persistence.Database;
 import com.tmt.core.persistence.datasource.DataSourceHolder;
 
 /**
@@ -78,5 +79,10 @@ public class MySQLDialect implements Dialect {
 			DataSourceUtils.releaseConnection(conn, dataSource);
 		}
 		return 0;
+	}
+	
+	@Override
+	public Database getDatabase() {
+		return Database.mysql;
 	}
 }

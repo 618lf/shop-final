@@ -22,12 +22,12 @@
 		<#list table.columns as c>
         <#if c.isEdit == 1>
         <div class="control-group formSep">
-			<label class="control-label">${c.comments}<#if c.isNull == '0'><span class="red">*</span></#if>:</label>
+			<label class="control-label">${c.comments}<#if c.isNull == 0><span class="red">*</span></#if>:</label>
 			<div class="controls">
 		    <#if c.showType == 'input' || c.showType == 'readonly'>
-		      <form:input path="${c.javaField}" htmlEscape="false" maxlength="${c.length}" class="<#if c.isNull == '0'>required</#if> ${c.checkType}" <#if c.showType == 'readonly'>readonly="true"</#if>/>
+		      <form:input path="${c.javaField}" htmlEscape="false" maxlength="${c.length}" class="<#if c.isNull == 0>required</#if> ${c.checkType}" <#if c.showType == 'readonly'>readonly="true"</#if>/>
 		    <#elseif c.showType == 'textarea' || c.showType == 'richtext'>
-		      <form:textarea path="${c.javaField}"  maxlength="${c.length}" cssStyle="width:100%;" rows="4"  class="<#if c.isNull == '0'>required</#if> ${c.checkType}"/>
+		      <form:textarea path="${c.javaField}"  maxlength="${c.length}" cssStyle="width:100%;" rows="4"  class="<#if c.isNull == 0>required</#if> ${c.checkType}"/>
 		    <#elseif c.showType == 'y_n_r'>
 		      <label class='radio inline'>
 		       <form:radiobutton path="${c.javaField}" value="1" data-form='uniform'/>&nbsp;是
@@ -71,7 +71,7 @@
               <#elseif c.javaField?ends_with("Id") && c.showType != 'tanselect'>
               <input type="text" name="${c.javaField}" value="${r'${'}${functionName}.${c.javaField}${r'}'}" maxlength="${c.length}" data-name="${r'${'}${functionName}.${(c.javaField?substring(0,c.javaField?index_of("Id"))+'Name')}${r'}'}">
               <#else>
-              <form:input path="${c.javaField}" htmlEscape="false" maxlength="${c.length}" class="<#if c.isNull == '0'>required</#if>" <#if c.showType == 'readonly'>readonly="true"</#if>/>
+              <form:input path="${c.javaField}" htmlEscape="false" maxlength="${c.length}" class="<#if c.isNull == 0>required</#if>" <#if c.showType == 'readonly'>readonly="true"</#if>/>
               </#if>
             <#elseif c.showType == 'singleimg'>
               <tags:attachment name="${c.javaField}" value="${r'${'}${functionName}.${c.javaField}${r'}'}"/>
@@ -88,7 +88,7 @@
   </div>
 </div>
 <%@ include file="/WEB-INF/views/include/form-footer.jsp"%>
-<#if table.richtexts != null>
+<#if table.richtexts ??>
 <script src="${ctxStatic}/ueditor/ueditor.config.js" type="text/javascript"></script>
 <script src="${ctxStatic}/ueditor/ueditor.all.min.js" type="text/javascript"></script>
 <script src="${ctxStatic}/ueditor/lang/zh-cn/zh-cn.js" type="text/javascript"></script>
@@ -106,7 +106,7 @@ var THISPAGE = {
 		);
 	},
 	addEvent : function() {
-	    <#if table.richtexts != null><#list table.richtexts as rich>Public.uEditor('${rich}');</#list></#if>    
+	    <#if table.richtexts ??><#list table.richtexts as rich>Public.uEditor('${rich}');</#list></#if>    
         $(document).on('click','#cancelBtn',function(){
 			Public.closeTab();
 		});
