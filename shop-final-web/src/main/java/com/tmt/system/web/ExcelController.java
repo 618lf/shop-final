@@ -55,6 +55,7 @@ public class ExcelController extends BaseImpExportController<ExcelTemplate> {
 	public Page page(Model model, Page page, HttpServletResponse response) {
 		QueryCondition qc = new QueryCondition();
 		PageParameters param = page.getParam();
+		qc.setOrderByClause("CREATE_DATE DESC");
 		page = this.templateService.queryForPage(qc, param);
 		return page;
 	}
