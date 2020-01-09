@@ -138,12 +138,12 @@
            TOP_MENU, DEGREE
       FROM SYS_MENU M
 	 WHERE (EXISTS (
-	          SELECT 1 FROM SYS_GROUP_USER GU, SYS_GROUP_ROLE GR, SYS_ROLE_MENU A
+	          SELECT 1 X FROM SYS_GROUP_USER GU, SYS_GROUP_ROLE GR, SYS_ROLE_MENU A
 	           WHERE GU.GROUP_ID = GR.GROUP_ID AND GR.ROLE_ID = A.ROLE_ID
 	             AND M.ID = A.MENU_ID AND M.TYPE IN(2,3) 
 	             AND GU.USER_ID = #{USERID})
 	        OR EXISTS (
-	          SELECT 1 FROM SYS_MENU M2, SYS_GROUP_USER GU, SYS_GROUP_ROLE GR, SYS_ROLE_MENU A
+	          SELECT 1 X FROM SYS_MENU M2, SYS_GROUP_USER GU, SYS_GROUP_ROLE GR, SYS_ROLE_MENU A
 	           WHERE CONCAT(',',M2.PARENT_IDS) LIKE CONCAT(CONCAT('%,',M.ID),',%')
 	             AND GU.GROUP_ID = GR.GROUP_ID AND GR.ROLE_ID = A.ROLE_ID
 	             AND M2.ID = A.MENU_ID AND M2.TYPE IN(2)
@@ -158,12 +158,12 @@
            TOP_MENU, DEGREE
       FROM SYS_MENU M
 	 WHERE (EXISTS (
-	          SELECT 1 FROM SYS_GROUP_ROLE GR, SYS_ROLE_MENU A
+	          SELECT 1 X FROM SYS_GROUP_ROLE GR, SYS_ROLE_MENU A
 	           WHERE GR.ROLE_ID = A.ROLE_ID
 	             AND M.ID = A.MENU_ID AND M.TYPE IN(2,3) 
 	             AND GR.GROUP_ID = #{VALUE})
 	        OR EXISTS (
-	          SELECT 1 FROM SYS_MENU M2, SYS_GROUP_ROLE GR, SYS_ROLE_MENU A
+	          SELECT 1 X FROM SYS_MENU M2, SYS_GROUP_ROLE GR, SYS_ROLE_MENU A
 	           WHERE CONCAT(',',M2.PARENT_IDS) LIKE CONCAT(CONCAT('%,',M.ID),',%')
 	             AND GR.ROLE_ID = A.ROLE_ID
 	             AND M2.ID = A.MENU_ID AND M2.TYPE IN(2)
@@ -183,14 +183,14 @@
   </select>
   <select id="deleteMenuCheck" parameterType="com.tmt.system.entity.Menu" resultType="int" >
      SELECT COUNT(1) FROM(
-		SELECT 1 FROM SYS_DUAL
+		SELECT 1 X FROM SYS_DUAL
 		 WHERE EXISTS (SELECT 1 FROM SYS_MENU A WHERE A.PARENT_ID = #{id})
 	 ) A
   </select>
   <!-- tree 选择时菜单是否可选 -->
   <select id="treeMenuCheck" parameterType="long" resultType="int" >
      SELECT COUNT(1) FROM (
-		SELECT 1 FROM SYS_MENU M1 
+		SELECT 1 X FROM SYS_MENU M1 
 	     WHERE EXISTS ( SELECT 1 FROM SYS_MENU M2
 	           WHERE CONCAT(',',M2.PARENT_IDS) LIKE CONCAT(CONCAT('%,',M1.ID),',%')
 	             AND m2.TYPE IN(2,3))
