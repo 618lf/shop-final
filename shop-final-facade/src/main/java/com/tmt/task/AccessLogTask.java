@@ -98,17 +98,25 @@ public class AccessLogTask implements TaskExecutor {
 	 * @param file
 	 */
 	private void storeByDialect(File file) {
-		if (dialect instanceof MySQLDialect) {
-			storeToMysql(file);
-		} else {
-			storeToOther(file);
+		boolean storeFlag = false;
+		try {
+			if (dialect instanceof MySQLDialect) {
+				storeFlag = storeToMysql(file);
+			} else {
+				storeFlag = storeToOther(file);
+			}
+		} finally {
+			// 同步成功删除文件
+			if (storeFlag) {
+				file.delete();
+			}
 		}
 	}
 
 	/**
 	 * 存储到数据库 1百万条数据 18S
 	 */
-	private void storeToOther(File file) {
+	private boolean storeToOther(File file) {
 		String bulk_Load_Sql = "INSERT INTO SYS_LOG (ID, TYPE, CREATE_ID, CREATE_NAME, CREATE_DATE, REMOTE_ADDR, USER_AGENT, REQUEST_URI, METHOD, DEAL_TIME, EXCEPTION, REFERER) values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)";
 		BufferedReader reader = null;
 		try {
@@ -137,16 +145,15 @@ public class AccessLogTask implements TaskExecutor {
 				batchSql.clear();
 			}
 
-			// 删除日志文件
-			file.delete();
-
 			// for gc
 			batchSql = null;
 			file = null;
+			return true;
 		} catch (Exception e) {
 			logger.error("保存日志文件异常", e);
 			File newFile = new File(file.getParent(), StringUtils.substringBefore(file.getName(), ".lock"));
 			file.renameTo(newFile);
+			return false;
 		} finally {
 			IOUtils.closeQuietly(reader);
 		}
@@ -172,7 +179,7 @@ public class AccessLogTask implements TaskExecutor {
 	/**
 	 * 存储到数据库 1百万条数据 18S
 	 */
-	private void storeToMysql(File file) {
+	private boolean storeToMysql(File file) {
 		List<String> bulk_Load_Sql = Collections.singletonList(
 				"LOAD DATA LOCAL INFILE 'LOGS.SQL' IGNORE INTO TABLE SYS_LOG (ID, TYPE, CREATE_ID, CREATE_NAME, CREATE_DATE, REMOTE_ADDR, USER_AGENT, REQUEST_URI, METHOD, DEAL_TIME, EXCEPTION, REFERER)");
 		BufferedReader reader = null;
@@ -201,16 +208,15 @@ public class AccessLogTask implements TaskExecutor {
 				logs.setLength(0);
 			}
 
-			// 删除日志文件
-			file.delete();
-
 			// for gc
 			logs = null;
 			file = null;
+			return true;
 		} catch (Exception e) {
 			logger.error("保存日志文件异常", e);
 			File newFile = new File(file.getParent(), StringUtils.substringBefore(file.getName(), ".lock"));
 			file.renameTo(newFile);
+			return false;
 		} finally {
 			IOUtils.closeQuietly(reader);
 		}
