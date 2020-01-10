@@ -127,14 +127,14 @@ public class QueryCondition implements Serializable{
 
 		protected void addCriterion(String condition) {
 			if (condition == null) {
-				throw new RuntimeException("Value for condition cannot be null");
+				return;
 			}
 			criteriaWithoutValue.add(condition);
 		}
 
 		protected void addCriterion(String condition, Object value) {
 			if (value == null) {
-				throw new RuntimeException("Value for condition cannot be null");
+				return;
 			}
 			SingleValue map = new SingleValue();
 			map.setCondition(condition);
@@ -144,7 +144,7 @@ public class QueryCondition implements Serializable{
 
 		protected void addCriterion(String condition, List<?> values) {
 			if (values == null || values.size() == 0) {
-				throw new RuntimeException("Value list for  condition cannot be null or empty");
+				return;
 			}
 			MultiValue map = new MultiValue();
 			map.setCondition(condition);
@@ -154,7 +154,7 @@ public class QueryCondition implements Serializable{
 
 		protected void addCriterion(String condition, Object value1, Object value2) {
 			if (value1 == null || value2 == null) {
-				throw new RuntimeException("Between values for condition cannot be null");
+				return;
 			}
 			BetweenValue values = new BetweenValue();
 			values.setCondition(condition);
@@ -169,7 +169,7 @@ public class QueryCondition implements Serializable{
 
 		protected void addCriterionForJDBCDate(String condition, List<Date> values) {
 			if (values == null || values.size() == 0) {
-				throw new RuntimeException("Value list for condition cannot be null or empty");
+				return;
 			}
 			List<Date> dateList = new ArrayList<Date>();
 			Iterator<Date> iter = values.iterator();
@@ -181,7 +181,7 @@ public class QueryCondition implements Serializable{
 
 		protected void addCriterionForJDBCDate(String condition, Date value1, Date value2) {
 			if (value1 == null || value2 == null) {
-				throw new RuntimeException(StringUtils.format("Between values for condition cannot be null"));
+				return;
 			}
 			addCriterion(condition, new java.sql.Timestamp(value1.getTime()), new java.sql.Timestamp(value2.getTime()));
 		}
