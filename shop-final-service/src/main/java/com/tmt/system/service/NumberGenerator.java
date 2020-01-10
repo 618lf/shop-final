@@ -22,7 +22,7 @@ import com.tmt.core.persistence.datasource.DataSourceHolder;
 public class NumberGenerator implements NumberGeneratorFacade {
 
 	private HashMap<String, LinkedList<Long>> KEY_CACHE = new HashMap<String, LinkedList<Long>>();
-	private final String UPDATE_SQL = "UPDATE SYS_ID_STORE SET CURRENT_VALUE = GREATEST(CURRENT_VALUE, MIN_VALUE) + STEP WHERE TABLE_NAME = ?";
+	private final String UPDATE_SQL = "UPDATE SYS_ID_STORE SET CURRENT_VALUE = (CASE WHEN CURRENT_VALUE >= MIN_VALUE THEN CURRENT_VALUE ELSE MIN_VALUE END) + STEP WHERE TABLE_NAME = ?";
 	private final String VALUE_SQL = "SELECT CURRENT_VALUE + 1, STEP FROM SYS_ID_STORE WHERE TABLE_NAME = ?";
 	private final String VALUE_INIT_SQL = "INSERT INTO SYS_ID_STORE(TABLE_NAME, MIN_VALUE, CURRENT_VALUE, MAX_VALUE, STEP, REMARK) VALUES(?,?,?,?,?,?)";
 
