@@ -46,7 +46,7 @@
   </select>
   <select id="checkDictCode"  resultType="int" parameterType="com.tmt.system.entity.Dict" >
     SELECT COUNT(1) FROM SYS_DUAL WHERE EXISTS(
-      SELECT 1 FROM SYS_DICT D WHERE D.CODE = #{code} AND D.ID != #{id})
+      SELECT 1 X FROM SYS_DICT D WHERE D.CODE = #{code} AND D.ID != #{id})
   </select>
   <select id="lock" parameterType="com.tmt.system.entity.Dict" resultType="int" >
     SELECT 1 FROM SYS_DICT D WHERE D.CODE = #{code} FOR UPDATE

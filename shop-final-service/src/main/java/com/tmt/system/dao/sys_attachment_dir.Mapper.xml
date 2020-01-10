@@ -97,11 +97,11 @@
   <!-- 删除前的判断 -->
   <select id="deleteDirCheck" parameterType="com.tmt.system.entity.AttachmentDir" resultType="int" >
     SELECT COUNT(1) FROM (
-	    SELECT 1 FROM SYS_DUAL
-	       WHERE EXISTS (SELECT 1 FROM SYS_ATTACHMENT A WHERE A.DIR_ID=#{id})
+	    SELECT 1 X FROM SYS_DUAL
+	       WHERE EXISTS (SELECT 1 X FROM SYS_ATTACHMENT A WHERE A.DIR_ID=#{id})
 		UNION ALL
-		SELECT 1 FROM SYS_DUAL
-		       WHERE EXISTS (SELECT 1 FROM SYS_ATTACHMENT_DIR B WHERE b.PARENT_ID=#{id})
+		SELECT 1 X FROM SYS_DUAL
+		       WHERE EXISTS (SELECT 1 X FROM SYS_ATTACHMENT_DIR B WHERE b.PARENT_ID=#{id})
     )A
   </select>
   

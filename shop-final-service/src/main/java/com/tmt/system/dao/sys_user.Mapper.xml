@@ -163,13 +163,13 @@
   <!-- tree 选择时 组织结构是否可选 -->
   <select id="officeSelectCheck" parameterType="long" resultType="int" >
      SELECT COUNT(1) FROM (
-	    SELECT 1 FROM SYS_DUAL E
-	           WHERE EXISTS (SELECT 1 FROM SYS_USER A WHERE A.OFFICE_ID=#{officeId})
+	    SELECT 1 X FROM SYS_DUAL E
+	           WHERE EXISTS (SELECT 1 X FROM SYS_USER A WHERE A.OFFICE_ID=#{officeId})
 		UNION ALL
-		SELECT 1 FROM SYS_OFFICE E1 
-	     WHERE EXISTS (SELECT 1 FROM SYS_OFFICE E2 
+		SELECT 1 X FROM SYS_OFFICE E1 
+	     WHERE EXISTS (SELECT 1 X FROM SYS_OFFICE E2 
 	           WHERE  CONCAT(',',E2.PARENT_IDS) LIKE CONCAT(CONCAT('%,',E1.ID),',%')
-	           AND EXISTS (SELECT 1 FROM SYS_USER A WHERE A.OFFICE_ID = E2.ID ))
+	           AND EXISTS (SELECT 1 X FROM SYS_USER A WHERE A.OFFICE_ID = E2.ID ))
 	    AND E1.ID=#{officeId}
 	 )A
   </select>

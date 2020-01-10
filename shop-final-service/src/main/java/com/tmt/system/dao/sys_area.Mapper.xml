@@ -63,11 +63,11 @@
   </select>
   <select id="deleteAreaCheck" parameterType="com.tmt.system.entity.Area" resultType="int" >
     SELECT COUNT(1) FROM (
-	    SELECT 1 FROM SYS_DUAL
-	       WHERE EXISTS (SELECT 1 FROM SYS_OFFICE A WHERE A.AREA_ID=#{id})
+	    SELECT 1 X FROM SYS_DUAL
+	       WHERE EXISTS (SELECT 1 X FROM SYS_OFFICE A WHERE A.AREA_ID=#{id})
 		UNION ALL
-		SELECT 1 FROM SYS_DUAL
-		       WHERE EXISTS (SELECT 1 FROM SYS_AREA B WHERE b.PARENT_ID=#{id})
+		SELECT 1 X FROM SYS_DUAL
+		       WHERE EXISTS (SELECT 1 X FROM SYS_AREA B WHERE b.PARENT_ID=#{id})
     )A
   </select>
   <select id="queryAreasByLevel" resultMap="BaseResult" parameterType="java.util.Map">

@@ -106,11 +106,11 @@
   </select>
   <select id="deleteOfficeCheck" parameterType="com.tmt.system.entity.Office" resultType="int" >
     SELECT COUNT(1) FROM (
-	    SELECT 1 FROM SYS_DUAL
-	     WHERE EXISTS (SELECT 1 FROM SYS_USER A WHERE A.OFFICE_ID=#{id})
+	    SELECT 1 X FROM SYS_DUAL
+	     WHERE EXISTS (SELECT 1 X FROM SYS_USER A WHERE A.OFFICE_ID=#{id})
 		UNION ALL
-		SELECT 1 FROM SYS_DUAL
-		 WHERE EXISTS (SELECT 1 FROM SYS_OFFICE B WHERE B.PARENT_ID=#{id})
+		SELECT 1 X FROM SYS_DUAL
+		 WHERE EXISTS (SELECT 1 X FROM SYS_OFFICE B WHERE B.PARENT_ID=#{id})
     )A
   </select>
   <select id="findAllChildrenByParent" resultMap="BaseResult" parameterType="long" >
