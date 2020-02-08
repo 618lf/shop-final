@@ -97,7 +97,7 @@ public class AccessLogTask implements TaskExecutor {
 	 * 
 	 * @param file
 	 */
-	private void storeByDialect(File file) {
+	private synchronized void storeByDialect(File file) {
 		boolean storeFlag = false;
 		try {
 			if (dialect instanceof MySQLDialect) {
