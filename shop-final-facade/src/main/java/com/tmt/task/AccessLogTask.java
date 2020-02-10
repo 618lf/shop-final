@@ -100,6 +100,9 @@ public class AccessLogTask implements TaskExecutor {
 	private synchronized void storeByDialect(File file) {
 		boolean storeFlag = false;
 		try {
+			if (!file.exists()) {
+				return;
+			}
 			if (dialect instanceof MySQLDialect) {
 				storeFlag = storeToMysql(file);
 			} else {
