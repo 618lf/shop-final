@@ -8,29 +8,31 @@ import java.util.List;
  * @author TMT
  */
 @SuppressWarnings("rawtypes")
-public class Page implements Serializable{
-	
+public class Page implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 
 	private PageParameters param;
-	
+
 	private List data;
 
-	public  Page(){
+	public Page() {
 		super();
 	}
 
-	public <T> Page(int pageSize,int pageNum,int recordCount,List<T> page){
-		this.param = new PageParameters(pageNum,pageSize,recordCount);
+	public <T> Page(int pageSize, int pageNum, int recordCount, List<T> page) {
+		this.param = new PageParameters(pageNum, pageSize, recordCount);
 		this.data = page;
 	}
-	
-	public <T> Page(PageParameters pageParameters,List<T> page){
-		this.param = new PageParameters(pageParameters.getPageIndex(),pageParameters.getPageSize(),pageParameters.getRecordCount());
+
+	public <T> Page(PageParameters pageParameters, List<T> page) {
+		this.param = new PageParameters(pageParameters.getPageIndex(), pageParameters.getPageSize(),
+				pageParameters.getRecordCount());
 		this.param.setSortField(pageParameters.getSortField());
-		this.param.setSortType(pageParameters.getSortType());	
+		this.param.setSortType(pageParameters.getSortType());
 		this.param.setPageUrl(pageParameters.getPageUrl());
 		this.param.setSerializePage(pageParameters.getSerializePage());
+		this.param.setFuncName(pageParameters.getFuncName());
 		this.data = page;
 	}
 
@@ -42,29 +44,27 @@ public class Page implements Serializable{
 	public <T> List<T> getData() {
 		return data;
 	}
-	
+
 	public void setData(List data) {
 		this.data = data;
-		if(this.param == null && this.data != null) {
+		if (this.param == null && this.data != null) {
 			param = new PageParameters();
 			param.setRecordCount(this.data.size());
 		}
 	}
 
 	public PageParameters getParam() {
-		if(this.param == null) {
+		if (this.param == null) {
 			param = new PageParameters();
 		}
 		return param;
 	}
-	
+
 	/**
-	 *  分页的三种方式：
-	 *  1. jqgrid 获取json数据，本身有分页的功能，不许要序列化分页组件
-	 *  2. ajax 显示分页数据，需要序列化，统一使用 page.pagination;
-	 *  3. jsp 中使用分页 ${page.pagination}
+	 * 分页的三种方式： 1. jqgrid 获取json数据，本身有分页的功能，不许要序列化分页组件 2. ajax 显示分页数据，需要序列化，统一使用
+	 * page.pagination; 3. jsp 中使用分页 ${page.pagination}
 	 */
-	public String getPagination(){
+	public String getPagination() {
 		return getParam().getPagination();
 	}
 }
