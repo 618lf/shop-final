@@ -61,7 +61,7 @@ public abstract class BaseService<T, PK> {
 	}
 
 	/**
-	 * 获得代理类
+	 * 获得代理类 :(考虑没有接口)
 	 * 
 	 * @return
 	 */
@@ -71,6 +71,8 @@ public abstract class BaseService<T, PK> {
 			Class<?>[] interfacess = this.getClass().getInterfaces();
 			if (interfacess != null && interfacess.length > 0) {
 				this.proxy = SpringContextHolder.getBean(interfacess[0]);
+			} else {
+				this.proxy = SpringContextHolder.getBean(this.getClass());
 			}
 		}
 		return (U) this.proxy;
