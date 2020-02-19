@@ -302,18 +302,29 @@ public class DefaultExportFile implements IExportFile {
 					objRow = sheet.createRow(iHeader);
 					objRow.setHeight((short) 500);
 				}
+
 				int iCellIndex = 0;
-				// 设置序号
-				objCell = objRow.getCell(iCellIndex);
-				if (objCell == null) {
-					objCell = objRow.createCell(iCellIndex);
-					objCell.setCellStyle(getHeaderCellStyle(template, data, "template"));
+				List<ColumnMapper> mappers = getColumnMappers(data);
+
+				/**
+				 * 没有A列才设置序号
+				 */
+				if (!"A".equals(mappers.get(0).getColumn())) {
+					// 设置序号
+					objCell = objRow.getCell(iCellIndex);
+					if (objCell == null) {
+						objCell = objRow.createCell(iCellIndex);
+						objCell.setCellStyle(getHeaderCellStyle(template, data, "template"));
+					}
+					objCell.setCellValue("序号");
+					objCell.setCellStyle(getHeaderCellStyle(template, data, "header"));
+					iCellIndex++;
 				}
-				objCell.setCellValue("序号");
-				objCell.setCellStyle(getHeaderCellStyle(template, data, "header"));
-				iCellIndex++;
-				// 具体的数据
-				for (ColumnMapper mapper : getColumnMappers(data)) {
+
+				/**
+				 * 具体的数据
+				 */
+				for (ColumnMapper mapper : mappers) {
 					objCell = objRow.getCell(iCellIndex);
 					if (objCell == null) {
 						objCell = objRow.createCell(iCellIndex);
@@ -373,17 +384,27 @@ public class DefaultExportFile implements IExportFile {
 					objRow.setHeight((short) 500);
 				}
 				int iCellIndex = 0;
-				// 设置序号
-				objCell = objRow.getCell(iCellIndex);
-				if (objCell == null) {
-					objCell = objRow.createCell(iCellIndex);
-					objCell.setCellStyle(getCellStyle(template, data, null));
+				List<ColumnMapper> mappers = getColumnMappers(data);
+
+				/**
+				 * 没有A列才设置序号
+				 */
+				if (!"A".equals(mappers.get(0).getColumn())) {
+					// 设置序号
+					objCell = objRow.getCell(iCellIndex);
+					if (objCell == null) {
+						objCell = objRow.createCell(iCellIndex);
+						objCell.setCellStyle(getCellStyle(template, data, null));
+					}
+					objCell.setCellValue(i + 1);
+					objCell.setCellType(Cell.CELL_TYPE_NUMERIC);
+					iCellIndex++;
 				}
-				objCell.setCellValue(i + 1);
-				objCell.setCellType(Cell.CELL_TYPE_NUMERIC);
-				iCellIndex++;
-				// 具体的数据
-				for (ColumnMapper mapper : getColumnMappers(data)) {
+
+				/**
+				 * 具体的数据
+				 */
+				for (ColumnMapper mapper : mappers) {
 					objCell = objRow.getCell(iCellIndex);
 					if (objCell == null) {
 						objCell = objRow.createCell(iCellIndex);
