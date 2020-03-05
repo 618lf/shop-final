@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.servlet.ServletRequest;
 
+import org.apache.tomcat.util.http.LegacyCookieProcessor;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -107,10 +108,10 @@ public class ServletWebServerFactoryAutoConfiguration {
 
 		@Override
 		public void customize(TomcatServletWebServerFactory factory) {
-			
+
 			// tld查找目录
 			factory.getTldSkipPatterns().addAll(DEFAULT);
-			
+
 			// 错误页面
 			this.customizeErrorPage(factory);
 
@@ -119,11 +120,14 @@ public class ServletWebServerFactoryAutoConfiguration {
 
 			// 设置基础的工作目录
 			this.customizeBaseWork(factory);
-			
+
 			// 自定义session管理器
 			this.customizeSession(factory);
+
+			// 配置Cookie
+			this.customizeCookie(factory);
 		}
-		
+
 		// 适配ErrorPage
 		private void customizeErrorPage(TomcatServletWebServerFactory factory) {
 			ErrorPage error401Page = new ErrorPage(HttpStatus.UNAUTHORIZED, "/WEB-INF/views/error/401.jsp");
@@ -175,7 +179,13 @@ public class ServletWebServerFactoryAutoConfiguration {
 		}
 
 		private void customizeSession(TomcatServletWebServerFactory factory) {
-			factory.addContextCustomizers((context) -> context.setManager(new NoSessionManager()));
+			if (properties.getServlet().getSession().getTimeout() == null) {
+				factory.addContextCustomizers((context) -> context.setManager(new NoSessionManager()));
+			}
+		}
+
+		private void customizeCookie(TomcatServletWebServerFactory factory) {
+			factory.addContextCustomizers((context) -> context.setCookieProcessor(new LegacyCookieProcessor()));
 		}
 	}
 }
