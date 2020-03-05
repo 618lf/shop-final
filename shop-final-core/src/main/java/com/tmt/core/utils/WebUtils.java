@@ -423,13 +423,20 @@ public class WebUtils extends org.springframework.web.util.WebUtils {
 	}
 
 	/**
+	 * 获取响应
+	 * 
+	 * @return
+	 */
+	public static HttpServletResponse getResponse() {
+		return ContextHolderUtils.getResponse();
+	}
+
+	/**
 	 * 获取表格数据
 	 * 
 	 * @param request
-	 * @param clazz
-	 *            表格对应的实体类
-	 * @param paramPrefix
-	 *            --参数前缀 例如:items.id,items.name
+	 * @param clazz       表格对应的实体类
+	 * @param paramPrefix --参数前缀 例如:items.id,items.name
 	 * @return
 	 */
 	public static <T> List<T> fetchItemsFromRequest(HttpServletRequest request, Class<T> clazz, String paramPrefix) {
@@ -480,10 +487,8 @@ public class WebUtils extends org.springframework.web.util.WebUtils {
 	 * <p>
 	 * The default implementation uses <code>URLDecoder.decode(input, enc)</code>.
 	 *
-	 * @param request
-	 *            current HTTP request
-	 * @param source
-	 *            the String to decode
+	 * @param request current HTTP request
+	 * @param source  the String to decode
 	 * @return the decoded String
 	 * @see #DEFAULT_CHARACTER_ENCODING
 	 * @see javax.servlet.ServletRequest#getCharacterEncoding
@@ -503,10 +508,8 @@ public class WebUtils extends org.springframework.web.util.WebUtils {
 	/**
 	 * Decode the supplied URI string and strips any extraneous portion after a ';'.
 	 *
-	 * @param request
-	 *            the incoming HttpServletRequest
-	 * @param uri
-	 *            the application's URI string
+	 * @param request the incoming HttpServletRequest
+	 * @param uri     the application's URI string
 	 * @return the supplied URI string stripped of any extraneous portion after a
 	 *         ';'.
 	 */
@@ -524,8 +527,7 @@ public class WebUtils extends org.springframework.web.util.WebUtils {
 	 * {@link ServletRequest#getCharacterEncoding() character encoding}, and if that
 	 * <code>null</code>, falls back to the {@link #DEFAULT_CHARACTER_ENCODING}.
 	 *
-	 * @param request
-	 *            current HTTP request
+	 * @param request current HTTP request
 	 * @return the encoding for the request (never <code>null</code>)
 	 * @see javax.servlet.ServletRequest#getCharacterEncoding()
 	 */
@@ -544,8 +546,7 @@ public class WebUtils extends org.springframework.web.util.WebUtils {
 	 * checks for malicious input. Normalize operations were was happily taken from
 	 * org.apache.catalina.util.RequestUtil in Tomcat trunk, r939305
 	 *
-	 * @param path
-	 *            Relative path to be normalized
+	 * @param path Relative path to be normalized
 	 * @return normalized path
 	 */
 	public static String normalize(String path) {
@@ -559,10 +560,8 @@ public class WebUtils extends org.springframework.web.util.WebUtils {
 	 * checks for malicious input. Normalize operations were was happily taken from
 	 * org.apache.catalina.util.RequestUtil in Tomcat trunk, r939305
 	 *
-	 * @param path
-	 *            Relative path to be normalized
-	 * @param replaceBackSlash
-	 *            Should '\\' be replaced with '/'
+	 * @param path             Relative path to be normalized
+	 * @param replaceBackSlash Should '\\' be replaced with '/'
 	 * @return normalized path
 	 */
 	private static String normalize(String path, boolean replaceBackSlash) {

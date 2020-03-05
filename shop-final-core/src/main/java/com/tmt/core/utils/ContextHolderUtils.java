@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -33,6 +34,11 @@ public class ContextHolderUtils {
 	public static HttpServletRequest getRequest() {
 		ServletRequestAttributes _request = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 		return _request == null ? null : _request.getRequest();
+	}
+	
+	public static HttpServletResponse getResponse() {
+		ServletRequestAttributes _request = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+		return _request == null ? null : _request.getResponse();
 	}
 
 	public static String getWebRoot() {
