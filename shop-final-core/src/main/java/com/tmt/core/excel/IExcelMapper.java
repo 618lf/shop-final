@@ -18,14 +18,23 @@ public interface IExcelMapper<T> {
 	 * 
 	 * @return
 	 */
-	public int getStartRow();
+	int getStartRow();
 
 	/**
 	 * 返回当有错误时
 	 * 
 	 * @return
 	 */
-	public Boolean returnWhenError();
+	Boolean returnWhenError();
+
+	/**
+	 * 默认使用的 Map 是有序还是无顺的： 默认 无序
+	 * 
+	 * @return
+	 */
+	default Boolean columnOrder() {
+		return false;
+	};
 
 	/**
 	 * 通过对应的列得到 对应的列映射
@@ -33,21 +42,21 @@ public interface IExcelMapper<T> {
 	 * @param column
 	 * @return
 	 */
-	public Iterable<ColumnMapper> getColumnMappers(String column);
+	Iterable<ColumnMapper> getColumnMappers(String column);
 
 	/**
 	 * 得到目标类型
 	 * 
 	 * @return
 	 */
-	public Class<?> getTargetClass();
+	Class<?> getTargetClass();
 
 	/**
 	 * 得到类型转化器
 	 * 
 	 * @return
 	 */
-	public T receive(Map<String, Object> valueMap);
+	T receive(Map<String, Object> valueMap);
 
 	/**
 	 * 得到Excel的数据
@@ -55,6 +64,6 @@ public interface IExcelMapper<T> {
 	 * @param sheet
 	 * @return
 	 */
-	public ImportResult<T> getExcelData(Sheet sheet);
+	ImportResult<T> getExcelData(Sheet sheet);
 
 }

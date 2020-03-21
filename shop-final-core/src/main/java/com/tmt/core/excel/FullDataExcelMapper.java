@@ -1,5 +1,7 @@
 package com.tmt.core.excel;
 
+import java.lang.reflect.ParameterizedType;
+
 import com.google.common.collect.Lists;
 import com.tmt.core.entity.ColumnMapper;
 
@@ -36,5 +38,19 @@ public class FullDataExcelMapper<T> extends AbstractExcelMapper<T> {
 	@Override
 	public Iterable<ColumnMapper> getColumnMappers(String column) {
 		return mappers;
+	}
+
+	/**
+	 * 目标对象 T 的实际类型
+	 * 
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public Class<T> getTargetClass() {
+		if (clazz == null) {
+			clazz = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+		}
+		return clazz;
 	}
 }

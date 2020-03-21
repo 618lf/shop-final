@@ -2,7 +2,6 @@ package com.tmt.core.excel;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -68,7 +67,8 @@ public class DefaultExcelExecuter implements IExcelExecuter {
 			if (row == null) {
 				return Boolean.TRUE;
 			}
-			Map<String, Object> valueMap = new HashMap<String, Object>();
+			Map<String, Object> valueMap = mapper.columnOrder() ? com.tmt.core.utils.Maps.newOrderMap()
+					: com.tmt.core.utils.Maps.newHashMap();
 			for (int i = row.getFirstCellNum(), j = row.getLastCellNum(); i < j; i++) {
 
 				// 记录当前列号
