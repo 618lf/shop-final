@@ -1,5 +1,6 @@
 package com.tmt.core.excel;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,8 +22,19 @@ public abstract class AbstractExcelMapper<T> implements IExcelMapper<T>, IReceiv
 		return Boolean.FALSE;
 	}
 
+	/**
+	 * 目标对象 T 的实际类型
+	 * 
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public abstract Class<T> getTargetClass();
+	public Class<T> getTargetClass() {
+		if (clazz == null) {
+			clazz = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+		}
+		return clazz;
+	}
 
 	@Override
 	public T receive(Map<String, Object> valueMap) {
@@ -39,7 +51,8 @@ public abstract class AbstractExcelMapper<T> implements IExcelMapper<T>, IReceiv
 	}
 
 	// 初始化
-	protected abstract void initRowMapper();
+	protected void initRowMapper() {
+	}
 
 	@Override
 	public Iterable<ColumnMapper> getColumnMappers(String column) {
