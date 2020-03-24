@@ -18,6 +18,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.ErrorPage;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
+import org.springframework.boot.web.servlet.server.Session.SessionTrackingMode;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -27,6 +28,7 @@ import org.springframework.http.HttpStatus;
 
 import com.shop.config.tomcat.NoSessionManager;
 import com.tmt.core.exception.PortUnUseableException;
+import com.tmt.core.utils.Sets;
 
 /**
  * 自定义的 Servlet 服务器自动配置
@@ -182,6 +184,7 @@ public class ServletWebServerFactoryAutoConfiguration {
 			if (properties.getServlet().getSession().getTimeout() == null) {
 				factory.addContextCustomizers((context) -> context.setManager(new NoSessionManager()));
 			}
+			properties.getServlet().getSession().setTrackingModes(Sets.newHashSet(SessionTrackingMode.COOKIE));
 		}
 
 		private void customizeCookie(TomcatServletWebServerFactory factory) {
