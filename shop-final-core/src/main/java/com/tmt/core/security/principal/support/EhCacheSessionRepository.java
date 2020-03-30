@@ -6,6 +6,8 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.tmt.core.cache.Cache;
 import com.tmt.core.cache.CacheManager;
 import com.tmt.core.security.principal.Principal;
@@ -50,7 +52,7 @@ public class EhCacheSessionRepository implements SessionRepository<EhCacheSessio
 	}
 
 	@Override
-	public EhCacheSession createSession(Principal principal, boolean authenticated) {
+	public EhCacheSession createSession(HttpServletRequest request, Principal principal, boolean authenticated) {
 		EhCacheSession session = new EhCacheSession();
 		session.principal = principal;
 		session.authenticated = authenticated;
@@ -59,7 +61,7 @@ public class EhCacheSessionRepository implements SessionRepository<EhCacheSessio
 	}
 
 	@Override
-	public EhCacheSession getSession(String id) {
+	public EhCacheSession getSession(HttpServletRequest request, String id) {
 		String key = this.getSessionKey(id);
 		Map<String, Object> entries = sessionCache.get(key);
 		if (entries == null || entries.isEmpty()) {
@@ -89,7 +91,7 @@ public class EhCacheSessionRepository implements SessionRepository<EhCacheSessio
 	}
 
 	@Override
-	public void removeSession(Session session) {
+	public void removeSession(HttpServletRequest request, Session session) {
 		if (session != null && StringUtils.hasText(session.getId())) {
 			sessionCache.delete(this.getSessionKey(session.getId()));
 		}

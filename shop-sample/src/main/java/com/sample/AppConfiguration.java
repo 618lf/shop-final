@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.shop.config.security.SecurityConfigurationSupport;
+import com.shop.config.security.SecurityConfigurationSupport.SessionMode;
 import com.shop.starter.ApplicationProperties;
 import com.tmt.Constants;
 import com.tmt.core.cache.CacheManager;
@@ -79,7 +80,8 @@ public class AppConfiguration {
 				.definition("/admin/** = user, roles[\"admin\"]")
 				.definition("/** = anon")
 				.loginUrl("/admin/login").successUrl("/admin/")
-				.unauthorizedUrl("/admin/login");
+				.unauthorizedUrl("/admin/login")
+				.sessionMode(SessionMode.Session);
 		return securityConfiguration.realm(authenticationRealm);
 	}
 }

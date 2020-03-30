@@ -38,7 +38,7 @@ public class SecurityConfigurationSupport {
 		return this;
 	}
 
-	public SecurityConfigurationSupport setSessionMode(SessionMode sessionMode) {
+	public SecurityConfigurationSupport sessionMode(SessionMode sessionMode) {
 		this.sessionMode = sessionMode;
 		return this;
 	}

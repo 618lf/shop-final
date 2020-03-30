@@ -52,14 +52,10 @@ public class SecurityFilter extends OncePerRequestFilter implements Ordered {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response,
 			final FilterChain filterChain) throws ServletException, IOException {
-
 		Throwable t = null;
-
 		Subject subejct = null;
-
 		long t1 = System.currentTimeMillis();
 		try {
-
 			subejct = securityManager.createSubject(request, response);
 			subejct.execute(new Callable() {
 				@Override
@@ -68,7 +64,6 @@ public class SecurityFilter extends OncePerRequestFilter implements Ordered {
 					return null;
 				}
 			});
-
 		} catch (Throwable throwable) {
 			t = throwable;
 		}
@@ -77,19 +72,16 @@ public class SecurityFilter extends OncePerRequestFilter implements Ordered {
 		try {
 			this.accessLog(subejct, request, t1, t);
 		} finally {
-
 			// 提交 Session
 			if (subejct != null && subejct.getSession() != null) {
 				subejct.getSession().onCommit();
 			}
-
 			// 销毁临时数据
 			if (subejct != null) {
 				subejct.destory();
 				subejct = null;
 			}
 		}
-
 		if (t != null) {
 			if (t instanceof ServletException) {
 				throw (ServletException) t;
@@ -168,12 +160,10 @@ public class SecurityFilter extends OncePerRequestFilter implements Ordered {
 	protected FilterChain getExecutionChain(HttpServletRequest request, HttpServletResponse response,
 			FilterChain origChain) {
 		FilterChain chain = origChain;
-
 		FilterChainResolver resolver = getFilterChainResolver();
 		if (resolver == null) {
 			return origChain;
 		}
-
 		FilterChain resolved = resolver.getChain(request, response, origChain);
 
 		if (resolved != null) {

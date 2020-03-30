@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.tmt.core.security.principal.Principal;
@@ -11,7 +12,6 @@ import com.tmt.core.security.principal.Session;
 import com.tmt.core.security.principal.SessionRepository;
 import com.tmt.core.security.principal.support.HttpServletSessionRepository.HttpServletSession;
 import com.tmt.core.utils.Maps;
-import com.tmt.core.utils.WebUtils;
 
 /**
  * 基于Http Session 的管理方式
@@ -36,8 +36,8 @@ public class HttpServletSessionRepository implements SessionRepository<HttpServl
 	}
 
 	@Override
-	public HttpServletSession createSession(Principal principal, boolean authenticated) {
-		HttpServletSession session = new HttpServletSession(WebUtils.getRequest().getSession(true));
+	public HttpServletSession createSession(HttpServletRequest request, Principal principal, boolean authenticated) {
+		HttpServletSession session = new HttpServletSession(request.getSession(true));
 		session.principal = principal;
 		session.authenticated = authenticated;
 		session.saveDelta();
@@ -45,8 +45,8 @@ public class HttpServletSessionRepository implements SessionRepository<HttpServl
 	}
 
 	@Override
-	public HttpServletSession getSession(String sessonId) {
-		HttpSession session = WebUtils.getRequest().getSession(false);
+	public HttpServletSession getSession(HttpServletRequest request, String sessonId) {
+		HttpSession session = request.getSession(false);
 		if (session == null) {
 			return null;
 		}
@@ -64,8 +64,12 @@ public class HttpServletSessionRepository implements SessionRepository<HttpServl
 	}
 
 	@Override
-	public void removeSession(Session session) {
-		session.destory();
+	public void removeSession(HttpServletRequest request, Session session) {
+		HttpSession httpSession = request.getSession(false);
+		if (httpSession != null) {
+			httpSession.invalidate();
+		}
+		((HttpServletSession) session).stoped = true;
 	}
 
 	@Override
@@ -75,6 +79,7 @@ public class HttpServletSessionRepository implements SessionRepository<HttpServl
 
 	public class HttpServletSession implements Session {
 
+		private boolean stoped;
 		private HttpSession session;
 		protected Principal principal = null;
 		protected boolean authenticated = false;
@@ -157,7 +162,6 @@ public class HttpServletSessionRepository implements SessionRepository<HttpServl
 				sessionAttrs.clear();
 			}
 			this.sessionAttrs = null;
-			this.session.invalidate();
 		}
 
 		/**
@@ -165,14 +169,19 @@ public class HttpServletSessionRepository implements SessionRepository<HttpServl
 		 */
 		@Override
 		public void onCommit() {
-			this.saveDelta();
+			if (!this.stoped) {
+				this.saveDelta();
+			}
 		}
 
 		public void saveDelta() {
-			session.setAttribute(PRINCIPAL_ATTR, this.getPrincipal());
-			session.setAttribute(AUTHENTICATED_ATTR, this.isAuthenticated());
-			session.setAttribute(RUNASPRINCIPALS_ATTR, this.getRunAsPrincipals());
-			session.setAttribute(SESSION_ATTR_PREFIX, sessionAttrs);
+			try {
+				session.setAttribute(PRINCIPAL_ATTR, this.getPrincipal());
+				session.setAttribute(AUTHENTICATED_ATTR, this.isAuthenticated());
+				session.setAttribute(RUNASPRINCIPALS_ATTR, this.getRunAsPrincipals());
+				session.setAttribute(SESSION_ATTR_PREFIX, sessionAttrs);
+			} catch (Exception e) {
+			}
 		}
 
 		public boolean equals(Object obj) {
