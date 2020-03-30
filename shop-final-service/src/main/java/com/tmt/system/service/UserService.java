@@ -151,6 +151,34 @@ public class UserService extends BaseService<User, Long> implements UserServiceF
 	 */
 	@Override
 	@Transactional
+	public void grantRoles(User user) {
+		List<RoleUser> roleUsers = this.roleUserDao.findByUserId(user.getId());
+		this.roleUserDao.batchDelete(roleUsers);
+		// 用户组
+		String roleIdStrs = user.getRoleIds();
+		if (StringUtils.isNotBlank(roleIdStrs)) {
+			roleUsers = Lists.newArrayList();
+			String[] roleIds = roleIdStrs.split(",");
+			RoleUser roleUser = null;
+			for (String roleId : roleIds) {
+				if (StringUtils.isNotEmpty(roleId)) {
+					roleUser = new RoleUser();
+					roleUser.setRoleId(Long.parseLong(roleId));
+					roleUser.setUserId(user.getId());
+					roleUsers.add(roleUser);
+				}
+			}
+			this.roleUserDao.batchInsert(roleUsers);
+		}
+	}
+
+	/**
+	 * 给用户分配权限组
+	 * 
+	 * @param user
+	 */
+	@Override
+	@Transactional
 	public void grantGroups(User user) {
 		List<GroupUser> userGroups = this.groupUserDao.findByUserId(user.getId());
 		this.groupUserDao.batchDelete(userGroups);
@@ -483,6 +511,16 @@ public class UserService extends BaseService<User, Long> implements UserServiceF
 
 		// 保存帐号信息
 		this.saveAccount(account);
+
+		// 添加权限信息
+		if (StringUtils.isNotBlank(member.getRoleIds())) {
+			this.grantRoles(member);
+		}
+
+		// 添加用户组信息
+		if (StringUtils.isNotBlank(member.getGroupIds())) {
+			this.grantGroups(member);
+		}
 	}
 
 	/**
