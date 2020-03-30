@@ -23,6 +23,7 @@ import com.tmt.core.utils.WebUtils;
 
 /**
  * 默认的管理器
+ * 
  * @author lifeng
  */
 public class DefaultSecurityManager implements SecurityManager {
@@ -31,7 +32,7 @@ public class DefaultSecurityManager implements SecurityManager {
 	private Realm realm;
 	private PrincipalStrategy principalStrategy;
 	private RememberMeManager rememberMeManager;
-	
+
 	// 域
 	public Realm getRealm() {
 		return realm;
@@ -40,7 +41,7 @@ public class DefaultSecurityManager implements SecurityManager {
 	public void setRealm(Realm realm) {
 		this.realm = realm;
 	}
-	
+
 	// 身份 策略
 	public PrincipalStrategy getPrincipalStrategy() {
 		return principalStrategy;
@@ -49,35 +50,37 @@ public class DefaultSecurityManager implements SecurityManager {
 	public void setPrincipalStrategy(PrincipalStrategy principalStrategy) {
 		this.principalStrategy = principalStrategy;
 	}
-	
+
 	// 记住我
 	public RememberMeManager getRememberMeManager() {
 		return rememberMeManager;
 	}
+
 	public void setRememberMeManager(RememberMeManager rememberMeManager) {
 		this.rememberMeManager = rememberMeManager;
 	}
 
 	@Override
 	public boolean isPermitted(Subject subject, String permission) {
-		return this.loadPermissions(subject).contains(permission);
+		Set<String> _permissions = this.loadPermissions(subject);
+		return !CollectionUtils.isEmpty(_permissions) && _permissions.contains(permission);
 	}
 
 	@Override
 	public boolean[] isPermitted(Subject subject, String... permissions) {
 		Set<String> _permissions = this.loadPermissions(subject);
 		boolean[] result;
-        if (permissions != null && permissions.length != 0) {
-            int size = permissions.length;
-            result = new boolean[size];
-            int i = 0;
-            for (String p : permissions) {
-                result[i++] = !CollectionUtils.isEmpty(_permissions) && _permissions.contains(p);
-            }
-        } else {
-            result = new boolean[0];
-        }
-        return result;
+		if (permissions != null && permissions.length != 0) {
+			int size = permissions.length;
+			result = new boolean[size];
+			int i = 0;
+			for (String p : permissions) {
+				result[i++] = !CollectionUtils.isEmpty(_permissions) && _permissions.contains(p);
+			}
+		} else {
+			result = new boolean[0];
+		}
+		return result;
 	}
 
 	@Override
@@ -87,35 +90,36 @@ public class DefaultSecurityManager implements SecurityManager {
 			return false;
 		}
 		if (permissions != null && permissions.length != 0) {
-            for (String p : permissions) {
-                if (!_permissions.contains(p)) {
-                    return false;
-                }
-            }
-        }
-        return true;
+			for (String p : permissions) {
+				if (!_permissions.contains(p)) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	@Override
 	public boolean hasRole(Subject subject, String role) {
-		return this.loadRoles(subject).contains(role);
+		Set<String> _roles = this.loadRoles(subject);
+		return !CollectionUtils.isEmpty(_roles) && _roles.contains(role);
 	}
 
 	@Override
 	public boolean[] hasRoles(Subject subject, String... roles) {
 		Set<String> _roles = this.loadRoles(subject);
 		boolean[] result;
-        if (roles != null && roles.length != 0) {
-            int size = roles.length;
-            result = new boolean[size];
-            int i = 0;
-            for (String p : roles) {
-                result[i++] = !CollectionUtils.isEmpty(_roles) && _roles.contains(p);
-            }
-        } else {
-            result = new boolean[0];
-        }
-        return result;
+		if (roles != null && roles.length != 0) {
+			int size = roles.length;
+			result = new boolean[size];
+			int i = 0;
+			for (String p : roles) {
+				result[i++] = !CollectionUtils.isEmpty(_roles) && _roles.contains(p);
+			}
+		} else {
+			result = new boolean[0];
+		}
+		return result;
 	}
 
 	@Override
@@ -125,17 +129,18 @@ public class DefaultSecurityManager implements SecurityManager {
 			return false;
 		}
 		if (roles != null && roles.length != 0) {
-            for (String p : roles) {
-                if (!_roles.contains(p)) {
-                    return false;
-                }
-            }
-        }
-        return true;
+			for (String p : roles) {
+				if (!_roles.contains(p)) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
-	
+
 	/**
 	 * 加载权限
+	 * 
 	 * @param subject
 	 * @return
 	 */
@@ -148,9 +153,10 @@ public class DefaultSecurityManager implements SecurityManager {
 		}
 		return subject.getPermissions();
 	}
-	
+
 	/**
 	 * 加载角色
+	 * 
 	 * @param subject
 	 * @return
 	 */
@@ -165,8 +171,9 @@ public class DefaultSecurityManager implements SecurityManager {
 	}
 
 	@Override
-	public void login(Subject subject, HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-		
+	public void login(Subject subject, HttpServletRequest request, HttpServletResponse response)
+			throws AuthenticationException {
+
 		// 验证
 		Principal principal;
 		try {
@@ -175,17 +182,17 @@ public class DefaultSecurityManager implements SecurityManager {
 			this.onLoginFailure(request, response);
 			throw ae;
 		}
-		
+
 		// 必须返回身份
 		if (principal == null) {
 			this.onLoginFailure(request, response);
 			throw new AuthenticationException(ErrorCode.U_P_FAILURE);
 		}
-		
+
 		// 登录成功 保存用户凭证，设置到subject中即可
 		this.login(subject, principal, request, response);
 	}
-	
+
 	/**
 	 * 指定了身份来登录
 	 */
@@ -193,21 +200,24 @@ public class DefaultSecurityManager implements SecurityManager {
 	public void login(Subject subject, Principal principal, HttpServletRequest request, HttpServletResponse response) {
 		this.login(subject, principal, true, request, response);
 	}
-	
+
 	/**
 	 * 真实的登录
+	 * 
 	 * @param subject
 	 * @param principal
 	 * @param request
 	 * @param response
 	 */
-	private void login(Subject subject, Principal principal, boolean authenticated, HttpServletRequest request, HttpServletResponse response) {
+	private void login(Subject subject, Principal principal, boolean authenticated, HttpServletRequest request,
+			HttpServletResponse response) {
 		// 设置相关信息到主体中
-		subject.setPrincipal(principal);  subject.setAuthenticated(authenticated);
-		
+		subject.setPrincipal(principal);
+		subject.setAuthenticated(authenticated);
+
 		// 创建身份
 		principalStrategy.createPrincipal(subject, request, response);
-		
+
 		// 通知登录成功
 		this.onLoginSuccess(subject, request, response);
 	}
@@ -226,19 +236,18 @@ public class DefaultSecurityManager implements SecurityManager {
 	 */
 	@Override
 	public Subject createSubject(HttpServletRequest request, HttpServletResponse response) {
-		
+
 		// 基本的 Subject
 		Subject subject = new DefaultSubject();
-		
+
 		// 获取身份
 		principalStrategy.resolvePrincipal(subject, request, response);
-		
+
 		// session 失效的原因
-		if (StringUtils.hasText(subject.getSessionId()) 
-				&& subject.getSession() == null) {
+		if (StringUtils.hasText(subject.getSessionId()) && subject.getSession() == null) {
 			subject.setReason(this.realm.resolveReason(subject.getSessionId()));
 		}
-		
+
 		// 判断是否有身份信息
 		if (rememberMeManager != null && subject.getPrincipal() == null) {
 			Principal rprincipal = null;
@@ -246,10 +255,10 @@ public class DefaultSecurityManager implements SecurityManager {
 				this.login(subject, rprincipal, false, request, response);
 			}
 		}
-		
+
 		return subject;
 	}
-	
+
 	/**
 	 * 将此身份失效
 	 */
@@ -258,26 +267,27 @@ public class DefaultSecurityManager implements SecurityManager {
 		principalStrategy.invalidatePrincipal(sessionId);
 		this.realm.onInvalidate(sessionId, reason);
 	}
-	
+
 	/**
 	 * 登录成功
+	 * 
 	 * @param subject
 	 */
 	void onLoginSuccess(Subject subject, HttpServletRequest request, HttpServletResponse response) {
 		realm.onLoginSuccess(subject, request);
-		
+
 		// 记住我
 		if (this.rememberMeManager != null) {
 			String rememberMe = WebUtils.getCleanParam(request, AuthenticationToken.rememberMe);
-			if (StringUtils.hasText(rememberMe)
-					&& ("on".equals(rememberMe) || "1".equals(rememberMe))) {
+			if (StringUtils.hasText(rememberMe) && ("on".equals(rememberMe) || "1".equals(rememberMe))) {
 				this.rememberMeManager.onLoginSuccess(subject, request, response);
 			}
 		}
 	}
-	
+
 	/**
 	 * 登录失败
+	 * 
 	 * @param request
 	 */
 	void onLoginFailure(HttpServletRequest request, HttpServletResponse response) {
@@ -286,9 +296,9 @@ public class DefaultSecurityManager implements SecurityManager {
 			this.rememberMeManager.onLoginFailure(request, response);
 		}
 	}
-	
+
 	/**
-	 *  退出登录
+	 * 退出登录
 	 */
 	void onLogout(Subject subject, HttpServletRequest request, HttpServletResponse response) {
 		realm.onLogout(subject);

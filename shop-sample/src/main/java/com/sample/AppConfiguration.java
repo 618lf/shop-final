@@ -3,10 +3,14 @@ package com.sample;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.filter.OrderedFilter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.sample.sso.ExternalSsoFilter;
+import com.sample.sso.SsoAuthenticationRealm;
 import com.shop.config.security.SecurityConfigurationSupport;
 import com.shop.config.security.SecurityConfigurationSupport.SessionMode;
 import com.shop.starter.ApplicationProperties;
@@ -29,6 +33,8 @@ public class AppConfiguration {
 
 	@Autowired
 	private ApplicationContext context;
+	@Autowired
+	private ApplicationProperties properties;
 
 	/**
 	 * 批量设置定时任务
@@ -60,7 +66,7 @@ public class AppConfiguration {
 	 */
 	@Bean
 	public AuthenticationRealm authenticationRealm(ApplicationProperties properties, CacheManager cacheManager) {
-		AuthenticationRealm authenticationRealm = new AuthenticationRealm();
+		AuthenticationRealm authenticationRealm = new SsoAuthenticationRealm();
 		authenticationRealm.setCacheName(properties.getSecurity().getCacheName());
 		authenticationRealm.setCacheManager(cacheManager);
 		return authenticationRealm;
@@ -75,13 +81,28 @@ public class AppConfiguration {
 	public SecurityConfigurationSupport securityConfiguration(AuthenticationRealm authenticationRealm) {
 		SecurityConfigurationSupport securityConfiguration = new SecurityConfigurationSupport();
 		securityConfiguration.definition("/admin/validate/code = anon")
-		        .definition("/admin/login = authc")
-				.definition("/admin/logout = logout")
-				.definition("/admin/** = user, roles[\"admin\"]")
+		        .definition("/admin/login = anon")
+				.definition("/admin/logout = anon")
+				.definition("/admin/** = anon")
 				.definition("/** = anon")
 				.loginUrl("/admin/login").successUrl("/admin/")
 				.unauthorizedUrl("/admin/login")
 				.sessionMode(SessionMode.Session);
 		return securityConfiguration.realm(authenticationRealm);
+	}
+	
+	/**
+	 * SSO 过滤器，保证在安全配置后执行即可
+	 * 
+	 * @return
+	 */
+	@Bean
+	public FilterRegistrationBean<ExternalSsoFilter> passportFilter() {
+		FilterRegistrationBean<ExternalSsoFilter> registrationBean = new FilterRegistrationBean<>();
+		registrationBean.setFilter(new ExternalSsoFilter());
+		registrationBean.setUrlPatterns(properties.getSecurity().getUrlPatterns());
+		registrationBean.setName("passportFilter");
+		registrationBean.setOrder(OrderedFilter.REQUEST_WRAPPER_FILTER_MAX_ORDER + 1);
+		return registrationBean;
 	}
 }
