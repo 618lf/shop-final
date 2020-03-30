@@ -20,50 +20,70 @@ public class SecurityConfigurationSupport {
 	private Map<String, String> chains;
 	private String loginUrl;
 	private String successUrl;
-	private String unauthorizedUrl; 
-	
+	private String unauthorizedUrl;
+	private SessionMode sessionMode = SessionMode.Cache;
+
 	public SecurityConfigurationSupport loginUrl(String loginUrl) {
 		this.loginUrl = loginUrl;
 		return this;
 	}
+
 	public SecurityConfigurationSupport successUrl(String successUrl) {
 		this.successUrl = successUrl;
 		return this;
 	}
+
 	public SecurityConfigurationSupport unauthorizedUrl(String unauthorizedUrl) {
 		this.unauthorizedUrl = unauthorizedUrl;
 		return this;
 	}
+
+	public SecurityConfigurationSupport setSessionMode(SessionMode sessionMode) {
+		this.sessionMode = sessionMode;
+		return this;
+	}
+
 	public String getLoginUrl() {
 		return loginUrl;
 	}
+
 	public String getSuccessUrl() {
 		return successUrl;
 	}
+
 	public String getUnauthorizedUrl() {
 		return unauthorizedUrl;
 	}
+
 	public Map<String, Filter> getFilters() {
 		return filters;
 	}
+
 	public Realm getRealm() {
 		return realm;
 	}
+
 	public Map<String, String> getChains() {
 		return chains;
 	}
-	
+
+	public SessionMode getSessionMode() {
+		return sessionMode;
+	}
+
 	/**
 	 * 设置域
+	 * 
 	 * @param realm
 	 */
 	public SecurityConfigurationSupport realm(Realm realm) {
 		this.realm = realm;
 		return this;
 	}
-	
+
 	/**
 	 * 添加 filter
+	 * 
 	 * @param name
 	 * @param filter
 	 * @return
@@ -72,9 +92,10 @@ public class SecurityConfigurationSupport {
 		filters.put(name, filter);
 		return this;
 	}
-	
+
 	/**
 	 * 配置 FilterChain
+	 * 
 	 * @param line
 	 * @return
 	 */
@@ -96,5 +117,34 @@ public class SecurityConfigurationSupport {
 		}
 		chains.put(path, filter);
 		return this;
+	}
+
+	/**
+	 * 使用的 Session 方式
+	 * 
+	 * @author lifeng
+	 */
+	public static enum SessionMode {
+
+		/**
+		 * 默认会根据Cache 的类型选择实现
+		 */
+		Cache,
+
+		/**
+		 * 使用HttpSession
+		 */
+		Session,
+
+		/**
+		 * 使用 EhCache
+		 */
+		EhCache,
+
+		/**
+		 * 使用Redis
+		 */
+		Redis
+
 	}
 }

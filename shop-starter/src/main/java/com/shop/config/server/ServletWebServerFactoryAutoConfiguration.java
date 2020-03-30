@@ -2,6 +2,7 @@ package com.shop.config.server;
 
 import java.io.File;
 import java.net.Socket;
+import java.time.Duration;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -9,6 +10,7 @@ import java.util.Set;
 import javax.servlet.ServletRequest;
 
 import org.apache.tomcat.util.http.LegacyCookieProcessor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -26,7 +28,10 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 
+import com.shop.config.security.SecurityConfigurationSupport;
+import com.shop.config.security.SecurityConfigurationSupport.SessionMode;
 import com.shop.config.tomcat.NoSessionManager;
+import com.shop.starter.ApplicationProperties;
 import com.tmt.core.exception.PortUnUseableException;
 import com.tmt.core.utils.Sets;
 
@@ -41,6 +46,11 @@ import com.tmt.core.utils.Sets;
 @EnableConfigurationProperties(ServerProperties.class)
 @AutoConfigureAfter(org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactoryAutoConfiguration.class)
 public class ServletWebServerFactoryAutoConfiguration {
+
+	@Autowired
+	private ApplicationProperties applicationProperties;
+	@Autowired(required = false)
+	private SecurityConfigurationSupport securityConfig;
 
 	/**
 	 * 定义自定义对象
@@ -60,7 +70,7 @@ public class ServletWebServerFactoryAutoConfiguration {
 	 * 
 	 * @author lifeng
 	 */
-	public static class TomcatServletWebServerFactoryCustomizer
+	public class TomcatServletWebServerFactoryCustomizer
 			implements WebServerFactoryCustomizer<TomcatServletWebServerFactory>, Ordered {
 
 		private final Set<String> DEFAULT;
@@ -181,7 +191,10 @@ public class ServletWebServerFactoryAutoConfiguration {
 		}
 
 		private void customizeSession(TomcatServletWebServerFactory factory) {
-			if (properties.getServlet().getSession().getTimeout() == null) {
+			if (securityConfig != null && securityConfig.getSessionMode() == SessionMode.Session) {
+				properties.getServlet().getSession()
+						.setTimeout(Duration.ofSeconds(applicationProperties.getSecurity().getSessionTimeout()));
+			} else if (securityConfig != null) {
 				factory.addContextCustomizers((context) -> context.setManager(new NoSessionManager()));
 			}
 			properties.getServlet().getSession().setTrackingModes(Sets.newHashSet(SessionTrackingMode.COOKIE));

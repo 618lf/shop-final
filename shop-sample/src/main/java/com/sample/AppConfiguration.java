@@ -65,7 +65,6 @@ public class AppConfiguration {
 		return authenticationRealm;
 	}
 	
-
 	/**
 	 * 安全配置
 	 * 
@@ -74,9 +73,12 @@ public class AppConfiguration {
 	@Bean
 	public SecurityConfigurationSupport securityConfiguration(AuthenticationRealm authenticationRealm) {
 		SecurityConfigurationSupport securityConfiguration = new SecurityConfigurationSupport();
-		securityConfiguration.definition("/admin/validate/code = anon").definition("/admin/login = authc")
-				.definition("/admin/logout = logout").definition("/admin/** = user, roles[\"admin\"]")
-				.definition("/** = anon").loginUrl("/admin/login").successUrl("/admin/")
+		securityConfiguration.definition("/admin/validate/code = anon")
+		        .definition("/admin/login = authc")
+				.definition("/admin/logout = logout")
+				.definition("/admin/** = user, roles[\"admin\"]")
+				.definition("/** = anon")
+				.loginUrl("/admin/login").successUrl("/admin/")
 				.unauthorizedUrl("/admin/login");
 		return securityConfiguration.realm(authenticationRealm);
 	}
