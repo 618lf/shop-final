@@ -1,4 +1,4 @@
-package com.tmt.core.web.security.interceptor;
+package com.tmt.core.security.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

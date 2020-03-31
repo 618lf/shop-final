@@ -69,6 +69,7 @@ import com.tmt.core.converter.DateConverter;
 import com.tmt.core.converter.StringEscapeConverter;
 import com.tmt.core.exception.DefaultExceptionHandler;
 import com.tmt.core.web.SessionFlashMapManager;
+import com.tmt.core.web.security.interceptor.PermissionInterceptor;
 import com.tmt.core.web.security.interceptor.TokenInterceptor;
 
 /**
@@ -81,7 +82,7 @@ import com.tmt.core.web.security.interceptor.TokenInterceptor;
 @ConditionalOnWebApplication(type = Type.SERVLET)
 @ConditionalOnClass({ Servlet.class, DispatcherServlet.class, WebMvcConfigurer.class })
 @ConditionalOnMissingBean(WebMvcConfigurationSupport.class)
-@AutoConfigureAfter({ DispatcherServletAutoConfiguration.class})
+@AutoConfigureAfter({ DispatcherServletAutoConfiguration.class })
 @EnableConfigurationProperties({ WebMvcProperties.class, ResourceProperties.class, ApplicationProperties.class })
 public class WebMvcAutoConfiguration {
 
@@ -212,8 +213,12 @@ public class WebMvcAutoConfiguration {
 
 		@Override
 		public void addInterceptors(InterceptorRegistry registry) {
-			TokenInterceptor interceptor = new TokenInterceptor();
-			registry.addInterceptor(interceptor).addPathPatterns("/admin/**").excludePathPatterns("/admin/login/**");
+			TokenInterceptor tokenInterceptor = new TokenInterceptor();
+			registry.addInterceptor(tokenInterceptor).addPathPatterns("/admin/**")
+					.excludePathPatterns("/admin/login/**");
+			PermissionInterceptor permissionInterceptor = new PermissionInterceptor();
+			registry.addInterceptor(permissionInterceptor).addPathPatterns("/admin/**")
+					.excludePathPatterns("/admin/login/**");
 		}
 	}
 
@@ -244,7 +249,7 @@ public class WebMvcAutoConfiguration {
 			this.mvcProperties = mvcPropertiesProvider.getIfAvailable();
 			this.mvcRegistrations = mvcRegistrationsProvider.getIfUnique();
 		}
-		
+
 		@Bean
 		@Override
 		public ContentNegotiationManager mvcContentNegotiationManager() {
@@ -300,7 +305,7 @@ public class WebMvcAutoConfiguration {
 			}
 			return super.createRequestMappingHandlerAdapter();
 		}
-		
+
 		/**
 		 * Mapping
 		 */
@@ -324,7 +329,7 @@ public class WebMvcAutoConfiguration {
 		}
 
 		/**
-		 * 替代默认 --  异常处理
+		 * 替代默认 -- 异常处理
 		 * 
 		 * @return
 		 */

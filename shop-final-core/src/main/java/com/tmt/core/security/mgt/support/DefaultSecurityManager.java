@@ -13,6 +13,7 @@ import com.tmt.core.security.context.AuthorizationInfo;
 import com.tmt.core.security.exception.AuthenticationException;
 import com.tmt.core.security.mgt.RememberMeManager;
 import com.tmt.core.security.mgt.SecurityManager;
+import com.tmt.core.security.permission.Permission;
 import com.tmt.core.security.principal.Principal;
 import com.tmt.core.security.principal.PrincipalStrategy;
 import com.tmt.core.security.realm.Realm;
@@ -58,6 +59,16 @@ public class DefaultSecurityManager implements SecurityManager {
 
 	public void setRememberMeManager(RememberMeManager rememberMeManager) {
 		this.rememberMeManager = rememberMeManager;
+	}
+
+	public boolean isPermitted(Subject subject, Permission permission) {
+		Set<String> _permissions = this.loadPermissions(subject);
+		return !CollectionUtils.isEmpty(_permissions) && permission.implies(_permissions);
+	}
+
+	public boolean hasRole(Subject subject, Permission role) {
+		Set<String> _roles = this.loadRoles(subject);
+		return !CollectionUtils.isEmpty(_roles) && role.implies(_roles);
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.tmt.core.security.context.SubjectCallable;
 import com.tmt.core.security.exception.AuthenticationException;
+import com.tmt.core.security.permission.Permission;
 import com.tmt.core.security.principal.Principal;
 import com.tmt.core.security.principal.Session;
 import com.tmt.core.security.subject.Subject;
@@ -97,6 +98,16 @@ public class DefaultSubject implements Subject {
 	public void setRunAsPrincipals(Stack<Principal> runAsPrincipals) {
 		this.runAsPrincipals = runAsPrincipals;
 	}
+	
+    @Override
+    public boolean isPermitted(Permission permission) {
+        return SecurityUtils.getSecurityManager().isPermitted(this, permission);
+    }
+
+    @Override
+    public boolean hasRole(Permission role) {
+        return SecurityUtils.getSecurityManager().hasRole(this, role);
+    }
 
 	@Override
 	public boolean isPermitted(String permission) {

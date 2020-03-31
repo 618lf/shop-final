@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.tmt.core.security.exception.AuthenticationException;
+import com.tmt.core.security.permission.Permission;
 import com.tmt.core.security.principal.Principal;
 import com.tmt.core.security.subject.Subject;
 
@@ -20,6 +21,8 @@ public interface SecurityManager {
 	boolean hasRole(Subject subject, String role);
 	boolean[] hasRoles(Subject subject, String... roles);
 	boolean hasAllRoles(Subject subject, String... roles);
+	boolean isPermitted(Subject subject, Permission permission);
+	boolean hasRole(Subject subject, Permission role);
 	
 	// 身份
 	void login(Subject subject, HttpServletRequest request, HttpServletResponse response) throws AuthenticationException;

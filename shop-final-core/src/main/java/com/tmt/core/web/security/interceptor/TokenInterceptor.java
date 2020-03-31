@@ -1,16 +1,14 @@
 package com.tmt.core.web.security.interceptor;
 
-import java.lang.reflect.Method;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.tmt.core.persistence.incrementer.IdGen;
+import com.tmt.core.security.annotation.Token;
 import com.tmt.core.utils.StringUtils;
 import com.tmt.core.web.security.session.SessionProvider;
 
@@ -19,7 +17,7 @@ import com.tmt.core.web.security.session.SessionProvider;
  * 
  * @author lifeng
  */
-public class TokenInterceptor extends HandlerInterceptorAdapter {
+public class TokenInterceptor extends MethodInterceptor {
 
 	private Logger logger = LoggerFactory.getLogger(TokenInterceptor.class);
 	private final String TOKEN_KEY = "token";
@@ -28,51 +26,46 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 	/**
 	 * 执行验证
 	 */
-	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-		if (handler instanceof HandlerMethod) {
-			HandlerMethod handlerMethod = (HandlerMethod) handler;
-			Method method = handlerMethod.getMethod();
+	public boolean doHandle(HttpServletRequest request, HttpServletResponse response, HandlerMethod handlerMethod) {
 
-			// 是否需要验证token
-			Token token = method.getAnnotation(Token.class);
+		// 是否需要验证token
+		Token token = handlerMethod.getToken();
 
-			// 没设置则不需要验证
-			if (token == null) {
-				return Boolean.TRUE;
-			}
-
-			// 存储token
-			if (token.save()) {
-				this.createToken(request, response);
-				return Boolean.TRUE;
-			}
-
-			Boolean flag = Boolean.TRUE;
-
-			// 客户端token
-			String clinetToken = this.getClinetToken(request);
-			
-			// 验证token
-			if (token.validate() && isRepeatSubmit(clinetToken)) {
-				flag = Boolean.FALSE;
-			}
-
-			// 是否删除
-			if (token.remove()) {
-				SessionProvider.removeAttribute(clinetToken);
-			}
-
-			// token 失效
-			if (!flag) {
-				try {
-					response.sendError(403, ACCESS_DENIED_MSG);
-				} catch (Exception e) {
-					logger.error("token error", e);
-				}
-			}
-			return flag;
+		// 没设置则不需要验证
+		if (token == null) {
+			return Boolean.TRUE;
 		}
-		return Boolean.TRUE;
+
+		// 存储token
+		if (token.save()) {
+			this.createToken(request, response);
+			return Boolean.TRUE;
+		}
+
+		Boolean flag = Boolean.TRUE;
+
+		// 客户端token
+		String clinetToken = this.getClinetToken(request);
+
+		// 验证token
+		if (token.validate() && isRepeatSubmit(clinetToken)) {
+			flag = Boolean.FALSE;
+		}
+
+		// 是否删除
+		if (token.remove()) {
+			SessionProvider.removeAttribute(clinetToken);
+		}
+
+		// token 失效
+		if (!flag) {
+			try {
+				response.sendError(403, ACCESS_DENIED_MSG);
+			} catch (Exception e) {
+				logger.error("token error", e);
+			}
+		}
+		return flag;
 	}
 
 	// 创建token
