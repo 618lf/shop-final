@@ -32,7 +32,7 @@ public class PermissionInterceptor extends MethodInterceptor {
 		Permission requiresPermissions = handler.getRequiresPermissions();
 
 		// 是否继续
-		boolean continued = false;
+		boolean continued = true;
 
 		// 配置了权限信息
 		if (requiresPermissions != null && requiresPermissions != Permission.NONE) {

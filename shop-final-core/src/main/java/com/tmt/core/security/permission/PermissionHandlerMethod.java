@@ -1,6 +1,7 @@
 package com.tmt.core.security.permission;
 
 import java.lang.annotation.Annotation;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.tmt.core.security.annotation.Logical;
 import com.tmt.core.security.annotation.RequiresPermissions;
@@ -23,13 +24,7 @@ public abstract class PermissionHandlerMethod {
 	protected Permission requiresRoles;
 	protected Permission requiresPermissions;
 	protected Token token;
-
-	/**
-	 * 解析基本的注解
-	 */
-	public PermissionHandlerMethod() {
-		this.token = this.getMethodAnnotation(Token.class);
-	}
+	protected AtomicBoolean tokenInit = new AtomicBoolean(false);
 
 	/**
 	 * 角色
@@ -75,6 +70,9 @@ public abstract class PermissionHandlerMethod {
 	 * @return
 	 */
 	public Token getToken() {
+		if (tokenInit.compareAndSet(false, true)) {
+			this.token = this.getMethodAnnotation(Token.class);
+		}
 		return token;
 	}
 
