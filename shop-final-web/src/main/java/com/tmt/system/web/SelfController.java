@@ -49,7 +49,8 @@ public class SelfController extends BaseController {
 	private GroupServiceFacade groupService;
 
 	// 菜单显示
-	private YSMenuDisplay menuDisplay = new YSMenuDisplay();
+	@Autowired(required = false)
+	private YSMenuDisplay menuDisplay;
 
 	// 用户自己的信息修改 ----- 权限集合
 	/**
@@ -167,13 +168,20 @@ public class SelfController extends BaseController {
 		User user = UserUtils.getUser();
 		String menus = UserUtils.getUserMenus();
 		if (menus == null) {
+
+			// 获取用户菜单
 			List<Menu> menuList = UserUtils.getMenus(user);
+
+			// 允许自定义菜单显示
+			if (menuDisplay == null) {
+				menuDisplay = new YSMenuDisplay();
+			}
 			menus = menuDisplay.getUIMenu(menuList);
 			UserUtils.cacheUserMenus(menus);
 		}
 		return AjaxResult.success(menus);
 	}
-	
+
 	/**
 	 * 用户菜单导航 json 格式的数据
 	 * 

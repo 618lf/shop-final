@@ -34,7 +34,7 @@ public class YSMenuDisplay {
 	}
 
 	// menuList是按级别和排序字段排好序 只支持两级菜单 bootStrap
-	public static String getBSUIMenu(List<Menu> menuList) throws IOException {
+	protected String getBSUIMenu(List<Menu> menuList) throws IOException {
 		// 菜单过滤
 		Filter<Menu> filter = new Filter<Menu>() {
 			@Override
@@ -67,16 +67,25 @@ public class YSMenuDisplay {
 	 */
 	private static String getContentTags(Menu menu, int level, Map<Integer, List<Menu>> menuMap, int deep)
 			throws IOException {
+
+		// 第一层不显示空目录
+		String childrenMenus = "";
+		if (menu.getType() == 1) {// 目录
+			deep++;
+			childrenMenus = getBSUIChildMenu(menu, level + 1, menuMap, deep);
+			if (StringUtils.isBlank(childrenMenus)) {
+				return "";
+			}
+		}
+
+		// 显示菜单
 		StringBuffer menuString = new StringBuffer();
 		menuString.append("<li>");
 		menuString.append(getBHrefTag(menu, deep));
 		menuString.append(getIconTag(menu, deep));
 		menuString.append(getSpanTag(menu, deep));
 		menuString.append(getEHrefTag(menu));
-		if (menu.getType() == 1) {// 目录
-			deep++;
-			menuString.append(getBSUIChildMenu(menu, level + 1, menuMap, deep));
-		}
+		menuString.append(childrenMenus);
 		menuString.append("</li>");
 		return menuString.toString();
 	}
