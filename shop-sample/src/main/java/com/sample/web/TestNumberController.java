@@ -32,6 +32,10 @@ public class TestNumberController {
 	@ResponseBody
 	@RequestMapping("get")
 	public Result num() {
+
+		// 测试类加载的顺序
+		// new TestApp().doSomething();
+
 		Long num = numberGenerator.generateNumber("LIFENG-TEST");
 		return Result.success(num);
 	}
