@@ -8,8 +8,11 @@ import com.shop.starter.EnableSystemAutoConfiguration;
  * 
  * 系统启动项目
  * 
+ * @SpringBootApplication 支持Idea 的插件
+ * 
  * @author lifeng
  */
+// @SpringBootApplication
 @ApplicationBoot
 @EnableSystemAutoConfiguration
 public class AppRunner {
