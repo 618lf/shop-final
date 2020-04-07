@@ -14,8 +14,6 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
 
-import com.tmt.core.utils.ExceptionUtil;
-
 /**
  * 支持HMAC-SHA1消息签名 及 DES/AES对称加密的工具类.
  * 

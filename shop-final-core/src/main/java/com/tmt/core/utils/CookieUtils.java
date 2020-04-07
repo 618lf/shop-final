@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.tmt.core.config.Globals;
-import com.tmt.core.utils.StringUtils;
 
 /**
  * Cookie 操作类

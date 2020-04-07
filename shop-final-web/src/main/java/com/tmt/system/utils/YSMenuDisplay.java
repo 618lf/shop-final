@@ -71,8 +71,7 @@ public class YSMenuDisplay {
 		// 第一层不显示空目录
 		String childrenMenus = "";
 		if (menu.getType() == 1) {// 目录
-			deep++;
-			childrenMenus = getBSUIChildMenu(menu, level + 1, menuMap, deep);
+			childrenMenus = getBSUIChildMenu(menu, level + 1, menuMap, deep + 1);
 			if (StringUtils.isBlank(childrenMenus)) {
 				return "";
 			}

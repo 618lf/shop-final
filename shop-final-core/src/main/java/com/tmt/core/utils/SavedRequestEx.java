@@ -4,8 +4,6 @@ import java.io.Serializable;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.tmt.core.utils.StringUtils;
-
 /**
  * 扩展SavedRequest,可以在登录后跳转到指定的get页面，
  * 并验证域名

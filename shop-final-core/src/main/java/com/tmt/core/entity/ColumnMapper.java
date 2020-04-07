@@ -2,8 +2,6 @@ package com.tmt.core.entity;
 
 import java.io.Serializable;
 
-import com.tmt.core.entity.DataType;
-
 /**
  * Excel 的列的配置
  * @ClassName: ColumnMapper 
