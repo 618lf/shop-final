@@ -154,13 +154,7 @@ public class HttpServletSessionRepository implements SessionRepository<HttpServl
 		@Override
 		public void destory() {
 			this.principal = null;
-			if (this.runAsPrincipals != null) {
-				this.runAsPrincipals.clear();
-			}
 			this.runAsPrincipals = null;
-			if (this.sessionAttrs != null) {
-				sessionAttrs.clear();
-			}
 			this.sessionAttrs = null;
 		}
 
