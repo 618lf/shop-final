@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.sqlite.SQLiteDataSource;
@@ -20,7 +21,7 @@ import com.tmt.core.exception.BaseRuntimeException;
  * @author lifeng
  */
 @ConditionalOnClass({ SQLiteDataSource.class })
-@ConditionalOnMissingBean(DataSource.class)
+@ConditionalOnMissingBean(value = DataSource.class)
 @ConditionalOnProperty(prefix = Constants.DATASOURCE_PREFIX, name = "db", havingValue = "sqlite", matchIfMissing = false)
 public class SqlLiteDataSourceAutoConfiguration {
 
@@ -39,7 +40,8 @@ public class SqlLiteDataSourceAutoConfiguration {
 	 * 3. 配置file: 打包之后在相对目录中获取，开发环境获取不到
 	 */
 	@Bean(destroyMethod = "")
-	public DataSource sqlLiteDataSource() {
+	@Primary
+	public DataSource primaryDataSource() {
 		SQLiteDataSource dataSource = new SQLiteDataSource();
 		dataSource.setUrl("jdbc:sqlite:" + loadSqliteUrl());
 		return dataSource;

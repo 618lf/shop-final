@@ -15,13 +15,13 @@ import com.shop.config.jdbc.database.HikariDataSourceAutoConfiguration;
 import com.shop.config.jdbc.database.SqlLiteDataSourceAutoConfiguration;
 
 /**
- * DataSource 数据源
+ * DataSource 数据源, 可以定义多个数据源，则数据源定义的都是主数据源
  * 
  * @author lifeng
  */
 @Configuration
 @ConditionalOnClass(JdbcTemplate.class)
-@ConditionalOnMissingBean(DataSource.class)
+@ConditionalOnMissingBean(value = DataSource.class, name = "primaryDataSource")
 @EnableConfigurationProperties(DataSourceProperties.class)
 @Import({ SqlLiteDataSourceAutoConfiguration.class, DruidDataSourceAutoConfiguration.class,
 		HikariDataSourceAutoConfiguration.class })

@@ -10,27 +10,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.tmt.core.persistence.datasource.DataSourceHolder;
 
 /**
  * 配置 Druid
+ * 
  * @author lifeng
  */
-@ConditionalOnClass({DruidDataSource.class})
-@ConditionalOnMissingBean(DataSource.class)
+@ConditionalOnClass({ DruidDataSource.class })
+@ConditionalOnMissingBean(value = DataSource.class)
 public class DruidDataSourceAutoConfiguration {
 
 	@Autowired
 	private DataSourceProperties properties;
-	
+
 	/**
 	 * 构建 DruidDataSource
+	 * 
 	 * @return
 	 */
 	@Bean
-	public DataSource druidDataSource() {
+	@Primary
+	public DataSource primaryDataSource() {
 		APP_LOGGER.debug("Loading Druid DataSource");
 		DruidDataSource dataSource = new DruidDataSource();
 		dataSource.setUrl(properties.getUrl());
@@ -63,14 +67,15 @@ public class DruidDataSourceAutoConfiguration {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		// 设置链接
 		DataSourceHolder.setDataSource(dataSource);
 		return dataSource;
 	}
-	
+
 	/**
 	 * 提供 HikariDataSourcePool 指标查询
+	 * 
 	 * @return
 	 */
 	@Bean

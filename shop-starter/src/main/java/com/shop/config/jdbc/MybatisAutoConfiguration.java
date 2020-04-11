@@ -18,10 +18,11 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandidate;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.Assert;
@@ -81,6 +82,7 @@ public class MybatisAutoConfiguration {
 	}
 
 	@Bean
+	@Primary
 	public Dialect dbDialect() {
 		Database db = this.dbProperties.getDb();
 		if (db == Database.h2) {
@@ -98,7 +100,8 @@ public class MybatisAutoConfiguration {
 	}
 
 	@Bean
-	@ConditionalOnMissingBean
+	@Primary
+	@ConditionalOnSingleCandidate(DataSource.class)
 	public SqlSessionFactory sqlSessionFactory(DataSource dataSource, Dialect dialect) throws Exception {
 		SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
 		factory.setDataSource(dataSource);
@@ -156,8 +159,9 @@ public class MybatisAutoConfiguration {
 	}
 
 	@Bean
-	@ConditionalOnMissingBean
-	public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
+	@Primary
+	@ConditionalOnSingleCandidate(SqlSessionFactory.class)
+	public SqlSessionTemplate primarySessionTemplate(SqlSessionFactory sqlSessionFactory) {
 		ExecutorType executorType = this.properties.getExecutorType();
 		if (executorType != null) {
 			return new SqlSessionTemplate(sqlSessionFactory, executorType);
