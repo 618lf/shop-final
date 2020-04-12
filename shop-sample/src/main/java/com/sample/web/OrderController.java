@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sample.dao.OrderDao;
+import com.sample.service.OrderService;
 
 /**
  * 只是测试
@@ -20,7 +20,7 @@ public class OrderController {
 	 * 多数据源的演示
 	 */
 	@Autowired(required = false)
-	OrderDao orderDao;
+	OrderService orderService;
 
 	/**
 	 * 获得订单
@@ -28,6 +28,6 @@ public class OrderController {
 	@ResponseBody
 	@RequestMapping("/get")
 	public void get() {
-		orderDao.get(0L);
+		orderService.saveOrder();
 	}
 }

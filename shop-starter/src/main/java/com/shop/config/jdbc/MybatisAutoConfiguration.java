@@ -61,20 +61,17 @@ import com.tmt.core.utils.StringUtils;
 		DruidDataSourceAutoConfiguration.class, HikariDataSourceAutoConfiguration.class })
 @ConditionalOnProperty(prefix = Constants.APPLICATION_PREFIX, name = "enableMybatis", matchIfMissing = true)
 public class MybatisAutoConfiguration {
-	private final DataSourceProperties dbProperties;
 	private final MybatisProperties properties;
 	private final Interceptor[] interceptors;
 	private final ResourceLoader resourceLoader;
 	private final DatabaseIdProvider databaseIdProvider;
 	private final List<ConfigurationCustomizer> configurationCustomizers;
 
-	public MybatisAutoConfiguration(MybatisProperties properties, DataSourceProperties dbProperties,
-			ObjectProvider<Interceptor[]> interceptorsProvider, ResourceLoader resourceLoader,
-			ObjectProvider<DatabaseIdProvider> databaseIdProvider,
+	public MybatisAutoConfiguration(MybatisProperties properties, ObjectProvider<Interceptor[]> interceptorsProvider,
+			ResourceLoader resourceLoader, ObjectProvider<DatabaseIdProvider> databaseIdProvider,
 			ObjectProvider<List<ConfigurationCustomizer>> configurationCustomizersProvider) {
 		APP_LOGGER.debug("Loading Mybatis");
 		this.properties = properties;
-		this.dbProperties = dbProperties;
 		this.interceptors = interceptorsProvider.getIfAvailable();
 		this.resourceLoader = resourceLoader;
 		this.databaseIdProvider = databaseIdProvider.getIfAvailable();
@@ -83,8 +80,8 @@ public class MybatisAutoConfiguration {
 
 	@Bean
 	@ConditionalOnMissingBean
-	public Dialect primaryDbDialect() {
-		Database db = this.dbProperties.getDb();
+	public Dialect primaryDbDialect(DataSourceProperties dbProperties) {
+		Database db = dbProperties.getDb();
 		if (db == Database.h2) {
 			return new H2Dialect();
 		} else if (db == Database.mysql) {

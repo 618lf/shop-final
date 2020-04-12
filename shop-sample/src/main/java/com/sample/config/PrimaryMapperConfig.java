@@ -30,7 +30,7 @@ import com.tmt.core.persistence.mapper.MapperScan;
 import com.tmt.core.utils.Sets;
 
 /**
- * 代替之前的配置 <br>
+ * 代替之前的配置: @Transactional 的代码都会使用@Primary 配置的 事务管理器 <br>
  * 
  * @author lifeng
  */
@@ -69,7 +69,8 @@ public class PrimaryMapperConfig {
 		return new HikariDataSourceAutoConfiguration().primaryDataSource(properties);
 	}
 
-	// ************ 2. 数据源的事务管理器 ****************
+	// ************ 2. 数据源的事务管理器 ， 配置这个之后 不会配置默认的事务管理器， 但是会配置一个默认的编程式事务
+	// 模板， 不建议使用****************
 
 	@Bean
 	@Primary
@@ -79,6 +80,9 @@ public class PrimaryMapperConfig {
 		transactionManagerCustomizers.ifAvailable((customizers) -> customizers.customize(transactionManager));
 		return transactionManager;
 	}
+
+	// @Transactional 使用此事务管理器 -- 也可以通过 Aop 来开启 包事务的管理模式
+	// 如果多个数据源需要能统一事务则需要使用 JtaTransactionManager + AtomikosDataSource
 
 	// ************ 3. 主 Mybatis 配置 这部分配置后默认的 Mybatis将失效，但是需要配置一个 @Primary
 	// SqlSessionTemplate 因为默认的Dao 中是通过注解获取的 ****************
