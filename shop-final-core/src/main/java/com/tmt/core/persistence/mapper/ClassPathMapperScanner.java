@@ -4,16 +4,19 @@ import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Set;
 
+import org.mybatis.spring.SqlSessionTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
+import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
+import org.springframework.util.StringUtils;
 
 /**
  * 类扫描
@@ -27,6 +30,7 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
 
 	private Class<? extends MapperFactoryBean> mapperFactoryBeanClass = MapperFactoryBean.class;
 	private Class<? extends Annotation> annotationClass;
+	private String sqlSessionTemplateBeanName;
 
 	public ClassPathMapperScanner(BeanDefinitionRegistry registry) {
 		super(registry, false);
@@ -34,6 +38,10 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
 
 	public void setAnnotationClass(Class<? extends Annotation> annotationClass) {
 		this.annotationClass = annotationClass;
+	}
+
+	public void setSqlSessionTemplateBeanName(String sqlSessionTemplateBeanName) {
+		this.sqlSessionTemplateBeanName = sqlSessionTemplateBeanName;
 	}
 
 	/**
@@ -96,6 +104,13 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
 			}
 			definition.getConstructorArgumentValues().addGenericArgumentValue(beanClassName); // issue #59
 			definition.setBeanClass(this.mapperFactoryBeanClass);
+			if (StringUtils.hasText(this.sqlSessionTemplateBeanName)) {
+				definition.getPropertyValues().add("sqlSessionTemplate",
+						new RuntimeBeanReference(this.sqlSessionTemplateBeanName));
+			} else {
+				definition.getPropertyValues().add("sqlSessionTemplate",
+						new RuntimeBeanReference(SqlSessionTemplate.class));
+			}
 			definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
 		}
 	}

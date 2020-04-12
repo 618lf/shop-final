@@ -189,28 +189,33 @@ public class MybatisProperties {
 	// 合并默认配置和自定义配置
 	private Set<String> mergeMapperLocations() {
 		if (_mapperLocations == null) {
-			
+
+			// 创建
+			_mapperLocations = Sets.newHashSet();
+
 			// 解析自动扫描的类
-			Set<String> mapperLocations = this.parseAutoMapperLocations();
+			Set<String> mapperLocations = this.parseAutoMapperScanPackages();
+			for (String mapperLocation : mapperLocations) {
+				_mapperLocations.add(
+						StringUtils.format("classpath*:%s/**/*.Mapper.xml", mapperLocation.replaceAll("\\.", "/")));
+			}
 
 			// 自定义的配置
 			if (this.mapperLocations != null) {
 				for (String mapperLocation : this.mapperLocations) {
-					mapperLocations.add(mapperLocation);
+					_mapperLocations.add(
+							StringUtils.format("classpath*:%s/**/*.Mapper.xml", mapperLocation.replaceAll("\\.", "/")));
 				}
 			}
 
 			// 基础配置
-			mapperLocations.add("classpath*:com/tmt/core/persistence/config/*.Mapper.xml");
-
-			// 返回需要扫描的地址
-			_mapperLocations = mapperLocations;
+			_mapperLocations.add("classpath*:com/tmt/core/persistence/config/*.Mapper.xml");
 		}
 		return _mapperLocations;
 	}
 
 	// 解析出需要扫码的目录
-	private Set<String> parseAutoMapperLocations() {
+	public Set<String> parseAutoMapperScanPackages() {
 		Set<String> mappings = Sets.newHashSet();
 		Set<String> sources = Application.getScanPackages();
 		if (sources != null && !sources.isEmpty()) {
@@ -218,7 +223,7 @@ public class MybatisProperties {
 				if (StringUtils.isBlank(source)) {
 					continue;
 				}
-				mappings.add(StringUtils.format("classpath*:%s/**/dao/*.Mapper.xml", source.replaceAll("\\.", "/")));
+				mappings.add(source + ".dao");
 			}
 		}
 		return mappings;

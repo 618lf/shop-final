@@ -20,10 +20,20 @@ public class MapperScannerConfigurer
 	private ApplicationContext applicationContext;
 	private String beanName;
 	private String basePackage;
+	private String sqlSessionTemplateBeanName;
 	private Class<? extends Annotation> annotationClass;
 
 	@Override
 	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+	}
+
+	/**
+	 * 配置当前扫描包使用的 sqlSessionTemplateBeanName
+	 * 
+	 * @param sqlSessionTemplateBeanName
+	 */
+	public void setSqlSessionTemplateBeanName(String sqlSessionTemplateBeanName) {
+		this.sqlSessionTemplateBeanName = sqlSessionTemplateBeanName;
 	}
 
 	/**
@@ -33,6 +43,15 @@ public class MapperScannerConfigurer
 	 */
 	public void setBasePackage(String basePackage) {
 		this.basePackage = basePackage;
+	}
+
+	/**
+	 * 配置只识别的注解
+	 * 
+	 * @param annotationClass
+	 */
+	public void setAnnotationClass(Class<? extends Annotation> annotationClass) {
+		this.annotationClass = annotationClass;
 	}
 
 	/**
@@ -68,6 +87,7 @@ public class MapperScannerConfigurer
 		ClassPathMapperScanner scanner = new ClassPathMapperScanner(registry);
 		scanner.setAnnotationClass(this.annotationClass);
 		scanner.setResourceLoader(this.applicationContext);
+		scanner.setSqlSessionTemplateBeanName(this.sqlSessionTemplateBeanName);
 		scanner.registerFilters();
 		scanner.scan(StringUtils.tokenizeToStringArray(this.basePackage,
 				ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS));

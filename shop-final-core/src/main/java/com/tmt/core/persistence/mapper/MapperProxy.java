@@ -7,6 +7,8 @@ import java.lang.reflect.Proxy;
 import java.util.List;
 import java.util.Map;
 
+import org.mybatis.spring.SqlSessionTemplate;
+
 import com.tmt.core.persistence.BaseDao;
 import com.tmt.core.persistence.BaseDaoImpl;
 import com.tmt.core.persistence.PageParameters;
@@ -18,6 +20,15 @@ import com.tmt.core.persistence.QueryCondition;
  * @author lifeng
  */
 public class MapperProxy<T, PK> extends BaseDaoImpl<T, PK> implements InvocationHandler {
+
+	/**
+	 * 需要设置 操作模板
+	 * 
+	 * @param sqlSessionTemplate
+	 */
+	public MapperProxy(SqlSessionTemplate sqlSessionTemplate) {
+		super(sqlSessionTemplate);
+	}
 
 	@Override
 	@SuppressWarnings("unchecked")
@@ -272,8 +283,8 @@ public class MapperProxy<T, PK> extends BaseDaoImpl<T, PK> implements Invocation
 	 * @return
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static <T> T newProxy(Class<T> mapperInterface) {
+	public static <T> T newProxy(Class<T> mapperInterface, SqlSessionTemplate sqlSessionTemplate) {
 		return (T) Proxy.newProxyInstance(mapperInterface.getClassLoader(), new Class[] { mapperInterface },
-				new MapperProxy());
+				new MapperProxy(sqlSessionTemplate));
 	}
 }

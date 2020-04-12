@@ -18,11 +18,10 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandidate;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.Assert;
@@ -53,9 +52,10 @@ import com.tmt.core.utils.StringUtils;
  * 
  * @author lifeng
  */
-@org.springframework.context.annotation.Configuration
+@org.springframework.context.annotation.Configuration(proxyBeanMethods = false)
 @ConditionalOnClass({ SqlSessionFactory.class, SqlSessionFactoryBean.class })
 @ConditionalOnBean(DataSource.class)
+@ConditionalOnMissingBean(MybatisAutoConfiguration.class)
 @EnableConfigurationProperties(MybatisProperties.class)
 @AutoConfigureAfter({ DataSourceAutoConfiguration.class, SqlLiteDataSourceAutoConfiguration.class,
 		DruidDataSourceAutoConfiguration.class, HikariDataSourceAutoConfiguration.class })
@@ -82,8 +82,8 @@ public class MybatisAutoConfiguration {
 	}
 
 	@Bean
-	@Primary
-	public Dialect dbDialect() {
+	@ConditionalOnMissingBean
+	public Dialect primaryDbDialect() {
 		Database db = this.dbProperties.getDb();
 		if (db == Database.h2) {
 			return new H2Dialect();
@@ -100,8 +100,7 @@ public class MybatisAutoConfiguration {
 	}
 
 	@Bean
-	@Primary
-	@ConditionalOnSingleCandidate(DataSource.class)
+	@ConditionalOnMissingBean
 	public SqlSessionFactory sqlSessionFactory(DataSource dataSource, Dialect dialect) throws Exception {
 		SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
 		factory.setDataSource(dataSource);
@@ -159,8 +158,7 @@ public class MybatisAutoConfiguration {
 	}
 
 	@Bean
-	@Primary
-	@ConditionalOnSingleCandidate(SqlSessionFactory.class)
+	@ConditionalOnMissingBean
 	public SqlSessionTemplate primarySessionTemplate(SqlSessionFactory sqlSessionFactory) {
 		ExecutorType executorType = this.properties.getExecutorType();
 		if (executorType != null) {

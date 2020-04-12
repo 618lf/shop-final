@@ -47,11 +47,18 @@ public class BaseDaoImpl<T, PK> implements BaseDao<T, PK> {
 	private SqlSessionTemplate primarySessionTemplate;
 
 	/**
-	 * 支持通过Set的方式设置
+	 * 通过注解设置 sessionTemplate
+	 */
+	public BaseDaoImpl() {
+
+	}
+
+	/**
+	 * 支持通过构造的方式设置
 	 * 
 	 * @param sessionTemplate
 	 */
-	public void setSessionTemplate(SqlSessionTemplate sessionTemplate) {
+	public BaseDaoImpl(SqlSessionTemplate sessionTemplate) {
 		this.primarySessionTemplate = sessionTemplate;
 	}
 

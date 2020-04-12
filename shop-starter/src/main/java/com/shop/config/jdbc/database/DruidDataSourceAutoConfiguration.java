@@ -6,11 +6,9 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.tmt.core.persistence.datasource.DataSourceHolder;
@@ -24,17 +22,13 @@ import com.tmt.core.persistence.datasource.DataSourceHolder;
 @ConditionalOnMissingBean(value = DataSource.class)
 public class DruidDataSourceAutoConfiguration {
 
-	@Autowired
-	private DataSourceProperties properties;
-
 	/**
 	 * 构建 DruidDataSource
 	 * 
 	 * @return
 	 */
 	@Bean
-	@Primary
-	public DataSource primaryDataSource() {
+	public DataSource primaryDataSource(DataSourceProperties properties) {
 		APP_LOGGER.debug("Loading Druid DataSource");
 		DruidDataSource dataSource = new DruidDataSource();
 		dataSource.setUrl(properties.getUrl());

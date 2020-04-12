@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.sqlite.SQLiteDataSource;
@@ -34,13 +33,10 @@ public class SqlLiteDataSourceAutoConfiguration {
 	 * 构建 sqlLiteDataSource 可配置在 resource: 在资源目录下获取db文件，这种方式有一定的问题 如果填写的是相对路径，则获取
 	 * jar 中当前目录下的当前目录。 可以研究下spring 的 resource
 	 * 
-	 * URL配置总结：
-	 * 1. 可以配置绝对路径，不建议
-	 * 2. 配置resource:或 classpaht: 打包之后读取不到,开发环境可以使用，打包之后不能使用
-	 * 3. 配置file: 打包之后在相对目录中获取，开发环境获取不到
+	 * URL配置总结： 1. 可以配置绝对路径，不建议 2. 配置resource:或 classpaht:
+	 * 打包之后读取不到,开发环境可以使用，打包之后不能使用 3. 配置file: 打包之后在相对目录中获取，开发环境获取不到
 	 */
 	@Bean(destroyMethod = "")
-	@Primary
 	public DataSource primaryDataSource() {
 		SQLiteDataSource dataSource = new SQLiteDataSource();
 		dataSource.setUrl("jdbc:sqlite:" + loadSqliteUrl());

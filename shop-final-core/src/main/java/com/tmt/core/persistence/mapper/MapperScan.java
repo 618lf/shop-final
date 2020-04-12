@@ -47,7 +47,7 @@ public @interface MapperScan {
 	 *
 	 * @return the annotation that the scanner will search for
 	 */
-	Class<? extends Annotation> annotationClass() default Annotation.class;
+	Class<? extends Annotation> annotationClass() default Mapper.class;
 
 	/**
 	 * Specifies which {@code SqlSessionTemplate} to use in the case that there is

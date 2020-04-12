@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.jdbc.metadata.HikariDataSourcePoolMetadata;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
 
 import com.tmt.core.persistence.datasource.DataSourceHolder;
 import com.zaxxer.hikari.HikariConfig;
@@ -23,21 +22,13 @@ import com.zaxxer.hikari.HikariDataSource;
 @ConditionalOnMissingBean(value = DataSource.class)
 public class HikariDataSourceAutoConfiguration {
 
-	// 数据库属性
-	private DataSourceProperties properties;
-
-	public HikariDataSourceAutoConfiguration(DataSourceProperties properties) {
-		this.properties = properties;
-	}
-
 	/**
 	 * 构建 HikariDataSource
 	 * 
 	 * @return
 	 */
 	@Bean
-	@Primary
-	public DataSource primaryDataSource() {
+	public DataSource primaryDataSource(DataSourceProperties properties) {
 		APP_LOGGER.debug("Loading Hikari DataSource");
 		HikariConfig config = new HikariConfig();
 		config.setPoolName(properties.getName());

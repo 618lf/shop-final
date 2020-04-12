@@ -1,5 +1,6 @@
 package com.tmt.core.persistence.mapper;
 
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.FactoryBean;
 
 /**
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.FactoryBean;
  */
 public class MapperFactoryBean<T> implements FactoryBean<T> {
 
+	private SqlSessionTemplate sqlSessionTemplate;
 	private Class<T> mapperInterface;
 
 	public MapperFactoryBean() {
@@ -29,11 +31,22 @@ public class MapperFactoryBean<T> implements FactoryBean<T> {
 	}
 
 	/**
+	 * Set the SqlSessionTemplate for this DAO explicitly, as an alternative to
+	 * specifying a SqlSessionFactory.
+	 *
+	 * @param sqlSessionTemplate a template of SqlSession
+	 * @see #setSqlSessionFactory
+	 */
+	public void setSqlSessionTemplate(SqlSessionTemplate sqlSessionTemplate) {
+		this.sqlSessionTemplate = sqlSessionTemplate;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public T getObject() throws Exception {
-		return MapperProxy.newProxy(mapperInterface);
+		return MapperProxy.newProxy(mapperInterface, sqlSessionTemplate);
 	}
 
 	/**
