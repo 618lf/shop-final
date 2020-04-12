@@ -10,17 +10,21 @@ import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.transaction.TransactionManagerCustomizers;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import com.shop.config.jdbc.MybatisAutoConfiguration;
 import com.shop.config.jdbc.MybatisProperties;
 import com.shop.config.jdbc.database.ConfigurationCustomizer;
 import com.shop.config.jdbc.database.DataSourceProperties;
 import com.shop.config.jdbc.database.HikariDataSourceAutoConfiguration;
+import com.tmt.Constants;
 import com.tmt.core.persistence.dialect.Dialect;
 import com.tmt.core.persistence.mapper.MapperScan;
 import com.tmt.core.utils.Sets;
@@ -32,6 +36,7 @@ import com.tmt.core.utils.Sets;
  */
 @Configuration
 @MapperScan({ "com.tmt.system.dao", "com.tmt.gen.dao" })
+@ConditionalOnProperty(prefix = Constants.APPLICATION_PREFIX, name = "enableMultipleDb", matchIfMissing = false)
 public class PrimaryMapperConfig {
 
 	// ************ 主定义主配置的资源配置 ****************
@@ -62,6 +67,17 @@ public class PrimaryMapperConfig {
 	@Primary
 	public DataSource primaryDataSource(PrimaryDataSourceProperties properties) {
 		return new HikariDataSourceAutoConfiguration().primaryDataSource(properties);
+	}
+
+	// ************ 2. 数据源的事务管理器 ****************
+
+	@Bean
+	@Primary
+	public DataSourceTransactionManager primaryTransactionManager(DataSource primaryDataSource,
+			ObjectProvider<TransactionManagerCustomizers> transactionManagerCustomizers) {
+		DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(primaryDataSource);
+		transactionManagerCustomizers.ifAvailable((customizers) -> customizers.customize(transactionManager));
+		return transactionManager;
 	}
 
 	// ************ 3. 主 Mybatis 配置 这部分配置后默认的 Mybatis将失效，但是需要配置一个 @Primary

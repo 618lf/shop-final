@@ -16,7 +16,10 @@ import com.sample.dao.OrderDao;
 @RequestMapping("/order")
 public class OrderController {
 
-	@Autowired
+	/**
+	 * 多数据源的演示
+	 */
+	@Autowired(required = false)
 	OrderDao orderDao;
 
 	/**

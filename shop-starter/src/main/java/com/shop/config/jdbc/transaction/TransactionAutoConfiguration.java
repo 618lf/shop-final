@@ -49,6 +49,9 @@ import org.springframework.transaction.support.TransactionTemplate;
 @EnableConfigurationProperties(TransactionProperties.class)
 public class TransactionAutoConfiguration {
 
+	/**
+	 * 事务配置
+	 */
 	@Bean
 	@ConditionalOnMissingBean
 	public TransactionManagerCustomizers platformTransactionManagerCustomizers(
@@ -56,6 +59,11 @@ public class TransactionAutoConfiguration {
 		return new TransactionManagerCustomizers(customizers.getIfAvailable());
 	}
 
+	/**
+	 * 提供编程式事务
+	 * 
+	 * @author lifeng
+	 */
 	@Configuration
 	@ConditionalOnSingleCandidate(PlatformTransactionManager.class)
 	public static class TransactionTemplateConfiguration {
@@ -73,6 +81,11 @@ public class TransactionAutoConfiguration {
 		}
 	}
 
+	/**
+	 * 事务代理的方式
+	 * 
+	 * @author lifeng
+	 */
 	@Configuration
 	@ConditionalOnBean(PlatformTransactionManager.class)
 	@ConditionalOnMissingBean(AbstractTransactionManagementConfiguration.class)

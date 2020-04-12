@@ -11,16 +11,20 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.transaction.TransactionManagerCustomizers;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import com.shop.config.jdbc.MybatisAutoConfiguration;
 import com.shop.config.jdbc.MybatisProperties;
 import com.shop.config.jdbc.database.ConfigurationCustomizer;
 import com.shop.config.jdbc.database.DataSourceProperties;
 import com.shop.config.jdbc.database.HikariDataSourceAutoConfiguration;
+import com.tmt.Constants;
 import com.tmt.core.persistence.dialect.Dialect;
 import com.tmt.core.persistence.mapper.MapperScan;
 import com.tmt.core.utils.Sets;
@@ -32,6 +36,7 @@ import com.tmt.core.utils.Sets;
  */
 @Configuration
 @MapperScan(value = "com.sample.dao", sqlSessionTemplateRef = "orderSessionTemplate")
+@ConditionalOnProperty(prefix = Constants.APPLICATION_PREFIX, name = "enableMultipleDb", matchIfMissing = false)
 public class OrderMapperConfig {
 
 	// ************ 订单系统 -- 配置的资源配置 ****************
@@ -59,6 +64,17 @@ public class OrderMapperConfig {
 	@Bean
 	public DataSource orderDataSource(OrderDataSourceProperties properties) {
 		return new HikariDataSourceAutoConfiguration().primaryDataSource(properties);
+	}
+
+	// ************ 2. 数据源的事务管理器 ****************
+
+	@Bean
+	public DataSourceTransactionManager orderTransactionManager(
+			@Qualifier("orderDataSource") DataSource orderDataSource,
+			ObjectProvider<TransactionManagerCustomizers> transactionManagerCustomizers) {
+		DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(orderDataSource);
+		transactionManagerCustomizers.ifAvailable((customizers) -> customizers.customize(transactionManager));
+		return transactionManager;
 	}
 
 	// ************3. 订单系统 -- Mybatis 配置 ****************

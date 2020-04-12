@@ -27,7 +27,7 @@ public abstract class BaseService<T, PK> {
 	protected static Logger logger = LoggerFactory.getLogger(BaseService.class);
 
 	/**
-	 * 用于提供编程式事务支持
+	 * 用于提供编程式事务支持 -- 多数据源不能使用
 	 */
 	@Autowired
 	protected PlatformTransactionManager transactionManager;
