@@ -9,6 +9,9 @@ import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.aop.Advisor;
+import org.springframework.aop.aspectj.AspectJExpressionPointcut;
+import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -19,6 +22,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.interceptor.DefaultTransactionAttribute;
+import org.springframework.transaction.interceptor.NameMatchTransactionAttributeSource;
+import org.springframework.transaction.interceptor.TransactionInterceptor;
 
 import com.shop.config.jdbc.MybatisAutoConfiguration;
 import com.shop.config.jdbc.MybatisProperties;
@@ -46,6 +53,7 @@ public class MultipleDbConfig {
 	 */
 	@Configuration
 	@MapperScan({ "com.tmt.system.dao", "com.tmt.gen.dao" })
+	@ConditionalOnProperty(prefix = Constants.APPLICATION_PREFIX, name = "enableMultipleDb", matchIfMissing = false)
 	public static class PrimaryMapperConfig {
 
 		// ************ 主定义主配置的资源配置 ****************
@@ -138,7 +146,8 @@ public class MultipleDbConfig {
 	 */
 	@Configuration
 	@MapperScan(value = "com.sample.dao", sqlSessionTemplateRef = "orderSessionTemplate")
-	public class OrderMapperConfig {
+	@ConditionalOnProperty(prefix = Constants.APPLICATION_PREFIX, name = "enableMultipleDb", matchIfMissing = false)
+	public static class OrderMapperConfig {
 
 		// ************ 订单系统 -- 配置的资源配置 ****************
 
@@ -167,7 +176,7 @@ public class MultipleDbConfig {
 			return new HikariDataSourceAutoConfiguration().primaryDataSource(properties);
 		}
 
-		// ************ 2. 数据源的事务管理器 ****************
+		// ************ 2. 数据源的事务管理器 -- 并通过AOP植入事务管理，不需要使用声明式事务 ****************
 
 		@Bean
 		public DataSourceTransactionManager orderTransactionManager(
@@ -176,6 +185,48 @@ public class MultipleDbConfig {
 			DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(orderDataSource);
 			transactionManagerCustomizers.ifAvailable((customizers) -> customizers.customize(transactionManager));
 			return transactionManager;
+		}
+
+		@Bean
+		public TransactionInterceptor orderTxAdvice(
+				@Qualifier("orderTransactionManager") DataSourceTransactionManager orderTransactionManager) {
+
+			// 开启事务
+			DefaultTransactionAttribute txAttr_REQUIRED = new DefaultTransactionAttribute();
+			txAttr_REQUIRED.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+
+			// 只读
+			DefaultTransactionAttribute txAttr_REQUIRED_READONLY = new DefaultTransactionAttribute();
+			txAttr_REQUIRED_READONLY.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+			txAttr_REQUIRED_READONLY.setReadOnly(true);
+
+			// 事务配置
+			NameMatchTransactionAttributeSource source = new NameMatchTransactionAttributeSource();
+			source.addTransactionalMethod("save*", txAttr_REQUIRED);
+			source.addTransactionalMethod("delete*", txAttr_REQUIRED);
+			source.addTransactionalMethod("update*", txAttr_REQUIRED);
+			source.addTransactionalMethod("exec*", txAttr_REQUIRED);
+			source.addTransactionalMethod("set*", txAttr_REQUIRED);
+			source.addTransactionalMethod("get*", txAttr_REQUIRED_READONLY);
+			source.addTransactionalMethod("query*", txAttr_REQUIRED_READONLY);
+			source.addTransactionalMethod("find*", txAttr_REQUIRED_READONLY);
+			source.addTransactionalMethod("list*", txAttr_REQUIRED_READONLY);
+			source.addTransactionalMethod("count*", txAttr_REQUIRED_READONLY);
+			source.addTransactionalMethod("is*", txAttr_REQUIRED_READONLY);
+
+			// 关联事务管理器
+			return new TransactionInterceptor(orderTransactionManager, source);
+		}
+
+		@Bean
+		public Advisor orderTxAdviceAdvisor(@Qualifier("orderTxAdvice") TransactionInterceptor orderTxAdvice) {
+			AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();
+			pointcut.setExpression("execution (public * com.sample.service..*.*(..)))");
+
+			// 设置通过的顺序，排在声明式事务的前面（如果有）
+			DefaultPointcutAdvisor advisor = new DefaultPointcutAdvisor(pointcut, orderTxAdvice);
+			advisor.setOrder(-1000);
+			return advisor;
 		}
 
 		// ************3. 订单系统 -- Mybatis 配置 ****************

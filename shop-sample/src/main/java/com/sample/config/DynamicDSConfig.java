@@ -40,8 +40,7 @@ public class DynamicDSConfig {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * 需要定义一个主数据配置-- 确定数据的类型
 	 */
 	@Bean
 	@Primary
@@ -80,6 +79,11 @@ public class DynamicDSConfig {
 		return dynamicDataSource;
 	}
 
+	/**
+	 * 通过 Aop 来开启自动数据源的切换
+	 * 
+	 * @return
+	 */
 	@Bean
 	public DynamicSourceAspect dynamicSourceAspect() {
 		return new DynamicSourceAspect();

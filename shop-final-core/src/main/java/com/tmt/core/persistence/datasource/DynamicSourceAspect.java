@@ -1,9 +1,13 @@
 package com.tmt.core.persistence.datasource;
 
+import java.lang.reflect.Method;
+
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
@@ -25,11 +29,11 @@ public class DynamicSourceAspect implements Ordered {
 	 */
 	@Pointcut(value = "@annotation(com.tmt.core.persistence.datasource.DS)")
 	private void cut() {
-
 	}
 
 	@Around("cut()")
-	public Object around(ProceedingJoinPoint point, DS datasource) throws Throwable {
+	public Object around(ProceedingJoinPoint point) throws Throwable {
+		DS datasource = this.getMethod(point).getAnnotation(DS.class);
 		if (log.isDebugEnabled()) {
 			log.debug("设置数据源为：" + datasource.value());
 		}
@@ -44,6 +48,18 @@ public class DynamicSourceAspect implements Ordered {
 			}
 			DataSourceHolder.clearDataSourceType();
 		}
+	}
+
+	/**
+	 * 获得当前的 Method
+	 * 
+	 * @param point
+	 * @return
+	 */
+	private Method getMethod(ProceedingJoinPoint point) {
+		Signature s = point.getSignature();
+		MethodSignature ms = (MethodSignature) s;
+		return ms.getMethod();
 	}
 
 	/**

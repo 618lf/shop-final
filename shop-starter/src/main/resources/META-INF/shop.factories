@@ -3,6 +3,7 @@
 
 # Shop only load Auto Configuration, look above
 com.shop.starter.ApplicationBoot=\
+com.shop.config.aop.AopAutoConfiguration,\
 com.shop.config.jdbc.DataSourceAutoConfiguration,\
 com.shop.config.jdbc.JdbcTemplateAutoConfiguration,\
 com.shop.config.jdbc.DataSourceTransactionManagerConfiguration,\
