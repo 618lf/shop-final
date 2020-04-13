@@ -43,7 +43,7 @@ import com.tmt.core.persistence.dialect.MsSQLDialect;
 import com.tmt.core.persistence.dialect.MySQLDialect;
 import com.tmt.core.persistence.dialect.OracleDialect;
 import com.tmt.core.persistence.dialect.SqlLiteDialect;
-import com.tmt.core.persistence.mybatis.ExecutorInterceptor;
+import com.tmt.core.persistence.mybatis.PagingInterceptor;
 import com.tmt.core.utils.Maps;
 import com.tmt.core.utils.StringUtils;
 
@@ -146,7 +146,7 @@ public class MybatisAutoConfiguration {
 	private void defaultConfiguration(Configuration configuration, Dialect dialect) {
 
 		// 默认的拦截器
-		ExecutorInterceptor interceptor = new ExecutorInterceptor();
+		PagingInterceptor interceptor = new PagingInterceptor();
 		interceptor.setDialect(dialect);
 		configuration.addInterceptor(interceptor);
 

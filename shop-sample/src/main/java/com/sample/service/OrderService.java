@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sample.dao.OrderDao;
-import com.tmt.core.persistence.datasource.DS;
+import com.tmt.core.persistence.DS;
 
 /**
  * 订单服务 -- 测试多数据源
