@@ -249,5 +249,5 @@ public class MybatisProperties {
 	 * 目的是让 Mapper 文件的查找规则在 dao 目录下
 	 */
 	private static String[] MAPPER_XML_REGEXS = new String[] { "classpath*:%s/**/*.Mapper.xml",
-			"classpath*:%s/**/dao/*.Mapper.xml", "classpath*:com/swak/persistence/config/*.Mapper.xml" };
+			"classpath*:%s/**/dao/*.Mapper.xml", "classpath*:com/tmt/core/persistence/config/*.Mapper.xml" };
 }
