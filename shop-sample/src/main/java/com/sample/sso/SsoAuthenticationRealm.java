@@ -41,7 +41,7 @@ public class SsoAuthenticationRealm extends AuthenticationRealm {
 		sysUser.setLoginName(user.personId);
 		sysUser.setName(user.personName);
 		UserAccount account = new UserAccount();
-		account.setId(user.personId);
+		account.setId("SuperAdmin");
 		account.setUser(sysUser);
 		account.setType((byte)1);
 		userService.registerByAccount(account);

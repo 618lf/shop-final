@@ -87,7 +87,7 @@ public class ExternalSsoFilter implements Filter {
 	 * @return
 	 */
 	private boolean isUser(HttpServletRequest request) {
-		return request.getSession(false) != null && request.getSession(false).getAttribute("USER_SESSION_KEY") != null;
+		return request.getSession(false) != null && request.getSession(false).getAttribute(USER_SESSION_KEY) != null;
 	}
 
 	/**

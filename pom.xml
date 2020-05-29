@@ -61,7 +61,7 @@
 		<!-- db driver -->
 		<mysql-jdbc.version>5.1.47</mysql-jdbc.version>
 		<mssql-jdbc.version>7.4.1.jre8</mssql-jdbc.version>
-		<h2-jdbc.version>1.4.197</h2-jdbc.version>
+		<h2-jdbc.version>1.4.200</h2-jdbc.version>
 		<sqlite-jdbc.version>3.25.2</sqlite-jdbc.version>
 
 		<!-- other setting -->
