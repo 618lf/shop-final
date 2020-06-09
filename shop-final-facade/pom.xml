@@ -2,14 +2,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.tmt</groupId>
+		<groupId>com.github.618lf</groupId>
 		<artifactId>shop-final</artifactId>
-		<version>0.0.2</version>
+		<version>1.0.0_final</version>
 	</parent>
 	<artifactId>shop-final-facade</artifactId>
 	<dependencies>
 		<dependency>
-			<groupId>com.tmt</groupId>
+			<groupId>com.github.618lf</groupId>
 			<artifactId>shop-final-core</artifactId>
 		</dependency>
 	</dependencies>

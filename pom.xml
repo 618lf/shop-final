@@ -2,9 +2,9 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.tmt</groupId>
+	<groupId>com.github.618lf</groupId>
 	<artifactId>shop-final</artifactId>
-	<version>0.0.2</version>
+	<version>1.0.0_final</version>
 	<packaging>pom</packaging>
 	<modules>
 		<module>shop-final-core</module>
@@ -87,27 +87,27 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>com.tmt</groupId>
+				<groupId>com.github.618lf</groupId>
 				<artifactId>shop-final-core</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.tmt</groupId>
+				<groupId>com.github.618lf</groupId>
 				<artifactId>shop-final-facade</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.tmt</groupId>
+				<groupId>com.github.618lf</groupId>
 				<artifactId>shop-final-service</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.tmt</groupId>
+				<groupId>com.github.618lf</groupId>
 				<artifactId>shop-final-web</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.tmt</groupId>
+				<groupId>com.github.618lf</groupId>
 				<artifactId>shop-starter</artifactId>
 				<version>${project.version}</version>
 			</dependency>
