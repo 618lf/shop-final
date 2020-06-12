@@ -187,6 +187,7 @@ public class MultipleDbConfig {
 			return transactionManager;
 		}
 
+		@SuppressWarnings("deprecation")
 		@Bean
 		public TransactionInterceptor orderTxAdvice(
 				@Qualifier("orderTransactionManager") DataSourceTransactionManager orderTransactionManager) {

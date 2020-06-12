@@ -78,6 +78,7 @@ import com.tmt.core.web.security.interceptor.TokenInterceptor;
  * 
  * @author lifeng
  */
+@SuppressWarnings("deprecation")
 @Configuration
 @ConditionalOnWebApplication(type = Type.SERVLET)
 @ConditionalOnClass({ Servlet.class, DispatcherServlet.class, WebMvcConfigurer.class })
