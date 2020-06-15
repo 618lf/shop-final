@@ -16,6 +16,12 @@
 		<dependency>
 			<groupId>com.github.618lf</groupId>
 			<artifactId>shop-final-service</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>com.alibaba</groupId>
+					<artifactId>druid</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.github.618lf</groupId>

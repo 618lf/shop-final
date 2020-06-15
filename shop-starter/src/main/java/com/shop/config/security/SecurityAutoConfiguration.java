@@ -6,8 +6,10 @@ import java.util.Map;
 
 import javax.servlet.Filter;
 
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -40,9 +42,11 @@ import com.tmt.core.security.principal.support.CookiePrincipalStrategy;
 import com.tmt.core.security.principal.support.EhCacheSessionRepository;
 import com.tmt.core.security.principal.support.HttpServletSessionRepository;
 import com.tmt.core.security.principal.support.RedisSessionRepository;
+import com.tmt.core.security.realm.Realm;
 import com.tmt.core.security.utils.SecurityUtils;
 import com.tmt.core.utils.StringUtils;
 import com.tmt.core.web.filter.EncodingConvertFilter;
+import com.tmt.system.realm.AuthenticationRealm;
 
 /**
  * 安全配置
@@ -104,11 +108,21 @@ public class SecurityAutoConfiguration {
 	}
 
 	@Bean
+	@ConditionalOnMissingBean
+	public AuthenticationRealm authenticationRealm(CacheManager cacheManager) {
+		AuthenticationRealm authenticationRealm = new AuthenticationRealm();
+		authenticationRealm.setCacheName(properties.getSecurity().getCacheName());
+		authenticationRealm.setCacheManager(cacheManager);
+		return authenticationRealm;
+	}
+
+	@Bean
 	public DefaultSecurityManager securityManager(PrincipalStrategy principalStrategy,
-			RememberMeManager rememberMeManager) {
+			RememberMeManager rememberMeManager, ObjectProvider<Realm> realm) {
+		Realm realmed = securityConfig.getRealm() == null ? realm.getIfAvailable() : securityConfig.getRealm();
 		DefaultSecurityManager securityManager = new DefaultSecurityManager();
 		securityManager.setPrincipalStrategy(principalStrategy);
-		securityManager.setRealm(securityConfig.getRealm());
+		securityManager.setRealm(realmed);
 		securityManager.setRememberMeManager(rememberMeManager);
 		SecurityUtils.setSecurityManager(securityManager);
 		return securityManager;
