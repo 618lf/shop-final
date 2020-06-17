@@ -112,6 +112,7 @@ public class BaseMessageController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping("jSonTrashList")
+	@SuppressWarnings("deprecation")
 	public Page jSonTrashList(Message message, Model model, Page page) {
 		QueryCondition qc = new QueryCondition();
 		PageParameters param = page.getParam();

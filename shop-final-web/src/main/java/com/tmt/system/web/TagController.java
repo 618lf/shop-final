@@ -130,6 +130,7 @@ public class TagController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping("/user/page")
+	@SuppressWarnings("deprecation")
 	public Page page(User user, Model model, Page page) {
 		QueryCondition qc = new QueryCondition();
 		PageParameters param = page.getParam();

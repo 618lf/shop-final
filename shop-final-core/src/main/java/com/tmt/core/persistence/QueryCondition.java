@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import com.tmt.core.codec.Encodes;
 import com.tmt.core.utils.StringUtils;
 
 /**
@@ -28,8 +29,13 @@ public class QueryCondition implements Serializable {
 		this.orderByClause = orderByClause;
 	}
 
+	/**
+	 * 过滤Sql语句和关键字
+	 * 
+	 * @return
+	 */
 	public String getOrderByClause() {
-		return orderByClause;
+		return Encodes.sqlFilter(this.orderByClause);
 	}
 
 	public Criteria getCriteria() {
@@ -231,7 +237,11 @@ public class QueryCondition implements Serializable {
 
 		/**
 		 * 这种方式会有sql注入的问题，有sql拼接。
+		 * 
+		 * @param conditionSql -- 直接传入的 Sql 会导致sql注入， 如果必须使用，请使用转义或则去除Sql关键词
+		 * @return
 		 */
+		@Deprecated
 		public Criteria andConditionSql(String conditionSql) {
 			addCriterion(conditionSql);
 			return this;

@@ -2,18 +2,16 @@ package com.tmt.core.converter;
 
 import org.springframework.core.convert.converter.Converter;
 
-import com.tmt.core.utils.StringUtils;
+import com.tmt.core.codec.Encodes;
 
 /**
  * String 格式化
+ * 
  * @author root
  */
-public class StringEscapeConverter implements Converter<String, String>{
-	/**
-	 * 格式化(不需要这么严格，直接去掉脚本就行了)
-	 */
+public class StringEscapeConverter implements Converter<String, String> {
 	@Override
 	public String convert(String source) {
-		return source == null ? null : StringUtils.removeScript(source.trim());
+		return source == null ? null : Encodes.xssFilter(source);
 	}
 }
