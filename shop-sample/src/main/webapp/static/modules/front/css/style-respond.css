@@ -1,9 +1,0 @@
-@media (max-width: 368px) {
-   .goods-item .ops span {
-      display: none;
-   }
-   .top-ops {
-      overflow: hidden;
-      max-height: 25px;
-   }
-}
