@@ -124,7 +124,7 @@ public class SecurityFilter extends OncePerRequestFilter implements Ordered {
 		String errMsg = null;
 		if (_ex != null) {
 			errMsg = ExceptionUtil.getCauseMessage(_ex, 255);
-			errMsg = errMsg.replaceAll("\r|\n", "");
+			errMsg = errMsg != null ? errMsg.replaceAll("\r|\n|\t", " ") : "";
 		}
 
 		// 记录下来

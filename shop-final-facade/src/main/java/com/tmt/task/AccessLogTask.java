@@ -133,12 +133,15 @@ public class AccessLogTask implements TaskExecutor {
 			String line = null;
 			int size = 0;
 			while ((line = reader.readLine()) != null) {
-				String sql = StringUtils.format(bulk_Load_Sql, this.parseLine(line));
-				batchSql.add(sql);
-				if (size++ >= 1500) {
-					dialect.bulkSave(batchSql, null);
-					batchSql.clear();
-					size = 0;
+				Object[] logLine = this.parseLine(line);
+				if (logLine != null) {
+					String sql = StringUtils.format(bulk_Load_Sql, logLine);
+					batchSql.add(sql);
+					if (size++ >= 1500) {
+						dialect.bulkSave(batchSql, null);
+						batchSql.clear();
+						size = 0;
+					}
 				}
 			}
 
@@ -154,8 +157,6 @@ public class AccessLogTask implements TaskExecutor {
 			return true;
 		} catch (Exception e) {
 			logger.error("保存日志文件异常", e);
-			File newFile = new File(file.getParent(), StringUtils.substringBefore(file.getName(), ".lock"));
-			file.renameTo(newFile);
 			return false;
 		} finally {
 			IOUtils.closeQuietly(reader);
@@ -163,20 +164,25 @@ public class AccessLogTask implements TaskExecutor {
 	}
 
 	// 解析 line
-	private Object[] parseLine(String line) {
-		String[] params = new String[] { null, null, null, null, null, null, null, null, null, null, null, null };
-		Object[] args = line.split("\\t");
-		for (int i = 0; i < args.length; i++) {
-			params[i] = String.valueOf(args[i]);
-			if (params[i].equals("\\N")) {
-				params[i] = null;
+	private String[] parseLine(String line) {
+		try {
+			String[] params = new String[] { null, null, null, null, null, null, null, null, null, null, null, null };
+			Object[] args = line.split("\\t");
+			for (int i = 0; i < args.length; i++) {
+				params[i] = String.valueOf(args[i]);
+				if (params[i].equals("\\N")) {
+					params[i] = null;
+				}
+				params[i] = StringUtils.escapeDb(params[i]);
+				if (params[i] != null) {
+					params[i] = "'" + params[i] + "'";
+				}
 			}
-			params[i] = StringUtils.escapeDb(params[i]);
-			if (params[i] != null) {
-				params[i] = "'" + params[i] + "'";
-			}
+			return params;
+		} catch (Exception e) {
+			logger.error("日志行解析错误：{}", line);
+			return null;
 		}
-		return params;
 	}
 
 	/**
