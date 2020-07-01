@@ -57,9 +57,7 @@ public class TaskController extends BaseController {
 	public Page page(Task task, Model model, Page page) {
 		QueryCondition qc = new QueryCondition();
 		PageParameters param = page.getParam();
-		qc.setOrderByClause(
-				"(CASE WHEN TASK_STATUS = 'RUNNING' THEN 1 WHEN TASK_STATUS = 'RUNABLE' THEN 2 ELSE 3 END), NEXT_EXECUTE_TIME");
-		page = this.taskService.queryForPage(qc, param);
+		page = this.taskService.page(qc, param);
 		return page;
 	}
 

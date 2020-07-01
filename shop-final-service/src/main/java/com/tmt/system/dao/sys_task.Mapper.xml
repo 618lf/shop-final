@@ -54,6 +54,22 @@
     <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
   </select>
   
+  <!-- 分页数据 -->
+  <select id="pageByCondition" resultMap="BaseResult" parameterType="queryCondition" >
+    SELECT ID, NAME, CRON_EXPRESSION, ALLOW_EXECUTE_COUNT, YET_EXECUTE_COUNT, FAIL_EXECUTE_COUNT,
+           PRE_EXECUTE_TIME, NEXT_EXECUTE_TIME, BUSINESS_OBJECT, BUSINESS_OBJECT_NAME, TASK_STATUS,
+           MANUAL_OPERATION, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID, UPDATE_NAME, UPDATE_DATE,
+           REMARKS, DEL_FLAG, CONCURRENT, PARAMS, OPS
+      FROM SYS_TASK
+    <include refid="COMMON.whereClause"/>
+    ORDER BY (CASE WHEN TASK_STATUS = 'RUNNING' THEN 1 WHEN TASK_STATUS = 'RUNABLE' THEN 2 ELSE 3 END), NEXT_EXECUTE_TIME
+  </select>
+  
+  <select id="pageByConditionStat" parameterType="queryCondition" resultType="int">
+    SELECT COUNT(1) FROM SYS_TASK D
+    <include refid="COMMON.whereClause" />
+  </select>
+  
   <!-- 所有可执行的任务 -->
   <select id="findRunAbleTasks" resultMap="BaseResult">
     SELECT ID, NAME, CRON_EXPRESSION, ALLOW_EXECUTE_COUNT, YET_EXECUTE_COUNT, FAIL_EXECUTE_COUNT,

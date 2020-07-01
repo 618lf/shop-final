@@ -9,6 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.tmt.Constants;
 import com.tmt.core.entity.LabelVO;
 import com.tmt.core.persistence.BaseDao;
+import com.tmt.core.persistence.Page;
+import com.tmt.core.persistence.PageParameters;
+import com.tmt.core.persistence.QueryCondition;
 import com.tmt.core.persistence.incrementer.IdGen;
 import com.tmt.core.service.BaseService;
 import com.tmt.core.utils.CacheUtils;
@@ -63,6 +66,17 @@ public class TaskService extends BaseService<Task, Long> implements TaskServiceF
 			this.update(taskTemp);
 		}
 		return task.getId();
+	}
+	
+	/**
+	 * 分页数据查询
+	 * 
+	 * @param qc
+	 * @param param
+	 * @return
+	 */
+	public Page page(QueryCondition qc, PageParameters param) {
+		return this.queryForPageList("pageByCondition", qc, param);
 	}
 
 	/**

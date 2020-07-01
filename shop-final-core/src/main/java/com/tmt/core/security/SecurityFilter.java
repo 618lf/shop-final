@@ -18,6 +18,7 @@ import com.tmt.core.security.mgt.FilterChainResolver;
 import com.tmt.core.security.mgt.SecurityManager;
 import com.tmt.core.security.principal.Principal;
 import com.tmt.core.security.subject.Subject;
+import com.tmt.core.utils.ExceptionUtil;
 import com.tmt.core.utils.StringUtils;
 import com.tmt.core.utils.WebUtils;
 import com.tmt.core.utils.time.DateUtils;
@@ -119,12 +120,19 @@ public class SecurityFilter extends OncePerRequestFilter implements Ordered {
 			createName = principal.getAccount();
 		}
 
+		// 错误信息 -- 需要删除换行符号
+		String errMsg = null;
+		if (_ex != null) {
+			errMsg = ExceptionUtil.getCauseMessage(_ex, 255);
+			errMsg = errMsg.replaceAll("\r|\n", "");
+		}
+
 		// 记录下来
 		ACCESS_LOG.info("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}", IdGen.key(), (byte) (_ex == null ? 1 : 2),
 				createId == null ? "\\N" : createId, StringUtils.defaultIfBlank(createName, "\\N"),
 				DateUtils.getTimeStampNow(), WebUtils.getRemoteAddr(request),
 				StringUtils.abbreviate(request.getHeader("user-agent"), 255), _url, request.getMethod(),
-				(int) (System.currentTimeMillis() - t1), StringUtils.defaultIfBlank("", "\\N"),
+				(int) (System.currentTimeMillis() - t1), StringUtils.defaultIfBlank(errMsg, "\\N"),
 				StringUtils.defaultIfBlank(
 						StringUtils.isNoneBlank(referer) ? StringUtils.abbreviate(referer, 255) : null, "\\N"));
 
