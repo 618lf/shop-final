@@ -80,7 +80,7 @@ public class ExcelExpUtils {
 					startRow);
 			return new DefaultExportFile().build(data);
 		} catch (Exception e) {
-			return null;
+			throw new RuntimeException(e);
 		}
 	}
 }
