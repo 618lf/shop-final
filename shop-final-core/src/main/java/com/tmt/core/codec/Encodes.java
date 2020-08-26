@@ -145,9 +145,9 @@ public class Encodes {
 					case '\'':
 						sb.append("＇");
 						break;
-					case '\"':
-						sb.append("＂");
-						break;
+//					case '\"':
+//						sb.append("＂");
+//						break;
 //					case '&':
 //						sb.append("＆");
 //						break;
