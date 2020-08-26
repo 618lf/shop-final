@@ -87,9 +87,17 @@
 					<include>**/*</include>
 				</includes>
 			</resource>
-			<!-- 有可能打成jar中有问题 以后在测试吧 -->
-			<!-- <resource> <directory>src/main/webapp</directory> <targetPath>META-INF/resources</targetPath> 
-				<includes> <include>**/*</include> </includes> </resource> -->
+			<!-- 有可能打成jar中有问题 以后在测试吧 ，估计打包之后这个目录很重要: META-INF/resources -->
+			<resource>
+				<directory>src/main/webapp</directory>
+				<targetPath>META-INF/resources</targetPath>
+				<includes>
+					<include>**/*</include>
+				</includes>
+				<excludes>
+					<exclude>static/**</exclude>
+				</excludes>
+			</resource>
 		</resources>
 	</build>
 </project>
