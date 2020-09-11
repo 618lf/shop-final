@@ -98,9 +98,10 @@
 					</execution>
 				</executions>
 				<configuration>
+					<repository>${project.artifactId}</repository>
 					<tag>${project.version}</tag>
 					<buildArgs>
-						<JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+						<JAR_FILE>target/shop-sample-RELEASE.zip</JAR_FILE>
 					</buildArgs>
 				</configuration>
 			</plugin>
