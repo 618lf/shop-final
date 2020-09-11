@@ -1,0 +1,1 @@
+docker run --name="shop-sample"  -d -p 8080:8080 618lf/shop-sample
