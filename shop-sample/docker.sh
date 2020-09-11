@@ -11,3 +11,5 @@ cd "${BUILD_DIR}"
 unzip shop-sample-RELEASE.zip
 
 docker build -t shop-sample/latest .
+
+rm -rf "${BUILD_DIR}"
