@@ -2,7 +2,7 @@ FROM amazoncorretto:8u265
 
 MAINTAINER "lifeng"
 
-RUN mkdir /opt/lifeng/shop-sample
+RUN mkdir -p /opt/lifeng/shop-sample
 
 COPY config/ /opt/lifeng/shop-sample/config/
 COPY lib/ /opt/lifeng/shop-sample/lib/
