@@ -11,4 +11,4 @@ COPY statics/ /opt/lifeng/shop-sample/statics/
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "/opt/lifeng/shop-sample/shop-sample-1.0.0_final.jar"]
+CMD ["nohup","java","-jar","/opt/lifeng/shop-sample/shop-sample-1.0.0_final.jar","&"]
