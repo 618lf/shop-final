@@ -40,33 +40,51 @@
 	</dependencies>
 	<build>
 		<plugins>
+			<!-- fatjar 中需要修改tomcat的配置 <plugin> <groupId>org.springframework.boot</groupId> 
+				<artifactId>spring-boot-maven-plugin</artifactId> <version>${springboot.version}</version> 
+				<configuration> <mainClass>com.sample.AppRunner</mainClass> <layout>JAR</layout> 
+				</configuration> <executions> <execution> <goals> <goal>repackage</goal> 
+				</goals> </execution> </executions> </plugin> -->
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<version>${springboot.version}</version>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.2.0</version>
 				<configuration>
-					<mainClass>com.sample.AppRunner</mainClass>
-					<layout>JAR</layout>
+					<source>${jdk.version}</source>
+					<target>${jdk.version}</target>
+					<archive>
+						<manifest>
+							<mainClass>com.sample.AppRunner</mainClass>
+							<addClasspath>true</addClasspath>
+							<classpathPrefix>lib</classpathPrefix>
+						</manifest>
+					</archive>
+					<excludes>
+						<exclude>application*.properties</exclude>
+						<exclude>logback.xml</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.1.0</version>
+				<configuration>
+					<finalName>PTMS</finalName>
+					<descriptors>
+						<descriptor>src/main/assembly/make-jar.xml</descriptor>
+					</descriptors>
 				</configuration>
 				<executions>
 					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
 						<goals>
-							<goal>repackage</goal>
+							<goal>single</goal>
 						</goals>
 					</execution>
 				</executions>
 			</plugin>
-			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-jar-plugin</artifactId> 
-				<configuration> <source>${jdk.version}</source> <target>${jdk.version}</target> 
-				<archive> <manifest> <mainClass>com.sample.AppRunner</mainClass> <addClasspath>true</addClasspath> 
-				<classpathPrefix>lib</classpathPrefix> </manifest> </archive> <excludes> 
-				<exclude>application*.properties</exclude> <exclude>logback.xml</exclude> 
-				</excludes> </configuration> </plugin> <plugin> <groupId>org.apache.maven.plugins</groupId> 
-				<artifactId>maven-assembly-plugin</artifactId> <version>3.1.0</version> <configuration> 
-				<finalName>PTMS</finalName> <descriptors> <descriptor>src/main/assembly/make-jar.xml</descriptor> 
-				</descriptors> </configuration> <executions> <execution> <id>make-assembly</id> 
-				<phase>package</phase> <goals> <goal>single</goal> </goals> </execution> 
-				</executions> </plugin> -->
 		</plugins>
 		<resources>
 			<resource>
