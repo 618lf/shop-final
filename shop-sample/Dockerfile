@@ -2,10 +2,10 @@ FROM amazoncorretto:8u265
 
 MAINTAINER "lifeng"
 
-WORKDIR /opt/lifeng/
+RUN mkdir /opt/lifeng/
 
-ADD shop-sample-RELEASE.zip
+ADD shop-sample-RELEASE.tar /opt/lifeng/
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar -Xms800m -Xmx800m", "/opt/lifeng/shop-sample/shop-sample-1.0.0_final.jar"]
+ENTRYPOINT ["java", "-jar", "/opt/lifeng/shop-sample-RELEASE/shop-sample/shop-sample-1.0.0_final.jar"]
