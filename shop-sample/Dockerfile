@@ -4,7 +4,7 @@ MAINTAINER "lifeng"
 
 WORKDIR /opt/lifeng/
 
-ADD "${JAR_FILE}"
+ADD shop-sample-RELEASE.zip
 
 EXPOSE 8080
 
