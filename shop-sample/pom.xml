@@ -70,7 +70,7 @@
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>3.1.0</version>
 				<configuration>
-					<finalName>PTMS</finalName>
+					<finalName>shop-sample</finalName>
 					<descriptors>
 						<descriptor>src/main/assembly/make-jar.xml</descriptor>
 					</descriptors>
