@@ -12,6 +12,6 @@ unzip shop-sample-RELEASE.zip
 
 cd shop-sample
 
-docker build -t shop-sample/latest .
+docker build -t 618lf/shop-sample .
 
 rm -rf "${BUILD_DIR}"
