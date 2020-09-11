@@ -15,6 +15,7 @@
 			<outputDirectory>/config</outputDirectory>
 			<includes>
 				<include>sqlite/SWAK.db</include>
+				<include>logback.xml</include>
 				<include>version</include>
 				<include>settings</include>
 			</includes>
