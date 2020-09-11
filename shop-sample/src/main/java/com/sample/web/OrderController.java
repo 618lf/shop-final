@@ -13,7 +13,7 @@ import com.sample.service.OrderService;
  * @author lifeng
  */
 @RestController
-@RequestMapping("/order")
+@RequestMapping("${spring.application.web.admin}/order")
 public class OrderController {
 
 	/**
@@ -27,7 +27,8 @@ public class OrderController {
 	 */
 	@ResponseBody
 	@RequestMapping("/get")
-	public void get() {
-		orderService.saveOrder();
+	public void get(String text) {
+		System.out.println("中文测试：" + text);
+		// orderService.saveOrder();
 	}
 }
