@@ -6,7 +6,7 @@
           http://maven.apache.org/xsd/assembly-3.1.0.xsd">
 	<id>RELEASE</id>
 	<formats>
-		<format>tar</format>
+		<format>gzip</format>
 	</formats>
 	<includeBaseDirectory>true</includeBaseDirectory>
 	<fileSets>
