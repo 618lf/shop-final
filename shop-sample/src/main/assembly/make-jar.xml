@@ -6,7 +6,7 @@
           http://maven.apache.org/xsd/assembly-3.1.0.xsd">
 	<id>RELEASE</id>
 	<formats>
-		<format>gzip</format>
+		<format>zip</format>
 	</formats>
 	<includeBaseDirectory>true</includeBaseDirectory>
 	<fileSets>
@@ -43,6 +43,14 @@
 			<outputDirectory>/</outputDirectory>
 			<includes>
 				<include>*.sh</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>src/main/docker</directory>
+			<fileMode>0777</fileMode>
+			<outputDirectory>/</outputDirectory>
+			<includes>
+				<include>*</include>
 			</includes>
 		</fileSet>
 		<fileSet>
