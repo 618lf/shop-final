@@ -30,7 +30,7 @@ public class DefaultExceptionHandler implements HandlerExceptionResolver {
 			ResponseBody responseBody = method.getMethodAnnotation(ResponseBody.class);
 			if (responseBody != null) {
 				WebUtils.sendJson(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-						AjaxResult.error("服务器异常").toJson());
+						AjaxResult.error(ExceptionUtil.getMessage(ex)).toJson());
 			} else {
 				WebUtils.sendError(response, ExceptionUtil.getMessage(ex));
 			}

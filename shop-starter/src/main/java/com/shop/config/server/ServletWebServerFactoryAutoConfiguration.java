@@ -158,6 +158,7 @@ public class ServletWebServerFactoryAutoConfiguration {
 		}
 
 		// 适配ErrorPage
+		// 这个仅仅是通过状态码来查找错误，可以看看： ErrorPageSupport
 		private void customizeErrorPage(TomcatServletWebServerFactory factory) {
 			ErrorPage error401Page = new ErrorPage(HttpStatus.UNAUTHORIZED, "/WEB-INF/views/error/401.jsp");
 			ErrorPage error404Page = new ErrorPage(HttpStatus.NOT_FOUND, "/WEB-INF/views/error/404.jsp");

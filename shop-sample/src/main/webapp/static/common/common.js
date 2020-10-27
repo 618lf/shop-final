@@ -601,7 +601,7 @@ Public.defaultGrid = function(params){
 		    	npage:null
 		    },
 		    loadError:function(xhr,status,error){
-		    	var msg = $.parseJSON(x.responseText).msg;
+		    	var msg = $.parseJSON(xhr.responseText).msg;
 				Error.out(msg);
 		    },
 		    beforeRequest:function(){
