@@ -15,6 +15,36 @@ public class UserAccount implements Serializable {
 	private Long userId;
 	private Byte type;// 1：用户名，2：邮箱，3：手机，4：微信（多个），5：微网站（多个），6：QQ，7：SINA
 	private User user; // 用户信息
+	private UserUnion union; // 统一用户信息
+	private UserWechat wechat; // 微用户
+
+	/**
+	 * @return the union
+	 */
+	public UserUnion getUnion() {
+		return union;
+	}
+
+	/**
+	 * @param union the union to set
+	 */
+	public void setUnion(UserUnion union) {
+		this.union = union;
+	}
+
+	/**
+	 * @return the wechat
+	 */
+	public UserWechat getWechat() {
+		return wechat;
+	}
+
+	/**
+	 * @param wechat the wechat to set
+	 */
+	public void setWechat(UserWechat wechat) {
+		this.wechat = wechat;
+	}
 
 	public User getUser() {
 		return user;

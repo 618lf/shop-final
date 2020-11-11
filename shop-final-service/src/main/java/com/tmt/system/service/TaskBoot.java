@@ -20,7 +20,7 @@ public class TaskBoot extends AbstractBoot {
 	@Autowired
 	private TaskService taskService;
 	@Autowired
-	private SiteServiceFacade siteService;
+	private SiteService siteService;
 	@Autowired
 	private TaskCommandService taskCommandService;
 
