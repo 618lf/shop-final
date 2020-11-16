@@ -3,6 +3,7 @@ package com.tmt.core.persistence;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
@@ -76,5 +77,14 @@ public class JdbcSqlExecutor {
 	 */
 	public static Integer count(String sql, Map<String, ?> param) {
 		return jdbcTemplate.queryForObject(sql, param, Integer.class);
+	}
+
+	/**
+	 * 代码执行模板
+	 * 
+	 * @return
+	 */
+	public static JdbcTemplate getInnerTemplate() {
+		return jdbcTemplate.getJdbcTemplate();
 	}
 }
