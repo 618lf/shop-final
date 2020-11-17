@@ -1,11 +1,14 @@
 package com.sample.web;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sample.service.OrderService;
+import com.tmt.core.utils.ExcelExpUtils;
 
 /**
  * 只是测试
@@ -30,5 +33,13 @@ public class OrderController {
 	public void get(String text) {
 		System.out.println("中文测试：" + text);
 		// orderService.saveOrder();
+	}
+
+	/**
+	 * 下载模板
+	 */
+	@RequestMapping("/template")
+	public void template(HttpServletResponse response) {
+		ExcelExpUtils.downloadTemplate("测试.xls", "defaultTemplate.xls", response);
 	}
 }
