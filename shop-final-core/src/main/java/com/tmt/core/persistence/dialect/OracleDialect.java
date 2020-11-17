@@ -1,5 +1,8 @@
 package com.tmt.core.persistence.dialect;
 
+import java.util.Map;
+
+import com.google.common.collect.Maps;
 import com.tmt.core.persistence.Database;
 
 /**
@@ -33,5 +36,15 @@ public class OracleDialect implements Dialect {
 	@Override
 	public Database getDatabase() {
 		return Database.oracle;
+	}
+	
+	/**
+	 * 变量
+	 */
+	@Override
+	public Map<String, String> variables() {
+		Map<String, String> variables = Maps.newHashMap();
+		variables.put("X_LEN", "LENGTH");
+		return variables;
 	}
 }
