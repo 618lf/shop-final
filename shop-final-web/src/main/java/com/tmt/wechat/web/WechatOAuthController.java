@@ -8,13 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.tmt.common.utils.StringUtil3;
-import com.tmt.common.web.OAuthLoginController;
 import com.tmt.core.entity.BaseEntity;
 import com.tmt.core.utils.Maps;
+import com.tmt.core.utils.StringUtils;
 import com.tmt.system.entity.User;
 import com.tmt.system.entity.UserAccount;
 import com.tmt.system.entity.UserWechat;
+import com.tmt.system.web.OAuthLoginController;
 import com.tmt.wechat.bean.base.SnsToken;
 import com.tmt.wechat.bean.user.UserInfo;
 import com.tmt.wechat.entity.App;
@@ -66,7 +66,7 @@ public class WechatOAuthController extends OAuthLoginController {
 		
 		Map<String, Object> params = Maps.newHashMap();
 		SnsToken token = wechatService.bind(app).oauth2AccessToken(code, state);
-		if (token != null && StringUtil3.isNotBlank(token.getAccess_token())) {
+		if (token != null && StringUtils.isNotBlank(token.getAccess_token())) {
 			String openId = token.getOpenid();
 			String unionId = token.getUnionid();
 			params.put("appId", token.getAppId());
@@ -91,7 +91,7 @@ public class WechatOAuthController extends OAuthLoginController {
 		// 设置微信公众号信息
 		String appId = String.valueOf(token.get("appId"));
 		String openId = String.valueOf(token.get("openId"));
-		if (StringUtil3.isNotBlank(appId)) {
+		if (StringUtils.isNotBlank(appId)) {
 			UserWechat wechat = new UserWechat();
 			wechat.setOpenId(openId);
 			wechat.setAppId(appId);
@@ -108,7 +108,7 @@ public class WechatOAuthController extends OAuthLoginController {
 		UserInfo user = wechatService.authUserinfo(accessToken, openId);
 		if (user != null) {
 			User member = new User();
-			member.setName(StringUtil3.mb4Replace(user.getNickname(), null));
+			member.setName(StringUtils.mb4Replace(user.getNickname(), null));
 			member.setSex((user.getSex() != null && "1".equals(user.getSex().toString()))?BaseEntity.YES:BaseEntity.NO);
 	        member.setProvince(user.getProvince());
 			member.setCity(user.getCity());

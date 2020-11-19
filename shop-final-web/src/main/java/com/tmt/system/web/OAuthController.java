@@ -54,7 +54,7 @@ public abstract class OAuthController {
 		}
 		
 		// 如果没有指定地址则返回保存的地址
-		return WebUtils.redirectTo(WebUtils.getAndClearSavedRequest(request, response, Globals.getStaticFront()));
+		return WebUtils.redirectTo(WebUtils.getAndClearSavedRequest(request, response, Globals.staticFront));
 	}
 	
 	/**

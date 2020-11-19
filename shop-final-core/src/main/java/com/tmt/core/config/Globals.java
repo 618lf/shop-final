@@ -14,6 +14,7 @@ public class Globals {
 	 */
 	public static String adminPath;
 	public static String frontPath;
+	public static String staticFront;
 	public static String index;
 	public static String version;
 	public static String domain;

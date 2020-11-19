@@ -25,6 +25,8 @@ import com.tmt.system.dao.UserAccountDao;
 import com.tmt.system.dao.UserDao;
 import com.tmt.system.dao.UserNoDao;
 import com.tmt.system.dao.UserSessionDao;
+import com.tmt.system.dao.UserUnionDao;
+import com.tmt.system.dao.UserWechatDao;
 import com.tmt.system.entity.GroupUser;
 import com.tmt.system.entity.RoleUser;
 import com.tmt.system.entity.User;
@@ -33,6 +35,8 @@ import com.tmt.system.entity.User.UserType;
 import com.tmt.system.entity.UserAccount;
 import com.tmt.system.entity.UserNo;
 import com.tmt.system.entity.UserSession;
+import com.tmt.system.entity.UserUnion;
+import com.tmt.system.entity.UserWechat;
 
 /**
  * 用户管理
@@ -58,6 +62,10 @@ public class UserService extends BaseService<User, Long> implements UserServiceF
 	private UserNoDao userNoDao;
 	@Autowired
 	private UserSessionDao userSessionDao;
+	@Autowired
+	private UserUnionDao unionDao;
+	@Autowired
+	private UserWechatDao userWechatDao;
 
 	@Override
 	protected BaseDao<User, Long> getBaseDao() {
@@ -542,6 +550,20 @@ public class UserService extends BaseService<User, Long> implements UserServiceF
 	private void saveAccount(UserAccount account) {
 		// 添加账户信息
 		this.accountDao.insert(account);
+		
+		// 如果有统一用户信息
+		UserUnion union = account.getUnion();
+		if (union != null) {
+			union.setUserId(account.getUserId());
+			unionDao.insert(union);
+		}
+		
+		// 微信用户，添加
+		UserWechat wechat = account.getWechat();
+		if (wechat != null) {
+			wechat.setUserId(account.getUserId());
+			this.userWechatDao.save(wechat);
+		}
 	}
 
 	/**
@@ -594,5 +616,10 @@ public class UserService extends BaseService<User, Long> implements UserServiceF
 		user.setLoginIp(loginIp);
 		this.update("updateUserLoginAction", user);
 		return oldSessionId;
+	}
+
+	@Override
+	public UserUnion findByUnion(String union) {
+		return unionDao.get(union);
 	}
 }
