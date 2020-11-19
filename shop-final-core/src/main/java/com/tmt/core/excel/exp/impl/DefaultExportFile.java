@@ -266,7 +266,12 @@ public class DefaultExportFile implements IExportFile {
 		try {
 			Workbook template = ExcelUtils.loadExcelFile(templateFile);
 			out = FileUtils.openOutputStream(outFile);
-			writeData(template, data);
+
+			// 写入数据
+			if (data.containsKey(EXPORT_COLUMNS)) {
+				writeData(template, data);
+			}
+
 			// 写入数据
 			template.write(out);
 		} catch (Exception e) {
@@ -454,7 +459,7 @@ public class DefaultExportFile implements IExportFile {
 
 	// 检查相应的参数
 	public Boolean checkDataAttr(Map<String, Object> data) {
-		if (data == null || (!data.containsKey(EXPORT_COLUMNS) && !data.containsKey(EXPORT_VALUES))) {
+		if (data == null) {
 			return Boolean.FALSE;
 		}
 		if (!data.containsKey(TEMPLATE_NAME)) {
