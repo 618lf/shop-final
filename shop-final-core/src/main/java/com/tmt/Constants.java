@@ -97,4 +97,7 @@ public interface Constants {
 	String USER_KEY = "USER_KEY";
 	String SITE_KEY = "SITE_KEY";
 
+	// 系统事件
+	String EVENT_LOG = "EVENT_LOG";
+
 }
