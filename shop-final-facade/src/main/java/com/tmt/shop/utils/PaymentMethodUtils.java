@@ -2,8 +2,8 @@ package com.tmt.shop.utils;
 
 import java.util.List;
 
-import com.tmt.common.utils.CacheUtils;
-import com.tmt.common.utils.SpringContextHolder;
+import com.tmt.core.utils.CacheUtils;
+import com.tmt.core.utils.SpringContextHolder;
 import com.tmt.shop.entity.PaymentMethod;
 import com.tmt.shop.entity.ShopConstant;
 import com.tmt.shop.service.PaymentMethodServiceFacade;
@@ -11,9 +11,8 @@ import com.tmt.shop.service.PaymentMethodServiceFacade;
 public class PaymentMethodUtils {
 
 	/**
-	 * 排在第一位的是默认的支付方式(后台可以设置顺序)
-	 * 得到默认的支付方式
-	 * 默认使用在线支付（先付款在发货）
+	 * 排在第一位的是默认的支付方式(后台可以设置顺序) 得到默认的支付方式 默认使用在线支付（先付款在发货）
+	 * 
 	 * @return
 	 */
 	public static PaymentMethod getDefaultPaymentMethod() {
@@ -33,9 +32,10 @@ public class PaymentMethodUtils {
 		}
 		return paymentMethod;
 	}
-	
+
 	/**
 	 * 得到指定的支付方式
+	 * 
 	 * @param id
 	 * @return
 	 */
@@ -51,9 +51,10 @@ public class PaymentMethodUtils {
 		}
 		return paymentMethod;
 	}
-	
+
 	/**
 	 * 得到支付方式
+	 * 
 	 * @return
 	 */
 	public static List<PaymentMethod> getPaymentMethods() {
@@ -68,7 +69,7 @@ public class PaymentMethodUtils {
 		}
 		return methods;
 	}
-	
+
 	/**
 	 * 清楚缓存
 	 */

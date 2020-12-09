@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.ParameterOptionDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.ParameterOption"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="PARAMETER_ID" property="parameterId" jdbcType="BIGINT"/>
+    <result column="SORT" property="sort" jdbcType="INTEGER"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.ParameterOption">
+   DELETE FROM SHOP_PARAMETER_OPTION WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.ParameterOption">
+   INSERT INTO SHOP_PARAMETER_OPTION (ID, PARAMETER_ID, SORT, NAME)
+   VALUES (#{id}, #{parameterId}, #{sort}, #{name})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO SHOP_PARAMETER_OPTION (ID, PARAMETER_ID, SORT, NAME)
+    VALUES 
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.id}, #{item.parameterId}, #{item.sort}, #{item.name})
+   </foreach> 
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.shop.entity.ParameterOption" >
+   UPDATE SHOP_PARAMETER_OPTION
+      SET PARAMETER_ID = #{parameterId},
+		  SORT = #{sort},
+		  NAME = #{name}
+    WHERE ID = #{id}
+  </update>
+  
+  <select id="queryByParameterId" resultMap="BaseResult" parameterType="long">
+   SELECT ID, PARAMETER_ID, SORT, NAME
+     FROM SHOP_PARAMETER_OPTION
+    WHERE PARAMETER_ID = #{VALUE} ORDER BY SORT
+  </select>
+  
+</mapper>

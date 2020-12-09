@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.GoodsSpecificationOptionDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.GoodsSpecificationOption"> 
+    <result column="GOODS_ID" property="goodsId" jdbcType="BIGINT"/>
+    <result column="SPECIFICATIONS_OPTION_ID" property="specificationsOptionId" jdbcType="BIGINT"/>
+    <result column="SPECIFICATIONS_OPTION_NAME" property="specificationsOptionName" jdbcType="VARCHAR"/>
+    <result column="SORT" property="sort" jdbcType="INTEGER"/>
+    <result column="SUPPORT" property="support" jdbcType="INTEGER"/>
+  </resultMap>
+  
+  <delete id="deleteByGoodsId" parameterType="com.tmt.shop.entity.GoodsSpecificationOption" >
+   DELETE FROM SHOP_GOODS_SPECIFICATION_OPTION WHERE GOODS_ID = #{goodsId}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.GoodsSpecificationOption" >
+   INSERT INTO SHOP_GOODS_SPECIFICATION_OPTION (GOODS_ID, SPECIFICATIONS_ID, SPECIFICATIONS_OPTION_ID, SPECIFICATIONS_OPTION_NAME, SORT)
+   VALUES (#{goodsId}, #{specificationsId}, #{specificationsOptionId}, #{specificationsOptionName}, #{sort})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO SHOP_GOODS_SPECIFICATION_OPTION (GOODS_ID, SPECIFICATIONS_ID, SPECIFICATIONS_OPTION_ID, SPECIFICATIONS_OPTION_NAME, SORT)
+    VALUES 
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.goodsId}, #{item.specificationsId}, #{item.specificationsOptionId}, #{item.specificationsOptionName}, #{item.sort})
+   </foreach> 
+  </insert>
+  
+  <select id="queryBySpecificationsId" resultMap="BaseResult" parameterType="Long">
+   SELECT SO.ID SPECIFICATIONS_OPTION_ID, -1 GOODS_ID, SO.SORT, SO.NAME SPECIFICATIONS_OPTION_NAME, 0 SUPPORT
+     FROM SHOP_SPECIFICATION_OPTION SO
+    WHERE SO.SPECIFICATION_ID = #{SPECIFICATIONS_ID}
+    ORDER BY SO.SORT
+  </select>
+  
+  <select id="queryBySpecificationsIdAndGoodsId" resultMap="BaseResult" parameterType="java.util.Map">
+   SELECT GSO.SPECIFICATIONS_OPTION_ID, GSO.GOODS_ID, GSO.SORT, GSO.SPECIFICATIONS_OPTION_NAME, 1 SUPPORT
+     FROM SHOP_GOODS_SPECIFICATION_OPTION GSO 
+    WHERE GSO.SPECIFICATIONS_ID = #{SPECIFICATIONS_ID}
+      AND GSO.GOODS_ID = #{GOODS_ID}
+    ORDER BY GSO.SORT
+  </select>
+  
+</mapper>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.GoodsImageDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.GoodsImage"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="GOODS_ID" property="goodsId" jdbcType="BIGINT"/>
+    <result column="LARGE" property="large" jdbcType="VARCHAR"/>
+    <result column="MEDIUM" property="medium" jdbcType="VARCHAR"/>
+    <result column="THUMBNAIL" property="thumbnail" jdbcType="VARCHAR"/>
+    <result column="SORT" property="sort" jdbcType="INTEGER"/>
+    <result column="TITLE" property="title" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="long" >
+   SELECT ID, GOODS_ID, LARGE, MEDIUM, THUMBNAIL, SORT, TITLE
+     FROM SHOP_GOODS_IMAGE
+    WHERE ID = #{id}
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.GoodsImage" >
+   DELETE FROM SHOP_GOODS_IMAGE WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.GoodsImage" >
+   INSERT INTO SHOP_GOODS_IMAGE (ID, GOODS_ID, LARGE, MEDIUM, THUMBNAIL, SORT, TITLE)
+   VALUES (#{id}, #{goodsId}, #{large}, #{medium}, #{thumbnail}, #{sort}, #{title})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+   INSERT INTO SHOP_GOODS_IMAGE (ID, GOODS_ID, LARGE, MEDIUM, THUMBNAIL, SORT, TITLE)
+   VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+   (#{item.id}, #{item.goodsId}, #{item.large}, #{item.medium}, #{item.thumbnail}, #{item.sort}, #{item.title})
+   </foreach> 
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.shop.entity.GoodsImage" >
+   UPDATE SHOP_GOODS_IMAGE
+      SET GOODS_ID = #{goodsId},
+		  LARGE = #{large},
+		  MEDIUM = #{medium},
+		  THUMBNAIL = #{thumbnail},
+		  SORT = #{sort},
+		  TITLE = #{title}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateSort" parameterType="com.tmt.shop.entity.GoodsImage" >
+   UPDATE SHOP_GOODS_IMAGE
+      SET SORT = #{sort}
+    WHERE ID = #{id}
+  </update>
+  
+  <select id="queryImagesById" resultMap="BaseResult" parameterType="long" >
+   SELECT ID, GOODS_ID, LARGE, MEDIUM, THUMBNAIL, SORT, TITLE
+     FROM SHOP_GOODS_IMAGE
+    WHERE GOODS_ID = #{VALUE}
+    ORDER BY SORT
+  </select>
+  
+</mapper>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.OrderPromotionDao" >
+  <delete id="delete" parameterType="com.tmt.shop.entity.OrderPromotion">
+   DELETE FROM SHOP_ORDER_PROMOTION WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.OrderPromotion">
+   INSERT INTO SHOP_ORDER_PROMOTION (ORDERS, PROMOTIONS, PROMOTION_TYPE, PROMOTION_NAME, FISSIONS, REDUCE)
+   VALUES (#{orders}, #{promotions}, #{promotionType}, #{promotionName}, #{fissions}, #{reduce})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO SHOP_ORDER_PROMOTION (ORDERS, PROMOTIONS, PROMOTION_TYPE, PROMOTION_NAME, FISSIONS, REDUCE)
+    VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.orders}, #{item.promotions}, #{item.promotionType}, #{item.promotionName}, #{item.fissions}, #{item.reduce})
+   </foreach> 
+  </insert>
+  
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.OrderPromotion"> 
+    <result column="PROMOTION_TYPE" property="promotionType" jdbcType="TINYINT"/>
+    <result column="PROMOTION_NAME" property="promotionName" jdbcType="VARCHAR"/>
+    <result column="REDUCE" property="reduce" jdbcType="DECIMAL"/>
+    <result column="IS_GIVE" property="isGive" jdbcType="TINYINT"/>
+  </resultMap>
+  
+  <select id="queryOrderPromotions" resultMap="BaseResult" parameterType="long">
+    SELECT A.REDUCE, A.PROMOTION_NAME, A.PROMOTION_TYPE, A.IS_GIVE
+      FROM SHOP_ORDER_PROMOTION A
+     WHERE A.ORDERS = #{orders}
+  </select>
+  
+  <resultMap id="ProBaseResult" type="com.tmt.shop.entity.OrderPromotion"> 
+    <result column="ORDERS" property="orders" jdbcType="BIGINT"/>
+    <result column="PROMOTIONS" property="promotions" jdbcType="BIGINT"/>
+    <result column="IS_GIVE" property="isGive" jdbcType="TINYINT"/>
+  </resultMap>
+  
+  <!-- 是否有需要赠送的促销活动 -->
+  <select id="hasOrderGiveAbleMzsPromotion" resultType="java.lang.Integer" parameterType="long">
+    SELECT COUNT(1) C
+      FROM SHOP_ORDER_PROMOTION A, SHOP_PROMOTION B
+     WHERE A.PROMOTIONS = B.ID AND B.TYPE = 8 AND A.IS_GIVE = 0
+       AND A.ORDERS = #{orders} LIMIT 1
+  </select>
+  
+  <!-- 订单未赠送的满赠送（可能有多个）一次只处理一个 -->
+  <select id="getOrderGiveAbleMzsPromotion" resultMap="ProBaseResult" parameterType="long">
+    SELECT A.ORDERS, A.PROMOTIONS, A.IS_GIVE
+      FROM SHOP_ORDER_PROMOTION A, SHOP_PROMOTION B
+     WHERE A.PROMOTIONS = B.ID AND B.TYPE = 8 AND A.IS_GIVE = 0
+       AND A.ORDERS = #{orders} LIMIT 1
+  </select>
+  
+  <!-- 设置为已赠送 -->
+  <update id="updateGiveMzsPromotion" parameterType="com.tmt.shop.entity.OrderPromotion" >
+   UPDATE SHOP_ORDER_PROMOTION
+      SET IS_GIVE = #{isGive},
+          FISSIONS = #{fissions},
+          COUPONS = #{coupons},
+          REDUCE = #{reduce}
+    WHERE ORDERS = #{orders} AND PROMOTIONS = #{promotions}
+  </update>
+  
+  <!-- 订单已赠送的促销 -->
+  <resultMap id="GivedBaseResult" type="com.tmt.shop.entity.OrderPromotion"> 
+    <result column="FISSIONS" property="fissions" jdbcType="BIGINT"/>
+    <result column="COUPONS" property="coupons" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <select id="queryOrderGivedMzsPromotions" resultMap="GivedBaseResult" parameterType="long">
+    SELECT A.FISSIONS, A.COUPONS
+      FROM SHOP_ORDER_PROMOTION A
+     WHERE A.IS_GIVE = 1 AND A.ORDERS = #{orders}
+  </select>
+  
+  <!-- 订单已赠送的分享促销 -->
+  <resultMap id="GivedFissionBaseResult" type="com.tmt.shop.entity.OrderPromotion"> 
+    <result column="FISSIONS" property="fissions" jdbcType="BIGINT"/>
+    <result column="VAL" property="val" jdbcType="INTEGER"/>
+  </resultMap>
+  
+  <select id="queryOrderGivedFissionPromotion" resultMap="GivedFissionBaseResult" parameterType="long">
+    SELECT A.FISSIONS, B.VAL
+      FROM SHOP_ORDER_PROMOTION A, SHOP_COUPON_FISSION B
+     WHERE A.IS_GIVE = 1 AND A.ORDERS = #{orders} 
+       AND A.FISSIONS IS NOT NULL AND A.FISSIONS = B.ID
+  </select>
+  
+  <!-- 是否有需要抢购的促销活动 -->
+  <select id="hasOrderGiveAbleQgPromotion" resultType="java.lang.Integer" parameterType="java.util.Map">
+    SELECT COUNT(1) C
+      FROM SHOP_ORDER_PROMOTION A, SHOP_ORDER B
+     WHERE A.PROMOTIONS = #{promotions} AND B.CREATE_ID = #{users}
+       AND A.ORDERS = B.ID AND B.ORDER_STATUS != 'cancelled'
+  </select>
+  
+</mapper>

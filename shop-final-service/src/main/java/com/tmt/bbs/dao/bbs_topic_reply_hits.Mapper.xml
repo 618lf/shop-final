@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.bbs.dao.ReplyHitsDao" >
+  <resultMap id="BaseResult" type="com.tmt.bbs.entity.ReplyHits"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="HITS" property="hits" jdbcType="INTEGER"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, HITS
+     FROM BBS_TOPIC_REPLY_HITS
+    WHERE ID = #{id}
+  </select>
+  
+  <insert id="insert" parameterType="com.tmt.bbs.entity.ReplyHits">
+   INSERT INTO BBS_TOPIC_REPLY_HITS (ID, HITS) VALUES (#{id}, #{hits}) ON DUPLICATE KEY UPDATE HITS = HITS + 1
+  </insert>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition">
+   SELECT ID, HITS
+     FROM BBS_TOPIC_REPLY_HITS
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="java.lang.Integer">
+    SELECT COUNT(1) C FROM BBS_TOPIC_REPLY_HITS
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+</mapper>

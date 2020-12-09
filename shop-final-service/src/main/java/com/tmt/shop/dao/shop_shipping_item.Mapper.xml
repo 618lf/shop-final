@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.ShippingItemDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.ShippingItem"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="SHIPPING_ID" property="shippingId" jdbcType="BIGINT"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="SN" property="sn" jdbcType="VARCHAR"/>
+    <result column="PRICE" property="price" jdbcType="DECIMAL"/>
+    <result column="QUANTITY" property="quantity" jdbcType="INTEGER"/>
+    <result column="WEIGHT" property="weight" jdbcType="VARCHAR"/>
+    <result column="UNIT" property="unit" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <select id="queryItemsByShippingId" resultMap="BaseResult" parameterType="long">
+   SELECT ID, SHIPPING_ID, NAME, SN, PRICE, QUANTITY, WEIGHT, UNIT
+     FROM SHOP_SHIPPING_ITEM
+    WHERE SHIPPING_ID = #{shippingId}
+  </select>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.ShippingItem" >
+   INSERT INTO SHOP_SHIPPING_ITEM (ID, SHIPPING_ID, NAME, SN, PRICE, QUANTITY, WEIGHT, UNIT)
+   VALUES (#{id}, #{shippingId}, #{name}, #{sn}, #{price}, #{quantity}, #{weight}, #{unit})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO SHOP_SHIPPING_ITEM (ID, SHIPPING_ID, NAME, SN, PRICE, QUANTITY, WEIGHT, UNIT)
+    VALUES 
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.id}, #{item.shippingId}, #{item.name}, #{item.sn}, #{item.price}, #{item.quantity}, #{item.weight}, #{item.unit})
+   </foreach> 
+  </insert>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.ShippingItem" >
+   DELETE FROM SHOP_SHIPPING_ITEM WHERE ID = #{id}
+  </delete>
+  
+</mapper>

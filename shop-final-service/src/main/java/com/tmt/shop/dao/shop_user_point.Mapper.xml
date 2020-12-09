@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.UserPointDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.UserPoint"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="USER_ID" property="userId" jdbcType="BIGINT"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="POINTS" property="points" jdbcType="INTEGER"/>
+    <result column="STATE" property="state" jdbcType="TINYINT"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, USER_ID, NAME, POINTS, STATE, CREATE_DATE
+     FROM SHOP_USER_POINT
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition">
+   SELECT ID, USER_ID, NAME, POINTS, STATE, CREATE_DATE
+     FROM SHOP_USER_POINT
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="java.lang.Integer">
+    SELECT COUNT(1) C FROM SHOP_USER_POINT
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.UserPoint">
+   INSERT INTO SHOP_USER_POINT (ID, USER_ID, NAME, POINTS, STATE, CREATE_DATE)
+   VALUES (#{id}, #{userId}, #{name}, #{points}, #{state}, #{createDate})
+  </insert>
+  
+</mapper>

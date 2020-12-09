@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.cms.dao.ArticleTagDao" >
+  <resultMap id="BaseResult" type="com.tmt.cms.entity.ArticleTag"> 
+    <result column="ARTICLE_ID" property="articleId" jdbcType="BIGINT"/>
+    <result column="TAG_ID" property="tagId" jdbcType="BIGINT"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Long" >
+   SELECT ARTICLE_ID, TAG_ID
+     FROM CMS_ARTICLE_TAG
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT ARTICLE_ID, TAG_ID
+     FROM CMS_ARTICLE_TAG
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition" >
+   SELECT ARTICLE_ID, TAG_ID
+     FROM CMS_ARTICLE_TAG
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="int" >
+    SELECT COUNT(1) C FROM CMS_ARTICLE_TAG
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.cms.entity.ArticleTag" >
+   DELETE FROM CMS_ARTICLE_TAG WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.cms.entity.ArticleTag" >
+   INSERT INTO CMS_ARTICLE_TAG (ARTICLE_ID, TAG_ID)
+   VALUES (#{articleId}, #{tagId})
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.cms.entity.ArticleTag" >
+   UPDATE CMS_ARTICLE_TAG
+      SET ARTICLE_ID = #{articleId},
+		  TAG_ID = #{tagId}
+    WHERE ID = #{id}
+  </update>
+  
+</mapper>

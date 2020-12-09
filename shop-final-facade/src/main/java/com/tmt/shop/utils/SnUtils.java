@@ -1,8 +1,8 @@
 package com.tmt.shop.utils;
 
-import com.tmt.common.utils.DateUtil3;
-import com.tmt.common.utils.SpringContextHolder;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.core.utils.SpringContextHolder;
+import com.tmt.core.utils.StringUtils;
+import com.tmt.core.utils.time.DateUtils;
 import com.tmt.system.service.NumberGeneratorFacade;
 
 public class SnUtils {
@@ -21,7 +21,7 @@ public class SnUtils {
 	 */
 	public static String createPaymentSn() {
 		String nextSeq = numberGenerator.generateNumber(SHOP_PAYMENT_SN).toString();
-		return new StringBuilder(DateUtil3.getTodayStr("yyyyMMdd")).append(StringUtil3.leftPad(nextSeq, 8, "0")).toString();
+		return new StringBuilder(DateUtils.getTodayStr("yyyyMMdd")).append(StringUtils.leftPad(nextSeq, 8, "0")).toString();
 	}
 	
 	
@@ -31,7 +31,7 @@ public class SnUtils {
 	 */
 	public static String createProductSn() {
 		String nextSeq = numberGenerator.generateNumber(SHOP_PRODUCT_SN).toString();
-		return new StringBuilder(DateUtil3.getTodayStr("yyyyMMdd")).append(StringUtil3.leftPad(nextSeq, 8, "0")).toString();
+		return new StringBuilder(DateUtils.getTodayStr("yyyyMMdd")).append(StringUtils.leftPad(nextSeq, 8, "0")).toString();
 	}
 	
 	/**
@@ -40,7 +40,7 @@ public class SnUtils {
 	 */
 	public static String createOrderSn() {
 		String nextSeq = numberGenerator.generateNumber(SHOP_ORDER_SN).toString();
-		return new StringBuilder(DateUtil3.getTodayStr("yyyyMMdd")).append(StringUtil3.leftPad(nextSeq, 8, "0")).toString();
+		return new StringBuilder(DateUtils.getTodayStr("yyyyMMdd")).append(StringUtils.leftPad(nextSeq, 8, "0")).toString();
 	}
 	
 	/**
@@ -49,7 +49,7 @@ public class SnUtils {
 	 */
 	public static String createShippingSn() {
 		String nextSeq = numberGenerator.generateNumber(SHOP_SHIPPING_SN).toString();
-		return new StringBuilder(DateUtil3.getTodayStr("yyyyMMdd")).append(StringUtil3.leftPad(nextSeq, 8, "0")).toString();
+		return new StringBuilder(DateUtils.getTodayStr("yyyyMMdd")).append(StringUtils.leftPad(nextSeq, 8, "0")).toString();
 	}
 	
 	/**
@@ -58,7 +58,7 @@ public class SnUtils {
 	 */
 	public static String createReturnsSn() {
 		String nextSeq = numberGenerator.generateNumber(SHOP_RETUENS_SN).toString();
-		return new StringBuilder(DateUtil3.getTodayStr("yyyyMMdd")).append(StringUtil3.leftPad(nextSeq, 8, "0")).toString();
+		return new StringBuilder(DateUtils.getTodayStr("yyyyMMdd")).append(StringUtils.leftPad(nextSeq, 8, "0")).toString();
 	}
 	
 	/**
@@ -67,6 +67,6 @@ public class SnUtils {
 	 */
 	public static String createRefundsSn() {
 		String nextSeq = numberGenerator.generateNumber(SHOP_REFUNDS_SN).toString();
-		return new StringBuilder(DateUtil3.getTodayStr("yyyyMMdd")).append(StringUtil3.leftPad(nextSeq, 8, "0")).toString();
+		return new StringBuilder(DateUtils.getTodayStr("yyyyMMdd")).append(StringUtils.leftPad(nextSeq, 8, "0")).toString();
 	}
 }

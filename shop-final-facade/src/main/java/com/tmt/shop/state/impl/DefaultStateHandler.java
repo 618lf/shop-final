@@ -3,7 +3,7 @@ package com.tmt.shop.state.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.tmt.common.utils.SpringContextHolder;
+import com.tmt.core.utils.SpringContextHolder;
 import com.tmt.shop.entity.OrderState;
 import com.tmt.shop.event.EventHandler;
 import com.tmt.shop.service.OrderServiceFacade;

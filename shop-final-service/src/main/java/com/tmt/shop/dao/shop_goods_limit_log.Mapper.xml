@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.GoodsLimitLogDao" >
+  <delete id="delete" parameterType="com.tmt.shop.entity.GoodsLimitLog">
+   DELETE FROM SHOP_GOODS_LIMIT_LOG WHERE BUY_DATE &lt;= #{buyDate}
+  </delete>
+  <insert id="insert" parameterType="com.tmt.shop.entity.GoodsLimitLog">
+   INSERT INTO SHOP_GOODS_LIMIT_LOG (GOODS_ID, USER_ID, BUY_DATE, BUY_NUM)
+   VALUES (#{goodsId}, #{userId}, #{buyDate}, #{buyNum}) 
+   ON DUPLICATE KEY UPDATE BUY_NUM = BUY_NUM + #{buyNum}
+  </insert>
+  <update id="update" parameterType="com.tmt.shop.entity.GoodsLimitLog">
+   UPDATE SHOP_GOODS_LIMIT_LOG
+      SET BUY_NUM = (CASE WHEN BUY_NUM &lt;= #{buyNum} THEN 0 ELSE BUY_NUM - #{buyNum} END)
+    WHERE GOODS_ID = #{goodsId} 
+      AND USER_ID = #{userId}
+      AND BUY_DATE = #{buyDate}
+  </update>
+</mapper>

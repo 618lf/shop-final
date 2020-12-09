@@ -2,8 +2,8 @@ package com.tmt.shop.utils;
 
 import java.util.List;
 
-import com.tmt.common.utils.CacheUtils;
-import com.tmt.common.utils.SpringContextHolder;
+import com.tmt.core.utils.CacheUtils;
+import com.tmt.core.utils.SpringContextHolder;
 import com.tmt.shop.entity.DeliveryCenter;
 import com.tmt.shop.entity.ShopConstant;
 import com.tmt.shop.service.DeliveryCenterServiceFacade;

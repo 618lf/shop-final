@@ -3,9 +3,9 @@ package com.tmt.update.impl;
 import java.util.List;
 
 import com.tmt.bbs.service.HotspotSearcherFacade;
-import com.tmt.common.utils.Lists;
-import com.tmt.common.utils.SpringContextHolder;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.core.utils.Lists;
+import com.tmt.core.utils.SpringContextHolder;
+import com.tmt.core.utils.StringUtils;
 import com.tmt.system.entity.UpdateData;
 
 public class HotspotUpdateHandler extends AbstractUpdateHandler {
@@ -26,10 +26,10 @@ public class HotspotUpdateHandler extends AbstractUpdateHandler {
 		}
 		return null;
 	}
-	
+
 	// 减位
 	private Long reducedPost(Long id) {
-		String _id = StringUtil3.removeEnd(id.toString(), "0");
+		String _id = StringUtils.removeEnd(id.toString(), "0");
 		return Long.parseLong(_id);
 	}
 
@@ -42,10 +42,10 @@ public class HotspotUpdateHandler extends AbstractUpdateHandler {
 		List<Long> updates = Lists.newArrayList();
 		List<Long> deletes = Lists.newArrayList();
 		for (UpdateData data : goods) {
-			
+
 			// id 转换
 			Long id = this.reducedPost(data.getId());
-			
+
 			// 删除
 			if (data.getOpt() == 1) {
 				deletes.add(id);

@@ -2,11 +2,11 @@ package com.tmt.shop.event.impl;
 
 import java.util.Map;
 
-import com.tmt.common.staticize.StaticUtils;
-import com.tmt.common.utils.FreemarkerUtils;
-import com.tmt.common.utils.Maps;
-import com.tmt.common.utils.SpringContextHolder;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.core.staticize.StaticUtils;
+import com.tmt.core.utils.FreemarkerUtils;
+import com.tmt.core.utils.Maps;
+import com.tmt.core.utils.SpringContextHolder;
+import com.tmt.core.utils.StringUtils;
 import com.tmt.shop.entity.NoticeSetting;
 import com.tmt.shop.entity.NoticeTask;
 import com.tmt.shop.entity.OrderEvent;
@@ -86,7 +86,7 @@ public class ProductOrderedEventHandler implements EventHandler{
 		String openId = systemService.getUserWechatOpenId(user, app.getId());
         root.put("touser", openId);
         root.put("url", StaticUtils.touchStaticizePage(app, "product", order));
-		if (StringUtil3.isNotBlank(openId)) {
+		if (StringUtils.isNotBlank(openId)) {
 			String msgString = FreemarkerUtils.processNoTemplate(template, root);
 		    NoticeTask noticeTask = new NoticeTask();
 		    noticeTask.setApp(app.getId());

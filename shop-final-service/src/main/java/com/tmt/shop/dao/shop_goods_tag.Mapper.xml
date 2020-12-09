@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.GoodsTagDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.GoodsTag"> 
+    <result column="GOODS_ID" property="goodsId" jdbcType="BIGINT"/>
+    <result column="TAG_ID" property="tagId" jdbcType="BIGINT"/>
+    <result column="TAG_NAME" property="tagName" jdbcType="VARCHAR"/>
+    <result column="SUPPORT" property="support" jdbcType="TINYINT"/>
+  </resultMap>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.GoodsTag" >
+   DELETE FROM SHOP_GOODS_TAG WHERE TAG_ID = #{tagId} AND GOODS_ID = #{goodsId}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.GoodsTag" >
+   INSERT INTO SHOP_GOODS_TAG (GOODS_ID, TAG_ID)
+   VALUES (#{goodsId}, #{tagId})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+   INSERT INTO SHOP_GOODS_TAG (GOODS_ID, TAG_ID)
+   VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+   (#{item.goodsId}, #{item.tagId})
+   </foreach> 
+  </insert>
+  
+  <select id="queryByGoodsId" resultMap="BaseResult" parameterType="long" >
+   SELECT T.ID TAG_ID, T.NAME TAG_NAME, GT.GOODS_ID, 
+          (CASE WHEN GT.TAG_ID IS NOT NULL THEN 1 ELSE 0 END) SUPPORT
+     FROM SHOP_TAG T LEFT JOIN SHOP_GOODS_TAG GT
+       ON (GT.TAG_ID =  T.ID AND GT.GOODS_ID = #{VALUE})
+    ORDER BY T.SORT
+  </select>
+  
+  <select id="queryRealsByGoodsId" resultMap="BaseResult" parameterType="long" >
+   SELECT T.ID TAG_ID, T.NAME TAG_NAME, GT.GOODS_ID, 
+          (CASE WHEN GT.TAG_ID IS NOT NULL THEN 1 ELSE 0 END) SUPPORT
+     FROM SHOP_TAG T JOIN SHOP_GOODS_TAG GT
+       ON (GT.TAG_ID =  T.ID AND GT.GOODS_ID = #{VALUE})
+    ORDER BY T.SORT
+  </select>
+  
+</mapper>

@@ -4,11 +4,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.tmt.common.utils.CacheUtils;
-import com.tmt.common.utils.DateUtil3;
-import com.tmt.common.utils.Maps;
-import com.tmt.common.utils.SpringContextHolder;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.core.utils.CacheUtils;
+import com.tmt.core.utils.Maps;
+import com.tmt.core.utils.SpringContextHolder;
+import com.tmt.core.utils.StringUtils;
+import com.tmt.core.utils.time.DateUtils;
 import com.tmt.shop.entity.Complex;
 import com.tmt.shop.entity.Order;
 import com.tmt.shop.entity.OrderItem;
@@ -44,7 +44,7 @@ public class PromotionUtils {
 	 * @return
 	 */
 	public static Map<Long, Promotion> queryProductAllEnabledPromotions(Long productId) {
-		//System.out.println("当前时间：" + DateUtil3.getTodayStr("yyyy-MM-dd HH:mm:ss"));
+		//System.out.println("当前时间：" + DateUtils.getTodayStr("yyyy-MM-dd HH:mm:ss"));
 		Map<Long, Promotion> promotions = PromotionUtils.queryProductEnabledPromotions(productId);
 		promotions.putAll(PromotionUtils.queryGlobalEnabledPromotions());
 		return promotions;
@@ -114,7 +114,7 @@ public class PromotionUtils {
 			min = ShopConstant.MAX_SECONDS_PROMOTIONS;
 		}
 
-		// System.out.println("当前时间：" + DateUtil3.getTodayStr("yyyy-MM-dd HH:mm:ss") + "缓存：" + min + "秒");
+		// System.out.println("当前时间：" + DateUtils.getTodayStr("yyyy-MM-dd HH:mm:ss") + "缓存：" + min + "秒");
 		// 设置最长的生效时间
 		CacheUtils.getSysCache().put(key, promotions, (int) min);
 	}
@@ -162,11 +162,11 @@ public class PromotionUtils {
 			promotion.setName(complex.getName());
 			promotion.setType(Promotion.TZ);
 			promotion.setReduce(complex.getPrefer());
-			Date today = DateUtil3.getTodayDate();
+			Date today = DateUtils.getTodayDate();
 			promotion.setBeginDate(today);
-			promotion.setEndDate(DateUtil3.getDateByOffset(today, 1));
+			promotion.setEndDate(DateUtils.getDateByOffset(today, 1));
 			promotion.setIsEnabled(Promotion.YES);
-			promotion.setRemarks(StringUtil3.format("优惠%s元", complex.getPrefer()));
+			promotion.setRemarks(StringUtils.format("优惠%s元", complex.getPrefer()));
 			return promotion;
 		}
 		return null;

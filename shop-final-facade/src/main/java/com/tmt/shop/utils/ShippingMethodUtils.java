@@ -4,11 +4,11 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
-import com.tmt.common.utils.CacheUtils;
-import com.tmt.common.utils.Lists;
-import com.tmt.common.utils.Maps;
-import com.tmt.common.utils.SpringContextHolder;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.core.utils.CacheUtils;
+import com.tmt.core.utils.Lists;
+import com.tmt.core.utils.Maps;
+import com.tmt.core.utils.SpringContextHolder;
+import com.tmt.core.utils.StringUtils;
 import com.tmt.shop.entity.Order;
 import com.tmt.shop.entity.PaymentMethod;
 import com.tmt.shop.entity.ShippingMethod;
@@ -110,7 +110,7 @@ public class ShippingMethodUtils {
 		Map<String, ShippingMethodArea> mareas = smethod.getMareas();
 		
 		// 无区域设置
-		if (StringUtil3.isBlank(areaId)
+		if (StringUtils.isBlank(areaId)
 				|| mareas == null || mareas.isEmpty()) {
 			return smethod.calcula(weight);
 		}
@@ -120,7 +120,7 @@ public class ShippingMethodUtils {
 			
 			// 第一次不需要
 			if (i != 0) {
-				areaId = StringUtil3.substringBeforeLast(areaId, "/");
+				areaId = StringUtils.substringBeforeLast(areaId, "/");
 			}
 			
 			// 找到这个地区的配置
@@ -129,7 +129,7 @@ public class ShippingMethodUtils {
 			}
 			
 			// 如果没有“/” 不需要再往下找了
-			if (!StringUtil3.contains(areaId, "/")) {
+			if (!StringUtils.contains(areaId, "/")) {
 				break;
 			}
 		}

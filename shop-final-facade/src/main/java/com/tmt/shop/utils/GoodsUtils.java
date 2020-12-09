@@ -9,9 +9,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.util.CollectionUtils;
 
-import com.tmt.common.utils.CacheUtils;
-import com.tmt.common.utils.SpringContextHolder;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.core.utils.CacheUtils;
+import com.tmt.core.utils.SpringContextHolder;
+import com.tmt.core.utils.StringUtils;
 import com.tmt.shop.entity.Goods;
 import com.tmt.shop.entity.Product;
 import com.tmt.shop.entity.ShopConstant;
@@ -69,9 +69,9 @@ public class GoodsUtils {
 	 * @param goods
 	 */
 	public static void imagesAsync(Goods goods) {
-		String gif = StringUtil3.format("/static%s", "/img/loading.gif");
+		String gif = StringUtils.format("/static%s", "/img/loading.gif");
 		String content = goods.getIntroduction();
-		if (StringUtil3.isNoneBlank(content)) {
+		if (StringUtils.isNoneBlank(content)) {
 			Document _doc = Jsoup.parse(content);
 			Elements imgs =_doc.getElementsByTag("img");
 			Iterator<Element>  it = imgs.iterator();

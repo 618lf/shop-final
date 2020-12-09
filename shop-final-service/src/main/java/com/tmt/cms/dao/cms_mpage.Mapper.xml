@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.cms.dao.MpageDao" >
+  <resultMap id="BaseResult" type="com.tmt.cms.entity.Mpage"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="TITLE" property="title" jdbcType="VARCHAR"/>
+    <result column="COLOR" property="color" jdbcType="VARCHAR"/>
+    <result column="DESCRIPTION" property="description" jdbcType="VARCHAR"/>
+    <result column="FOOTER_ABLE" property="footerAble" jdbcType="TINYINT"/>
+    <result column="TYPE" property="type" jdbcType="TINYINT"/>
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT"/>
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+    <result column="IS_ENABLED" property="isEnabled" jdbcType="TINYINT"/>
+    <result column="SHOP_ID" property="shopId" jdbcType="VARCHAR"/>
+    <result column="GOODS_NUM" property="goodsNum" jdbcType="TINYINT"/>
+    <result column="UV" property="uv" jdbcType="INTEGER"/>
+    <result column="PV" property="pv" jdbcType="INTEGER"/>
+    <result column="SORT" property="sort" jdbcType="INTEGER"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, TITLE, COLOR, DESCRIPTION, FOOTER_ABLE, TYPE, CREATE_ID, CREATE_NAME, CREATE_DATE, 
+		  UPDATE_DATE, IS_ENABLED, SHOP_ID, GOODS_NUM, UV, PV, SORT
+     FROM CMS_MPAGE
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT ID, TITLE, COLOR, DESCRIPTION, FOOTER_ABLE, TYPE, CREATE_ID, CREATE_NAME, CREATE_DATE, 
+		  UPDATE_DATE, IS_ENABLED, SHOP_ID, GOODS_NUM, UV, PV, SORT
+     FROM CMS_MPAGE
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition">
+   SELECT ID, TITLE, COLOR, DESCRIPTION, FOOTER_ABLE, TYPE, CREATE_ID, CREATE_NAME, CREATE_DATE, 
+		  UPDATE_DATE, IS_ENABLED, SHOP_ID, GOODS_NUM, UV, PV, SORT
+     FROM CMS_MPAGE
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="java.lang.Integer">
+    SELECT COUNT(1) C FROM CMS_MPAGE
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.cms.entity.Mpage">
+   DELETE FROM CMS_MPAGE WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.cms.entity.Mpage">
+   INSERT INTO CMS_MPAGE (ID, TITLE, COLOR, DESCRIPTION, FOOTER_ABLE, TYPE, CREATE_ID, CREATE_NAME, CREATE_DATE, 
+		  UPDATE_DATE, IS_ENABLED, SHOP_ID, GOODS_NUM, UV, PV, SORT)
+   VALUES (#{id}, #{title}, #{color}, #{description}, #{footerAble}, #{type}, #{createId}, #{createName}, #{createDate}, 
+		  #{updateDate}, #{isEnabled}, #{shopId}, #{goodsNum}, #{uv}, #{pv}, #{sort})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO CMS_MPAGE (ID, TITLE, COLOR, DESCRIPTION, FOOTER_ABLE, TYPE, CREATE_ID, CREATE_NAME, CREATE_DATE, 
+		   UPDATE_DATE, IS_ENABLED, SHOP_ID, GOODS_NUM, UV, PV, SORT)
+    VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.id}, #{item.title}, #{item.color}, #{item.description}, #{item.footerAble}, #{item.type}, #{item.createId}, #{item.createName}, #{item.createDate}, 
+		  #{item.updateDate}, #{item.isEnabled}, #{item.shopId}, #{item.goodsNum}, #{item.uv}, #{item.pv}, #{item.sort})
+   </foreach> 
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.cms.entity.Mpage">
+   UPDATE CMS_MPAGE
+      SET TITLE = #{title},
+		  COLOR = #{color},
+		  DESCRIPTION = #{description},
+		  FOOTER_ABLE = #{footerAble},
+		  TYPE = #{type},
+		  UPDATE_DATE = #{updateDate},
+		  IS_ENABLED = #{isEnabled},
+		  SHOP_ID = #{shopId},
+		  GOODS_NUM = #{goodsNum},
+		  UV = #{uv},
+		  PV = #{pv},
+		  SORT = #{sort}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateSort" parameterType="com.tmt.cms.entity.Mpage">
+   UPDATE CMS_MPAGE
+      SET SORT = #{sort}
+    WHERE ID = #{id}
+  </update>
+  
+</mapper>

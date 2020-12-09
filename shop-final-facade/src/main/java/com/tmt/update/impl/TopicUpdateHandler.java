@@ -3,8 +3,8 @@ package com.tmt.update.impl;
 import java.util.List;
 
 import com.tmt.bbs.service.TopicSearcherFacade;
-import com.tmt.common.utils.Lists;
-import com.tmt.common.utils.SpringContextHolder;
+import com.tmt.core.utils.Lists;
+import com.tmt.core.utils.SpringContextHolder;
 import com.tmt.system.entity.UpdateData;
 
 public class TopicUpdateHandler extends AbstractUpdateHandler {

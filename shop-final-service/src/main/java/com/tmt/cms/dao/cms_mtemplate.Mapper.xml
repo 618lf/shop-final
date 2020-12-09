@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.cms.dao.MtemplateDao" >
+  <resultMap id="BaseResult" type="com.tmt.cms.entity.Mtemplate"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="TITLE" property="title" jdbcType="VARCHAR"/>
+    <result column="COLOR" property="color" jdbcType="VARCHAR"/>
+    <result column="DESCRIPTION" property="description" jdbcType="VARCHAR"/>
+    <result column="FOOTER_ABLE" property="footerAble" jdbcType="TINYINT"/>
+    <result column="THUMBNAIL" property="thumbnail" jdbcType="VARCHAR"/>
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT"/>
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+    <result column="IS_ENABLED" property="isEnabled" jdbcType="TINYINT"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, NAME, TITLE, COLOR, DESCRIPTION, FOOTER_ABLE, THUMBNAIL, CREATE_ID, CREATE_NAME, 
+		  CREATE_DATE, UPDATE_DATE, IS_ENABLED
+     FROM CMS_MTEMPLATE
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT ID, NAME, TITLE, COLOR, DESCRIPTION, FOOTER_ABLE, THUMBNAIL, CREATE_ID, CREATE_NAME, 
+		  CREATE_DATE, UPDATE_DATE, IS_ENABLED
+     FROM CMS_MTEMPLATE
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition">
+   SELECT ID, NAME, TITLE, COLOR, DESCRIPTION, FOOTER_ABLE, THUMBNAIL, CREATE_ID, CREATE_NAME, 
+		  CREATE_DATE, UPDATE_DATE, IS_ENABLED
+     FROM CMS_MTEMPLATE
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="java.lang.Integer">
+    SELECT COUNT(1) C FROM CMS_MTEMPLATE
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.cms.entity.Mtemplate">
+   DELETE FROM CMS_MTEMPLATE WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.cms.entity.Mtemplate">
+   INSERT INTO CMS_MTEMPLATE (ID, NAME, TITLE, COLOR, DESCRIPTION, FOOTER_ABLE, THUMBNAIL, CREATE_ID, CREATE_NAME, 
+		  CREATE_DATE, UPDATE_DATE, IS_ENABLED)
+   VALUES (#{id}, #{name}, #{title}, #{color}, #{description}, #{footerAble}, #{thumbnail}, #{createId}, #{createName}, 
+		  #{createDate}, #{updateDate}, #{isEnabled})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO CMS_MTEMPLATE (ID, NAME, TITLE, COLOR, DESCRIPTION, FOOTER_ABLE, THUMBNAIL, CREATE_ID, CREATE_NAME, 
+		  CREATE_DATE, UPDATE_DATE, IS_ENABLED)
+    VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.id}, #{item.name}, #{item.title}, #{item.color}, #{item.description}, #{item.footerAble}, #{item.thumbnail}, #{item.createId}, #{item.createName}, 
+		  #{item.createDate}, #{item.updateDate}, #{item.isEnabled})
+   </foreach> 
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.cms.entity.Mtemplate">
+   UPDATE CMS_MTEMPLATE
+      SET NAME = #{name},
+		  TITLE = #{title},
+		  COLOR = #{color},
+		  DESCRIPTION = #{description},
+		  FOOTER_ABLE = #{footerAble},
+		  THUMBNAIL = #{thumbnail},
+		  UPDATE_DATE = #{updateDate},
+		  IS_ENABLED = #{isEnabled}
+    WHERE ID = #{id}
+  </update>
+</mapper>

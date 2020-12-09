@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.PromotionCouponDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.PromotionCoupon"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="PROMOTIONS" property="promotions" jdbcType="BIGINT"/>
+    <result column="COUPONS" property="coupons" jdbcType="BIGINT"/>
+  </resultMap>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.PromotionCoupon">
+   DELETE FROM SHOP_PROMOTION_COUPON WHERE ID = #{id}
+  </delete>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO SHOP_PROMOTION_COUPON (ID, PROMOTIONS, COUPONS)
+    VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.id}, #{item.promotions}, #{item.coupons})
+   </foreach> 
+  </insert>
+  
+  <select id="queryCouponByPromotionId" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, PROMOTIONS, COUPONS FROM SHOP_PROMOTION_COUPON
+    WHERE PROMOTIONS = #{promotions}
+  </select>
+  
+  <resultMap id="CouponBaseResult" type="com.tmt.shop.entity.PromotionCoupon"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="PROMOTIONS" property="promotions" jdbcType="BIGINT"/>
+    <result column="COUPONS" property="coupons" jdbcType="BIGINT"/>
+    <result column="IS_FISSION" property="coupon.isFission" jdbcType="TINYINT"/>
+    <result column="IS_PRICE" property="coupon.isPrice" jdbcType="TINYINT"/>
+    <result column="ORDER_PRICE" property="coupon.orderPrice" jdbcType="DECIMAL"/>
+    <result column="VAL" property="coupon.val" jdbcType="INTEGER"/>
+    <result column="BEGIN_DATE" property="coupon.beginDate" jdbcType="TIMESTAMP"/>
+    <result column="END_DATE" property="coupon.endDate" jdbcType="TIMESTAMP"/>
+  </resultMap>
+  
+  <select id="queryRichCouponByPromotionId" resultMap="CouponBaseResult" parameterType="Long">
+   SELECT A.ID, PROMOTIONS, COUPONS, B.IS_FISSION, B.VAL, B.BEGIN_DATE, B.END_DATE,
+          B.IS_PRICE, B.ORDER_PRICE
+     FROM SHOP_PROMOTION_COUPON A, SHOP_COUPON B
+    WHERE PROMOTIONS = #{promotions} AND A.COUPONS = B.ID
+  </select>
+  
+</mapper>

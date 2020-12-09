@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.CategoryBrandDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.CategoryBrand"> 
+    <result column="CATEGORY_ID" property="categoryId" jdbcType="BIGINT"/>
+    <result column="BRAND_ID" property="brandId" jdbcType="BIGINT"/>
+    <result column="BRAND_NAME" property="brandName" jdbcType="VARCHAR"/>
+    <result column="SUPPORT" property="support" jdbcType="TINYINT"/>
+  </resultMap>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.CategoryBrand" >
+   DELETE FROM SHOP_CATEGORY_BRAND WHERE BRAND_ID = #{brandId} AND CATEGORY_ID = #{categoryId}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.CategoryBrand" >
+   INSERT INTO SHOP_CATEGORY_BRAND (CATEGORY_ID, BRAND_ID) VALUES (#{categoryId}, #{brandId})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO SHOP_CATEGORY_BRAND (CATEGORY_ID, BRAND_ID)
+    VALUES 
+   <foreach collection="list" item="item" index="index" separator="," >  
+   (#{item.categoryId}, #{item.brandId})
+   </foreach> 
+  </insert>
+  
+  <select id="queryByCategoryd" resultMap="BaseResult" parameterType="long">
+   SELECT B.ID BRAND_ID, B.NAME BRAND_NAME, CB.CATEGORY_ID, 
+          (CASE WHEN CB.BRAND_ID IS NOT NULL THEN 1 ELSE 0 END) SUPPORT
+     FROM SHOP_BRAND B LEFT JOIN SHOP_CATEGORY_BRAND CB
+       ON (CB.BRAND_ID =  B.ID AND CB.CATEGORY_ID = #{VALUE})
+    ORDER BY B.SORT
+  </select>
+  
+  <select id="queryRealsByCategoryd" resultMap="BaseResult" parameterType="long">
+   SELECT B.ID BRAND_ID, B.NAME BRAND_NAME, CB.CATEGORY_ID, 
+          (CASE WHEN CB.BRAND_ID IS NOT NULL THEN 1 ELSE 0 END) SUPPORT
+     FROM SHOP_BRAND B JOIN SHOP_CATEGORY_BRAND CB
+       ON (CB.BRAND_ID = B.ID AND CB.CATEGORY_ID = #{VALUE})
+    ORDER BY B.SORT
+  </select>
+  
+</mapper>

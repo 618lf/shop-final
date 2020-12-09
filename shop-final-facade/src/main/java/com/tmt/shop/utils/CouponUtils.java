@@ -3,9 +3,9 @@ package com.tmt.shop.utils;
 import java.util.List;
 import java.util.Set;
 
-import com.tmt.common.utils.CacheUtils;
-import com.tmt.common.utils.Sets;
-import com.tmt.common.utils.SpringContextHolder;
+import com.google.common.collect.Sets;
+import com.tmt.core.utils.CacheUtils;
+import com.tmt.core.utils.SpringContextHolder;
 import com.tmt.shop.entity.Coupon;
 import com.tmt.shop.entity.CouponProduct;
 import com.tmt.shop.entity.ShopConstant;
@@ -14,7 +14,6 @@ import com.tmt.shop.service.CouponServiceFacade;
 /**
  * 优惠券 -- 相关
  * @author root
- *
  */
 public class CouponUtils {
 

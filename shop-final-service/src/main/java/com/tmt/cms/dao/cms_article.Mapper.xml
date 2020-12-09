@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.cms.dao.ArticleDao" >
+  <resultMap id="BaseResult" type="com.tmt.cms.entity.Article"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="TITLE" property="title" jdbcType="VARCHAR"/>
+    <result column="AUTHOR" property="author" jdbcType="VARCHAR"/>
+    <result column="CATEGORY_ID" property="categoryId" jdbcType="BIGINT"/>
+    <result column="CATEGORY_NAME" property="categoryName" jdbcType="VARCHAR"/>
+    <result column="IMAGE" property="image" jdbcType="VARCHAR"/>
+    <result column="KEYWORDS" property="keywords" jdbcType="VARCHAR"/>
+    <result column="WEIGHT" property="weight" jdbcType="INTEGER"/>
+    <result column="HITS" property="hits" jdbcType="INTEGER"/>
+    <result column="COMMENTS" property="comments" jdbcType="INTEGER"/>
+    <result column="IS_ENABLED" property="isEnabled" jdbcType="TINYINT"/>
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT"/>
+    <result column="UPDATE_ID" property="updateId" jdbcType="BIGINT"/>
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+    <result column="REMARKS" property="remarks" jdbcType="VARCHAR"/>
+    <result column="DEL_FLAG" property="delFlag" jdbcType="TINYINT"/>
+  </resultMap>
+  
+  <resultMap id="WithDataBaseResult" type="com.tmt.cms.entity.Article" extends="BaseResult"> 
+    <result column="CONTENT" property="content" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <select id="get" resultMap="WithDataBaseResult" parameterType="Long" >
+   SELECT A.ID, TITLE, AUTHOR, CATEGORY_ID, CATEGORY_NAME, IMAGE, KEYWORDS, WEIGHT, HITS, 
+		  COMMENTS, IS_ENABLED, CREATE_ID, UPDATE_ID, UPDATE_DATE, REMARKS, DEL_FLAG, AD.CONTENT
+     FROM CMS_ARTICLE A, CMS_ARTICLE_DATA AD
+    WHERE A.ID = AD.ID AND A.ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT ID, TITLE, AUTHOR, CATEGORY_ID, CATEGORY_NAME, IMAGE, KEYWORDS, WEIGHT, 
+		  HITS, COMMENTS, IS_ENABLED, CREATE_ID, UPDATE_ID, UPDATE_DATE, REMARKS, 
+		  DEL_FLAG
+     FROM CMS_ARTICLE
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition" >
+   SELECT ID, TITLE, AUTHOR, CATEGORY_ID, CATEGORY_NAME, IMAGE, KEYWORDS, WEIGHT, 
+		  HITS, COMMENTS, IS_ENABLED, CREATE_ID, UPDATE_ID, UPDATE_DATE, REMARKS, 
+		  DEL_FLAG
+     FROM CMS_ARTICLE
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="int" >
+    SELECT COUNT(1) C FROM CMS_ARTICLE
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.cms.entity.Article" >
+   DELETE FROM CMS_ARTICLE WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.cms.entity.Article" >
+   INSERT INTO CMS_ARTICLE (ID, TITLE, AUTHOR, CATEGORY_ID, CATEGORY_NAME, IMAGE, KEYWORDS, WEIGHT, 
+		  HITS, COMMENTS, IS_ENABLED, CREATE_ID, UPDATE_ID, UPDATE_DATE, REMARKS, 
+		  DEL_FLAG)
+   VALUES (#{id}, #{title}, #{author}, #{categoryId}, #{categoryName}, #{image}, #{keywords}, #{weight}, 
+		  #{hits}, #{comments}, #{isEnabled}, #{createId}, #{updateId}, #{updateDate}, #{remarks}, 
+		  #{delFlag})
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.cms.entity.Article" >
+   UPDATE CMS_ARTICLE
+      SET TITLE = #{title},
+		  AUTHOR = #{author},
+		  CATEGORY_ID = #{categoryId},
+		  CATEGORY_NAME = #{categoryName},
+		  IMAGE = #{image},
+		  KEYWORDS = #{keywords},
+		  WEIGHT = #{weight},
+		  HITS = #{hits},
+		  COMMENTS = #{comments},
+		  IS_ENABLED = #{isEnabled},
+		  UPDATE_ID = #{updateId},
+		  UPDATE_DATE = #{updateDate},
+		  REMARKS = #{remarks},
+		  DEL_FLAG = #{delFlag}
+    WHERE ID = #{id}
+  </update>
+  
+</mapper>

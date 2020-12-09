@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.CartItemDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.CartItem"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="CART_ID" property="cartId" jdbcType="VARCHAR"/>
+    <result column="PRODUCT_ID" property="productId" jdbcType="BIGINT"/>
+    <result column="QUANTITY" property="quantity" jdbcType="INTEGER"/>
+    <result column="CHECKED" property="checked" jdbcType="TINYINT"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="PROMOTIONS" property="promotions" jdbcType="BIGINT"/>
+    <result column="TYPE" property="type" jdbcType="TINYINT"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="long" >
+   SELECT ID, CART_ID, PRODUCT_ID, QUANTITY, CHECKED, CREATE_DATE, PROMOTIONS, TYPE
+     FROM SHOP_CART_ITEM
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="findByProductId" resultMap="BaseResult" parameterType="java.util.Map" >
+   SELECT ID, CART_ID, PRODUCT_ID, QUANTITY, CHECKED, CREATE_DATE, PROMOTIONS, TYPE
+     FROM SHOP_CART_ITEM
+    WHERE PRODUCT_ID = #{PRODUCT_ID} AND CART_ID = #{CART_ID}
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.CartItem" >
+   DELETE FROM SHOP_CART_ITEM WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.CartItem" >
+   INSERT INTO SHOP_CART_ITEM (ID, CART_ID, PRODUCT_ID, QUANTITY, CHECKED, CREATE_DATE, PROMOTIONS, TYPE)
+   VALUES (#{id}, #{cartId}, #{productId}, #{quantity}, #{checked}, #{createDate}, #{promotions}, #{type})
+   ON DUPLICATE KEY UPDATE QUANTITY = QUANTITY + #{quantity}, CHECKED = 1
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO SHOP_CART_ITEM (ID, CART_ID, PRODUCT_ID, QUANTITY, CHECKED, CREATE_DATE, PROMOTIONS, TYPE)
+    VALUES 
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.id}, #{item.cartId}, #{item.productId}, #{item.quantity}, #{item.checked}, #{item.createDate}, #{item.promotions}, 
+     #{item.type})
+   </foreach> 
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.shop.entity.CartItem" >
+   UPDATE SHOP_CART_ITEM
+      SET QUANTITY = #{quantity},
+		  CHECKED = 1
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateQuantity" parameterType="com.tmt.shop.entity.CartItem" >
+   UPDATE SHOP_CART_ITEM
+      SET QUANTITY = #{quantity}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateChecked" parameterType="com.tmt.shop.entity.CartItem" >
+   UPDATE SHOP_CART_ITEM
+      SET CHECKED = #{checked}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updatePromotions" parameterType="com.tmt.shop.entity.CartItem" >
+   UPDATE SHOP_CART_ITEM
+      SET PROMOTIONS = #{promotions}
+    WHERE ID = #{id}
+  </update>
+  
+  <!-- 根据key查询 -->
+  <select id="countQuantityByCartKey" parameterType="string" resultType="int" >
+    SELECT SUM(CI.QUANTITY) C 
+      FROM SHOP_CART_ITEM CI, SHOP_CART C
+     WHERE CI.CART_ID = C.ID 
+       AND C.CART_KEY = #{VALUE}
+  </select>
+  
+  <!-- 根据用户ID查询 -->
+  <select id="countQuantityByUserId" parameterType="long" resultType="int" >
+    SELECT SUM(CI.QUANTITY) C 
+      FROM SHOP_CART_ITEM CI, SHOP_CART C
+     WHERE CI.CART_ID = C.ID 
+       AND C.CREATE_ID = #{VALUE}
+  </select>
+  
+  <select id="findByCartId" resultMap="BaseResult" parameterType="long" >
+   SELECT ID, CART_ID, PRODUCT_ID, QUANTITY, CHECKED, CREATE_DATE, TYPE
+     FROM SHOP_CART_ITEM
+    WHERE CART_ID = #{VALUE}
+  </select>
+</mapper>

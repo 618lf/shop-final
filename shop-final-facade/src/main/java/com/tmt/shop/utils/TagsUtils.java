@@ -2,8 +2,8 @@ package com.tmt.shop.utils;
 
 import java.util.List;
 
-import com.tmt.common.utils.Lists;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.core.utils.Lists;
+import com.tmt.core.utils.StringUtils;
 import com.tmt.shop.entity.ProductAppraise;
 
 /**
@@ -35,13 +35,13 @@ public class TagsUtils {
 		if (appraise.getDeliveryGrade() >= 4) {
 			tags.add(TAGS[4]);
 		}
-		if (StringUtil3.isNotBlank(appraise.getImages())) {
+		if (StringUtils.isNotBlank(appraise.getImages())) {
 			tags.add(TAGS[5]);
 		}
-		if (StringUtil3.isNotBlank(appraise.getAddContent())) {
+		if (StringUtils.isNotBlank(appraise.getAddContent())) {
 			tags.add(TAGS[6]);
 		}
-		return StringUtil3.join(tags, ",");
+		return StringUtils.join(tags, ",");
 	}
 	
 	/**

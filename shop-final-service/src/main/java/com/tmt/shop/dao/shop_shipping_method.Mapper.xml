@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.ShippingMethodDao">
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.ShippingMethod"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="SORT" property="sort" jdbcType="INTEGER"/>
+    <result column="FIRST_PRICE" property="firstPrice" jdbcType="DECIMAL"/>
+    <result column="FIRST_WEIGHT" property="firstWeight" jdbcType="FLOAT"/>
+    <result column="CONTINUE_PRICE" property="continuePrice" jdbcType="DECIMAL"/>
+    <result column="CONTINUE_WEIGHT" property="continueWeight" jdbcType="FLOAT"/>
+    <result column="ICON" property="icon" jdbcType="VARCHAR"/>
+    <result column="DELIVERY_CORP_ID" property="deliveryCorpId" jdbcType="BIGINT"/>
+    <result column="DELIVERY_CORP_NAME" property="deliveryCorpName" jdbcType="VARCHAR"/>
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT"/>
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+    <result column="REMARKS" property="remarks" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="long" >
+   SELECT ID, NAME, SORT, FIRST_PRICE, FIRST_WEIGHT, CONTINUE_PRICE, CONTINUE_WEIGHT, ICON, 
+		  DELIVERY_CORP_ID, DELIVERY_CORP_NAME, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_DATE, REMARKS
+     FROM SHOP_SHIPPING_METHOD
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT ID, NAME, SORT, FIRST_PRICE, FIRST_WEIGHT, CONTINUE_PRICE, CONTINUE_WEIGHT, ICON, 
+		  DELIVERY_CORP_ID, DELIVERY_CORP_NAME, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_DATE, REMARKS  
+     FROM SHOP_SHIPPING_METHOD
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition" >
+   SELECT ID, NAME, SORT, FIRST_PRICE, FIRST_WEIGHT, CONTINUE_PRICE, CONTINUE_WEIGHT, ICON, 
+		  DELIVERY_CORP_ID, DELIVERY_CORP_NAME, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_DATE, REMARKS
+     FROM SHOP_SHIPPING_METHOD
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="int" >
+    SELECT COUNT(1) C FROM SHOP_SHIPPING_METHOD
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.ShippingMethod" >
+   DELETE FROM SHOP_SHIPPING_METHOD WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.ShippingMethod" >
+   INSERT INTO SHOP_SHIPPING_METHOD (ID, NAME, SORT, FIRST_PRICE, FIRST_WEIGHT, CONTINUE_PRICE, CONTINUE_WEIGHT, ICON, 
+		  DELIVERY_CORP_ID, DELIVERY_CORP_NAME, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_DATE, REMARKS)
+   VALUES (#{id}, #{name}, #{sort}, #{firstPrice}, #{firstWeight}, #{continuePrice}, #{continueWeight}, #{icon}, 
+		  #{deliveryCorpId}, #{deliveryCorpName}, #{createId}, #{createName}, #{createDate}, #{updateDate}, #{remarks})
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.shop.entity.ShippingMethod" >
+   UPDATE SHOP_SHIPPING_METHOD
+      SET NAME = #{name},
+		  SORT = #{sort},
+		  FIRST_PRICE = #{firstPrice},
+		  FIRST_WEIGHT = #{firstWeight},
+		  CONTINUE_PRICE = #{continuePrice},
+		  CONTINUE_WEIGHT = #{continueWeight},
+		  ICON = #{icon},
+		  DELIVERY_CORP_ID = #{deliveryCorpId},
+		  DELIVERY_CORP_NAME = #{deliveryCorpName},
+		  UPDATE_DATE = #{updateDate},
+		  REMARKS = #{remarks}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateSort" parameterType="com.tmt.shop.entity.ShippingMethod" >
+   UPDATE SHOP_SHIPPING_METHOD
+      SET SORT = #{sort}
+    WHERE ID = #{id}
+  </update>
+  
+</mapper>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.RankDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.Rank"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="GRADE" property="grade" jdbcType="TINYINT"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="IMAGE" property="image" jdbcType="VARCHAR"/>
+    <result column="BIG_IMAGE" property="bigImage" jdbcType="VARCHAR"/>
+    <result column="SN" property="sn" jdbcType="VARCHAR"/>
+    <result column="PRICE" property="price" jdbcType="DECIMAL"/>
+    <result column="MIN_POINTS" property="minPoints" jdbcType="INTEGER"/>
+    <result column="MAX_POINTS" property="maxPoints" jdbcType="INTEGER"/>
+    <result column="AUTO_UPGRADE" property="autoUpgrade" jdbcType="TINYINT"/>
+    <result column="DISCOUNT" property="discount" jdbcType="FLOAT"/>
+    <result column="SHIPPING" property="shipping" jdbcType="INTEGER"/>
+    <result column="POINTS" property="points" jdbcType="FLOAT"/>
+    <result column="BIRTHDAY_RIGHT" property="birthdayRight" jdbcType="VARCHAR"/>
+    <result column="MEMBER_RIGHT" property="memberRight" jdbcType="VARCHAR"/>
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT"/>
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="VALID_DAYS" property="validDays" jdbcType="INTEGER"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, GRADE, NAME, IMAGE, BIG_IMAGE, SN, PRICE, MIN_POINTS, MAX_POINTS, 
+		  AUTO_UPGRADE, DISCOUNT, SHIPPING, POINTS, BIRTHDAY_RIGHT, MEMBER_RIGHT, CREATE_ID, 
+		  CREATE_NAME, CREATE_DATE, VALID_DAYS
+     FROM SHOP_RANK
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT ID, GRADE, NAME, IMAGE, BIG_IMAGE, SN, PRICE, MIN_POINTS, MAX_POINTS, 
+		  AUTO_UPGRADE, DISCOUNT, SHIPPING, POINTS, BIRTHDAY_RIGHT, MEMBER_RIGHT, CREATE_ID, 
+		  CREATE_NAME, CREATE_DATE, VALID_DAYS
+     FROM SHOP_RANK 
+    ORDER BY GRADE, MIN_POINTS
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition">
+   SELECT ID, GRADE, NAME, IMAGE, BIG_IMAGE, SN, PRICE, MIN_POINTS, MAX_POINTS, 
+		  AUTO_UPGRADE, DISCOUNT, SHIPPING, POINTS, BIRTHDAY_RIGHT, MEMBER_RIGHT, CREATE_ID, 
+		  CREATE_NAME, CREATE_DATE, VALID_DAYS
+     FROM SHOP_RANK
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="java.lang.Integer">
+    SELECT COUNT(1) C FROM SHOP_RANK
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.Rank">
+   DELETE FROM SHOP_RANK WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.Rank">
+   INSERT INTO SHOP_RANK (ID, GRADE, NAME, IMAGE, BIG_IMAGE, SN, PRICE, MIN_POINTS, MAX_POINTS, 
+		  AUTO_UPGRADE, DISCOUNT, SHIPPING, POINTS, BIRTHDAY_RIGHT, MEMBER_RIGHT, CREATE_ID, 
+		  CREATE_NAME, CREATE_DATE, VALID_DAYS)
+   VALUES (#{id}, #{grade}, #{name}, #{image}, #{bigImage}, #{sn}, #{price}, #{minPoints}, #{maxPoints}, 
+		  #{autoUpgrade}, #{discount}, #{shipping}, #{points}, #{birthdayRight}, #{memberRight}, #{createId}, 
+		  #{createName}, #{createDate}, #{validDays})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO SHOP_RANK (ID, GRADE, NAME, IMAGE, BIG_IMAGE, SN, PRICE, MIN_POINTS, MAX_POINTS, 
+		  AUTO_UPGRADE, DISCOUNT, SHIPPING, POINTS, BIRTHDAY_RIGHT, MEMBER_RIGHT, CREATE_ID, 
+		  CREATE_NAME, CREATE_DATE, VALID_DAYS)
+    VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.id}, #{item.grade}, #{item.name}, #{item.image}, #{item.bigImage}, #{item.sn}, #{item.price}, #{item.minPoints}, #{item.maxPoints}, 
+		  #{item.autoUpgrade}, #{item.discount}, #{item.shipping}, #{item.points}, #{item.birthdayRight}, #{item.memberRight}, #{item.createId}, 
+		  #{item.createName}, #{item.createDate}, #{validDays})
+   </foreach> 
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.shop.entity.Rank">
+   UPDATE SHOP_RANK
+      SET GRADE = #{grade},
+		  NAME = #{name},
+		  IMAGE = #{image},
+		  BIG_IMAGE = #{bigImage},
+		  SN = #{sn},
+		  PRICE = #{price},
+		  MIN_POINTS = #{minPoints},
+		  MAX_POINTS = #{maxPoints},
+		  AUTO_UPGRADE = #{autoUpgrade},
+		  DISCOUNT = #{discount},
+		  SHIPPING = #{shipping},
+		  POINTS = #{points},
+		  BIRTHDAY_RIGHT = #{birthdayRight},
+		  MEMBER_RIGHT = #{memberRight},
+		  VALID_DAYS = #{validDays}
+    WHERE ID = #{id}
+  </update>
+</mapper>

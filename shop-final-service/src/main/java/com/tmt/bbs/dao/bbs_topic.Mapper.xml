@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.bbs.dao.TopicDao" >
+  <resultMap id="BaseResult" type="com.tmt.bbs.entity.Topic"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="SECTION_ID" property="sectionId" jdbcType="BIGINT"/>
+    <result column="SECTION_NAME" property="sectionName" jdbcType="VARCHAR"/>
+    <result column="IS_TOP" property="isTop" jdbcType="TINYINT"/>
+    <result column="IS_GOOD" property="isGood" jdbcType="TINYINT"/>
+    <result column="IS_SHOW" property="isShow" jdbcType="TINYINT"/>
+    <result column="MOOD" property="mood" jdbcType="VARCHAR"/>
+    <result column="TAGS" property="tags" jdbcType="VARCHAR"/>
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT"/>
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+    <result column="CREATE_RANK" property="createRank" jdbcType="VARCHAR"/>
+    <result column="CREATE_IMAGE" property="createImage" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="REMARKS" property="remarks" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, SECTION_ID, SECTION_NAME, IS_TOP, IS_GOOD, IS_SHOW, MOOD, TAGS, CREATE_ID, 
+		  CREATE_NAME, CREATE_RANK, CREATE_IMAGE, CREATE_DATE, REMARKS
+     FROM BBS_TOPIC
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT ID, SECTION_ID, SECTION_NAME, IS_TOP, IS_GOOD, IS_SHOW, MOOD, TAGS, CREATE_ID, 
+		  CREATE_NAME, CREATE_RANK, CREATE_IMAGE, CREATE_DATE, REMARKS
+     FROM BBS_TOPIC
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition">
+   SELECT ID, SECTION_ID, SECTION_NAME, IS_TOP, IS_GOOD, IS_SHOW, MOOD, TAGS, CREATE_ID, 
+		  CREATE_NAME, CREATE_RANK, CREATE_IMAGE, CREATE_DATE, REMARKS
+     FROM BBS_TOPIC
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="java.lang.Integer">
+    SELECT COUNT(1) C FROM BBS_TOPIC
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.bbs.entity.Topic">
+   DELETE FROM BBS_TOPIC WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.bbs.entity.Topic">
+   INSERT INTO BBS_TOPIC (ID, SECTION_ID, SECTION_NAME, IS_TOP, IS_GOOD, IS_SHOW, MOOD, TAGS, CREATE_ID, 
+		  CREATE_NAME, CREATE_RANK, CREATE_IMAGE, CREATE_DATE, REMARKS)
+   VALUES (#{id}, #{sectionId}, #{sectionName}, #{isTop}, #{isGood}, #{isShow}, #{mood}, #{tags}, #{createId}, 
+		  #{createName}, #{createRank}, #{createImage}, #{createDate}, #{remarks})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO BBS_TOPIC (ID, SECTION_ID, SECTION_NAME, IS_TOP, IS_GOOD, IS_SHOW, MOOD, TAGS, CREATE_ID, 
+		  CREATE_NAME, CREATE_RANK, CREATE_IMAGE, CREATE_DATE, REMARKS)
+    VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.id}, #{item.sectionId}, #{item.sectionName}, #{item.isTop}, #{item.isGood}, #{item.isShow}, #{item.mood}, #{item.tags}, #{item.createId}, 
+		  #{item.createName}, #{item.createRank}, #{item.createImage}, #{item.createDate}, #{item.remarks})
+   </foreach> 
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.bbs.entity.Topic">
+   UPDATE BBS_TOPIC
+      SET TAGS = #{tags},
+		  REMARKS = #{remarks}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateShow" parameterType="com.tmt.bbs.entity.Topic">
+   UPDATE BBS_TOPIC
+      SET IS_SHOW = #{isShow}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateRappraise" parameterType="com.tmt.bbs.entity.Topic">
+   UPDATE BBS_TOPIC
+      SET TAGS = (CASE WHEN TAGS IS NULL THEN #{tags} ELSE CONCAT(TAGS, ',', #{tags}) END)
+    WHERE ID = #{id}
+  </update>
+  
+  <select id="isShow" parameterType="java.lang.Long" resultType="java.lang.Byte">
+    SELECT IS_SHOW FROM BBS_TOPIC WHERE ID = #{id}
+  </select>
+  
+</mapper>

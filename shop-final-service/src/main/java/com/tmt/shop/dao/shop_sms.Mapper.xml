@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.SmsDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.Sms"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="SCENE" property="scene" jdbcType="TINYINT"/>
+    <result column="APPKEY" property="appkey" jdbcType="VARCHAR"/>
+    <result column="SECRET" property="secret" jdbcType="VARCHAR"/>
+    <result column="SORT" property="sort" jdbcType="TINYINT"/>
+    <result column="SIGN_NAME" property="signName" jdbcType="VARCHAR"/>
+    <result column="TEMPLATE" property="template" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, NAME, SCENE, APPKEY, SECRET, SORT, SIGN_NAME, TEMPLATE
+     FROM SHOP_SMS
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition">
+   SELECT ID, NAME, SCENE, APPKEY, SECRET, SORT, SIGN_NAME, TEMPLATE
+     FROM SHOP_SMS
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="java.lang.Integer">
+    SELECT COUNT(1) C FROM SHOP_SMS
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.Sms">
+   DELETE FROM SHOP_SMS WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.Sms">
+   INSERT INTO SHOP_SMS (ID, NAME, SCENE, APPKEY, SECRET, SORT, SIGN_NAME, TEMPLATE)
+   VALUES (#{id}, #{name}, #{scene}, #{appkey}, #{secret}, #{sort}, #{signName}, #{template})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO SHOP_SMS (ID, NAME, SCENE, APPKEY, SECRET, SORT, SIGN_NAME, TEMPLATE)
+    VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.id}, #{item.name}, #{item.scene}, #{item.appkey}, #{item.secret}, #{item.sort},
+     #{signName}, #{template})
+   </foreach> 
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.shop.entity.Sms">
+   UPDATE SHOP_SMS
+      SET NAME = #{name},
+		  SCENE = #{scene},
+		  APPKEY = #{appkey},
+		  SECRET = #{secret},
+		  SORT = #{sort},
+		  SIGN_NAME = #{signName}, 
+		  TEMPLATE = #{template}
+    WHERE ID = #{id}
+  </update>
+  
+  <select id="getByScene" resultMap="BaseResult" parameterType="Byte">
+   SELECT ID, NAME, SCENE, APPKEY, SECRET, SORT, SIGN_NAME, TEMPLATE
+     FROM SHOP_SMS
+    WHERE SCENE = #{scene} LIMIT 1
+  </select>
+  
+</mapper>

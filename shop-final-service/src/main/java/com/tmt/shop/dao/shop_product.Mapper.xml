@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.ProductDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.Product"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="GOODS_ID" property="goodsId" jdbcType="BIGINT"/>
+    <result column="SN" property="sn" jdbcType="VARCHAR"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="IMAGE" property="image" jdbcType="VARCHAR"/>
+    <result column="TIP" property="tip" jdbcType="VARCHAR"/>
+    <result column="COST" property="cost" jdbcType="DECIMAL"/>
+    <result column="MARKET_PRICE" property="marketPrice" jdbcType="DECIMAL"/>
+    <result column="PRICE" property="price" jdbcType="DECIMAL"/>
+    <result column="UNIT" property="unit" jdbcType="VARCHAR"/>
+    <result column="WEIGHT" property="weight" jdbcType="VARCHAR"/>
+    <result column="IN_STORE" property="inStore" jdbcType="INTEGER"/>
+    <result column="OUT_STORE" property="outStore" jdbcType="INTEGER"/>
+    <result column="STORE" property="store" jdbcType="INTEGER"/>
+    <result column="FREEZE_STORE" property="freezeStore" jdbcType="INTEGER"/>
+    <result column="REWARD_POINT" property="rewardPoint" jdbcType="INTEGER"/>
+    <result column="IS_DEFAULT" property="isDefault" jdbcType="TINYINT"/>
+    <result column="IS_SALESTATE" property="isSalestate" jdbcType="TINYINT"/>
+    <result column="SPECIFICATIONS_ID" property="specificationsId" jdbcType="VARCHAR"/>
+    <result column="SPECIFICATIONS_VALUE" property="specificationsValue" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+    <result column="SNAPSHOT" property="snapshot" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="long">
+   SELECT ID, GOODS_ID, SN, NAME, TIP, COST, MARKET_PRICE, PRICE, 
+		  UNIT, WEIGHT, IN_STORE, OUT_STORE, STORE, FREEZE_STORE, IS_DEFAULT, REWARD_POINT,
+		  IS_SALESTATE, SPECIFICATIONS_ID,  SPECIFICATIONS_VALUE, CREATE_DATE, UPDATE_DATE,
+		  SNAPSHOT, IMAGE
+     FROM SHOP_PRODUCT
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="getBySn" resultMap="BaseResult" parameterType="String">
+    SELECT ID, GOODS_ID, SN, NAME, TIP, COST, MARKET_PRICE, PRICE, 
+		  UNIT, WEIGHT, IN_STORE, OUT_STORE, STORE, FREEZE_STORE, IS_DEFAULT, REWARD_POINT,
+		  IS_SALESTATE, SPECIFICATIONS_ID,  SPECIFICATIONS_VALUE, CREATE_DATE, UPDATE_DATE,
+		  SNAPSHOT, IMAGE
+     FROM SHOP_PRODUCT
+    WHERE SN = #{VALUE}
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition" >
+   SELECT ID, GOODS_ID, SN, NAME, TIP, COST, MARKET_PRICE, PRICE, 
+		  UNIT, WEIGHT, IN_STORE, OUT_STORE, STORE, FREEZE_STORE, IS_DEFAULT, REWARD_POINT,
+		  IS_SALESTATE, SPECIFICATIONS_ID,  SPECIFICATIONS_VALUE, CREATE_DATE, UPDATE_DATE,
+		  SNAPSHOT, IMAGE
+     FROM SHOP_PRODUCT
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="int" >
+    SELECT COUNT(1) C FROM SHOP_PRODUCT
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="java.util.List">
+   UPDATE SHOP_PRODUCT SET IS_SALESTATE = 0 WHERE ID IN
+   <foreach collection="list" item="item" index="index" separator=","  open="(" close=")">  
+    #{item.id}
+   </foreach> 
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.Product" >
+   INSERT INTO SHOP_PRODUCT (ID, GOODS_ID, SN, NAME, TIP, COST, MARKET_PRICE, PRICE, 
+		  UNIT, WEIGHT, IN_STORE, OUT_STORE, STORE, FREEZE_STORE, IS_DEFAULT, REWARD_POINT,
+		  IS_SALESTATE, SPECIFICATIONS_ID, SPECIFICATIONS_VALUE, CREATE_DATE, UPDATE_DATE, IMAGE)
+   VALUES (#{id}, #{goodsId}, #{sn}, #{name}, #{tip}, #{cost}, #{marketPrice}, #{price}, 
+		  #{unit}, #{weight}, #{inStore}, #{outStore}, #{store}, #{freezeStore}, #{isDefault}, #{rewardPoint},
+		  #{isSalestate}, #{specificationsId}, #{specificationsValue}, #{createDate}, #{updateDate}, #{image})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+   INSERT INTO SHOP_PRODUCT (ID, GOODS_ID, SN, NAME, TIP, COST, MARKET_PRICE, PRICE, 
+		  UNIT, WEIGHT, IN_STORE, OUT_STORE, STORE, FREEZE_STORE, IS_DEFAULT, REWARD_POINT,
+		  IS_SALESTATE, SPECIFICATIONS_ID, SPECIFICATIONS_VALUE, CREATE_DATE, UPDATE_DATE, IMAGE)
+   VALUES 
+   <foreach collection="list" item="item" index="index" separator="," >  
+   (#{item.id}, #{item.goodsId}, #{item.sn}, #{item.name}, #{item.tip}, #{item.cost}, #{item.marketPrice}, #{item.price}, 
+		  #{item.unit}, #{item.weight}, #{item.inStore}, #{item.outStore}, #{item.store}, #{item.freezeStore}, #{item.isDefault}, #{item.rewardPoint},
+		  #{item.isSalestate}, #{item.specificationsId}, #{item.specificationsValue}, #{item.createDate}, #{item.updateDate}, #{item.image})
+   </foreach>
+  </insert>
+  
+   <!-- 修改快照需要的信息时，清空快照 -->
+  <update id="updateSimple" parameterType="com.tmt.shop.entity.Product" >
+   UPDATE SHOP_PRODUCT
+      SET SN = #{sn},
+		  NAME = #{name},
+		  COST = #{cost},
+		  MARKET_PRICE = #{marketPrice},
+		  PRICE = #{price},
+		  UNIT = #{unit},
+		  WEIGHT = #{weight},
+		  REWARD_POINT = #{rewardPoint},
+		  IS_SALESTATE = #{isSalestate},
+		  UPDATE_DATE = #{updateDate},
+		  IMAGE = #{image},
+		  SNAPSHOT = null
+    WHERE ID = #{id}
+  </update>
+  
+  <!-- 修改快照需要的信息时，清空快照 -->
+  <update id="update" parameterType="com.tmt.shop.entity.Product" >
+   UPDATE SHOP_PRODUCT
+      SET GOODS_ID = #{goodsId},
+		  SN = #{sn},
+		  NAME = #{name},
+		  TIP = #{tip},
+		  COST = #{cost},
+		  MARKET_PRICE = #{marketPrice},
+		  PRICE = #{price},
+		  UNIT = #{unit},
+		  WEIGHT = #{weight},
+		  REWARD_POINT = #{rewardPoint},
+		  IS_DEFAULT = #{isDefault},
+		  IS_SALESTATE = #{isSalestate},
+		  SPECIFICATIONS_ID = #{specificationsId},
+		  SPECIFICATIONS_VALUE = #{specificationsValue},
+		  UPDATE_DATE = #{updateDate},
+		  IMAGE = #{image},
+		  SNAPSHOT = null
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateInStroe" parameterType="com.tmt.shop.entity.Product" >
+   UPDATE SHOP_PRODUCT
+      SET IN_STORE = IN_STORE + #{store},
+          STORE = IN_STORE - OUT_STORE
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateOutStroe" parameterType="com.tmt.shop.entity.Product" >
+   UPDATE SHOP_PRODUCT
+      SET OUT_STORE = OUT_STORE + #{store}, 
+          STORE = IN_STORE - OUT_STORE 
+    WHERE ID = #{id}
+  </update>
+  
+ <update id="updateUnOutStroe" parameterType="com.tmt.shop.entity.Product" >
+   UPDATE SHOP_PRODUCT
+      SET OUT_STORE = OUT_STORE - #{store}, 
+          STORE = IN_STORE - OUT_STORE 
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateFreeStroe" parameterType="com.tmt.shop.entity.Product" >
+   UPDATE SHOP_PRODUCT
+      SET FREEZE_STORE = #{freezeStore} 
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="clearSnapshot" parameterType="com.tmt.shop.entity.Product" >
+   UPDATE SHOP_PRODUCT
+      SET SNAPSHOT = null,
+          UPDATE_DATE = #{updateDate}
+    WHERE ID = #{id}
+  </update>
+  
+  <!-- 下单时间比修改时间晚，才需要设置快照 -->
+  <update id="updateSnapshot" parameterType="com.tmt.shop.entity.Product">
+   UPDATE SHOP_PRODUCT
+      SET SNAPSHOT = #{snapshot} 
+    WHERE ID = #{id} AND UPDATE_DATE &lt;= #{updateDate}
+  </update>
+  
+  <select id="queryProductsByGoodsId" resultMap="BaseResult" parameterType="long">
+   SELECT ID, GOODS_ID, SN, NAME, TIP, COST, MARKET_PRICE, PRICE, 
+		  UNIT, WEIGHT, IN_STORE, OUT_STORE, STORE, FREEZE_STORE, IS_DEFAULT, REWARD_POINT, 
+		  IS_SALESTATE, SPECIFICATIONS_ID,  SPECIFICATIONS_VALUE, CREATE_DATE, UPDATE_DATE,
+		  SNAPSHOT, IMAGE
+     FROM SHOP_PRODUCT
+    WHERE GOODS_ID = #{VALUE} ORDER BY SN
+  </select>
+  
+  <resultMap id="IdBaseResult" type="com.tmt.shop.entity.Product"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+  </resultMap>
+  
+  <select id="queryProductIdsByGoodsId" resultMap="IdBaseResult" parameterType="long">
+   SELECT ID FROM SHOP_PRODUCT
+    WHERE GOODS_ID = #{VALUE} ORDER BY SN
+  </select>
+  
+  <!-- 前端可用的集合 -->
+  <select id="queryUseAbleProductsByGoodsId" resultMap="BaseResult" parameterType="long">
+   SELECT ID, GOODS_ID, SN, NAME, TIP, COST, MARKET_PRICE, PRICE, 
+		  UNIT, WEIGHT, IN_STORE, OUT_STORE, STORE, FREEZE_STORE, IS_DEFAULT, REWARD_POINT, 
+		  IS_SALESTATE, SPECIFICATIONS_ID,  SPECIFICATIONS_VALUE, CREATE_DATE, UPDATE_DATE,
+		  SNAPSHOT, IMAGE
+     FROM SHOP_PRODUCT
+    WHERE GOODS_ID = #{VALUE} AND IS_SALESTATE = '1' ORDER BY SN
+  </select>
+  
+  <!-- 校验是否限购 -->
+  <select id="getGoodsLimitNum" parameterType="long" resultType="Integer">
+    SELECT A.BUY_LIMIT FROM SHOP_GOODS_LIMIT A
+     WHERE A.GOODS_ID = #{goodsId}
+  </select>
+  
+  <!-- 校验是否限购 -->
+  <select id="checkGoodsLimit" parameterType="java.util.Map" resultType="int">
+    SELECT COUNT(1) C
+      FROM SHOP_GOODS_LIMIT A, SHOP_GOODS_LIMIT_LOG B
+     WHERE A.GOODS_ID = #{goodsId}
+       AND A.GOODS_ID = B.GOODS_ID
+       AND B.USER_ID = #{userId} AND B.BUY_DATE = #{day}
+       AND A.BUY_LIMIT &lt; (B.BUY_NUM + #{quantity})
+  </select>
+  
+  <!-- 库存 -->
+  <resultMap id="StoreBaseResult" type="com.tmt.shop.entity.Product"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="GOODS_ID" property="goodsId" jdbcType="BIGINT"/>
+    <result column="IN_STORE" property="inStore" jdbcType="INTEGER"/>
+    <result column="OUT_STORE" property="outStore" jdbcType="INTEGER"/>
+    <result column="STORE" property="store" jdbcType="INTEGER"/>
+    <result column="FREEZE_STORE" property="freezeStore" jdbcType="INTEGER"/>
+  </resultMap>
+  
+  <select id="lockStoreProduct" parameterType="Long" resultMap="StoreBaseResult">
+    SELECT ID, GOODS_ID, IN_STORE, OUT_STORE, STORE, FREEZE_STORE FROM SHOP_PRODUCT A WHERE A.ID = #{id} FOR UPDATE
+  </select>
+  
+  <!-- 获取库存数据 -->
+  <select id="getStore" parameterType="Long" resultMap="StoreBaseResult">
+    SELECT ID, GOODS_ID, IN_STORE, OUT_STORE, STORE, FREEZE_STORE 
+      FROM SHOP_PRODUCT A 
+     WHERE A.ID = #{id}
+  </select>
+</mapper>

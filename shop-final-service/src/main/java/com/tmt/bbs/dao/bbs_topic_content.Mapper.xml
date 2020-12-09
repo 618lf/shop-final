@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.bbs.dao.TopicContentDao" >
+  <resultMap id="BaseResult" type="com.tmt.bbs.entity.TopicContent"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="CONTENT" property="content" jdbcType="VARCHAR"/>
+    <result column="ADD_CONTENT" property="addContent" jdbcType="VARCHAR"/>
+    <result column="IMAGE" property="image" jdbcType="VARCHAR"/>
+    <result column="IMAGE2" property="image2" jdbcType="VARCHAR"/>
+    <result column="IMAGE3" property="image3" jdbcType="VARCHAR"/>
+    <result column="IMAGE4" property="image4" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, CONTENT, ADD_CONTENT, IMAGE, IMAGE2, IMAGE3, IMAGE4
+     FROM BBS_TOPIC_CONTENT
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT ID, CONTENT, ADD_CONTENT, IMAGE, IMAGE2, IMAGE3, IMAGE4
+     FROM BBS_TOPIC_CONTENT
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition">
+   SELECT ID, CONTENT, ADD_CONTENT, IMAGE, IMAGE2, IMAGE3, IMAGE4
+     FROM BBS_TOPIC_CONTENT
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="java.lang.Integer">
+    SELECT COUNT(1) C FROM BBS_TOPIC_CONTENT
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.bbs.entity.TopicContent">
+   DELETE FROM BBS_TOPIC_CONTENT WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.bbs.entity.TopicContent">
+   INSERT INTO BBS_TOPIC_CONTENT (ID, CONTENT, ADD_CONTENT, IMAGE, IMAGE2, IMAGE3, IMAGE4)
+   VALUES (#{id}, #{content}, #{addContent}, #{image}, #{image2}, #{image3}, #{image4})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO BBS_TOPIC_CONTENT (ID, CONTENT, ADD_CONTENT, IMAGE, IMAGE2, IMAGE3, IMAGE4)
+    VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.id}, #{item.content}, #{item.addContent}, #{item.image}, #{item.image2}, #{item.image3}, #{item.image4})
+   </foreach> 
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.bbs.entity.TopicContent">
+   UPDATE BBS_TOPIC_CONTENT
+      SET CONTENT = #{content},
+		  ADD_CONTENT = #{addContent},
+		  IMAGE = #{image},
+		  IMAGE2 = #{image2},
+		  IMAGE3 = #{image3},
+		  IMAGE4 = #{image4}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateRappraise" parameterType="com.tmt.bbs.entity.TopicContent">
+   UPDATE BBS_TOPIC_CONTENT
+      SET ADD_CONTENT = #{addContent}
+    WHERE ID = #{id}
+  </update>
+  
+</mapper>

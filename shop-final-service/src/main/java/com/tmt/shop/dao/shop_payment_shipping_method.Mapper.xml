@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.PaymentShiopingMethodDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.PaymentShiopingMethod"> 
+    <result column="PAYMENT_METHODS" property="paymentMethods" jdbcType="BIGINT"/>
+    <result column="PAYMENT_METHOD_NAME" property="paymentMethodName" jdbcType="VARCHAR"/>
+    <result column="SHIPPING_METHODS" property="shippingMethods" jdbcType="BIGINT"/>
+    <result column="SUPPORT" property="support" jdbcType="TINYINT"/>
+  </resultMap>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.PaymentShiopingMethod" >
+   DELETE FROM SHOP_PAYMENT_SHIPPING_METHOD WHERE PAYMENT_METHODS = #{paymentMethods} AND SHIPPING_METHODS = #{shippingMethods}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.PaymentShiopingMethod" >
+   INSERT INTO SHOP_PAYMENT_SHIPPING_METHOD (PAYMENT_METHODS, SHIPPING_METHODS)
+   VALUES (#{paymentMethods}, #{shippingMethods})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO SHOP_PAYMENT_SHIPPING_METHOD (PAYMENT_METHODS, SHIPPING_METHODS)
+    VALUES 
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.paymentMethods}, #{item.shippingMethods})
+   </foreach> 
+  </insert>
+  
+  <select id="queryByShiopingMethodId" resultMap="BaseResult" parameterType="long" >
+   SELECT PM.ID PAYMENT_METHODS, PM.NAME PAYMENT_METHOD_NAME, PSM.SHIPPING_METHODS, 
+          (CASE WHEN PSM.PAYMENT_METHODS IS NOT NULL THEN 1 ELSE 0 END) SUPPORT
+     FROM SHOP_PAYMENT_METHOD PM LEFT JOIN SHOP_PAYMENT_SHIPPING_METHOD PSM
+       ON (PSM.PAYMENT_METHODS = PM.ID AND PSM.SHIPPING_METHODS = #{VALUE})
+    ORDER BY PM.SORT
+  </select>
+  
+</mapper>

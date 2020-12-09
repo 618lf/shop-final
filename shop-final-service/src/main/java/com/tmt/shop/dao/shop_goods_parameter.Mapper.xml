@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.GoodsParameterDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.GoodsParameter"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="GOODS_ID" property="goodsId" jdbcType="BIGINT"/>
+    <result column="PARAMETER_GROUP_ID" property="parameterGroupId" jdbcType="BIGINT"/>
+    <result column="PARAMETER_NAME" property="parameterName" jdbcType="VARCHAR"/>
+    <result column="PARAMETER_VALUE" property="parameterValue" jdbcType="VARCHAR"/>
+    <result column="SORT" property="sort" jdbcType="INTEGER"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="long" >
+   SELECT ID, GOODS_ID, PARAMETER_GROUP_ID, PARAMETER_NAME, PARAMETER_VALUE, SORT
+     FROM SHOP_GOODS_PARAMETER
+    WHERE ID = #{id}
+  </select>
+  
+  <delete id="deleteByGoodsId" parameterType="com.tmt.shop.entity.GoodsParameter" >
+   DELETE FROM SHOP_GOODS_PARAMETER WHERE GOODS_ID = #{goodsId}
+  </delete>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.GoodsParameter" >
+   DELETE FROM SHOP_GOODS_PARAMETER WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.GoodsParameter" >
+   INSERT INTO SHOP_GOODS_PARAMETER (ID, GOODS_ID, PARAMETER_GROUP_ID, PARAMETER_NAME, PARAMETER_VALUE, SORT)
+   VALUES (#{id}, #{goodsId}, #{parameterGroupId}, #{parameterName}, #{parameterValue}, #{sort})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+   INSERT INTO SHOP_GOODS_PARAMETER (ID, GOODS_ID, PARAMETER_GROUP_ID, PARAMETER_NAME, PARAMETER_VALUE, SORT)
+   VALUES 
+   <foreach collection="list" item="item" index="index" separator="," >  
+   (#{item.id}, #{item.goodsId}, #{item.parameterGroupId}, #{item.parameterName}, #{item.parameterValue}, #{item.sort})
+   </foreach> 
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.shop.entity.GoodsParameter" >
+   UPDATE SHOP_GOODS_PARAMETER
+      SET GOODS_ID = #{goodsId},
+		  PARAMETER_GROUP_ID = #{parameterGroupId},
+		  PARAMETER_NAME = #{parameterName},
+		  PARAMETER_VALUE = #{parameterValue},
+		  SORT = #{sort}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateSort" parameterType="com.tmt.shop.entity.GoodsParameter" >
+   UPDATE SHOP_GOODS_PARAMETER
+      SET SORT = #{sort}
+    WHERE ID = #{id}
+  </update>
+  
+  <select id="queryGoodsParameterByGroupId" resultMap="BaseResult" parameterType="long" >
+   SELECT ID, GOODS_ID, PARAMETER_GROUP_ID, PARAMETER_NAME, PARAMETER_VALUE, SORT
+     FROM SHOP_GOODS_PARAMETER
+    WHERE PARAMETER_GROUP_ID = #{VALUE}
+  </select>
+  
+</mapper>

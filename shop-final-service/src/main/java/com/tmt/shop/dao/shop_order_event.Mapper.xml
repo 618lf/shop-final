@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.OrderEventDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.OrderEvent"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="ORDER_ID" property="orderId" jdbcType="BIGINT"/>
+    <result column="OPT" property="opt" jdbcType="TINYINT"/>
+  </resultMap>
+  
+  <select id="findByCondition" resultMap="BaseResult">
+   SELECT ID, ORDER_ID, OPT FROM SHOP_ORDER_EVENT WHERE STATE = 0
+  </select>
+  
+  <delete id="delete" parameterType="java.util.List">
+   DELETE FROM SHOP_ORDER_EVENT WHERE ID IN
+   <foreach collection="list" item="item" index="index" separator=","  open="(" close=")">  
+    #{item.id}
+   </foreach> 
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.OrderEvent">
+   INSERT INTO SHOP_ORDER_EVENT (ID, ORDER_ID, OPT, STATE) VALUES (#{id}, #{orderId}, #{opt}, #{state}) ON DUPLICATE KEY UPDATE STATE = 0
+  </insert>
+  
+  <update id="update" parameterType="java.util.List">
+   UPDATE SHOP_ORDER_EVENT SET STATE = 1
+    WHERE ID IN
+    <foreach collection="list" item="item" index="index" separator=","  open="(" close=")">  
+    #{item.id}
+   </foreach> 
+  </update>
+  
+</mapper>

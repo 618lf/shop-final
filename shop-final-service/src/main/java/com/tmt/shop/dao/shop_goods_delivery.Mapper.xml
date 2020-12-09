@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.GoodsDeliveryDao">
+
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.GoodsDelivery"> 
+    <result column="GOODS_ID" property="goodsId" jdbcType="BIGINT"/>
+    <result column="DELIVERY_ID" property="deliveryId" jdbcType="BIGINT"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="SHIPPING_EXPRESSION" property="shippingExpression" jdbcType="VARCHAR"/>
+    <result column="DELIVERY_EXPRESSION" property="deliveryExpression" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <!-- 获取指定的配置 -->
+  <select id="get" resultMap="BaseResult" parameterType="Long">
+   SELECT A.GOODS_ID, A.DELIVERY_ID, B.NAME, B.SHIPPING_EXPRESSION, B.DELIVERY_EXPRESSION
+     FROM SHOP_GOODS_DELIVERY A, SHOP_DELIVERY_SCHEME B
+    WHERE A.DELIVERY_ID = B.ID 
+      AND A.GOODS_ID = #{goodsId}
+  </select>
+  
+  <!-- 获取默认的配置 -->
+  <select id="getDefault" resultMap="BaseResult" parameterType="Long">
+   SELECT NULL GOODS_ID, B.ID DELIVERY_ID, B.NAME, B.SHIPPING_EXPRESSION, B.DELIVERY_EXPRESSION
+     FROM SHOP_DELIVERY_SCHEME B
+    WHERE B.IS_DEFAULT = 1 LIMIT 1
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.GoodsDelivery">
+   DELETE FROM SHOP_GOODS_DELIVERY WHERE GOODS_ID = #{goodsId}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.GoodsDelivery">
+   INSERT INTO SHOP_GOODS_DELIVERY (GOODS_ID, DELIVERY_ID)
+   VALUES (#{goodsId}, #{deliveryId})
+   ON DUPLICATE KEY UPDATE DELIVERY_ID = #{deliveryId}
+  </insert>
+  
+</mapper>

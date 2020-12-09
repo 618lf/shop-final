@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.OrderStateDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.OrderState"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="OPT" property="opt" jdbcType="TINYINT"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="EXPIRE" property="expire" jdbcType="TIMESTAMP"/>
+    <result column="ECOUNT" property="ecount" jdbcType="INTEGER"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="long">
+   SELECT ID, OPT, CREATE_DATE, EXPIRE, ECOUNT FROM SHOP_ORDER_STATE WHERE ID = #{id}
+  </select>
+  
+  <select id="countByOstate" resultType="int" parameterType="string">
+   SELECT COUNT(1) C FROM SHOP_ORDER_STATE 
+    WHERE OSTATE = #{ostate}
+  </select>
+  
+  <select id="statOrders" resultType="com.tmt.common.entity.LabelVO">
+   SELECT OSTATE LABEL, COUNT(1) COUNT FROM SHOP_ORDER_STATE GROUP BY OSTATE
+  </select>
+  
+  <select id="queryUpdateAbles" resultMap="BaseResult" parameterType="com.tmt.shop.entity.OrderState">
+   SELECT ID, OPT, CREATE_DATE, EXPIRE, ECOUNT FROM SHOP_ORDER_STATE WHERE STATE = 0 AND EXPIRE IS NOT NULL
+      AND EXPIRE &lt;= #{expire}
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.OrderState">
+   DELETE FROM SHOP_ORDER_STATE WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.OrderState">
+   INSERT INTO SHOP_ORDER_STATE (ID, OPT, STATE, CREATE_DATE, EXPIRE, OSTATE) 
+   VALUES (#{id}, #{opt}, #{state}, #{createDate}, #{expire}, #{ostate}) 
+   ON DUPLICATE KEY UPDATE OPT = #{opt}, STATE = 0, CREATE_DATE = #{createDate}, EXPIRE = #{expire}, OSTATE = #{ostate}
+  </insert>
+  
+  <update id="update" parameterType="java.util.List">
+   UPDATE SHOP_ORDER_STATE SET STATE = 1
+    WHERE ID IN
+    <foreach collection="list" item="item" index="index" separator=","  open="(" close=")">  
+    #{item.id}
+   </foreach> 
+  </update>
+  
+  <update id="updateEnabled" parameterType="java.util.List">
+   UPDATE SHOP_ORDER_STATE SET STATE = 0
+    WHERE ID IN
+    <foreach collection="list" item="item" index="index" separator=","  open="(" close=")">  
+    #{item.id}
+   </foreach> 
+  </update>
+  
+  <update id="updateExpire" parameterType="com.tmt.shop.entity.OrderState">
+   UPDATE SHOP_ORDER_STATE 
+      SET EXPIRE = #{expire},
+          ECOUNT = ECOUNT + 1
+    WHERE ID = #{id}
+  </update>
+  
+</mapper>

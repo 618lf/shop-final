@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.cms.dao.AdDao" >
+  <resultMap id="BaseResult" type="com.tmt.cms.entity.Ad"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="ORDERS" property="orders" jdbcType="INTEGER"/>
+    <result column="IMAGE" property="image" jdbcType="VARCHAR"/>
+    <result column="PATH" property="path" jdbcType="VARCHAR"/>
+    <result column="URL" property="url" jdbcType="VARCHAR"/>
+    <result column="POSITION_ID" property="positionId" jdbcType="BIGINT"/>
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT"/>
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Long" >
+   SELECT ID, NAME, ORDERS, IMAGE, PATH, URL, POSITION_ID, CREATE_ID, 
+		  CREATE_NAME, CREATE_DATE, UPDATE_DATE
+     FROM CMS_AD
+    WHERE ID = #{id}
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.cms.entity.Ad" >
+   DELETE FROM CMS_AD WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.cms.entity.Ad" >
+   INSERT INTO CMS_AD (ID, NAME, ORDERS, IMAGE, PATH, URL, POSITION_ID, CREATE_ID, 
+		  CREATE_NAME, CREATE_DATE, UPDATE_DATE)
+   VALUES (#{id}, #{name}, #{orders}, #{image}, #{path}, #{url}, #{positionId}, #{createId}, 
+		  #{createName}, #{createDate}, #{updateDate})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO CMS_AD (ID, NAME, ORDERS, IMAGE, PATH, URL, POSITION_ID, CREATE_ID, 
+		  CREATE_NAME, CREATE_DATE, UPDATE_DATE)
+    VALUES 
+   <foreach collection="list" item="item" index="index" separator="," >  
+   (#{item.id}, #{item.name}, #{item.orders}, #{item.image}, #{item.path}, #{item.url}, #{item.positionId}, #{item.createId}, 
+		  #{item.createName}, #{item.createDate}, #{item.updateDate})
+   </foreach> 
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.cms.entity.Ad" >
+   UPDATE CMS_AD
+      SET NAME = #{name},
+		  ORDERS = #{orders},
+		  IMAGE = #{image},
+		  PATH = #{path},
+		  URL = #{url},
+		  POSITION_ID = #{positionId},
+		  UPDATE_DATE = #{updateDate}
+    WHERE ID = #{id}
+  </update>
+  
+  <!-- 根据位置查询 -->
+  <select id="queryByPositionId" resultMap="BaseResult" parameterType="Long" >
+   SELECT ID, NAME, ORDERS, IMAGE, PATH, URL, POSITION_ID, CREATE_ID, 
+		  CREATE_NAME, CREATE_DATE, UPDATE_DATE
+     FROM CMS_AD
+    WHERE POSITION_ID = #{id}
+  </select>
+  
+</mapper>

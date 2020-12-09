@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.GoodsDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.Goods"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="CATEGORY_ID" property="categoryId" jdbcType="BIGINT"/>
+    <result column="CATEGORY_NAME" property="categoryName" jdbcType="VARCHAR"/>
+    <result column="SN" property="sn" jdbcType="VARCHAR"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="BRAND" property="brand" jdbcType="VARCHAR"/>
+    <result column="EXPIRE" property="expire" jdbcType="TIMESTAMP"/>
+    <result column="FULL_NAME" property="fullName" jdbcType="VARCHAR"/>
+    <result column="IMAGE" property="image" jdbcType="VARCHAR"/>
+    <result column="IS_MARKETABLE" property="isMarketable" jdbcType="TINYINT"/>
+    <result column="IS_LIST" property="isList" jdbcType="TINYINT"/>
+    <result column="IS_TOP" property="isTop" jdbcType="TINYINT"/>
+    <result column="IS_DELIVERY" property="isDelivery" jdbcType="TINYINT"/>
+    <result column="KEYWORD" property="keyword" jdbcType="VARCHAR"/>
+    <result column="COST" property="cost" jdbcType="DECIMAL"/>
+    <result column="MARKET_PRICE" property="marketPrice" jdbcType="DECIMAL"/>
+    <result column="PRICE" property="price" jdbcType="DECIMAL"/>
+    <result column="UNIT" property="unit" jdbcType="VARCHAR"/>
+    <result column="WEIGHT" property="weight" jdbcType="VARCHAR"/>
+    <result column="SWEIGHT" property="sweight" jdbcType="INTEGER"/>
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT"/>
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+    <result column="REMARKS" property="remarks" jdbcType="VARCHAR"/>
+    <result column="DEL_FLAG" property="delFlag" jdbcType="TINYINT"/>
+    <result column="SEO_DESCRIPTION" property="seoDescription" jdbcType="VARCHAR"/>
+    <result column="SEO_KEYWORDS" property="seoKeywords" jdbcType="VARCHAR"/>
+    <result column="SEO_TITLE" property="seoTitle" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <resultMap id="AllBaseResult" type="com.tmt.shop.entity.Goods" extends="BaseResult"> 
+    <result column="SALES" property="sales" jdbcType="BIGINT"/>
+    <result column="SCORE" property="score" jdbcType="FLOAT"/>
+    <result column="SCORE_COUNT" property="scoreCount" jdbcType="BIGINT"/>
+    <result column="TOTAL_SCORE" property="totalScore" jdbcType="BIGINT"/>
+    <result column="RELATED_PRODUCT_IDS" property="relatedProductIds" jdbcType="VARCHAR"/>
+    <result column="INTRODUCTION" property="introduction" jdbcType="LONGVARCHAR"/>
+  </resultMap>
+  
+  <select id="get" resultMap="AllBaseResult" parameterType="long" >
+   SELECT ID, CATEGORY_ID, CATEGORY_NAME, SN, NAME, BRAND, EXPIRE, FULL_NAME, 
+		  IMAGE, IS_MARKETABLE, IS_LIST, IS_TOP, IS_DELIVERY, KEYWORD, COST, 
+		  MARKET_PRICE, PRICE, INTRODUCTION, UNIT, WEIGHT, SWEIGHT, CREATE_ID, CREATE_NAME, 
+		  CREATE_DATE, UPDATE_DATE, REMARKS, DEL_FLAG, SEO_DESCRIPTION, SEO_KEYWORDS, SEO_TITLE, 
+		  SALES, SCORE, SCORE_COUNT, TOTAL_SCORE, RELATED_PRODUCT_IDS
+     FROM SHOP_GOODS
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition" >
+   SELECT ID, CATEGORY_ID, CATEGORY_NAME, SN, NAME, BRAND, EXPIRE, FULL_NAME, 
+		  IMAGE, IS_MARKETABLE, IS_LIST, IS_TOP, IS_DELIVERY, KEYWORD, COST, 
+		  MARKET_PRICE, PRICE, INTRODUCTION, UNIT, WEIGHT, SWEIGHT, CREATE_ID, CREATE_NAME, 
+		  CREATE_DATE, UPDATE_DATE, REMARKS, DEL_FLAG, SEO_DESCRIPTION, SEO_KEYWORDS, SEO_TITLE, 
+		  SALES, SCORE, SCORE_COUNT, TOTAL_SCORE, RELATED_PRODUCT_IDS
+     FROM SHOP_GOODS T
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="int" >
+    SELECT COUNT(1) C FROM SHOP_GOODS T
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <!-- 逻辑删除 -->
+  <delete id="delete" parameterType="com.tmt.shop.entity.Goods" >
+   UPDATE SHOP_GOODS SET DEL_FLAG = 1 WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.Goods" >
+   INSERT INTO SHOP_GOODS (ID, CATEGORY_ID, CATEGORY_NAME, SN, NAME, BRAND, EXPIRE, FULL_NAME, 
+		  IMAGE, IS_MARKETABLE, IS_LIST, IS_TOP, IS_DELIVERY, KEYWORD, COST, 
+		  MARKET_PRICE, PRICE, INTRODUCTION, UNIT, WEIGHT, SWEIGHT, CREATE_ID, CREATE_NAME, 
+		  CREATE_DATE, UPDATE_DATE, REMARKS, DEL_FLAG, SEO_DESCRIPTION, SEO_KEYWORDS, SEO_TITLE, 
+		  SALES, SCORE, SCORE_COUNT, TOTAL_SCORE, RELATED_PRODUCT_IDS)
+   VALUES (#{id}, #{categoryId}, #{categoryName}, #{sn}, #{name}, #{brand}, #{expire}, #{fullName}, 
+		  #{image}, #{isMarketable}, #{isList}, #{isTop}, #{isDelivery}, #{keyword}, #{cost}, 
+		  #{marketPrice}, #{price}, #{introduction}, #{unit}, #{weight}, #{sweight}, #{createId}, #{createName}, 
+		  #{createDate}, #{updateDate}, #{remarks}, #{delFlag}, #{seoDescription}, #{seoKeywords}, #{seoTitle}, 
+		  #{sales}, #{score:FLOAT}, #{scoreCount}, #{totalScore}, #{relatedProductIds})
+  </insert>
+  
+  <update id="updateBase" parameterType="com.tmt.shop.entity.Goods" >
+   UPDATE SHOP_GOODS
+      SET NAME = #{name},
+		  BRAND = #{brand},
+		  EXPIRE = #{expire},
+		  FULL_NAME = #{fullName},
+		  IMAGE = #{image},
+		  IS_MARKETABLE = #{isMarketable},
+		  IS_LIST = #{isList},
+		  IS_TOP = #{isTop},
+		  IS_DELIVERY = #{isDelivery},
+		  KEYWORD = #{keyword},
+		  COST = #{cost},
+		  MARKET_PRICE = #{marketPrice},
+		  PRICE = #{price},
+		  UNIT = #{unit},
+		  WEIGHT = #{weight},
+		  SWEIGHT = #{sweight},
+		  UPDATE_DATE = #{updateDate},
+		  REMARKS = #{remarks},
+		  SEO_DESCRIPTION = #{seoDescription},
+		  SEO_KEYWORDS = #{seoKeywords},
+		  SEO_TITLE = #{seoTitle}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateIntroduction" parameterType="com.tmt.shop.entity.Goods" >
+   UPDATE SHOP_GOODS
+      SET INTRODUCTION = #{introduction}
+    WHERE ID = #{id}
+  </update>
+</mapper>

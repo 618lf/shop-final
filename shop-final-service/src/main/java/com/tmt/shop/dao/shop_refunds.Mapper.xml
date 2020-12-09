@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.RefundsDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.Refunds"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="SN" property="sn" jdbcType="VARCHAR"/>
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT"/>
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="ORDER_ID" property="orderId" jdbcType="BIGINT"/>
+    <result column="AMOUNT" property="amount" jdbcType="DECIMAL"/>
+    <result column="PAYEE" property="payee" jdbcType="VARCHAR"/>
+    <result column="TRANSACTION_ID" property="transactionId" jdbcType="VARCHAR"/>
+    <result column="EPAY_ID" property="epayId" jdbcType="BIGINT"/>
+    <result column="TYPE" property="type" jdbcType="TINYINT"/>
+    <result column="STATE" property="state" jdbcType="TINYINT"/>
+    <result column="ACCOUNT" property="account" jdbcType="VARCHAR"/>
+    <result column="REMARKS" property="remarks" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="long" >
+   SELECT ID, SN, CREATE_ID, CREATE_NAME, CREATE_DATE, ORDER_ID, AMOUNT, PAYEE, 
+          TRANSACTION_ID, EPAY_ID, TYPE, STATE, ACCOUNT, REMARKS
+     FROM SHOP_REFUNDS
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition" >
+   SELECT ID, SN, CREATE_ID, CREATE_NAME, CREATE_DATE, ORDER_ID, AMOUNT, PAYEE, 
+          TRANSACTION_ID, EPAY_ID, TYPE, STATE, ACCOUNT, REMARKS
+     FROM SHOP_REFUNDS
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="int" >
+    SELECT COUNT(1) C FROM SHOP_REFUNDS
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.Refunds" >
+   DELETE FROM SHOP_REFUNDS WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.Refunds" >
+   INSERT INTO SHOP_REFUNDS (ID, SN, CREATE_ID, CREATE_NAME, CREATE_DATE, ORDER_ID, AMOUNT, PAYEE, 
+          TRANSACTION_ID, EPAY_ID, TYPE, STATE, ACCOUNT, REMARKS)
+   VALUES (#{id}, #{sn}, #{createId}, #{createName}, #{createDate}, #{orderId},  #{amount}, #{payee}, 
+          #{transactionId}, #{epayId}, #{type}, #{state}, #{account}, #{remarks})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+   INSERT INTO SHOP_REFUNDS (ID, SN, CREATE_ID, CREATE_NAME, CREATE_DATE, ORDER_ID, AMOUNT, PAYEE, 
+          TRANSACTION_ID, EPAY_ID, TYPE, STATE, ACCOUNT, REMARKS)
+    VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.id}, #{item.sn}, #{item.createId}, #{item.createName}, #{item.createDate}, #{item.orderId},  #{item.amount}, #{item.payee}, 
+          #{item.transactionId}, #{item.epayId}, #{item.type}, #{item.state}, #{item.account}, #{item.remarks})
+   </foreach> 
+  </insert>
+  
+  <select id="queryRefundsByOrderId" resultMap="BaseResult" parameterType="long" >
+  SELECT ID, SN, CREATE_ID, CREATE_NAME, CREATE_DATE, ORDER_ID, AMOUNT, PAYEE, 
+         TRANSACTION_ID, EPAY_ID, TYPE, STATE, ACCOUNT, REMARKS
+    FROM SHOP_REFUNDS
+   WHERE ORDER_ID = #{id}
+  </select>
+  
+  <update id="updateState" parameterType="com.tmt.shop.entity.Refunds" >
+   UPDATE SHOP_REFUNDS
+      SET STATE = #{state},
+          REMARKS = #{remarks}
+    WHERE ID = #{id}
+  </update>
+  
+</mapper>

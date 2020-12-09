@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.ShippingDao">
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.Shipping"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="SN" property="sn" jdbcType="VARCHAR"/>
+    <result column="ORDER_ID" property="orderId" jdbcType="BIGINT"/>
+    <result column="ORDER_SN" property="orderSn" jdbcType="VARCHAR"/>
+    <result column="AREA_ID" property="areaId" jdbcType="BIGINT"/>
+    <result column="AREA_NAME" property="areaName" jdbcType="VARCHAR"/>
+    <result column="ADDRESS" property="address" jdbcType="VARCHAR"/>
+    <result column="PHONE" property="phone" jdbcType="VARCHAR"/>
+    <result column="ZIP_CODE" property="zipCode" jdbcType="VARCHAR"/>
+    <result column="CONSIGNEE" property="consignee" jdbcType="VARCHAR"/>
+    <result column="SHIPPING_METHOD" property="shippingMethod" jdbcType="VARCHAR"/>
+    <result column="DELIVERY_CORP" property="deliveryCorp" jdbcType="VARCHAR"/>
+    <result column="DELIVERY_CORP_CODE" property="deliveryCorpCode" jdbcType="VARCHAR"/>
+    <result column="DELIVERY_CORP_URL" property="deliveryCorpUrl" jdbcType="VARCHAR"/>
+    <result column="FREIGHT" property="freight" jdbcType="DECIMAL"/>
+    <result column="TRACKING_NO" property="trackingNo" jdbcType="VARCHAR"/>
+    <result column="REMARKS" property="remarks" jdbcType="VARCHAR"/>
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT"/>
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="long" >
+   SELECT ID, SN, ORDER_ID, ORDER_SN, AREA_ID, AREA_NAME, ADDRESS, PHONE, 
+		  ZIP_CODE, CONSIGNEE, SHIPPING_METHOD, DELIVERY_CORP, DELIVERY_CORP_CODE, DELIVERY_CORP_URL, FREIGHT, 
+		  TRACKING_NO, REMARKS, CREATE_ID, CREATE_NAME, CREATE_DATE
+     FROM SHOP_SHIPPING
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT ID, SN, ORDER_ID, ORDER_SN, AREA_ID, AREA_NAME, ADDRESS, PHONE, 
+		  ZIP_CODE, CONSIGNEE, SHIPPING_METHOD, DELIVERY_CORP, DELIVERY_CORP_CODE, DELIVERY_CORP_URL, FREIGHT, 
+		  TRACKING_NO, REMARKS, CREATE_ID, CREATE_NAME, CREATE_DATE
+     FROM SHOP_SHIPPING
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition" >
+   SELECT ID, SN, ORDER_ID, ORDER_SN, AREA_ID, AREA_NAME, ADDRESS, PHONE, 
+		  ZIP_CODE, CONSIGNEE, SHIPPING_METHOD, DELIVERY_CORP, DELIVERY_CORP_CODE, DELIVERY_CORP_URL, FREIGHT, 
+		  TRACKING_NO, REMARKS, CREATE_ID, CREATE_NAME, CREATE_DATE
+     FROM SHOP_SHIPPING
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="int" >
+    SELECT COUNT(1) C FROM SHOP_SHIPPING
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.Shipping" >
+   DELETE FROM SHOP_SHIPPING WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.Shipping" >
+   INSERT INTO SHOP_SHIPPING (ID, SN, ORDER_ID, ORDER_SN, AREA_ID, AREA_NAME, ADDRESS, PHONE, 
+		  ZIP_CODE, CONSIGNEE, SHIPPING_METHOD, DELIVERY_CORP, DELIVERY_CORP_CODE, DELIVERY_CORP_URL, FREIGHT, 
+		  TRACKING_NO, REMARKS, CREATE_ID, CREATE_NAME, CREATE_DATE)
+   VALUES (#{id}, #{sn}, #{orderId}, #{orderSn}, #{areaId}, #{areaName}, #{address}, #{phone}, 
+		  #{zipCode}, #{consignee}, #{shippingMethod}, #{deliveryCorp}, #{deliveryCorpCode}, #{deliveryCorpUrl}, #{freight}, 
+		  #{trackingNo}, #{remarks}, #{createId}, #{createName}, #{createDate})
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.shop.entity.Shipping" >
+   UPDATE SHOP_SHIPPING
+      SET SN = #{sn},
+		  ORDER_ID = #{orderId},
+		  ORDER_SN = #{orderSn},
+		  AREA_ID = #{areaId},
+		  AREA_NAME = #{areaName},
+		  ADDRESS = #{address},
+		  PHONE = #{phone},
+		  ZIP_CODE = #{zipCode},
+		  CONSIGNEE = #{consignee},
+		  SHIPPING_METHOD = #{shippingMethod},
+		  DELIVERY_CORP = #{deliveryCorp},
+		  DELIVERY_CORP_CODE = #{deliveryCorpCode},
+		  DELIVERY_CORP_URL = #{deliveryCorpUrl},
+		  FREIGHT = #{freight},
+		  TRACKING_NO = #{trackingNo},
+		  REMARKS = #{remarks}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateSimple" parameterType="com.tmt.shop.entity.Shipping" >
+   UPDATE SHOP_SHIPPING
+      SET FREIGHT = #{freight},
+		  TRACKING_NO = #{trackingNo}
+    WHERE ID = #{id}
+  </update>
+  
+  <select id="queryShippingsByOrderId" resultMap="BaseResult" parameterType="long">
+   SELECT ID, SN, ORDER_ID, ORDER_SN, AREA_ID, AREA_NAME, ADDRESS, PHONE, 
+		  ZIP_CODE, CONSIGNEE, SHIPPING_METHOD, DELIVERY_CORP, DELIVERY_CORP_CODE, DELIVERY_CORP_URL, FREIGHT, 
+		  TRACKING_NO, REMARKS, CREATE_ID, CREATE_NAME, CREATE_DATE
+     FROM SHOP_SHIPPING
+    WHERE ORDER_ID = #{id}
+  </select>
+  
+</mapper>

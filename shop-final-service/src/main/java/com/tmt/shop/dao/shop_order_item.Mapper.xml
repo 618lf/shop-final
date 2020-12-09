@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.OrderItemDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.OrderItem"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="ORDER_ID" property="orderId" jdbcType="BIGINT"/>
+    <result column="PRODUCT_ID" property="productId" jdbcType="BIGINT"/>
+    <result column="PRODUCT_SN" property="productSn" jdbcType="VARCHAR"/>
+    <result column="PRODUCT_NAME" property="productName" jdbcType="VARCHAR"/>
+    <result column="THUMBNAIL" property="thumbnail" jdbcType="VARCHAR"/>
+    <result column="SNAPSHOT" property="snapshot" jdbcType="VARCHAR"/>
+    <result column="PRICE" property="price" jdbcType="DECIMAL"/>
+    <result column="QUANTITY" property="quantity" jdbcType="INTEGER"/>
+    <result column="RETURN_QUANTITY" property="returnQuantity" jdbcType="INTEGER"/>
+    <result column="SHIPPED_QUANTITY" property="shippedQuantity" jdbcType="INTEGER"/>
+    <result column="WEIGHT" property="weight" jdbcType="VARCHAR"/>
+    <result column="UNIT" property="unit" jdbcType="VARCHAR"/>
+    <result column="REWARD_POINT" property="rewardPoint" jdbcType="INTEGER"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="long" >
+   SELECT ID, ORDER_ID, PRODUCT_ID, PRODUCT_SN, PRODUCT_NAME, THUMBNAIL, SNAPSHOT, PRICE, QUANTITY, 
+		  RETURN_QUANTITY, SHIPPED_QUANTITY, WEIGHT, UNIT, REWARD_POINT
+     FROM SHOP_ORDER_ITEM
+    WHERE ID = #{id}
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.OrderItem" >
+   DELETE FROM SHOP_ORDER_ITEM WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.OrderItem" >
+   INSERT INTO SHOP_ORDER_ITEM (ID, ORDER_ID, PRODUCT_ID, PRODUCT_SN, PRODUCT_NAME, THUMBNAIL, SNAPSHOT, PRICE, QUANTITY, 
+		  RETURN_QUANTITY, SHIPPED_QUANTITY, WEIGHT, UNIT, REWARD_POINT)
+   VALUES (#{id}, #{orderId}, #{productId}, #{productSn}, #{productName}, #{thumbnail}, #{snapshot}, #{price}, #{quantity}, 
+		  #{returnQuantity}, #{shippedQuantity}, #{weight}, #{unit}, #{rewardPoint})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+   INSERT INTO SHOP_ORDER_ITEM (ID, ORDER_ID, PRODUCT_ID, PRODUCT_SN, PRODUCT_NAME, THUMBNAIL, SNAPSHOT, PRICE, QUANTITY, 
+		  RETURN_QUANTITY, SHIPPED_QUANTITY, WEIGHT, UNIT, REWARD_POINT)
+    VALUES 
+   <foreach collection="list" item="item" index="index" separator="," >  
+          (#{item.id}, #{item.orderId}, #{item.productId}, #{item.productSn}, #{item.productName}, #{item.thumbnail}, #{item.snapshot}, #{item.price}, #{item.quantity}, 
+		   #{item.returnQuantity}, #{item.shippedQuantity}, #{item.weight}, #{item.unit}, #{item.rewardPoint})
+   </foreach>
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.shop.entity.OrderItem" >
+   UPDATE SHOP_ORDER_ITEM
+      SET ORDER_ID = #{orderId},
+		  PRODUCT_ID = #{productId},
+		  PRODUCT_SN = #{productSn},
+		  PRODUCT_NAME = #{productName},
+		  THUMBNAIL = #{thumbnail},
+		  SNAPSHOT = #{snapshot},
+		  PRICE = #{price},
+		  QUANTITY = #{quantity},
+		  RETURN_QUANTITY = #{returnQuantity},
+		  SHIPPED_QUANTITY = #{shippedQuantity},
+		  WEIGHT = #{weight},
+		  UNIT = #{unit},
+		  REWARD_POINT = #{rewardPoint}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateShipping" parameterType="com.tmt.shop.entity.OrderItem">
+   UPDATE SHOP_ORDER_ITEM
+      SET SHIPPED_QUANTITY = #{shippedQuantity}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateReturn" parameterType="com.tmt.shop.entity.OrderItem">
+   UPDATE SHOP_ORDER_ITEM
+      SET RETURN_QUANTITY = #{returnQuantity}
+    WHERE ID = #{id}
+  </update>
+  
+  <select id="queryItemsByOrderId" resultMap="BaseResult" parameterType="long" >
+   SELECT ID, ORDER_ID, PRODUCT_ID, PRODUCT_SN, PRODUCT_NAME, THUMBNAIL, SNAPSHOT, PRICE, QUANTITY, 
+		  RETURN_QUANTITY, SHIPPED_QUANTITY, WEIGHT, UNIT, REWARD_POINT
+     FROM SHOP_ORDER_ITEM
+    WHERE ORDER_ID = #{VALUE}
+  </select>
+  
+  <resultMap id="SimpleBaseResult" type="com.tmt.shop.entity.OrderItem"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="PRODUCT_ID" property="productId" jdbcType="BIGINT"/>
+    <result column="PRODUCT_SN" property="productSn" jdbcType="VARCHAR"/>
+    <result column="PRODUCT_NAME" property="productName" jdbcType="VARCHAR"/>
+    <result column="THUMBNAIL" property="thumbnail" jdbcType="VARCHAR"/>
+    <result column="SNAPSHOT" property="snapshot" jdbcType="VARCHAR"/>
+    <result column="PRICE" property="price" jdbcType="DECIMAL"/>
+    <result column="QUANTITY" property="quantity" jdbcType="INTEGER"/>
+  </resultMap>
+  <select id="querySimpleItemsByOrderId" resultMap="SimpleBaseResult" parameterType="long">
+   SELECT ID, PRODUCT_ID, PRODUCT_SN, PRODUCT_NAME, THUMBNAIL, SNAPSHOT, PRICE, QUANTITY
+     FROM SHOP_ORDER_ITEM
+    WHERE ORDER_ID = #{VALUE}
+  </select>
+  
+  <update id="updateSnapshot" parameterType="com.tmt.shop.entity.OrderItem" >
+   UPDATE SHOP_ORDER_ITEM
+      SET SNAPSHOT = #{snapshot}
+    WHERE ID = #{id}
+  </update>
+  
+</mapper>

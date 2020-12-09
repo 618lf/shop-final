@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.OrderCouponDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.OrderCoupon"> 
+    <result column="ORDERS" property="orders" jdbcType="BIGINT"/>
+    <result column="COUPONS" property="coupons" jdbcType="BIGINT"/>
+  </resultMap>
+  
+  <!-- 订单使用的优惠码 -->
+  <select id="get" resultMap="BaseResult" parameterType="long" >
+   SELECT ORDERS, COUPONS
+     FROM SHOP_ORDER_COUPON
+    WHERE ORDERS = #{orders}
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.OrderCoupon" >
+   DELETE FROM SHOP_ORDER_COUPON WHERE ORDERS = #{orders} AND COUPONS = #{coupons}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.OrderCoupon" >
+   INSERT INTO SHOP_ORDER_COUPON (ORDERS, COUPONS)
+   VALUES (#{orders}, #{coupons})
+  </insert>
+  
+  <resultMap id="fullBaseResult" type="com.tmt.shop.entity.OrderCoupon"> 
+    <result column="COUPON_NAME" property="couponName" jdbcType="VARCHAR"/>
+    <result column="VAL" property="val" jdbcType="INTEGER"/>
+  </resultMap>
+  
+  <select id="queryOrderCoupons" resultMap="fullBaseResult" parameterType="long">
+    SELECT C.NAME COUPON_NAME, B.VAL VAL
+      FROM SHOP_ORDER_COUPON A, SHOP_COUPON_CODE B, SHOP_COUPON C
+     WHERE A.COUPONS = B.ID AND B.COUPON = C.ID
+       AND A.ORDERS = #{orders}
+  </select>
+  
+</mapper>

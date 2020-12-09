@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.GoodsLimitDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.GoodsLimit"> 
+    <result column="GOODS_ID" property="goodsId" jdbcType="BIGINT"/>
+    <result column="BUY_LIMIT" property="buyLimit" jdbcType="TINYINT"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Long">
+   SELECT GOODS_ID, BUY_LIMIT 
+     FROM SHOP_GOODS_LIMIT
+    WHERE GOODS_ID = #{goodsId}
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.GoodsLimit">
+   DELETE FROM SHOP_GOODS_LIMIT WHERE GOODS_ID = #{goodsId}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.GoodsLimit">
+   INSERT INTO SHOP_GOODS_LIMIT (GOODS_ID, BUY_LIMIT) VALUES (#{goodsId}, #{buyLimit}) ON DUPLICATE KEY UPDATE BUY_LIMIT = #{buyLimit}
+  </insert>
+  
+</mapper>

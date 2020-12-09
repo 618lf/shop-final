@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.PaymentMethodDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.PaymentMethod"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="SORT" property="sort" jdbcType="INTEGER"/>
+    <result column="ICON" property="icon" jdbcType="VARCHAR"/>
+    <result column="TIMEOUT" property="timeout" jdbcType="INTEGER"/>
+    <result column="TYPE" property="type" jdbcType="VARCHAR"/>
+    <result column="METHOD" property="method" jdbcType="VARCHAR"/>
+    <result column="CONTENT" property="content" jdbcType="LONGVARCHAR"/>
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT"/>
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="REMARKS" property="remarks" jdbcType="VARCHAR"/>
+    <result column="DEL_FLAG" property="delFlag" jdbcType="TINYINT"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="long" >
+   SELECT ID, NAME, SORT, ICON, TIMEOUT, TYPE, METHOD, CONTENT, 
+		  CREATE_ID, CREATE_NAME, CREATE_DATE, REMARKS, DEL_FLAG
+     FROM SHOP_PAYMENT_METHOD
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT ID, NAME, SORT, ICON, TIMEOUT, TYPE, METHOD, CONTENT, 
+		  CREATE_ID, CREATE_NAME, CREATE_DATE, REMARKS, DEL_FLAG
+     FROM SHOP_PAYMENT_METHOD
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition" >
+   SELECT ID, NAME, SORT, ICON, TIMEOUT, TYPE, METHOD, CONTENT, 
+		  CREATE_ID, CREATE_NAME, CREATE_DATE, REMARKS, DEL_FLAG
+     FROM SHOP_PAYMENT_METHOD
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="int" >
+    SELECT COUNT(1) C FROM SHOP_PAYMENT_METHOD
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.PaymentMethod" >
+   DELETE FROM SHOP_PAYMENT_METHOD WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.PaymentMethod" >
+   INSERT INTO SHOP_PAYMENT_METHOD (ID, NAME, SORT, ICON, TIMEOUT, TYPE, METHOD, CONTENT, 
+		  CREATE_ID, CREATE_NAME, CREATE_DATE, REMARKS, DEL_FLAG)
+   VALUES (#{id}, #{name}, #{sort}, #{icon}, #{timeout}, #{type}, #{method}, #{content}, 
+		  #{createId}, #{createName}, #{createDate}, #{remarks}, #{delFlag})
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.shop.entity.PaymentMethod" >
+   UPDATE SHOP_PAYMENT_METHOD
+      SET NAME = #{name},
+		  SORT = #{sort},
+		  ICON = #{icon},
+		  TIMEOUT = #{timeout},
+		  TYPE = #{type},
+		  METHOD = #{method},
+		  CONTENT = #{content},
+		  REMARKS = #{remarks},
+		  DEL_FLAG = #{delFlag}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateSort" parameterType="com.tmt.shop.entity.PaymentMethod" >
+   UPDATE SHOP_PAYMENT_METHOD
+      SET SORT = #{sort}
+    WHERE ID = #{id}
+  </update>
+  
+  <select id="getDefaultPaymentMethod" resultMap="BaseResult" parameterType="java.util.Map" >
+   SELECT ID, NAME, SORT, ICON, TIMEOUT, TYPE, METHOD, CONTENT, 
+		  CREATE_ID, CREATE_NAME, CREATE_DATE, REMARKS, DEL_FLAG
+     FROM SHOP_PAYMENT_METHOD
+    WHERE TYPE = #{TYPE} AND METHOD = #{METHOD} LIMIT 1
+  </select>
+</mapper>

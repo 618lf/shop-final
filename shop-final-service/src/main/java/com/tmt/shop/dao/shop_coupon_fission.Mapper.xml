@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.CouponFissionDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.CouponFission"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="COUPON" property="coupon" jdbcType="BIGINT"/>
+    <result column="USER_ID" property="userId" jdbcType="BIGINT"/>
+    <result column="USER_NAME" property="userName" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="FISSION_NUM" property="fissionNum" jdbcType="INTEGER"/>
+    <result column="GETED" property="geted" jdbcType="INTEGER"/>
+    <result column="VAL" property="val" jdbcType="INTEGER"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, COUPON, USER_ID, USER_NAME, CREATE_DATE, FISSION_NUM, GETED, VAL
+     FROM SHOP_COUPON_FISSION
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition">
+   SELECT ID, COUPON, USER_ID, USER_NAME, CREATE_DATE, FISSION_NUM, GETED, VAL
+     FROM SHOP_COUPON_FISSION
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="java.lang.Integer">
+    SELECT COUNT(1) C FROM SHOP_COUPON_FISSION
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <!-- 一次性删除所有的分享 -->
+  <delete id="delete" parameterType="com.tmt.shop.entity.CouponFission">
+   DELETE FROM SHOP_COUPON_FISSION WHERE COUPON = #{coupon}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.CouponFission">
+   INSERT INTO SHOP_COUPON_FISSION (ID, COUPON, USER_ID, USER_NAME, CREATE_DATE, FISSION_NUM, VAL)
+   VALUES (#{id}, #{coupon}, #{userId}, #{userName}, #{createDate}, #{fissionNum}, #{val})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO SHOP_COUPON_FISSION (ID, COUPON, USER_ID, USER_NAME, CREATE_DATE, FISSION_NUM, VAL)
+    VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.id}, #{item.coupon}, #{item.userId}, #{item.userName}, #{item.createDate}, #{item.fissionNum}, #{item.val})
+   </foreach> 
+  </insert>
+  
+  <!-- 用户分享的次数 -->
+  <select id="countUserAssigned" parameterType="com.tmt.shop.entity.CouponFission" resultType="java.lang.Integer">
+    SELECT COUNT(1) C FROM SHOP_COUPON_FISSION
+     WHERE COUPON = #{coupon} AND USER_ID = #{userId}
+  </select>
+  
+  <select id="lockOneFission" resultMap="BaseResult" parameterType="Long">
+    SELECT ID, COUPON, USER_ID, USER_NAME, CREATE_DATE, FISSION_NUM, GETED, VAL
+      FROM SHOP_COUPON_FISSION 
+     WHERE USER_ID IS NULL AND COUPON = #{id} LIMIT 1 FOR UPDATE
+  </select>
+  
+  <update id="updateUserInfo" parameterType="com.tmt.shop.entity.CouponFission">
+   UPDATE SHOP_COUPON_FISSION
+      SET USER_ID = #{userId},
+		  USER_NAME = #{userName},
+		  CREATE_DATE = #{createDate},
+		  IS_ENABLED = #{isEnabled}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateGeted" parameterType="com.tmt.shop.entity.CouponFission">
+   UPDATE SHOP_COUPON_FISSION
+      SET GETED = (CASE WHEN GETED IS NULL THEN 0 ELSE GETED END) + 1
+    WHERE ID = #{id}
+  </update>
+  
+  <resultMap id="SimpleBaseResult" type="com.tmt.shop.entity.CouponFission"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="COUPON" property="coupon" jdbcType="BIGINT"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="IS_ENABLED" property="isEnabled" jdbcType="TINYINT"/>
+  </resultMap>
+  
+  <select id="getSimpleAndLock" resultMap="SimpleBaseResult" parameterType="Long">
+   SELECT ID, COUPON, CREATE_DATE, IS_ENABLED
+     FROM SHOP_COUPON_FISSION
+    WHERE ID = #{id} FOR UPDATE
+  </select>
+  
+  <!-- 设置为可用 -->
+  <update id="updateEnabled" parameterType="com.tmt.shop.entity.CouponFission">
+   UPDATE SHOP_COUPON_FISSION
+      SET IS_ENABLED = 1
+    WHERE ID = #{id}
+  </update>
+  
+</mapper>

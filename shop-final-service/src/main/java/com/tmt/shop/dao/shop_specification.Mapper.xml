@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.SpecificationDao">
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.Specification"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="CATEGORY_ID" property="categoryId" jdbcType="BIGINT"/>
+    <result column="CATEGORY_NAME" property="categoryName" jdbcType="VARCHAR"/>
+    <result column="SORT" property="sort" jdbcType="INTEGER"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="TYPE" property="type" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="long" >
+   SELECT ID, CATEGORY_ID, CATEGORY_NAME, SORT, NAME, TYPE, CREATE_DATE, UPDATE_DATE
+     FROM SHOP_SPECIFICATION
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition" >
+   SELECT ID, CATEGORY_ID, CATEGORY_NAME, SORT, NAME, TYPE, CREATE_DATE, UPDATE_DATE
+     FROM SHOP_SPECIFICATION
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="int" >
+    SELECT COUNT(1) C FROM SHOP_SPECIFICATION
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.Specification" >
+   DELETE FROM SHOP_SPECIFICATION WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.Specification" >
+   INSERT INTO SHOP_SPECIFICATION (ID, CATEGORY_ID, CATEGORY_NAME, SORT, NAME, TYPE, CREATE_DATE, UPDATE_DATE)
+   VALUES (#{id}, #{categoryId}, #{categoryName}, #{sort}, #{name}, #{type}, #{createDate}, #{updateDate})
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.shop.entity.Specification" >
+   UPDATE SHOP_SPECIFICATION
+      SET CATEGORY_ID = #{categoryId},
+		  CATEGORY_NAME = #{categoryName},
+		  SORT = #{sort},
+		  NAME = #{name},
+		  TYPE = #{type},
+		  UPDATE_DATE = #{updateDate}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateSort" parameterType="com.tmt.shop.entity.Specification" >
+   UPDATE SHOP_SPECIFICATION
+      SET SORT = #{sort}
+    WHERE ID = #{id}
+  </update>
+  
+  <select id="countByCategoryId" parameterType="long" resultType="int" >
+    SELECT COUNT(1) C FROM SHOP_SPECIFICATION WHERE CATEGORY_ID = #{VALUE}
+  </select>
+  
+</mapper>

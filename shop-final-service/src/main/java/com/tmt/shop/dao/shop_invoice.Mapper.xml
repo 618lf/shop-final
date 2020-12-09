@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.InvoiceDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.Invoice"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="ORDER_SNS" property="orderSns" jdbcType="VARCHAR"/>
+    <result column="GOODS_NUM" property="goodsNum" jdbcType="INTEGER"/>
+    <result column="AMOUNT" property="amount" jdbcType="DECIMAL"/>
+    <result column="COMPANY" property="company" jdbcType="VARCHAR"/>
+    <result column="TAXPAYER_NUMBER" property="taxpayerNumber" jdbcType="VARCHAR"/>
+    <result column="CONSIGNEE" property="consignee" jdbcType="VARCHAR"/>
+    <result column="ADDRESS" property="address" jdbcType="VARCHAR"/>
+    <result column="PHONE" property="phone" jdbcType="VARCHAR"/>
+    <result column="APPLY_ID" property="applyId" jdbcType="BIGINT"/>
+    <result column="APPLY_NAME" property="applyName" jdbcType="VARCHAR"/>
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT"/>
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+    <result column="OPEN_DATE" property="openDate" jdbcType="TIMESTAMP"/>
+    <result column="REMARKS" property="remarks" jdbcType="VARCHAR"/>
+    <result column="STATUS" property="status" jdbcType="TINYINT"/>
+    <result column="SEND" property="send" jdbcType="TINYINT"/>
+    <result column="INVOICE_URL" property="invoiceUrl" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="long" >
+   SELECT ID, ORDER_SNS, GOODS_NUM, AMOUNT, COMPANY, TAXPAYER_NUMBER, CONSIGNEE, ADDRESS, 
+		  PHONE, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_DATE, REMARKS, STATUS, SEND,
+		  APPLY_ID, APPLY_NAME, OPEN_DATE, INVOICE_URL
+     FROM SHOP_INVOICE
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT ID, ORDER_SNS, GOODS_NUM, AMOUNT, COMPANY, TAXPAYER_NUMBER, CONSIGNEE, ADDRESS, 
+		  PHONE, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_DATE, REMARKS, STATUS, SEND,
+		  APPLY_ID, APPLY_NAME, OPEN_DATE, INVOICE_URL
+     FROM SHOP_INVOICE
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition" >
+   SELECT ID, ORDER_SNS, GOODS_NUM, AMOUNT, COMPANY, TAXPAYER_NUMBER, CONSIGNEE, ADDRESS, 
+		  PHONE, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_DATE, REMARKS, STATUS, SEND,
+		  APPLY_ID, APPLY_NAME, OPEN_DATE, INVOICE_URL
+     FROM SHOP_INVOICE
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="int" >
+    SELECT COUNT(1) C FROM SHOP_INVOICE
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.Invoice" >
+   DELETE FROM SHOP_INVOICE WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.Invoice" >
+   INSERT INTO SHOP_INVOICE (ID, ORDER_SNS, GOODS_NUM, AMOUNT, COMPANY, TAXPAYER_NUMBER, CONSIGNEE, ADDRESS, 
+		  PHONE, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_DATE, REMARKS, STATUS, SEND, APPLY_ID, APPLY_NAME, 
+		  OPEN_DATE, INVOICE_URL)
+   VALUES (#{id}, #{orderSns}, #{goodsNum}, #{amount}, #{company}, #{taxpayerNumber}, #{consignee}, #{address}, 
+		  #{phone}, #{createId}, #{createName}, #{createDate}, #{updateDate}, #{remarks}, #{status}, #{send}, 
+		  #{applyId}, #{applyName}, #{openDate}, #{invoiceUrl})
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.shop.entity.Invoice">
+   UPDATE SHOP_INVOICE
+      SET ORDER_SNS = #{orderSns},
+		  GOODS_NUM = #{goodsNum},
+		  AMOUNT = #{amount},
+		  COMPANY = #{company},
+		  CONSIGNEE = #{consignee},
+		  ADDRESS = #{address},
+		  PHONE = #{phone},
+		  UPDATE_DATE = #{updateDate},
+		  REMARKS = #{remarks},
+		  STATUS = #{status},
+		  OPEN_DATE = #{openDate},
+		  INVOICE_URL = #{invoiceUrl},
+		  APPLY_ID = #{applyId},
+		  APPLY_NAME = #{applyName}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateSend" parameterType="com.tmt.shop.entity.Invoice">
+   UPDATE SHOP_INVOICE
+      SET SEND = #{send}
+    WHERE ID = #{id}
+  </update>
+  
+</mapper>

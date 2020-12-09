@@ -345,6 +345,17 @@ public class UserService extends BaseService<User, Long> implements UserServiceF
 	}
 
 	/**
+	 * 获得用户对应公众号的OPENID
+	 * 
+	 * @param appId
+	 * @return
+	 */
+	public String getUserWechatOpenId(User user, String appId) {
+		UserWechat wechat = this.userWechatDao.get(user, appId);
+		return wechat != null ? wechat.getOpenId() : null;
+	}
+
+	/**
 	 * 根据编号获取用户
 	 */
 	@Override
@@ -550,14 +561,14 @@ public class UserService extends BaseService<User, Long> implements UserServiceF
 	private void saveAccount(UserAccount account) {
 		// 添加账户信息
 		this.accountDao.insert(account);
-		
+
 		// 如果有统一用户信息
 		UserUnion union = account.getUnion();
 		if (union != null) {
 			union.setUserId(account.getUserId());
 			unionDao.insert(union);
 		}
-		
+
 		// 微信用户，添加
 		UserWechat wechat = account.getWechat();
 		if (wechat != null) {

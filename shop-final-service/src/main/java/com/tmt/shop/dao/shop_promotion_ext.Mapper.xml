@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.PromotionExtDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.PromotionExt"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="ORDER_PRICE1" property="orderPrice1" jdbcType="DECIMAL"/>
+    <result column="ORDER_QUANTITY1" property="orderQuantity1" jdbcType="INTEGER"/>
+    <result column="REDUCE1" property="reduce1" jdbcType="DECIMAL"/>
+    <result column="DISCOUNT1" property="discount1" jdbcType="FLOAT"/>
+    <result column="ORDER_PRICE2" property="orderPrice2" jdbcType="DECIMAL"/>
+    <result column="ORDER_QUANTITY2" property="orderQuantity2" jdbcType="INTEGER"/>
+    <result column="REDUCE2" property="reduce2" jdbcType="DECIMAL"/>
+    <result column="DISCOUNT2" property="discount2" jdbcType="FLOAT"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, ORDER_PRICE1, ORDER_QUANTITY1, REDUCE1, DISCOUNT1, ORDER_PRICE2, ORDER_QUANTITY2, REDUCE2, 
+		  DISCOUNT2
+     FROM SHOP_PROMOTION_EXT
+    WHERE ID = #{id}
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.PromotionExt">
+   DELETE FROM SHOP_PROMOTION_EXT WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.PromotionExt">
+   INSERT INTO SHOP_PROMOTION_EXT (ID, ORDER_PRICE1, ORDER_QUANTITY1, REDUCE1, DISCOUNT1, ORDER_PRICE2, ORDER_QUANTITY2, REDUCE2, 
+		  DISCOUNT2)
+   VALUES (#{id}, #{orderPrice1}, #{orderQuantity1}, #{reduce1}, #{discount1}, #{orderPrice2}, #{orderQuantity2}, #{reduce2}, 
+		  #{discount2}) 
+   ON DUPLICATE KEY 
+   UPDATE ORDER_PRICE1 = #{orderPrice1}, ORDER_QUANTITY1 = #{orderQuantity1}, REDUCE1 = #{reduce1},
+          DISCOUNT1 = #{discount1}, ORDER_PRICE2 = #{orderPrice2}, ORDER_QUANTITY2 = #{orderQuantity2},
+          REDUCE2 = #{reduce2}, DISCOUNT2 = #{discount2}
+  </insert>
+  
+</mapper>

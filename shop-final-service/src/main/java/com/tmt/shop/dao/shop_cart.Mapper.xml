@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.CartDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.Cart"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="CART_KEY" property="cartKey" jdbcType="VARCHAR"/>
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT"/>
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="long">
+   SELECT ID, CART_KEY, CREATE_ID, CREATE_NAME, CREATE_DATE
+     FROM SHOP_CART
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="findByKey" resultMap="BaseResult" parameterType="String">
+   SELECT ID, CART_KEY, CREATE_ID, CREATE_NAME, CREATE_DATE
+     FROM SHOP_CART
+    WHERE CART_KEY = #{VALUE} LIMIT 1
+  </select>
+  
+  <select id="findByUserId" resultMap="BaseResult" parameterType="long">
+   SELECT ID, CART_KEY, CREATE_ID, CREATE_NAME, CREATE_DATE
+     FROM SHOP_CART
+    WHERE CREATE_ID = #{VALUE}
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition">
+   SELECT ID, CART_KEY, CREATE_ID, CREATE_NAME, CREATE_DATE
+     FROM SHOP_CART
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="int">
+    SELECT COUNT(1) C FROM SHOP_CART
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.Cart" >
+   DELETE FROM SHOP_CART WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.Cart" >
+   INSERT INTO SHOP_CART (ID, CART_KEY, CREATE_ID, CREATE_NAME, CREATE_DATE)
+   VALUES (#{id}, #{cartKey}, #{createId}, #{createName}, #{createDate}) ON DUPLICATE KEY UPDATE CREATE_DATE = #{createDate}
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.shop.entity.Cart">
+   UPDATE SHOP_CART
+      SET CART_KEY = #{cartKey},
+          CREATE_ID = #{createId},
+		  CREATE_NAME = #{createName},
+		  CREATE_DATE = #{createDate}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateAllSelected" parameterType="com.tmt.shop.entity.Cart" >
+   UPDATE SHOP_CART_ITEM
+      SET CHECKED = 1
+    WHERE CART_ID = #{id}
+  </update>
+  
+  <update id="updateAllCanceled" parameterType="com.tmt.shop.entity.Cart" >
+   UPDATE SHOP_CART_ITEM
+      SET CHECKED = 0
+    WHERE CART_ID = #{id}
+  </update>
+</mapper>

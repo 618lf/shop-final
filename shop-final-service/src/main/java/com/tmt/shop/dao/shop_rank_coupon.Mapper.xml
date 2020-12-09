@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.RankCouponDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.RankCoupon"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="RANKS" property="ranks" jdbcType="BIGINT"/>
+    <result column="COUPONS" property="coupons" jdbcType="BIGINT"/>
+  </resultMap>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.RankCoupon">
+   DELETE FROM SHOP_RANK_COUPON WHERE ID = #{id}
+  </delete>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO SHOP_RANK_COUPON (ID, RANKS, COUPONS)
+    VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.id}, #{item.ranks}, #{item.coupons})
+   </foreach> 
+  </insert>
+  
+  <select id="queryCouponByRankId" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, RANKS, COUPONS FROM SHOP_RANK_COUPON
+    WHERE RANKS = #{ranks}
+  </select>
+  
+  <resultMap id="CouponBaseResult" type="com.tmt.shop.entity.RankCoupon"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="RANKS" property="ranks" jdbcType="BIGINT"/>
+    <result column="COUPONS" property="coupons" jdbcType="BIGINT"/>
+    <result column="COUPON_NAME" property="coupon.name" jdbcType="VARCHAR"/>
+    <result column="IS_FISSION" property="coupon.isFission" jdbcType="TINYINT"/>
+    <result column="IS_PRICE" property="coupon.isPrice" jdbcType="TINYINT"/>
+    <result column="ORDER_PRICE" property="coupon.orderPrice" jdbcType="DECIMAL"/>
+    <result column="VAL" property="coupon.val" jdbcType="INTEGER"/>
+    <result column="BEGIN_DATE" property="coupon.beginDate" jdbcType="TIMESTAMP"/>
+    <result column="END_DATE" property="coupon.endDate" jdbcType="TIMESTAMP"/>
+  </resultMap>
+  
+  <select id="queryRichCouponByRankId" resultMap="CouponBaseResult" parameterType="Long">
+   SELECT A.ID, RANKS, COUPONS, B.NAME COUPON_NAME, B.IS_FISSION, B.VAL, B.BEGIN_DATE, B.END_DATE,
+          B.IS_PRICE, B.ORDER_PRICE
+     FROM SHOP_RANK_COUPON A, SHOP_COUPON B
+    WHERE RANKS = #{ranks} AND A.COUPONS = B.ID
+  </select>
+    
+</mapper>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.ReturnsDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.Returns"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="ORDER_ID" property="orderId" jdbcType="BIGINT"/>
+    <result column="ORDER_SN" property="orderSn" jdbcType="VARCHAR"/>
+    <result column="AREA_ID" property="areaId" jdbcType="BIGINT"/>
+    <result column="AREA_NAME" property="areaName" jdbcType="VARCHAR"/>
+    <result column="ADDRESS" property="address" jdbcType="VARCHAR"/>
+    <result column="DELIVERY_CORP" property="deliveryCorp" jdbcType="VARCHAR"/>
+    <result column="FREIGHT" property="freight" jdbcType="DECIMAL"/>
+    <result column="PHONE" property="phone" jdbcType="VARCHAR"/>
+    <result column="SHIPPER" property="shipper" jdbcType="VARCHAR"/>
+    <result column="SHIPPING_METHOD" property="shippingMethod" jdbcType="VARCHAR"/>
+    <result column="SN" property="sn" jdbcType="VARCHAR"/>
+    <result column="TRACKING_NO" property="trackingNo" jdbcType="VARCHAR"/>
+    <result column="ZIP_CODE" property="zipCode" jdbcType="VARCHAR"/>
+    <result column="REMARKS" property="remarks" jdbcType="VARCHAR"/>
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT"/>
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="long" >
+   SELECT ID, ORDER_ID, ORDER_SN, AREA_ID, AREA_NAME, ADDRESS, DELIVERY_CORP, FREIGHT, 
+		  PHONE, SHIPPER, SHIPPING_METHOD, SN, TRACKING_NO, ZIP_CODE, REMARKS, 
+		  CREATE_ID, CREATE_NAME, CREATE_DATE
+     FROM SHOP_RETURNS
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT ID, ORDER_ID, ORDER_SN, AREA_ID, AREA_NAME, ADDRESS, DELIVERY_CORP, FREIGHT, 
+		  PHONE, SHIPPER, SHIPPING_METHOD, SN, TRACKING_NO, ZIP_CODE, REMARKS, 
+		  CREATE_ID, CREATE_NAME, CREATE_DATE
+     FROM SHOP_RETURNS
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition" >
+   SELECT ID, ORDER_ID, ORDER_SN, AREA_ID, AREA_NAME, ADDRESS, DELIVERY_CORP, FREIGHT, 
+		  PHONE, SHIPPER, SHIPPING_METHOD, SN, TRACKING_NO, ZIP_CODE, REMARKS, 
+		  CREATE_ID, CREATE_NAME, CREATE_DATE
+     FROM SHOP_RETURNS
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="int" >
+    SELECT COUNT(1) C FROM SHOP_RETURNS
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.Returns" >
+   DELETE FROM SHOP_RETURNS WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.Returns" >
+   INSERT INTO SHOP_RETURNS (ID, ORDER_ID, ORDER_SN, AREA_ID, AREA_NAME, ADDRESS, DELIVERY_CORP, FREIGHT, 
+		  PHONE, SHIPPER, SHIPPING_METHOD, SN, TRACKING_NO, ZIP_CODE, REMARKS, 
+		  CREATE_ID, CREATE_NAME, CREATE_DATE)
+   VALUES (#{id}, #{orderId}, #{orderSn}, #{areaId}, #{areaName}, #{address}, #{deliveryCorp}, #{freight}, 
+		  #{phone}, #{shipper}, #{shippingMethod}, #{sn}, #{trackingNo}, #{zipCode}, #{remarks}, 
+		  #{createId}, #{createName}, #{createDate})
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.shop.entity.Returns" >
+   UPDATE SHOP_RETURNS
+      SET ORDER_ID = #{orderId},
+		  ORDER_SN = #{orderSn},
+		  AREA_ID = #{areaId},
+		  AREA_NAME = #{areaName},
+		  ADDRESS = #{address},
+		  DELIVERY_CORP = #{deliveryCorp},
+		  FREIGHT = #{freight},
+		  PHONE = #{phone},
+		  SHIPPER = #{shipper},
+		  SHIPPING_METHOD = #{shippingMethod},
+		  SN = #{sn},
+		  TRACKING_NO = #{trackingNo},
+		  ZIP_CODE = #{zipCode},
+		  REMARKS = #{remarks}
+    WHERE ID = #{id}
+  </update>
+  
+  <select id="queryReturnsByOrderId" resultMap="BaseResult" parameterType="long">
+   SELECT ID, ORDER_ID, ORDER_SN, AREA_ID, AREA_NAME, ADDRESS, DELIVERY_CORP, FREIGHT, 
+		  PHONE, SHIPPER, SHIPPING_METHOD, SN, TRACKING_NO, ZIP_CODE, REMARKS, 
+		  CREATE_ID, CREATE_NAME, CREATE_DATE
+     FROM SHOP_RETURNS
+    WHERE ORDER_ID = #{id}
+  </select>
+  
+</mapper>

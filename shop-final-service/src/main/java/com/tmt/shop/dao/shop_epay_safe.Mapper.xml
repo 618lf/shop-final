@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.EpaySafeDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.EpaySafe"> 
+    <result column="ID" property="id" jdbcType="VARCHAR"/>
+    <result column="SINGLE_ORDER_MAX_AMOUNT" property="singleOrderMaxAmount" jdbcType="DECIMAL"/>
+    <result column="SINGLE_USER_MAX_AMOUNT" property="singleUserMaxAmount" jdbcType="DECIMAL"/>
+    <result column="MANAGER" property="manager" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="String" >
+   SELECT ID, SINGLE_ORDER_MAX_AMOUNT, SINGLE_USER_MAX_AMOUNT, MANAGER
+     FROM SHOP_EPAY_SAFE
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT ID, SINGLE_ORDER_MAX_AMOUNT, SINGLE_USER_MAX_AMOUNT, MANAGER
+     FROM SHOP_EPAY_SAFE
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition" >
+   SELECT ID, SINGLE_ORDER_MAX_AMOUNT, SINGLE_USER_MAX_AMOUNT, MANAGER
+     FROM SHOP_EPAY_SAFE
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="int" >
+    SELECT COUNT(1) C FROM SHOP_EPAY_SAFE
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.EpaySafe" >
+   DELETE FROM SHOP_EPAY_SAFE WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.EpaySafe" >
+   INSERT INTO SHOP_EPAY_SAFE (ID, SINGLE_ORDER_MAX_AMOUNT, SINGLE_USER_MAX_AMOUNT, MANAGER)
+   VALUES (#{id}, #{singleOrderMaxAmount}, #{singleUserMaxAmount}, #{manager})
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.shop.entity.EpaySafe" >
+   UPDATE SHOP_EPAY_SAFE
+      SET SINGLE_ORDER_MAX_AMOUNT = #{singleOrderMaxAmount},
+		  SINGLE_USER_MAX_AMOUNT = #{singleUserMaxAmount},
+		  MANAGER = #{manager}
+    WHERE ID = #{id}
+  </update>
+  
+  <select id="exists" resultType="int" parameterType="String" >
+   SELECT COUNT(1) C FROM SHOP_EPAY_SAFE WHERE ID = #{id}
+  </select>
+  
+</mapper>

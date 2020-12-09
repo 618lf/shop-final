@@ -2,7 +2,7 @@ package com.tmt.shop.state.impl;
 
 import java.util.Date;
 
-import com.tmt.common.utils.DateUtil3;
+import com.tmt.core.utils.time.DateUtils;
 import com.tmt.shop.entity.Order;
 import com.tmt.shop.entity.OrderOpts;
 import com.tmt.shop.entity.OrderState;
@@ -21,7 +21,7 @@ public class BookStateHandler extends DefaultStateHandler{
 	@Override
 	protected Byte doInnerHandler(OrderState state) {
 		if (state.getOpt() == OrderOpts.BOOK) {
-			if (state.getExpire() != null && DateUtil3.after(new Date(),state.getExpire())) {
+			if (state.getExpire() != null && DateUtils.after(new Date(),state.getExpire())) {
 				Order order = orderService.get(state.getId());
 				
 				// 先发货的自动去审核

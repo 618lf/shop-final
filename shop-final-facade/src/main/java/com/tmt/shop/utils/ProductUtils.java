@@ -1,7 +1,7 @@
 package com.tmt.shop.utils;
 
-import com.tmt.common.utils.CacheUtils;
-import com.tmt.common.utils.SpringContextHolder;
+import com.tmt.core.utils.CacheUtils;
+import com.tmt.core.utils.SpringContextHolder;
 import com.tmt.shop.entity.Goods;
 import com.tmt.shop.entity.Product;
 import com.tmt.shop.entity.ShopConstant;

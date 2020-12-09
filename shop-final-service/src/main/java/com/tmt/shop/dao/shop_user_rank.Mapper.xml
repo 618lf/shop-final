@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.UserRankDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.UserRank"> 
+    <result column="USER_ID" property="userId" jdbcType="BIGINT"/>
+    <result column="USER_NO" property="userNo" jdbcType="VARCHAR"/>
+    <result column="USER_NAME" property="userName" jdbcType="VARCHAR"/>
+    <result column="HEADIMG" property="headimg" jdbcType="VARCHAR" />
+    <result column="POINTS" property="points" jdbcType="INTEGER"/>
+    <result column="RANK_ID" property="rankId" jdbcType="BIGINT"/>
+    <result column="RANK_NAME" property="rankName" jdbcType="VARCHAR"/>
+    <result column="USE_POINTS" property="usePoints" jdbcType="INTEGER"/>
+    <result column="SHIPPING" property="shipping" jdbcType="INTEGER"/>
+    <result column="USE_SHIPPING" property="useShipping" jdbcType="INTEGER"/>
+    <result column="EFFECT_DATE" property="effectDate" jdbcType="TIMESTAMP"/>
+    <result column="EXPIRY_DATE" property="expiryDate" jdbcType="TIMESTAMP"/>
+    <result column="IS_ENABLED" property="isEnabled" jdbcType="TINYINT"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Long">
+   SELECT A.USER_ID, B.NO USER_NO, B.NAME USER_NAME, B.HEADIMG, A.POINTS, A.RANK_ID, C.NAME RANK_NAME,
+          A.USE_POINTS, A.SHIPPING, A.USE_SHIPPING, A.EFFECT_DATE, A.EXPIRY_DATE, A.IS_ENABLED
+     FROM SHOP_USER_RANK A JOIN SYS_USER B ON A.USER_ID = B.ID
+     LEFT JOIN SHOP_RANK C ON A.RANK_ID = C.ID
+    WHERE USER_ID = #{userId} 
+  </select>
+  
+  <!-- 不一定有等级设置 -->
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition">
+   SELECT A.USER_ID, B.NO USER_NO, B.NAME USER_NAME, B.HEADIMG, A.POINTS, A.RANK_ID, C.NAME RANK_NAME,
+          A.USE_POINTS, A.SHIPPING, A.USE_SHIPPING, A.EFFECT_DATE, A.EXPIRY_DATE, A.IS_ENABLED
+     FROM SHOP_USER_RANK A JOIN SYS_USER B ON A.USER_ID = B.ID
+     LEFT JOIN SHOP_RANK C ON A.RANK_ID = C.ID
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="java.lang.Integer">
+   SELECT COUNT(1) C
+     FROM SHOP_USER_RANK A, SYS_USER B
+    WHERE A.USER_ID = B.ID 
+    <include refid="COMMON.andClause" />
+  </select>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.UserRank">
+   INSERT INTO SHOP_USER_RANK (USER_ID, POINTS, RANK_ID, USE_POINTS, SHIPPING, USE_SHIPPING, EFFECT_DATE, EXPIRY_DATE, IS_ENABLED)
+   VALUES (#{userId}, #{points}, #{rankId}, #{usePoints}, #{shipping}, #{useShipping}, #{effectDate}, #{expiryDate}, #{isEnabled})
+  </insert>
+  
+  <!-- 管理员直接修改用户的等级信息，如果修改了会员等级则会触发upgradeRank -->
+  <update id="update" parameterType="com.tmt.shop.entity.UserRank">
+   UPDATE SHOP_USER_RANK
+      SET POINTS = #{points},
+		  RANK_ID = #{rankId},
+		  SHIPPING = #{shipping},
+		  EFFECT_DATE = #{effectDate},
+		  EXPIRY_DATE = #{expiryDate},
+		  IS_ENABLED = #{isEnabled}
+    WHERE USER_ID = #{userId}
+  </update>
+  
+  <!-- 自动升级（用户购买商品后触发等级的提升） -->
+  <update id="updateUpgrade" parameterType="com.tmt.shop.entity.UserRank">
+   UPDATE SHOP_USER_RANK
+      SET RANK_ID = #{rankId},
+		  SHIPPING = (CASE WHEN SHIPPING IS NULL THEN #{shipping} WHEN (SHIPPING = -1 OR #{shipping} = -1) THEN -1 ELSE SHIPPING + #{shipping} END),
+		  EFFECT_DATE = #{effectDate},
+		  EXPIRY_DATE = #{expiryDate}
+    WHERE USER_ID = #{userId}
+  </update>
+  
+  <!-- 仅仅修改积分（用户购买商品后添加积分） -->
+  <update id="updatePoints" parameterType="com.tmt.shop.entity.UserRank">
+   UPDATE SHOP_USER_RANK
+      SET POINTS = #{points}
+    WHERE USER_ID = #{userId}
+  </update>
+  
+  <!-- 修改积分和包邮信息（管理员修改会员的等级） -->
+  <update id="upgradeRank" parameterType="com.tmt.shop.entity.UserRank">
+   UPDATE SHOP_USER_RANK
+      SET SHIPPING = (CASE WHEN SHIPPING IS NULL THEN #{shipping} WHEN (SHIPPING = -1 OR #{shipping} = -1) THEN -1 ELSE SHIPPING + #{shipping} END),
+          EFFECT_DATE = #{effectDate},
+		  EXPIRY_DATE = #{expiryDate}
+    WHERE USER_ID = #{userId}
+  </update>
+  
+  <!-- 使用包邮 -->
+  <update id="updateUseShipping" parameterType="com.tmt.shop.entity.UserRank">
+   UPDATE SHOP_USER_RANK
+      SET USE_SHIPPING = (CASE WHEN USE_SHIPPING IS NULL THEN 0 ELSE USE_SHIPPING END) + #{useShipping}
+    WHERE USER_ID = #{userId}
+  </update>
+  
+  <!-- 添加积分 -->
+  <resultMap id="SimpleBaseResult" type="com.tmt.shop.entity.UserRank"> 
+    <result column="USER_ID" property="userId" jdbcType="BIGINT"/>
+    <result column="POINTS" property="points" jdbcType="INTEGER"/>
+    <result column="RANK_ID" property="rankId" jdbcType="BIGINT"/>
+    <result column="IS_ENABLED" property="isEnabled" jdbcType="TINYINT"/>
+  </resultMap>
+  <select id="getRankandLock" resultMap="SimpleBaseResult" parameterType="Long">
+   SELECT USER_ID, POINTS, RANK_ID, IS_ENABLED
+     FROM SHOP_USER_RANK A
+    WHERE A.USER_ID = #{userId} FOR UPDATE
+  </select>
+  <select id="getSimple" resultMap="SimpleBaseResult" parameterType="Long">
+    SELECT USER_ID, POINTS, RANK_ID, IS_ENABLED
+     FROM SHOP_USER_RANK A
+    WHERE A.USER_ID = #{userId}
+  </select>
+</mapper>

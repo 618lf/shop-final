@@ -2,7 +2,7 @@ package com.tmt.shop.promotion.impl;
 
 import java.math.BigDecimal;
 
-import com.tmt.common.utils.BigDecimalUtil;
+import com.tmt.core.utils.BigDecimalUtil;
 import com.tmt.shop.entity.Order;
 import com.tmt.shop.entity.OrderItem;
 import com.tmt.shop.entity.Promotion;
@@ -11,9 +11,10 @@ import com.tmt.shop.promotion.PromotionWrap;
 
 /**
  * 套餐优惠
+ * 
  * @author lifeng
  */
-public class ComplexPromotionHandler extends DefaultPromotionHandler{
+public class ComplexPromotionHandler extends DefaultPromotionHandler {
 
 	@Override
 	protected PromotionResult doInnerHandler(PromotionWrap wrap, Promotion promotion, Order order, OrderItem item,

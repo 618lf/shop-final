@@ -2,7 +2,7 @@ package com.tmt.shop.promotion.impl;
 
 import java.math.BigDecimal;
 
-import com.tmt.common.utils.BigDecimalUtil;
+import com.tmt.core.utils.BigDecimalUtil;
 import com.tmt.shop.entity.Order;
 import com.tmt.shop.entity.OrderItem;
 import com.tmt.shop.entity.Promotion;

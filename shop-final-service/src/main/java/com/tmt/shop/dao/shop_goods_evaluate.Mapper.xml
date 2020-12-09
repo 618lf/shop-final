@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.GoodsEvaluateDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.GoodsEvaluate"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="GOODS_ID" property="goodsId" jdbcType="BIGINT"/>
+    <result column="SCORE" property="score" jdbcType="FLOAT"/>
+    <result column="CONTENT" property="content" jdbcType="VARCHAR"/>
+    <result column="IS_ENABLED" property="isEnabled" jdbcType="TINYINT"/>
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT"/>
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+    <result column="CREATE_HEAD" property="createHead" jdbcType="VARCHAR"/>
+    <result column="CREATE_GRADE" property="createGrade" jdbcType="TINYINT"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, GOODS_ID, SCORE, CONTENT, IS_ENABLED, CREATE_ID, CREATE_NAME, CREATE_HEAD, 
+		  CREATE_GRADE, CREATE_DATE, UPDATE_DATE
+     FROM SHOP_GOODS_EVALUATE
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT ID, GOODS_ID, SCORE, CONTENT, IS_ENABLED, CREATE_ID, CREATE_NAME, CREATE_HEAD, 
+		  CREATE_GRADE, CREATE_DATE, UPDATE_DATE
+     FROM SHOP_GOODS_EVALUATE
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition">
+   SELECT ID, GOODS_ID, SCORE, CONTENT, IS_ENABLED, CREATE_ID, CREATE_NAME, CREATE_HEAD, 
+		  CREATE_GRADE, CREATE_DATE, UPDATE_DATE
+     FROM SHOP_GOODS_EVALUATE
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="java.lang.Integer">
+    SELECT COUNT(1) C FROM SHOP_GOODS_EVALUATE
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.GoodsEvaluate">
+   DELETE FROM SHOP_GOODS_EVALUATE WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.GoodsEvaluate">
+   INSERT INTO SHOP_GOODS_EVALUATE (ID, GOODS_ID, SCORE, CONTENT, IS_ENABLED, CREATE_ID, CREATE_NAME, CREATE_HEAD, 
+		  CREATE_GRADE, CREATE_DATE, UPDATE_DATE)
+   VALUES (#{id}, #{goodsId}, #{score}, #{content}, #{isEnabled}, #{createId}, #{createName}, #{createHead}, 
+		  #{createGrade}, #{createDate}, #{updateDate})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO SHOP_GOODS_EVALUATE (ID, GOODS_ID, SCORE, CONTENT, IS_ENABLED, CREATE_ID, CREATE_NAME, CREATE_HEAD, 
+		  CREATE_GRADE, CREATE_DATE, UPDATE_DATE)
+    VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.id}, #{item.goodsId}, #{item.score}, #{item.content}, #{item.isEnabled}, #{item.createId}, #{item.createName}, #{item.createHead}, 
+		  #{item.createGrade}, #{item.createDate}, #{item.updateDate})
+   </foreach> 
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.shop.entity.GoodsEvaluate">
+   UPDATE SHOP_GOODS_EVALUATE
+      SET GOODS_ID = #{goodsId},
+		  SCORE = #{score},
+		  CONTENT = #{content},
+		  IS_ENABLED = #{isEnabled},
+		  CREATE_ID = #{createId},
+		  CREATE_NAME = #{createName},
+		  CREATE_HEAD = #{createHead},
+		  CREATE_GRADE = #{createGrade},
+		  UPDATE_DATE = #{updateDate}
+    WHERE ID = #{id}
+  </update>
+  
+  
+</mapper>

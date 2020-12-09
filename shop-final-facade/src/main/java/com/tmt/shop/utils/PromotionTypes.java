@@ -2,8 +2,8 @@ package com.tmt.shop.utils;
 
 import java.util.List;
 
-import com.tmt.common.utils.Ints;
-import com.tmt.common.utils.StringUtil3;
+import com.tmt.core.utils.Ints;
+import com.tmt.core.utils.StringUtils;
 import com.tmt.shop.entity.Promotion;
 import com.tmt.shop.entity.PromotionCoupon;
 import com.tmt.shop.entity.PromotionExt;
@@ -60,7 +60,7 @@ public class PromotionTypes {
 	public static String getRemarks(Promotion promotion) {
 		String remarks = ""; Byte type = promotion.getType();
 		if (type == 1) {
-			remarks = StringUtil3.format("直减%s元", promotion.getReduce());
+			remarks = StringUtils.format("直减%s元", promotion.getReduce());
 		} else if(type == 2) {
 			StringBuilder describe = new StringBuilder();
 			describe.append("满").append(promotion.getOrderPrice()).append("元减").append(promotion.getReduce()).append("元;");
@@ -91,13 +91,13 @@ public class PromotionTypes {
 		    		describe.append(product.getProductName()).append("打").append(product.getDiscount()* 10).append("折;");
 		    	}
 		    }
-			remarks = StringUtil3.abbr(describe.toString(), 255);
+			remarks = StringUtils.abbrHtml(describe.toString(), 255);
 		} else if(type == 5) {
-			remarks = StringUtil3.format("满%s元包邮", promotion.getOrderPrice());
+			remarks = StringUtils.format("满%s元包邮", promotion.getOrderPrice());
 		} else if(type == 6) {
-			remarks = StringUtil3.format("打%s折", promotion.getDiscount() * 10);
+			remarks = StringUtils.format("打%s折", promotion.getDiscount() * 10);
 		} else if(type == 7) {
-			remarks = StringUtil3.format("打%s折,限购%s件", promotion.getDiscount() * 10, promotion.getGetno());
+			remarks = StringUtils.format("打%s折,限购%s件", promotion.getDiscount() * 10, promotion.getGetno());
 		} else if(type == 8) {
 			int val = 0;
 			List<PromotionCoupon> coupons = promotion.getCoupons();
@@ -107,10 +107,10 @@ public class PromotionTypes {
 		    	}
 			}
 			if (promotion.getIsPrice() == 1) {
-				remarks = StringUtil3.format("满%s元赠送%s元优惠券", promotion.getOrderPrice(), val);
+				remarks = StringUtils.format("满%s元赠送%s元优惠券", promotion.getOrderPrice(), val);
 			}
 			if (promotion.getIsQuantity() == 1) {
-				remarks = StringUtil3.format("满%s件赠送%s元优惠券", promotion.getOrderQuantity(), val);
+				remarks = StringUtils.format("满%s件赠送%s元优惠券", promotion.getOrderQuantity(), val);
 			}
 		}
 		return remarks;

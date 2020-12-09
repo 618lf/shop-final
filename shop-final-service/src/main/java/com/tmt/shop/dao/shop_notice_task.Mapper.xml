@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.NoticeTaskDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.NoticeTask"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="MSG" property="msg" jdbcType="VARCHAR"/>
+    <result column="APP" property="app" jdbcType="VARCHAR"/>
+    <result column="TYPE" property="type" jdbcType="TINYINT"/>
+    <result column="STATE" property="state" jdbcType="TINYINT"/>
+    <result column="RESET" property="reset" jdbcType="TINYINT"/>
+    <result column="SOURCE" property="source" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+  </resultMap>
+  
+  <select id="findByCondition" resultMap="BaseResult">
+   SELECT ID, MSG, APP, TYPE, STATE, RESET, SOURCE, CREATE_DATE, UPDATE_DATE
+     FROM SHOP_NOTICE_TASK
+    WHERE STATE = 0 AND RESET &lt; 3 ORDER BY CREATE_DATE
+  </select>
+  
+  <delete id="delete" parameterType="java.util.List">
+   DELETE FROM SHOP_NOTICE_TASK WHERE ID IN
+   <foreach collection="list" item="item" index="index" separator=","  open="(" close=")">  
+    #{item.id}
+   </foreach> 
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.NoticeTask">
+   INSERT INTO SHOP_NOTICE_TASK (ID, MSG, APP, TYPE, STATE, SOURCE, CREATE_DATE, UPDATE_DATE)
+   VALUES (#{id}, #{msg}, #{app}, #{type}, #{state}, #{source}, #{createDate}, #{updateDate}) ON DUPLICATE KEY UPDATE UPDATE_DATE = #{updateDate}
+  </insert>
+  
+  <update id="update" parameterType="java.util.List">
+   UPDATE SHOP_NOTICE_TASK SET STATE = 1
+    WHERE ID IN
+    <foreach collection="list" item="item" index="index" separator=","  open="(" close=")">  
+    #{item.id}
+   </foreach> 
+  </update>
+  
+  <update id="updateReset" parameterType="java.util.List">
+   UPDATE SHOP_NOTICE_TASK SET STATE = 0, RESET = RESET + 1
+    WHERE ID IN
+    <foreach collection="list" item="item" index="index" separator=","  open="(" close=")">  
+    #{item.id}
+   </foreach> 
+  </update>
+  
+</mapper>

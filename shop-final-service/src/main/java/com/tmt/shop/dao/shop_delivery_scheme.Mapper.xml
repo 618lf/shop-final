@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.DeliverySchemeDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.DeliveryScheme"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="IS_DEFAULT" property="isDefault" jdbcType="TINYINT"/>
+    <result column="SHIPPING_EXPRESSION" property="shippingExpression" jdbcType="VARCHAR"/>
+    <result column="DELIVERY_EXPRESSION" property="deliveryExpression" jdbcType="VARCHAR"/>
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT"/>
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, NAME, IS_DEFAULT, SHIPPING_EXPRESSION, DELIVERY_EXPRESSION, CREATE_ID, CREATE_NAME, CREATE_DATE, 
+		  UPDATE_DATE
+     FROM SHOP_DELIVERY_SCHEME
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT ID, NAME, IS_DEFAULT, SHIPPING_EXPRESSION, DELIVERY_EXPRESSION, CREATE_ID, CREATE_NAME, CREATE_DATE, 
+		  UPDATE_DATE
+     FROM SHOP_DELIVERY_SCHEME
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition">
+   SELECT ID, NAME, IS_DEFAULT, SHIPPING_EXPRESSION, DELIVERY_EXPRESSION, CREATE_ID, CREATE_NAME, CREATE_DATE, 
+		  UPDATE_DATE
+     FROM SHOP_DELIVERY_SCHEME
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="java.lang.Integer">
+    SELECT COUNT(1) C FROM SHOP_DELIVERY_SCHEME
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.DeliveryScheme">
+   DELETE FROM SHOP_DELIVERY_SCHEME WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.DeliveryScheme">
+   INSERT INTO SHOP_DELIVERY_SCHEME (ID, NAME, IS_DEFAULT, SHIPPING_EXPRESSION, DELIVERY_EXPRESSION, CREATE_ID, CREATE_NAME, CREATE_DATE, 
+		  UPDATE_DATE)
+   VALUES (#{id}, #{name}, #{isDefault}, #{shippingExpression}, #{deliveryExpression}, #{createId}, #{createName}, #{createDate}, 
+		  #{updateDate})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO SHOP_DELIVERY_SCHEME (ID, NAME, IS_DEFAULT, SHIPPING_EXPRESSION, DELIVERY_EXPRESSION, CREATE_ID, CREATE_NAME, CREATE_DATE, 
+		  UPDATE_DATE)
+    VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.id}, #{item.name}, #{item.isDefault}, #{item.shippingExpression}, #{item.deliveryExpression}, #{item.createId}, #{item.createName}, #{item.createDate}, 
+		  #{item.updateDate})
+   </foreach> 
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.shop.entity.DeliveryScheme">
+   UPDATE SHOP_DELIVERY_SCHEME
+      SET NAME = #{name},
+		  IS_DEFAULT = #{isDefault},
+		  SHIPPING_EXPRESSION = #{shippingExpression},
+		  DELIVERY_EXPRESSION = #{deliveryExpression},
+		  UPDATE_DATE = #{updateDate}
+    WHERE ID = #{id}
+  </update>
+  
+  <!-- 设置为非默认 -->
+  <update id="updateNoDefault" parameterType="com.tmt.shop.entity.DeliveryScheme">
+   UPDATE SHOP_DELIVERY_SCHEME
+      SET IS_DEFAULT = 0
+    WHERE ID != #{id}
+  </update>
+</mapper>

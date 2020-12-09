@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.DeliveryCorpDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.DeliveryCorp"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="CODE" property="code" jdbcType="VARCHAR"/>
+    <result column="SORT" property="sort" jdbcType="INTEGER"/>
+    <result column="URL" property="url" jdbcType="VARCHAR"/>
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT"/>
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="long" >
+   SELECT ID, NAME, CODE, SORT, URL, CREATE_ID, CREATE_NAME, CREATE_DATE, 
+		  UPDATE_DATE
+     FROM SHOP_DELIVERY_CORP
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT ID, NAME, CODE, SORT, URL, CREATE_ID, CREATE_NAME, CREATE_DATE, 
+		  UPDATE_DATE
+     FROM SHOP_DELIVERY_CORP
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition" >
+   SELECT ID, NAME, CODE, SORT, URL, CREATE_ID, CREATE_NAME, CREATE_DATE, 
+		  UPDATE_DATE
+     FROM SHOP_DELIVERY_CORP
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="int" >
+    SELECT COUNT(1) C FROM SHOP_DELIVERY_CORP
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.DeliveryCorp" >
+   DELETE FROM SHOP_DELIVERY_CORP WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.DeliveryCorp" >
+   INSERT INTO SHOP_DELIVERY_CORP (ID, NAME, CODE, SORT, URL, CREATE_ID, CREATE_NAME, CREATE_DATE, 
+		  UPDATE_DATE)
+   VALUES (#{id}, #{name}, #{code}, #{sort}, #{url}, #{createId}, #{createName}, #{createDate}, 
+		  #{updateDate})
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.shop.entity.DeliveryCorp" >
+   UPDATE SHOP_DELIVERY_CORP
+      SET NAME = #{name},
+		  CODE = #{code},
+		  SORT = #{sort},
+		  URL = #{url},
+		  UPDATE_DATE = #{updateDate}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateSort" parameterType="com.tmt.shop.entity.DeliveryCorp" >
+   UPDATE SHOP_DELIVERY_CORP
+      SET SORT = #{sort}
+    WHERE ID = #{id}
+  </update>
+  
+</mapper>

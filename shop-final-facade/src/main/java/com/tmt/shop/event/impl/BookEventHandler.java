@@ -3,10 +3,10 @@ package com.tmt.shop.event.impl;
 import java.util.List;
 import java.util.Map;
 
-import com.tmt.common.utils.StringUtil3;
 import com.tmt.core.utils.Lists;
 import com.tmt.core.utils.Maps;
 import com.tmt.core.utils.SpringContextHolder;
+import com.tmt.core.utils.StringUtils;
 import com.tmt.notice.ActualNotice;
 import com.tmt.shop.entity.NoticeSetting;
 import com.tmt.shop.entity.Order;
@@ -36,7 +36,7 @@ public class BookEventHandler extends DefaultEventHandler{
 			List<OrderItem> updates = Lists.newArrayList();
 			List<Product> products = Lists.newArrayList();
 			for(OrderItem item: items) {
-				if (StringUtil3.isBlank(item.getSnapshot())) {
+				if (StringUtils.isBlank(item.getSnapshot())) {
 					Product product = shopStaticizer.goods_snapshot_build(item.getProductId());
 					// 设置为临时的下单时间
 					product.setUpdateDate(order.getCreateDate());
@@ -76,9 +76,9 @@ public class BookEventHandler extends DefaultEventHandler{
 				}
 				
 				// 发送一个实时的通知
-				ActualNotice anotice = SpringContextHolder.getBeanQuietly(ActualNotice.class);
+				ActualNotice anotice = SpringContextHolder.getBean(ActualNotice.class);
 				if (anotice != null) {
-					anotice.sendMessage(StringUtil3.format("%s 刚刚下单了", order.getCreateName()));
+					anotice.sendMessage(StringUtils.format("%s 刚刚下单了", order.getCreateName()));
 				}
 			}catch(Exception e) {
 				logger.error("构建消息错误",e);

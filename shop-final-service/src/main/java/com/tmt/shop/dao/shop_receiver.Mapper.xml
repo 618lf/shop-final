@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.ReceiverDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.Receiver"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="AREA_ID" property="areaId" jdbcType="VARCHAR"/>
+    <result column="AREA_NAME" property="areaName" jdbcType="VARCHAR"/>
+    <result column="ADDRESS" property="address" jdbcType="VARCHAR"/>
+    <result column="HOUSE_NUMBER" property="houseNumber" jdbcType="VARCHAR"/>
+    <result column="PHONE" property="phone" jdbcType="VARCHAR"/>
+    <result column="LOCATION" property="location" jdbcType="VARCHAR"/>
+    <result column="CONSIGNEE" property="consignee" jdbcType="VARCHAR"/>
+    <result column="SEX" property="sex" jdbcType="TINYINT"/>
+    <result column="IS_DEFAULT" property="isDefault" jdbcType="TINYINT"/>
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT"/>
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="TAG" property="tag" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="long" >
+   SELECT ID, AREA_ID, AREA_NAME, ADDRESS, HOUSE_NUMBER, PHONE, LOCATION, CONSIGNEE, SEX, IS_DEFAULT, 
+		  CREATE_ID, CREATE_NAME, CREATE_DATE, TAG
+     FROM SHOP_RECEIVER
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition">
+   SELECT ID, AREA_ID, AREA_NAME, ADDRESS, HOUSE_NUMBER, PHONE, LOCATION, CONSIGNEE, SEX, IS_DEFAULT, 
+		  CREATE_ID, CREATE_NAME, CREATE_DATE, TAG
+     FROM SHOP_RECEIVER
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="java.lang.Integer">
+    SELECT COUNT(1) C FROM SHOP_RECEIVER
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.Receiver" >
+   DELETE FROM SHOP_RECEIVER WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.Receiver" >
+   INSERT INTO SHOP_RECEIVER (ID, AREA_ID, AREA_NAME, ADDRESS, HOUSE_NUMBER, PHONE, LOCATION, CONSIGNEE, SEX, IS_DEFAULT, 
+		  CREATE_ID, CREATE_NAME, CREATE_DATE, TAG)
+   VALUES (#{id}, #{areaId}, #{areaName}, #{address}, #{houseNumber}, #{phone}, #{location}, #{consignee}, #{sex}, #{isDefault}, 
+		  #{createId}, #{createName}, #{createDate}, #{tag})
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.shop.entity.Receiver" >
+   UPDATE SHOP_RECEIVER
+      SET AREA_ID = #{areaId},
+          AREA_NAME = #{areaName},
+		  ADDRESS = #{address},
+		  HOUSE_NUMBER = #{houseNumber},
+		  PHONE = #{phone},
+		  LOCATION = #{location},
+		  CONSIGNEE = #{consignee},
+		  SEX = #{sex},
+		  TAG = #{tag}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateDefault" parameterType="com.tmt.shop.entity.Receiver" >
+   UPDATE SHOP_RECEIVER
+      SET IS_DEFAULT = 1
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateNoDefault" parameterType="com.tmt.shop.entity.Receiver" >
+   UPDATE SHOP_RECEIVER
+      SET IS_DEFAULT = 0
+    WHERE CREATE_ID = #{createId} AND IS_DEFAULT = 1
+      AND ID != #{id}
+  </update>
+  
+  <resultMap id="SimpleBaseResult" type="com.tmt.shop.entity.Receiver"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="AREA_ID" property="areaId" jdbcType="VARCHAR"/>
+    <result column="AREA_NAME" property="areaName" jdbcType="VARCHAR"/>
+    <result column="ADDRESS" property="address" jdbcType="VARCHAR"/>
+    <result column="HOUSE_NUMBER" property="houseNumber" jdbcType="VARCHAR"/>
+    <result column="PHONE" property="phone" jdbcType="VARCHAR"/>
+    <result column="LOCATION" property="location" jdbcType="VARCHAR"/>
+    <result column="CONSIGNEE" property="consignee" jdbcType="VARCHAR"/>
+    <result column="IS_DEFAULT" property="isDefault" jdbcType="TINYINT"/>
+  </resultMap>
+  
+  <select id="queryUserReceivers" resultMap="SimpleBaseResult" parameterType="long" >
+   SELECT ID, AREA_ID, AREA_NAME, ADDRESS, HOUSE_NUMBER, PHONE, LOCATION, CONSIGNEE, IS_DEFAULT
+     FROM SHOP_RECEIVER
+    WHERE CREATE_ID = #{VALUE}
+    ORDER BY IS_DEFAULT DESC, CREATE_DATE
+  </select>
+  
+  <select id="queryUserDefaultReceiver" resultMap="SimpleBaseResult" parameterType="long">
+   SELECT ID, AREA_ID, AREA_NAME, ADDRESS, HOUSE_NUMBER, PHONE, LOCATION, CONSIGNEE, IS_DEFAULT
+     FROM SHOP_RECEIVER
+    WHERE CREATE_ID = #{VALUE} AND IS_DEFAULT = 1 LIMIT 1
+  </select>
+</mapper>

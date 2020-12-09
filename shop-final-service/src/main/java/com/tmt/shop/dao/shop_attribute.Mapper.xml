@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.AttributeDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.Attribute"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="CATEGORY_ID" property="categoryId" jdbcType="BIGINT"/>
+    <result column="CATEGORY_NAME" property="categoryName" jdbcType="VARCHAR"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="SORT" property="sort" jdbcType="INTEGER"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="long" >
+   SELECT ID, CATEGORY_ID, CATEGORY_NAME, NAME, SORT, CREATE_DATE, UPDATE_DATE
+     FROM SHOP_ATTRIBUTE
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT ID, CATEGORY_ID, CATEGORY_NAME, NAME, SORT, CREATE_DATE, UPDATE_DATE
+     FROM SHOP_ATTRIBUTE
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition" >
+   SELECT ID, CATEGORY_ID, CATEGORY_NAME, NAME, SORT, CREATE_DATE, UPDATE_DATE
+     FROM SHOP_ATTRIBUTE
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="int" >
+    SELECT COUNT(1) C FROM SHOP_ATTRIBUTE
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.Attribute" >
+   DELETE FROM SHOP_ATTRIBUTE WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.Attribute" >
+   INSERT INTO SHOP_ATTRIBUTE (ID, CATEGORY_ID, CATEGORY_NAME, NAME, SORT, CREATE_DATE, UPDATE_DATE)
+   VALUES (#{id}, #{categoryId}, #{categoryName}, #{name}, #{sort}, #{createDate}, #{updateDate})
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.shop.entity.Attribute" >
+   UPDATE SHOP_ATTRIBUTE
+      SET CATEGORY_ID = #{categoryId},
+		  CATEGORY_NAME = #{categoryName},
+		  NAME = #{name},
+		  SORT = #{sort},
+		  UPDATE_DATE = #{updateDate}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateSort" parameterType="com.tmt.shop.entity.Attribute" >
+   UPDATE SHOP_ATTRIBUTE
+      SET SORT = #{sort}
+    WHERE ID = #{id}
+  </update>
+  
+</mapper>

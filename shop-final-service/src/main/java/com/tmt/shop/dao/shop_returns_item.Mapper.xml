@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.ReturnItemDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.ReturnItem"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="RETURNS_ID" property="returnsId" jdbcType="BIGINT"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="SN" property="sn" jdbcType="VARCHAR"/>
+    <result column="QUANTITY" property="quantity" jdbcType="INTEGER"/>
+  </resultMap>
+  
+  <select id="queryItemsByReturnsId" resultMap="BaseResult" parameterType="long">
+   SELECT ID, RETURNS_ID, NAME, SN, QUANTITY
+     FROM SHOP_RETURNS_ITEM
+    WHERE RETURNS_ID = #{id}
+  </select>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.ReturnItem" >
+   INSERT INTO SHOP_RETURNS_ITEM (ID, RETURNS_ID, NAME, SN, QUANTITY)
+   VALUES (#{id}, #{returnsId}, #{name}, #{sn}, #{quantity})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO SHOP_RETURNS_ITEM (ID, RETURNS_ID, NAME, SN, QUANTITY)
+    VALUES 
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.id}, #{item.returnsId}, #{item.name}, #{item.sn}, #{item.quantity})
+   </foreach> 
+  </insert>
+</mapper>

@@ -2,8 +2,8 @@ package com.tmt.shop.state.impl;
 
 import java.util.Date;
 
-import com.tmt.common.utils.DateUtil3;
-import com.tmt.common.utils.SpringContextHolder;
+import com.tmt.core.utils.SpringContextHolder;
+import com.tmt.core.utils.time.DateUtils;
 import com.tmt.shop.entity.Order;
 import com.tmt.shop.entity.OrderOpts;
 import com.tmt.shop.entity.OrderState;
@@ -32,9 +32,9 @@ public class RefundProcessStateHandler extends DefaultStateHandler{
 	@Override
 	protected Byte doInnerHandler(OrderState state) {
 		if (state.getOpt() == OrderOpts.REFUND_PROCESS) {
-			Order order = orderService.get(state.getId()); Date today = DateUtil3.getTimeStampNow();
+			Order order = orderService.get(state.getId()); Date today = DateUtils.getTimeStampNow();
 			if (order.getPaymentStatus() == PayStatus.refunds_process
-					&& (state.getExpire() == null || DateUtil3.after(today, state.getExpire()))) {
+					&& (state.getExpire() == null || DateUtils.after(today, state.getExpire()))) {
 				// 完成此订单
 				Boolean flag = refundsService.refundsProcess(order);
 				if (!flag) {

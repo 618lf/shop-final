@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.OrderRankDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.OrderRank"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="RANKS" property="ranks" jdbcType="BIGINT"/>
+    <result column="RANKS_ANME" property="ranksAnme" jdbcType="VARCHAR"/>
+    <result column="DISCOUNT" property="discount" jdbcType="FLOAT"/>
+    <result column="REDUCE" property="reduce" jdbcType="DECIMAL"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, RANKS, RANKS_ANME, DISCOUNT, REDUCE
+     FROM SHOP_ORDER_RANK
+    WHERE ID = #{id}
+  </select>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.OrderRank">
+   INSERT INTO SHOP_ORDER_RANK (ID, RANKS, RANKS_ANME, DISCOUNT, REDUCE)
+   VALUES (#{id}, #{ranks}, #{ranksAnme}, #{discount}, #{reduce})
+  </insert>
+  
+</mapper>

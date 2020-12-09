@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.NoticeSettingDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.NoticeSetting"> 
+    <result column="ID" property="id" jdbcType="TINYINT"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="TEMPLATE_MSG" property="templateMsg" jdbcType="TINYINT"/>
+    <result column="TM_TEMPLATE" property="tmTemplate" jdbcType="VARCHAR"/>
+    <result column="SITE_MSG" property="siteMsg" jdbcType="TINYINT"/>
+    <result column="SM_TEMPLATE" property="smTemplate" jdbcType="VARCHAR"/>
+    <result column="SMS_MSG" property="smsMsg" jdbcType="TINYINT"/>
+    <result column="SMS_TEMPLATE" property="smsTemplate" jdbcType="VARCHAR"/>
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Byte">
+    SELECT ID, NAME, TEMPLATE_MSG, SITE_MSG, SMS_MSG, UPDATE_DATE,
+           TM_TEMPLATE, SM_TEMPLATE, SMS_TEMPLATE
+     FROM SHOP_NOTICE_SETTING
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT ID, NAME, TEMPLATE_MSG, SITE_MSG, SMS_MSG, UPDATE_DATE,
+          TM_TEMPLATE, SM_TEMPLATE, SMS_TEMPLATE
+     FROM SHOP_NOTICE_SETTING
+  </select>
+  
+  <update id="updateTmsg" parameterType="com.tmt.shop.entity.NoticeSetting">
+   UPDATE SHOP_NOTICE_SETTING
+      SET TEMPLATE_MSG = #{templateMsg},
+		  UPDATE_DATE = #{updateDate}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateSitemsg" parameterType="com.tmt.shop.entity.NoticeSetting">
+   UPDATE SHOP_NOTICE_SETTING
+      SET SITE_MSG = #{siteMsg},
+		  UPDATE_DATE = #{updateDate}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateSmsg" parameterType="com.tmt.shop.entity.NoticeSetting">
+   UPDATE SHOP_NOTICE_SETTING
+      SET SMS_MSG = #{smsMsg},
+		  UPDATE_DATE = #{updateDate}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateTemplate" parameterType="com.tmt.shop.entity.NoticeSetting">
+   UPDATE SHOP_NOTICE_SETTING
+      SET TM_TEMPLATE = #{tmTemplate},
+		  SM_TEMPLATE = #{smTemplate},
+		  SMS_TEMPLATE = #{smsTemplate}
+    WHERE ID = #{id}
+  </update>
+</mapper>

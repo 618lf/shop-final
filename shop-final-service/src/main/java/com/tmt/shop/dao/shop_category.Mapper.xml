@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.CategoryDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.Category"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="PARENT_ID" property="parentId" jdbcType="BIGINT"/>
+    <result column="PARENT_IDS" property="parentIds" jdbcType="VARCHAR"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="SORT" property="sort" jdbcType="INTEGER"/>
+    <result column="LEVEL" property="level" jdbcType="INTEGER"/>
+    <result column="PATH" property="path" jdbcType="VARCHAR"/>
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT"/>
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+    <result column="REMARKS" property="remarks" jdbcType="VARCHAR"/>
+    <result column="DEL_FLAG" property="delFlag" jdbcType="TINYINT"/>
+    <result column="SEO_DESCRIPTION" property="seoDescription" jdbcType="VARCHAR"/>
+    <result column="SEO_KEYWORDS" property="seoKeywords" jdbcType="VARCHAR"/>
+    <result column="SEO_TITLE" property="seoTitle" jdbcType="VARCHAR"/>
+    <result column="LARGE" property="large" jdbcType="VARCHAR"/>
+    <result column="MEDIUM" property="medium" jdbcType="VARCHAR"/>
+    <result column="THUMBNAIL" property="thumbnail" jdbcType="VARCHAR"/>
+    <result column="IS_LIST" property="isList" jdbcType="TINYINT"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="long">
+   SELECT ID, PARENT_ID, PARENT_IDS, NAME, SORT, LEVEL, PATH, CREATE_ID, CREATE_NAME, CREATE_DATE, 
+          UPDATE_DATE, REMARKS, DEL_FLAG, SEO_DESCRIPTION, SEO_KEYWORDS, SEO_TITLE, LARGE, MEDIUM, 
+          THUMBNAIL, IS_LIST
+     FROM SHOP_CATEGORY
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT ID, PARENT_ID, PARENT_IDS, NAME, SORT, LEVEL, PATH, CREATE_ID, CREATE_NAME, CREATE_DATE, 
+          UPDATE_DATE, REMARKS, DEL_FLAG, SEO_DESCRIPTION, SEO_KEYWORDS, SEO_TITLE, LARGE, MEDIUM, 
+          THUMBNAIL, IS_LIST
+     FROM SHOP_CATEGORY
+  </select>
+  
+  <select id="findTreeList" resultMap="COMMON.BaseTreeResult">
+     SELECT * FROM (
+	 SELECT C.ID ID, C.PARENT_ID PARENT, C.PARENT_IDS PARENT_IDS,
+	        C.NAME TREE_NAME,
+	        '' TREE_CODE,
+	        '' TREE_TYPE,
+	        C.LEVEL TREE_LEVEL, '' TREE_PATH, '' TREE_DESC, C.SORT
+	   FROM SHOP_CATEGORY C
+	  WHERE 1 = 1 AND C.LEVEL != 0
+	  <if test="NAME != null"> AND C.NAME = #{NAME}</if>
+	  <if test="IDS != null"> AND #{IDS} LIKE CONCAT(CONCAT('%,',C.ID),',%')</if>  
+	 )A ORDER BY TREE_LEVEL, SORT
+  </select>
+  <select id="findByCondition" resultMap="BaseResult" parameterType="java.util.Map" >
+   SELECT ID, PARENT_ID, PARENT_IDS, NAME, SORT, LEVEL, PATH, CREATE_ID, CREATE_NAME, CREATE_DATE, 
+          UPDATE_DATE, REMARKS, DEL_FLAG, SEO_DESCRIPTION, SEO_KEYWORDS, SEO_TITLE, LARGE, MEDIUM, 
+          THUMBNAIL, IS_LIST
+     FROM SHOP_CATEGORY
+    WHERE LEVEL != 0
+    <if test="IDS != null"> AND #{IDS} LIKE CONCAT(CONCAT('%,',ID),',%')</if>
+    <if test="NAME != null"> AND NAME LIKE CONCAT(CONCAT('%',#{NAME}),'%')</if>
+    <if test="PARENT_ID != null"> AND PARENT_ID = #{PARENT_ID}</if>
+    <if test="PARENT_IDS != null"> AND PARENT_IDS LIKE CONCAT(CONCAT('%,',#{PARENT_IDS}), ',%')</if>
+    <if test="IS_LIST != null"> AND IS_LIST = #{IS_LIST}</if>
+    <if test="LEVEL != null"> AND LEVEL = #{LEVEL}</if>
+    ORDER BY LEVEL, SORT
+  </select>
+  
+  <select id="deleteCategoryCheck" parameterType="com.tmt.shop.entity.Category" resultType="int" >
+    SELECT COUNT(1) FROM (
+		SELECT 1 FROM SYS_DUAL WHERE EXISTS (SELECT 1 FROM SHOP_CATEGORY B WHERE B.PARENT_ID=#{id}) 
+    )A
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.Category" >
+   DELETE FROM SHOP_CATEGORY WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.Category" >
+   INSERT INTO SHOP_CATEGORY (ID, PARENT_ID, PARENT_IDS, NAME, SORT, LEVEL, PATH, 
+		  CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_DATE, REMARKS, DEL_FLAG, SEO_DESCRIPTION, SEO_KEYWORDS, 
+		  SEO_TITLE, LARGE, MEDIUM, THUMBNAIL, IS_LIST)
+   VALUES (#{id}, #{parentId}, #{parentIds}, #{name}, #{sort}, #{level}, #{path},
+		  #{createId}, #{createName}, #{createDate}, #{updateDate}, #{remarks}, #{delFlag}, #{seoDescription}, #{seoKeywords}, 
+		  #{seoTitle}, #{large}, #{medium}, #{thumbnail}, #{isList})
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.shop.entity.Category" >
+   UPDATE SHOP_CATEGORY
+      SET PARENT_ID = #{parentId},
+		  PARENT_IDS = #{parentIds},
+		  NAME = #{name},
+		  SORT = #{sort},
+		  LEVEL = #{level},
+		  PATH = #{path},
+		  REMARKS = #{remarks},
+		  DEL_FLAG = #{delFlag},
+		  SEO_DESCRIPTION = #{seoDescription},
+		  SEO_KEYWORDS = #{seoKeywords},
+		  SEO_TITLE = #{seoTitle},
+		  LARGE = #{large},
+		  MEDIUM = #{medium},
+		  THUMBNAIL = #{thumbnail},
+		  IS_LIST = #{isList},
+		  UPDATE_DATE = #{updateDate}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateSort" parameterType="com.tmt.shop.entity.Category" >
+   UPDATE SHOP_CATEGORY
+      SET SORT = #{sort}
+    WHERE ID = #{id}
+  </update>
+  
+  <select id="queryUseAbleCategorys" resultMap="BaseResult">
+   SELECT ID, PARENT_ID, PARENT_IDS, NAME, SORT, LEVEL, PATH, CREATE_ID, CREATE_NAME, CREATE_DATE, 
+          UPDATE_DATE, REMARKS, DEL_FLAG, SEO_DESCRIPTION, SEO_KEYWORDS, SEO_TITLE, LARGE, MEDIUM, 
+          THUMBNAIL, IS_LIST
+     FROM SHOP_CATEGORY
+    WHERE IS_LIST = 1 AND LEVEL IN (1,2)
+    ORDER BY LEVEL, SORT
+  </select>
+  
+  <select id="queryUseAbleTopCategorys" resultMap="BaseResult">
+   SELECT ID, PARENT_ID, PARENT_IDS, NAME, SORT, LEVEL, PATH, CREATE_ID, CREATE_NAME, CREATE_DATE, 
+          UPDATE_DATE, REMARKS, DEL_FLAG, SEO_DESCRIPTION, SEO_KEYWORDS, SEO_TITLE, LARGE, MEDIUM, 
+          THUMBNAIL, IS_LIST
+     FROM SHOP_CATEGORY
+    WHERE IS_LIST = 1 AND LEVEL = 1
+    ORDER BY LEVEL, SORT
+  </select>
+  
+  <select id="queryCategorysByLevel" resultMap="BaseResult" parameterType="java.util.Map">
+   SELECT ID, PARENT_ID, PARENT_IDS, NAME, SORT, LEVEL, PATH, CREATE_ID, CREATE_NAME, CREATE_DATE, 
+          UPDATE_DATE, REMARKS, DEL_FLAG, SEO_DESCRIPTION, SEO_KEYWORDS, SEO_TITLE, LARGE, MEDIUM, 
+          THUMBNAIL, IS_LIST
+     FROM SHOP_CATEGORY
+     WHERE LEVEL = #{LEVEL}
+     <if test="PARENT_ID != null">AND PARENT_ID = #{PARENT_ID}</if> 
+     <if test="NAME != null">AND NAME LIKE CONCAT(CONCAT('%', #{NAME}), '%')</if>
+     ORDER BY SORT
+  </select>
+</mapper>

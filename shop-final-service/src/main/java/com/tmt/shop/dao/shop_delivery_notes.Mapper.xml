@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.DeliveryNotesDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.DeliveryNotes"> 
+    <result column="TRACKING_NO" property="trackingNo" jdbcType="VARCHAR"/>
+    <result column="CORP_CODE" property="corpCode" jdbcType="VARCHAR"/>
+    <result column="CORP_NAME" property="corpName" jdbcType="VARCHAR"/>
+    <result column="NOTE_TIME" property="noteTime" jdbcType="VARCHAR"/>
+    <result column="NOTE_MESSAGE" property="noteMessage" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <select id="findByCorpTrackingNo" resultMap="BaseResult" parameterType="java.util.Map" >
+   SELECT TRACKING_NO, CORP_CODE, CORP_NAME, NOTE_TIME, NOTE_MESSAGE
+     FROM SHOP_DELIVERY_NOTES
+    WHERE TRACKING_NO = #{trackingNo} 
+      AND CORP_CODE = #{corpCode}
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.DeliveryNotes" >
+   DELETE FROM SHOP_DELIVERY_NOTES WHERE TRACKING_NO = #{trackingNo} AND CORP_CODE = #{corpCode}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.DeliveryNotes" >
+   INSERT INTO SHOP_DELIVERY_NOTES (TRACKING_NO, CORP_CODE, CORP_NAME, NOTE_TIME, NOTE_MESSAGE)
+   VALUES (#{trackingNo}, #{corpCode}, #{corpName}, #{noteTime}, #{noteMessage})
+  </insert>
+  
+</mapper>

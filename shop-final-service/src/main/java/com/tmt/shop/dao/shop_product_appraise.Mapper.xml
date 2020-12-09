@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.ProductAppraiseDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.ProductAppraise"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="ORDER_ID" property="orderId" jdbcType="BIGINT"/>
+    <result column="PRODUCT_ID" property="productId" jdbcType="BIGINT"/>
+    <result column="PRODUCT_NAME" property="productName" jdbcType="VARCHAR"/>
+    <result column="PRODUCT_IMAGE" property="productImage" jdbcType="VARCHAR"/>
+    <result column="PRODUCT_GRADE" property="productGrade" jdbcType="TINYINT"/>
+    <result column="PACKAGE_GRADE" property="packageGrade" jdbcType="TINYINT"/>
+    <result column="DELIVERY_GRADE" property="deliveryGrade" jdbcType="TINYINT"/>
+    <result column="MOOD" property="mood" jdbcType="VARCHAR"/>
+    <result column="TAGS" property="tags" jdbcType="VARCHAR"/>
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT"/>
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+    <result column="CREATE_RANK" property="createRank" jdbcType="VARCHAR"/>
+    <result column="CREATE_IMAGE" property="createImage" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="REMARKS" property="remarks" jdbcType="VARCHAR"/>
+    <result column="IS_TOP" property="isTop" jdbcType="TINYINT"/>
+    <result column="IS_SHOW" property="isShow" jdbcType="TINYINT"/>
+    <result column="POINTS" property="points" jdbcType="INTEGER"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, ORDER_ID, PRODUCT_ID, PRODUCT_NAME, PRODUCT_IMAGE, PRODUCT_GRADE, PACKAGE_GRADE, DELIVERY_GRADE, 
+		  MOOD, TAGS, CREATE_ID, CREATE_NAME, CREATE_RANK, CREATE_IMAGE, CREATE_DATE, REMARKS, IS_TOP, IS_SHOW, 
+		  POINTS
+     FROM SHOP_PRODUCT_APPRAISE
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT ID, ORDER_ID, PRODUCT_ID, PRODUCT_NAME, PRODUCT_IMAGE, PRODUCT_GRADE, PACKAGE_GRADE, DELIVERY_GRADE, 
+		  MOOD, TAGS, CREATE_ID, CREATE_NAME, CREATE_RANK, CREATE_IMAGE, CREATE_DATE, REMARKS, IS_TOP, IS_SHOW, 
+		  POINTS
+     FROM SHOP_PRODUCT_APPRAISE
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition">
+   SELECT ID, ORDER_ID, PRODUCT_ID, PRODUCT_NAME, PRODUCT_IMAGE, PRODUCT_GRADE, PACKAGE_GRADE, DELIVERY_GRADE, 
+		  MOOD, TAGS, CREATE_ID, CREATE_NAME, CREATE_RANK, CREATE_IMAGE, CREATE_DATE, REMARKS, IS_TOP, IS_SHOW, 
+		  POINTS
+     FROM SHOP_PRODUCT_APPRAISE
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="java.lang.Integer">
+    SELECT COUNT(1) C FROM SHOP_PRODUCT_APPRAISE
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.ProductAppraise">
+   DELETE FROM SHOP_PRODUCT_APPRAISE WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.ProductAppraise">
+   INSERT INTO SHOP_PRODUCT_APPRAISE (ID, ORDER_ID, PRODUCT_ID, PRODUCT_NAME, PRODUCT_IMAGE, PRODUCT_GRADE, PACKAGE_GRADE, DELIVERY_GRADE, 
+		  MOOD, TAGS, CREATE_ID, CREATE_NAME, CREATE_RANK, CREATE_IMAGE, CREATE_DATE, REMARKS, IS_TOP, IS_SHOW)
+   VALUES (#{id}, #{orderId}, #{productId}, #{productName}, #{productImage}, #{productGrade}, #{packageGrade}, #{deliveryGrade}, 
+		  #{mood}, #{tags}, #{createId}, #{createName}, #{createRank}, #{createImage}, #{createDate}, #{remarks}, #{isTop}, #{isShow})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO SHOP_PRODUCT_APPRAISE (ID, ORDER_ID, PRODUCT_ID, PRODUCT_NAME, PRODUCT_IMAGE, PRODUCT_GRADE, PACKAGE_GRADE, DELIVERY_GRADE, 
+		  MOOD, TAGS, CREATE_ID, CREATE_NAME, CREATE_RANK, CREATE_IMAGE, CREATE_DATE, 
+		  REMARKS, IS_TOP, IS_SHOW)
+    VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.id}, #{item.orderId}, #{item.productId}, #{item.productName}, #{item.productImage}, #{item.productGrade}, #{item.packageGrade}, #{item.deliveryGrade}, 
+		  #{item.mood}, #{item.tags}, #{item.createId}, #{item.createName}, #{item.createRank}, #{item.createImage}, #{item.createDate}, 
+		  #{item.remarks}, #{item.isTop}, #{item.isShow})
+   </foreach> 
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.shop.entity.ProductAppraise">
+   UPDATE SHOP_PRODUCT_APPRAISE
+      SET PRODUCT_GRADE = #{productGrade},
+		  PACKAGE_GRADE = #{packageGrade},
+		  DELIVERY_GRADE = #{deliveryGrade},
+		  TAGS = #{tags},
+		  REMARKS = #{remarks}
+    WHERE ID = #{id}
+  </update>
+  
+  <select id="queryByOrder" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, ORDER_ID, PRODUCT_ID, PRODUCT_NAME, PRODUCT_IMAGE, PRODUCT_GRADE, PACKAGE_GRADE, DELIVERY_GRADE, 
+		  MOOD, TAGS, CREATE_ID, CREATE_NAME, CREATE_RANK, CREATE_IMAGE, CREATE_DATE, REMARKS, IS_TOP, IS_SHOW, 
+		  POINTS
+     FROM SHOP_PRODUCT_APPRAISE
+    WHERE ORDER_ID = #{orderId}
+  </select>
+  
+  <select id="firstPoints" resultType="Integer" parameterType="Long">
+   SELECT POINTS FROM SHOP_PRODUCT_APPRAISE
+    WHERE ID = #{id} FOR UPDATE
+  </select>
+  
+  <update id="addPoints" parameterType="com.tmt.shop.entity.ProductAppraise">
+   UPDATE SHOP_PRODUCT_APPRAISE
+      SET POINTS = (CASE WHEN POINTS IS NULL THEN 0 ELSE POINTS END) + #{points}
+    WHERE ID = #{id}
+  </update>
+  
+</mapper>

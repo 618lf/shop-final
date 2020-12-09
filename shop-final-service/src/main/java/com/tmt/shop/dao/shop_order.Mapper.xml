@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.OrderDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.Order"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="SN" property="sn" jdbcType="VARCHAR"/>
+    <result column="SHOP_ID" property="shopId" jdbcType="VARCHAR"/>
+    <result column="ORDER_DESC" property="orderDesc" jdbcType="VARCHAR"/>
+    <result column="TYPE" property="type" jdbcType="TINYINT"/>
+    <result column="AMOUNT" property="amount" jdbcType="DECIMAL"/>
+    <result column="AMOUNT_PAID" property="amountPaid" jdbcType="DECIMAL"/>
+    <result column="DISCOUNT" property="discount" jdbcType="DECIMAL"/>
+    <result column="FREIGHT" property="freight" jdbcType="DECIMAL"/>
+    <result column="FEE" property="fee" jdbcType="DECIMAL"/>
+    <result column="TAX" property="tax" jdbcType="DECIMAL"/>
+    <result column="EXPIRE" property="expire" jdbcType="TIMESTAMP"/>
+    <result column="INVOICE_TITLE" property="invoiceTitle" jdbcType="VARCHAR"/>
+    <result column="INVOICE_URL" property="invoiceUrl" jdbcType="VARCHAR"/>
+    <result column="ORDER_STATUS" property="orderStatus" jdbcType="VARCHAR"/>
+    <result column="PAYMENT_METHOD" property="paymentMethod" jdbcType="VARCHAR"/>
+    <result column="PAYMENT_METHOD_NAME" property="paymentMethodName" jdbcType="VARCHAR"/>
+    <result column="PAYMENT_METHOD_TYPE" property="paymentMethodType" jdbcType="VARCHAR"/>
+    <result column="PAYMENT_METHOD_METHOD" property="paymentMethodMethod" jdbcType="VARCHAR"/>
+    <result column="PAYMENT_STATUS" property="paymentStatus" jdbcType="VARCHAR"/>
+    <result column="REMARKS" property="remarks" jdbcType="VARCHAR"/>
+    <result column="SPECIAL" property="special" jdbcType="VARCHAR"/>
+    <result column="IS_ALLOCATED_STOCK" property="isAllocatedStock" jdbcType="VARCHAR"/>
+    <result column="VERSION" property="version" jdbcType="INTEGER"/>
+    <result column="SHIPPING_METHOD" property="shippingMethod" jdbcType="VARCHAR"/>
+    <result column="SHIPPING_METHOD_NAME" property="shippingMethodName" jdbcType="VARCHAR"/>
+    <result column="SHIPPING_STATUS" property="shippingStatus" jdbcType="VARCHAR"/>
+    <result column="FLOW_STATE" property="flowState" jdbcType="VARCHAR"/>
+    <result column="AREA_ID" property="areaId" jdbcType="VARCHAR"/>
+    <result column="AREA" property="area" jdbcType="VARCHAR"/>
+    <result column="ADDRESS" property="address" jdbcType="VARCHAR"/>
+    <result column="PHONE" property="phone" jdbcType="VARCHAR"/>
+    <result column="CONSIGNEE" property="consignee" jdbcType="VARCHAR"/>
+    <result column="CONSIGNEE_TIME" property="consigneeTime" jdbcType="VARCHAR"/>
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT"/>
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+  </resultMap>
+  
+  <select id="getIdBySn" resultType="Long" parameterType="String">
+   SELECT ID FROM SHOP_ORDER WHERE SN = #{sn}
+  </select>
+  
+  <select id="get" resultMap="BaseResult" parameterType="long" >
+   SELECT ID, ORDER_DESC, TYPE, AMOUNT, AMOUNT_PAID, DISCOUNT, FREIGHT, FEE, TAX, EXPIRE, 
+		  INVOICE_TITLE, INVOICE_URL, ORDER_STATUS, PAYMENT_METHOD_TYPE, PAYMENT_METHOD_METHOD, PAYMENT_METHOD, 
+		  PAYMENT_METHOD_NAME, PAYMENT_STATUS, SN, CREATE_ID, CREATE_NAME, CREATE_DATE, 
+		  UPDATE_DATE, REMARKS, SPECIAL, IS_ALLOCATED_STOCK, VERSION, SHIPPING_METHOD, SHIPPING_METHOD_NAME, 
+		  SHIPPING_STATUS, AREA_ID, AREA, ADDRESS, PHONE, CONSIGNEE, CONSIGNEE_TIME, SHOP_ID, FLOW_STATE
+     FROM SHOP_ORDER
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition" >
+   SELECT ID, ORDER_DESC, TYPE, AMOUNT, AMOUNT_PAID, DISCOUNT, FREIGHT, FEE, TAX, EXPIRE, 
+		  INVOICE_TITLE, INVOICE_URL, ORDER_STATUS, PAYMENT_METHOD_TYPE, PAYMENT_METHOD_METHOD, PAYMENT_METHOD, 
+		  PAYMENT_METHOD_NAME, PAYMENT_STATUS, SN, CREATE_ID, CREATE_NAME, CREATE_DATE, 
+		  UPDATE_DATE, REMARKS, SPECIAL, IS_ALLOCATED_STOCK, VERSION, SHIPPING_METHOD, SHIPPING_METHOD_NAME, 
+		  SHIPPING_STATUS, AREA_ID, AREA, ADDRESS, PHONE, CONSIGNEE, CONSIGNEE_TIME, SHOP_ID, FLOW_STATE
+     FROM SHOP_ORDER
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="int" >
+    SELECT COUNT(1) C FROM SHOP_ORDER
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.Order" >
+   DELETE FROM SHOP_ORDER WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.Order" >
+   INSERT INTO SHOP_ORDER (ID, ORDER_DESC, TYPE, AMOUNT, AMOUNT_PAID, DISCOUNT, FREIGHT, FEE, TAX, EXPIRE, 
+		  INVOICE_TITLE, ORDER_STATUS, PAYMENT_METHOD_TYPE, PAYMENT_METHOD_METHOD, PAYMENT_METHOD, 
+		  PAYMENT_METHOD_NAME, PAYMENT_STATUS, SN, CREATE_ID, CREATE_NAME, 
+		  CREATE_DATE, UPDATE_DATE, REMARKS, IS_ALLOCATED_STOCK, VERSION, SHIPPING_METHOD, SHIPPING_METHOD_NAME, 
+		  SHIPPING_STATUS, AREA_ID, AREA, ADDRESS, PHONE, CONSIGNEE, CONSIGNEE_TIME, SHOP_ID, FLOW_STATE)
+   VALUES (#{id}, #{orderDesc}, #{type}, #{amount}, #{amountPaid}, #{discount}, #{freight}, #{fee}, #{tax}, #{expire}, 
+		  #{invoiceTitle}, #{orderStatus}, #{paymentMethodType}, #{paymentMethodMethod}, #{paymentMethod},
+		  #{paymentMethodName}, #{paymentStatus}, #{sn}, #{createId}, #{createName},
+		  #{createDate}, #{updateDate}, #{remarks}, #{isAllocatedStock}, #{version}, #{shippingMethod}, #{shippingMethodName}, 
+		  #{shippingStatus}, #{areaId}, #{area}, #{address}, #{phone}, #{consignee}, #{consigneeTime}, #{shopId}, #{flowState})
+  </insert>
+  
+  <update id="updateType" parameterType="com.tmt.shop.entity.Order">
+   UPDATE SHOP_ORDER
+      SET TYPE = (CASE WHEN TYPE = #{type} THEN 1 ELSE #{type} END)
+    WHERE ID = #{id}
+  </update>
+  
+  <!-- 确认订单 -->
+  <update id="updateConfirm" parameterType="com.tmt.shop.entity.Order">
+   UPDATE SHOP_ORDER
+      SET ORDER_STATUS = #{orderStatus},
+		  PAYMENT_STATUS = #{paymentStatus},
+		  FLOW_STATE = #{flowState},
+		  EXPIRE = #{expire},
+		  VERSION = #{version}
+    WHERE ID = #{id}
+  </update>
+  
+  <!-- 线上收款(只能一次性付款) -->
+  <update id="updateAutoPayment" parameterType="com.tmt.shop.entity.Order">
+   UPDATE SHOP_ORDER
+      SET ORDER_STATUS = #{orderStatus},
+		  PAYMENT_STATUS = #{paymentStatus},
+		  AMOUNT_PAID = #{amountPaid},
+		  FLOW_STATE = #{flowState},
+		  EXPIRE = #{expire}
+    WHERE ID = #{id}
+  </update>
+  
+  <!-- 线下收款 -->
+  <update id="updateManualPayment" parameterType="com.tmt.shop.entity.Order">
+   UPDATE SHOP_ORDER
+      SET ORDER_STATUS = #{orderStatus},
+		  PAYMENT_STATUS = #{paymentStatus},
+		  AMOUNT_PAID = #{amountPaid},
+		  VERSION = #{version},
+		  FLOW_STATE = #{flowState},
+		  EXPIRE = #{expire}
+    WHERE ID = #{id}
+  </update>
+  
+  <!-- 申请退款 -->
+  <update id="updateApplyRefund" parameterType="com.tmt.shop.entity.Order">
+   UPDATE SHOP_ORDER
+      SET PAYMENT_STATUS = #{paymentStatus},
+          FLOW_STATE = #{flowState}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateStatus" parameterType="com.tmt.shop.entity.Order">
+   UPDATE SHOP_ORDER
+      SET ORDER_STATUS = #{orderStatus},
+          EXPIRE = #{expire}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updatePaymentStatus" parameterType="com.tmt.shop.entity.Order">
+   UPDATE SHOP_ORDER
+      SET PAYMENT_STATUS = #{paymentStatus}
+    WHERE ID = #{id}
+  </update>
+  
+  <select id="lock" parameterType="com.tmt.shop.entity.Order" resultType="int" >
+    SELECT 1 FROM SHOP_ORDER O WHERE O.ID = #{id} FOR UPDATE
+  </select>
+  
+  <update id="updateSpecial" parameterType="com.tmt.shop.entity.Order">
+   UPDATE SHOP_ORDER
+      SET SPECIAL = #{special}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateShipping" parameterType="com.tmt.shop.entity.Order">
+   UPDATE SHOP_ORDER
+      SET SHIPPING_STATUS = #{shippingStatus},
+          FLOW_STATE = #{flowState},
+          EXPIRE = #{expire}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateRefundsProcess" parameterType="com.tmt.shop.entity.Order">
+   UPDATE SHOP_ORDER
+      SET PAYMENT_STATUS = #{paymentStatus},
+          EXPIRE = #{expire},
+          FLOW_STATE = #{flowState}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateRefunds" parameterType="com.tmt.shop.entity.Order">
+   UPDATE SHOP_ORDER
+      SET PAYMENT_STATUS = #{paymentStatus},
+          EXPIRE = #{expire},
+          FLOW_STATE = #{flowState},
+          AMOUNT_PAID = #{amountPaid}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateAllocatedStock" parameterType="com.tmt.shop.entity.Order">
+   UPDATE SHOP_ORDER
+      SET IS_ALLOCATED_STOCK = #{isAllocatedStock}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateComplete" parameterType="com.tmt.shop.entity.Order">
+   UPDATE SHOP_ORDER
+      SET ORDER_STATUS = #{orderStatus},
+          SHIPPING_STATUS = #{shippingStatus},
+          EXPIRE = #{expire},
+          FLOW_STATE = #{flowState},
+          IS_ALLOCATED_STOCK = #{isAllocatedStock}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateCancel" parameterType="com.tmt.shop.entity.Order">
+   UPDATE SHOP_ORDER
+      SET ORDER_STATUS = #{orderStatus},
+          EXPIRE = #{expire},
+          FLOW_STATE = #{flowState},
+          IS_ALLOCATED_STOCK = #{isAllocatedStock}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateMdamount" parameterType="com.tmt.shop.entity.Order">
+   UPDATE SHOP_ORDER
+      SET AMOUNT = #{amount}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateMdinvoice" parameterType="com.tmt.shop.entity.Order">
+   UPDATE SHOP_ORDER
+      SET INVOICE_TITLE = #{invoiceTitle},
+		  INVOICE_URL = #{invoiceUrl}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateMdshipping" parameterType="com.tmt.shop.entity.Order">
+   UPDATE SHOP_ORDER
+      SET AREA = #{area},
+          ADDRESS = #{address},
+		  PHONE = #{phone},
+		  CONSIGNEE = #{consignee}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateUnShipping" parameterType="com.tmt.shop.entity.Order">
+   UPDATE SHOP_ORDER
+      SET SHIPPING_STATUS = #{shippingStatus},
+          FLOW_STATE = #{flowState},
+          IS_ALLOCATED_STOCK = #{isAllocatedStock}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateOrderDesc" parameterType="com.tmt.shop.entity.Order">
+   UPDATE SHOP_ORDER
+      SET ORDER_DESC = #{orderDesc}
+    WHERE ID = #{id}
+  </update>
+  
+  <resultMap id="SimpleBaseResult" type="com.tmt.shop.entity.Order"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="SN" property="sn" jdbcType="VARCHAR"/>
+    <result column="AMOUNT" property="amount" jdbcType="DECIMAL"/>
+    <result column="EXPIRE" property="expire" jdbcType="TIMESTAMP"/>
+    <result column="FLOW_STATE" property="flowState" jdbcType="VARCHAR"/>
+    <result column="ORDER_STATUS" property="orderStatus" jdbcType="VARCHAR"/>
+    <result column="PAYMENT_METHOD_TYPE" property="paymentMethodType" jdbcType="VARCHAR"/>
+    <result column="PAYMENT_METHOD_METHOD" property="paymentMethodMethod" jdbcType="VARCHAR"/>
+    <result column="PAYMENT_STATUS" property="paymentStatus" jdbcType="VARCHAR"/>
+    <result column="SHIPPING_STATUS" property="shippingStatus" jdbcType="VARCHAR"/>
+  </resultMap>
+  <select id="queryUserOrdersForPage" resultMap="SimpleBaseResult" parameterType="queryCondition">
+   SELECT ID, SN, AMOUNT, EXPIRE, ORDER_STATUS, PAYMENT_METHOD_TYPE, PAYMENT_METHOD_METHOD,
+          PAYMENT_STATUS, SHIPPING_STATUS, FLOW_STATE
+     FROM SHOP_ORDER
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="queryUserOrdersForPageStat" parameterType="queryCondition" resultType="int">
+    SELECT COUNT(1) C FROM SHOP_ORDER
+    <include refid="COMMON.whereClause" />
+  </select>
+  <select id="version" resultType="int" parameterType="long">
+   SELECT VERSION FROM SHOP_ORDER WHERE ID = #{id}
+  </select>
+  <select id="getType" resultType="byte" parameterType="long">
+   SELECT TYPE FROM SHOP_ORDER WHERE ID = #{id}
+  </select>
+  <select id="getNewestOrder" resultType="Long" parameterType="long">
+   SELECT ID FROM SHOP_ORDER WHERE CREATE_ID = #{createId} ORDER BY CREATE_DATE DESC LIMIT 1
+  </select>
+</mapper>

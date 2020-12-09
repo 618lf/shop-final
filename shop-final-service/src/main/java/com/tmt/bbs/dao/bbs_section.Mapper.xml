@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.bbs.dao.SectionDao" >
+  <resultMap id="BaseResult" type="com.tmt.bbs.entity.Section"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="DESCRIPTION" property="description" jdbcType="VARCHAR"/>
+    <result column="SORT" property="sort" jdbcType="INTEGER"/>
+    <result column="IS_SHOW" property="isShow" jdbcType="TINYINT"/>
+    <result column="TAGS" property="tags" jdbcType="VARCHAR"/>
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+    <result column="REMARKS" property="remarks" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, NAME, DESCRIPTION, SORT, IS_SHOW, TAGS, CREATE_ID, CREATE_DATE, 
+		  UPDATE_DATE, REMARKS
+     FROM BBS_SECTION
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT ID, NAME, DESCRIPTION, SORT, IS_SHOW, TAGS, CREATE_ID, CREATE_DATE, 
+		  UPDATE_DATE, REMARKS
+     FROM BBS_SECTION
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition">
+   SELECT ID, NAME, DESCRIPTION, SORT, IS_SHOW, TAGS, CREATE_ID, CREATE_DATE, 
+		  UPDATE_DATE, REMARKS
+     FROM BBS_SECTION
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="java.lang.Integer">
+    SELECT COUNT(1) C FROM BBS_SECTION
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.bbs.entity.Section">
+   DELETE FROM BBS_SECTION WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.bbs.entity.Section">
+   INSERT INTO BBS_SECTION (ID, NAME, DESCRIPTION, SORT, IS_SHOW, TAGS, CREATE_ID, CREATE_DATE, 
+		  UPDATE_DATE, REMARKS)
+   VALUES (#{id}, #{name}, #{description}, #{sort}, #{isShow}, #{tags}, #{createId}, #{createDate}, 
+		  #{updateDate}, #{remarks})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO BBS_SECTION (ID, NAME, DESCRIPTION, SORT, IS_SHOW, TAGS, CREATE_ID, CREATE_DATE, 
+		  UPDATE_DATE, REMARKS)
+    VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.id}, #{item.name}, #{item.description}, #{item.sort}, #{item.isShow}, #{item.tags}, #{item.createId}, #{item.createDate}, 
+		  #{item.updateDate}, #{item.remarks})
+   </foreach> 
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.bbs.entity.Section">
+   UPDATE BBS_SECTION
+      SET NAME = #{name},
+		  DESCRIPTION = #{description},
+		  SORT = #{sort},
+		  IS_SHOW = #{isShow},
+		  TAGS = #{tags},
+		  UPDATE_DATE = #{updateDate},
+		  REMARKS = #{remarks}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateSort" parameterType="com.tmt.bbs.entity.Section">
+   UPDATE BBS_SECTION
+      SET SORT = #{sort}
+    WHERE ID = #{id}
+  </update>
+  
+</mapper>

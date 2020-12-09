@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.bbs.dao.ReplyHitDao" >
+  <resultMap id="BaseResult" type="com.tmt.bbs.entity.ReplyHit"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="REPLY_ID" property="replyId" jdbcType="BIGINT"/>
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT"/>
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+    <result column="CREATE_RANK" property="createRank" jdbcType="VARCHAR"/>
+    <result column="CREATE_IMAGE" property="createImage" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="IS_CANCEL" property="isCancel" jdbcType="TINYINT"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, REPLY_ID, CREATE_ID, CREATE_NAME, CREATE_RANK, CREATE_IMAGE, CREATE_DATE, IS_CANCEL
+     FROM BBS_TOPIC_REPLY_HIT
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT ID, REPLY_ID, CREATE_ID, CREATE_NAME, CREATE_RANK, CREATE_IMAGE, CREATE_DATE, IS_CANCEL
+     FROM BBS_TOPIC_REPLY_HIT
+  </select>
+  
+  <select id="count_replyId" parameterType="Long" resultType="java.lang.Integer">
+    SELECT COUNT(1) C FROM BBS_TOPIC_REPLY_HIT WHERE REPLY_ID = #{value}
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition">
+   SELECT ID, REPLY_ID, CREATE_ID, CREATE_NAME, CREATE_RANK, CREATE_IMAGE, CREATE_DATE, IS_CANCEL
+     FROM BBS_TOPIC_REPLY_HIT
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="java.lang.Integer">
+    SELECT COUNT(1) C FROM BBS_TOPIC_REPLY_HIT
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.bbs.entity.ReplyHit">
+   DELETE FROM BBS_TOPIC_REPLY_HIT WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.bbs.entity.ReplyHit">
+   INSERT INTO BBS_TOPIC_REPLY_HIT (ID, REPLY_ID, CREATE_ID, CREATE_NAME, CREATE_RANK, CREATE_IMAGE, CREATE_DATE, IS_CANCEL)
+   VALUES (#{id}, #{replyId}, #{createId}, #{createName}, #{createRank}, #{createImage}, #{createDate}, #{isCancel})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO BBS_TOPIC_REPLY_HIT (ID, REPLY_ID, CREATE_ID, CREATE_NAME, CREATE_RANK, CREATE_IMAGE, CREATE_DATE, IS_CANCEL)
+    VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.id}, #{item.replyId}, #{item.createId}, #{item.createName}, #{item.createRank}, #{item.createImage}, #{item.createDate}, #{item.isCancel})
+   </foreach> 
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.bbs.entity.ReplyHit">
+   UPDATE BBS_TOPIC_REPLY_HIT
+      SET IS_CANCEL = #{isCancel}
+    WHERE ID = #{id}
+  </update>
+  
+  <select id="hited" resultType="java.lang.Integer" parameterType="com.tmt.bbs.entity.ReplyHit">
+   SELECT COUNT(1) C FROM BBS_TOPIC_REPLY_HIT
+    WHERE REPLY_ID = #{replyId} AND CREATE_ID = #{createId}
+  </select>
+  
+  <!-- 用户点击 -->
+  <select id="queryUserHits" resultType="java.lang.Long" parameterType="queryCondition">
+   SELECT REPLY_ID FROM BBS_TOPIC_REPLY_HIT
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  
+</mapper>

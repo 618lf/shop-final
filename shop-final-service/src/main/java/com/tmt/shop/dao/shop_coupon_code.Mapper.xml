@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.CouponCodeDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.CouponCode"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="CODE" property="code" jdbcType="VARCHAR"/>
+    <result column="IS_ENABLED" property="isEnabled" jdbcType="TINYINT"/>
+    <result column="IS_USED" property="isUsed" jdbcType="TINYINT"/>
+    <result column="USED_DATE" property="usedDate" jdbcType="TIMESTAMP"/>
+    <result column="COUPON" property="coupon" jdbcType="BIGINT"/>
+    <result column="USER_ID" property="userId" jdbcType="BIGINT"/>
+    <result column="USER_NAME" property="userName" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="BEGIN_DATE" property="beginDate" jdbcType="TIMESTAMP"/>
+    <result column="END_DATE" property="endDate" jdbcType="TIMESTAMP"/>
+    <result column="FISSION_ID" property="fissionId" jdbcType="BIGINT"/>
+    <result column="VAL" property="val" jdbcType="INTEGER"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, CODE, IS_ENABLED, IS_USED, USED_DATE, COUPON, USER_ID, USER_NAME, 
+		  CREATE_DATE, BEGIN_DATE, END_DATE, FISSION_ID, VAL
+     FROM SHOP_COUPON_CODE
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition">
+   SELECT ID, CODE, IS_ENABLED, IS_USED, USED_DATE, COUPON, USER_ID, USER_NAME, 
+		  CREATE_DATE, BEGIN_DATE, END_DATE, FISSION_ID, VAL
+     FROM SHOP_COUPON_CODE
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="java.lang.Integer">
+    SELECT COUNT(1) C FROM SHOP_COUPON_CODE
+    <include refid="COMMON.whereClause" />
+  </select>
+ 
+  <select id="lockOneCode" resultMap="BaseResult" parameterType="Long">
+    SELECT ID, CODE, IS_ENABLED, IS_USED, USED_DATE, COUPON, USER_ID, USER_NAME, 
+		   CREATE_DATE, BEGIN_DATE, END_DATE, FISSION_ID, VAL
+      FROM SHOP_COUPON_CODE 
+     WHERE IS_ENABLED = 1 AND USER_ID IS NULL AND COUPON = #{id} LIMIT 1 FOR UPDATE
+  </select>
+  
+  <select id="lockOneCodeByCode" resultMap="BaseResult" parameterType="java.lang.String">
+   SELECT ID, CODE, IS_ENABLED, IS_USED, USED_DATE, COUPON, USER_ID, USER_NAME, 
+		  CREATE_DATE, BEGIN_DATE, END_DATE, FISSION_ID, VAL
+     FROM SHOP_COUPON_CODE WHERE IS_ENABLED = 1 AND USER_ID IS NULL AND CODE = #{code} LIMIT 1 FOR UPDATE
+  </select>
+  
+  <select id="lockOneCodeByFission" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, CODE, IS_ENABLED, IS_USED, USED_DATE, COUPON, USER_ID, USER_NAME, 
+		  CREATE_DATE, BEGIN_DATE, END_DATE, FISSION_ID, VAL
+     FROM SHOP_COUPON_CODE WHERE IS_ENABLED = 1 AND USER_ID IS NULL AND FISSION_ID = #{id} LIMIT 1 FOR UPDATE
+  </select>
+  
+  <!-- 同时删除所有类型的券码 -->
+  <delete id="delete" parameterType="com.tmt.shop.entity.CouponCode">
+   DELETE FROM SHOP_COUPON_CODE WHERE COUPON = #{coupon}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.CouponCode">
+   INSERT INTO SHOP_COUPON_CODE (ID, CODE, IS_ENABLED, IS_USED, USED_DATE, COUPON, USER_ID, USER_NAME, USER_IMG,
+		  CREATE_DATE, BEGIN_DATE, END_DATE, FISSION_ID, VAL)
+   VALUES (#{id}, #{code}, #{isEnabled}, #{isUsed}, #{usedDate}, #{coupon}, #{userId}, #{userName}, #{userImg}, 
+		  #{createDate}, #{beginDate}, #{endDate}, #{fissionId}, #{val})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO SHOP_COUPON_CODE (ID, CODE, IS_ENABLED, IS_USED, USED_DATE, COUPON, USER_ID, USER_NAME, USER_IMG,
+		  CREATE_DATE, BEGIN_DATE, END_DATE, FISSION_ID, VAL)
+    VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.id}, #{item.code}, #{item.isEnabled}, #{item.isUsed}, #{item.usedDate}, #{item.coupon}, #{item.userId}, #{item.userName}, #{item.userImg}, 
+		  #{item.createDate}, #{item.beginDate}, #{item.endDate}, #{item.fissionId}, #{item.val})
+   </foreach> 
+  </insert>
+  
+  <update id="updateUserInfo" parameterType="com.tmt.shop.entity.CouponCode">
+   UPDATE SHOP_COUPON_CODE
+      SET USER_ID = #{userId},
+		  USER_NAME = #{userName},
+		  USER_IMG = #{userImg},
+		  BEGIN_DATE = #{beginDate},
+		  END_DATE = #{endDate},
+		  CREATE_DATE = #{createDate},
+		  IS_ENABLED = #{isEnabled},
+		  REMARKS = #{remarks}
+    WHERE ID = #{id}
+  </update>
+  
+  <select id="countUserAssigned" parameterType="com.tmt.shop.entity.CouponCode" resultType="java.lang.Integer">
+    SELECT COUNT(1) C FROM SHOP_COUPON_CODE
+     WHERE COUPON = #{coupon} AND USER_ID = #{userId}
+  </select>
+  
+  <resultMap id="SimpleBaseResult" type="com.tmt.shop.entity.CouponCode"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="COUPON" property="coupon" jdbcType="BIGINT"/>
+    <result column="VAL" property="val" jdbcType="INTEGER"/>
+  </resultMap>
+  
+  <!-- 用户可用的优惠券 -->
+  <select id="queryUserEnabledCoupons" resultMap="SimpleBaseResult" parameterType="java.util.Map">
+   SELECT ID ID, COUPON, VAL FROM SHOP_COUPON_CODE A 
+    WHERE A.IS_ENABLED = 1 AND #{now} BETWEEN A.BEGIN_DATE AND A.END_DATE
+      AND A.USER_ID = #{userId} AND IS_USED = 0
+    ORDER BY VAL DESC
+  </select>
+  
+  <!-- 使用这张优惠券 -->
+  <select id="getUserEnabledCoupon" resultMap="SimpleBaseResult" parameterType="java.util.Map">
+   SELECT ID ID, COUPON, VAL FROM SHOP_COUPON_CODE A 
+    WHERE A.IS_ENABLED = 1 AND #{now} BETWEEN A.BEGIN_DATE AND A.END_DATE
+      AND A.ID = #{id} AND IS_USED = 0 AND A.USER_ID = #{userId}
+  </select>
+  
+  <!-- 列表页面需要展示 -->
+  <resultMap id="listBaseResult" type="com.tmt.shop.entity.CouponCode"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="IS_ENABLED" property="isEnabled" jdbcType="TINYINT"/>
+    <result column="IS_USED" property="isUsed" jdbcType="TINYINT"/>
+    <result column="BEGIN_DATE" property="beginDate" jdbcType="TIMESTAMP"/>
+    <result column="END_DATE" property="endDate" jdbcType="TIMESTAMP"/>
+    <result column="VAL" property="val" jdbcType="INTEGER"/>
+    <result column="ORDER_PRICE" property="orderPrice" jdbcType="DECIMAL"/>
+    <result column="IS_PRICE" property="isPrice" jdbcType="TINYINT"/>
+    <result column="REMARKS" property="remarks" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <select id="queryUserPage" resultMap="listBaseResult" parameterType="java.util.Map">
+   SELECT A.ID, A.IS_ENABLED, A.IS_USED, A.BEGIN_DATE, A.END_DATE, A.VAL,
+          B.ORDER_PRICE, B.IS_PRICE, A.REMARKS
+     FROM SHOP_COUPON_CODE A, SHOP_COUPON B
+    WHERE A.COUPON = B.ID AND A.USER_ID = #{userId}
+    ORDER BY A.IS_USED, A.CREATE_DATE DESC  
+  </select>
+  <select id="queryUserPageStat" parameterType="java.util.Map" resultType="java.lang.Integer">
+   SELECT COUNT(1) C FROM SHOP_COUPON_CODE A
+    WHERE A.USER_ID = #{userId}
+  </select>
+  
+  <update id="updateUsed" parameterType="com.tmt.shop.entity.CouponCode">
+   UPDATE SHOP_COUPON_CODE
+      SET IS_USED = #{isUsed}, 
+		  USED_DATE = #{usedDate}
+    WHERE ID = #{id} AND USER_ID = #{userId} AND IS_USED = 0
+  </update>
+  
+  <update id="updateUnUsed" parameterType="com.tmt.shop.entity.CouponCode">
+   UPDATE SHOP_COUPON_CODE
+      SET IS_USED = #{isUsed}, 
+		  USED_DATE = #{usedDate}
+    WHERE ID = #{id} AND USER_ID = #{userId} AND IS_USED = 1
+  </update>
+  
+  <!-- 一次分享的，每个用户只能获取一张 -->
+  <select id="fetchOneCodeByFission" resultMap="BaseResult" parameterType="com.tmt.shop.entity.CouponCode">
+   SELECT ID, CODE, IS_ENABLED, IS_USED, USED_DATE, COUPON, USER_ID, USER_NAME, 
+		  CREATE_DATE, BEGIN_DATE, END_DATE, FISSION_ID, VAL
+     FROM SHOP_COUPON_CODE 
+    WHERE USER_ID = #{userId} AND FISSION_ID = #{fissionId} LIMIT 1
+  </select> 
+  
+  <select id="countUserUsableStat" parameterType="java.util.Map" resultType="java.lang.Integer">
+   SELECT COUNT(1) C FROM SHOP_COUPON_CODE A
+    WHERE A.IS_ENABLED = 1 AND #{now} BETWEEN A.BEGIN_DATE AND A.END_DATE
+      AND A.USER_ID = #{userId} AND IS_USED = 0
+  </select>
+  
+  <!-- 普通设置为可用 -->
+  <update id="updateEnabled" parameterType="com.tmt.shop.entity.CouponCode">
+   UPDATE SHOP_COUPON_CODE
+      SET IS_ENABLED = 1
+    WHERE ID = #{id}
+  </update>
+  
+  <!-- 分类的设置为可用 -->
+  <update id="updateFissionEnabled" parameterType="com.tmt.shop.entity.CouponCode">
+   UPDATE SHOP_COUPON_CODE
+      SET IS_ENABLED = 1
+    WHERE FISSION_ID = #{fissionId}
+  </update>
+  
+  <!-- 朋友的手气 -->
+  <resultMap id="FissionBaseResult" type="com.tmt.shop.entity.CouponCode"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="USER_ID" property="userId" jdbcType="BIGINT"/>
+    <result column="USER_NAME" property="userName" jdbcType="VARCHAR"/>
+    <result column="USER_IMG" property="userImg" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="VAL" property="val" jdbcType="INTEGER"/>
+  </resultMap>
+  
+  <select id="queryGetedCodesByFission" resultMap="FissionBaseResult" parameterType="long">
+   SELECT ID, USER_ID, USER_NAME, USER_IMG, CREATE_DATE, VAL
+     FROM SHOP_COUPON_CODE 
+    WHERE FISSION_ID = #{fissionId} AND USER_ID IS NOT NULL
+  </select>
+  
+</mapper>

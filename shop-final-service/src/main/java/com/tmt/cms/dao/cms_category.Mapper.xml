@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.cms.dao.CategoryDao" >
+  <resultMap id="BaseResult" type="com.tmt.cms.entity.Category"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="PARENT_ID" property="parentId" jdbcType="BIGINT"/>
+    <result column="PARENT_IDS" property="parentIds" jdbcType="VARCHAR"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="CODE" property="code" jdbcType="VARCHAR"/>
+    <result column="DESCRIPTION" property="description" jdbcType="VARCHAR"/>
+    <result column="KEYWORDS" property="keywords" jdbcType="VARCHAR"/>
+    <result column="SORT" property="sort" jdbcType="INTEGER"/>
+    <result column="LEVEL" property="level" jdbcType="TINYINT"/>
+    <result column="IS_SHOW" property="isShow" jdbcType="TINYINT"/>
+    <result column="IN_MENU" property="inMenu" jdbcType="TINYINT"/>
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT"/>
+    <result column="UPDATE_ID" property="updateId" jdbcType="BIGINT"/>
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+    <result column="REMARKS" property="remarks" jdbcType="VARCHAR"/>
+    <result column="DEL_FLAG" property="delFlag" jdbcType="TINYINT"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Long" >
+   SELECT ID, PARENT_ID, PARENT_IDS, NAME, CODE, DESCRIPTION, KEYWORDS, SORT, 
+		  LEVEL, IS_SHOW, IN_MENU, CREATE_ID, UPDATE_ID, UPDATE_DATE, REMARKS, 
+		  DEL_FLAG
+     FROM CMS_CATEGORY
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT ID, PARENT_ID, PARENT_IDS, NAME, CODE, DESCRIPTION, KEYWORDS, SORT, 
+		  LEVEL, IS_SHOW, IN_MENU, CREATE_ID, UPDATE_ID, UPDATE_DATE, REMARKS, 
+		  DEL_FLAG
+     FROM CMS_CATEGORY
+  </select>
+  
+  <select id="findTreeList" resultMap="COMMON.BaseTreeResult">
+     SELECT * FROM (
+	 SELECT C.ID ID, C.PARENT_ID PARENT, C.PARENT_IDS PARENT_IDS,
+	        C.NAME TREE_NAME,
+	        '' TREE_CODE,
+	        '' TREE_TYPE,
+	        C.LEVEL TREE_LEVEL, '' TREE_PATH, '' TREE_DESC
+	   FROM CMS_CATEGORY C
+	  WHERE 1 = 1
+	  <if test="NAME != null"> AND C.NAME = #{NAME}</if>  
+	  <if test="IDS != null"> #{IDS} LIKE CONCAT(CONCAT('%,',C.ID),',%')</if> 
+      )A
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="java.util.Map" >
+   SELECT ID, PARENT_ID, PARENT_IDS, NAME, CODE, DESCRIPTION, KEYWORDS, SORT, 
+		  LEVEL, IS_SHOW, IN_MENU, CREATE_ID, UPDATE_ID, UPDATE_DATE, REMARKS, 
+		  DEL_FLAG
+     FROM CMS_CATEGORY
+    WHERE LEVEL != 0
+    <if test="IDS != null"> AND #{IDS} LIKE CONCAT(CONCAT('%,',ID),',%')</if>  
+    <if test="NAME != null"> AND NAME LIKE CONCAT(CONCAT('%',#{NAME}),'%')</if>
+    <if test="PARENT_ID != null"> AND PARENT_ID = #{PARENT_ID}</if>
+    <if test="PARENT_IDS != null"> AND PARENT_IDS LIKE CONCAT(CONCAT('%,',#{PARENT_IDS}), ',%')</if>
+    ORDER BY LEVEL, SORT
+  </select>
+  
+  <select id="deleteCategoryCheck" parameterType="com.tmt.cms.entity.Category" resultType="int" >
+    SELECT COUNT(1) FROM (
+		SELECT 1 FROM SYS_DUAL WHERE EXISTS (SELECT 1 FROM CMS_CATEGORY B WHERE B.PARENT_ID=#{id}) 
+    )A
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.cms.entity.Category" >
+   DELETE FROM CMS_CATEGORY WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.cms.entity.Category" >
+   INSERT INTO CMS_CATEGORY (ID, PARENT_ID, PARENT_IDS, NAME, CODE, DESCRIPTION, KEYWORDS, SORT, 
+		  LEVEL, IS_SHOW, IN_MENU, CREATE_ID, UPDATE_ID, UPDATE_DATE, REMARKS, 
+		  DEL_FLAG)
+   VALUES (#{id}, #{parentId}, #{parentIds}, #{name}, #{code}, #{description}, #{keywords}, #{sort}, 
+		  #{level}, #{isShow}, #{inMenu}, #{createId}, #{updateId}, #{updateDate}, #{remarks}, 
+		  #{delFlag})
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.cms.entity.Category" >
+   UPDATE CMS_CATEGORY
+      SET PARENT_ID = #{parentId},
+		  PARENT_IDS = #{parentIds},
+		  NAME = #{name},
+		  CODE = #{code},
+		  DESCRIPTION = #{description},
+		  KEYWORDS = #{keywords},
+		  SORT = #{sort},
+		  LEVEL = #{level},
+		  IS_SHOW = #{isShow},
+		  IN_MENU = #{inMenu},
+		  UPDATE_ID = #{updateId},
+		  UPDATE_DATE = #{updateDate},
+		  REMARKS = #{remarks},
+		  DEL_FLAG = #{delFlag}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateSort" parameterType="com.tmt.cms.entity.Category" >
+   UPDATE CMS_CATEGORY
+      SET SORT = #{sort}
+    WHERE ID = #{id}
+  </update>
+  
+</mapper>

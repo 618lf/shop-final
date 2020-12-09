@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.GoodsSpecificationDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.GoodsSpecification"> 
+    <result column="GOODS_ID" property="goodsId" jdbcType="BIGINT"/>
+    <result column="SPECIFICATIONS_ID" property="specificationsId" jdbcType="BIGINT"/>
+    <result column="SPECIFICATIONS_NAME" property="specificationsName" jdbcType="VARCHAR"/>
+    <result column="SORT" property="sort" jdbcType="INTEGER"/>
+  </resultMap>
+  
+  <delete id="deleteByGoodsId" parameterType="com.tmt.shop.entity.GoodsSpecification" >
+   DELETE FROM SHOP_GOODS_SPECIFICATION WHERE GOODS_ID = #{goodsId}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.GoodsSpecification" >
+   INSERT INTO SHOP_GOODS_SPECIFICATION (GOODS_ID, SPECIFICATIONS_ID, SPECIFICATIONS_NAME, SORT)
+   VALUES (#{goodsId}, #{specificationsId}, #{specificationsName}, #{sort})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+   INSERT INTO SHOP_GOODS_SPECIFICATION (GOODS_ID, SPECIFICATIONS_ID, SPECIFICATIONS_NAME, SORT)
+   VALUES 
+   <foreach collection="list" item="item" index="index" separator="," >  
+   (#{item.goodsId}, #{item.specificationsId}, #{item.specificationsName}, #{item.sort})
+   </foreach>
+  </insert>
+  
+  <select id="queryByCategoryId" resultMap="BaseResult" parameterType="Long">
+   SELECT S.ID SPECIFICATIONS_ID, S.NAME SPECIFICATIONS_NAME, -1 GOODS_ID, S.SORT
+     FROM SHOP_SPECIFICATION S
+    WHERE S.CATEGORY_ID = #{CATEGORY_ID}
+    ORDER BY S.SORT
+  </select>
+  
+  <select id="queryByGoodsId" resultMap="BaseResult" parameterType="java.util.Map">
+   SELECT GS.SPECIFICATIONS_ID, GS.SPECIFICATIONS_NAME, GS.GOODS_ID, GS.SORT
+     FROM SHOP_GOODS_SPECIFICATION GS
+    WHERE GS.GOODS_ID = #{GOODS_ID}
+    ORDER BY GS.SORT
+  </select>
+  
+  <!-- 是否有规格 -->
+  <select id="countByGoodsId" parameterType="long" resultType="int" >
+    SELECT COUNT(1) C FROM SHOP_GOODS_SPECIFICATION WHERE GOODS_ID = #{VALUE}
+  </select>
+  
+</mapper>

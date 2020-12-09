@@ -5,8 +5,8 @@ import java.util.List;
 import com.tmt.bbs.service.HotspotSearcherFacade;
 import com.tmt.bbs.service.ReplySearcherFacade;
 import com.tmt.bbs.update.BbsModule;
-import com.tmt.common.utils.Lists;
-import com.tmt.common.utils.SpringContextHolder;
+import com.tmt.core.utils.Lists;
+import com.tmt.core.utils.SpringContextHolder;
 import com.tmt.system.entity.UpdateData;
 
 public class ReplyUpdateHandler extends AbstractUpdateHandler {
@@ -79,7 +79,7 @@ public class ReplyUpdateHandler extends AbstractUpdateHandler {
 		updates = null;
 		deletes = null;
 	}
-	
+
 	// 商品索引
 	private void hot_lucene(List<UpdateData> goods) {
 		if (goods == null || goods.size() == 0) {

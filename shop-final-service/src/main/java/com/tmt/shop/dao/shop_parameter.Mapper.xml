@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.ParameterDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.Parameter"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="CATEGORY_ID" property="categoryId" jdbcType="BIGINT"/>
+    <result column="CATEGORY_NAME" property="categoryName" jdbcType="VARCHAR"/>
+    <result column="SORT" property="sort" jdbcType="INTEGER"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="long" >
+   SELECT ID, CATEGORY_ID, CATEGORY_NAME, SORT, NAME, CREATE_DATE, UPDATE_DATE
+     FROM SHOP_PARAMETER
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition" >
+   SELECT ID, CATEGORY_ID, CATEGORY_NAME, SORT, NAME, CREATE_DATE, UPDATE_DATE
+     FROM SHOP_PARAMETER
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="int" >
+    SELECT COUNT(1) C FROM SHOP_PARAMETER
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.Parameter" >
+   DELETE FROM SHOP_PARAMETER WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.Parameter" >
+   INSERT INTO SHOP_PARAMETER (ID, CATEGORY_ID, CATEGORY_NAME, SORT, NAME, CREATE_DATE, UPDATE_DATE)
+   VALUES (#{id}, #{categoryId}, #{categoryName}, #{sort}, #{name}, #{createDate}, #{updateDate})
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.shop.entity.Parameter" >
+   UPDATE SHOP_PARAMETER
+      SET CATEGORY_ID = #{categoryId},
+		  CATEGORY_NAME = #{categoryName},
+		  SORT = #{sort},
+		  NAME = #{name},
+		  UPDATE_DATE = #{updateDate}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateSort" parameterType="com.tmt.shop.entity.Parameter">
+   UPDATE SHOP_PARAMETER
+      SET SORT = #{sort}
+    WHERE ID = #{id}
+  </update>
+  
+  <select id="queryByCategoryId" resultMap="BaseResult" parameterType="long">
+   SELECT ID, CATEGORY_ID, CATEGORY_NAME, SORT, NAME, CREATE_DATE, UPDATE_DATE
+     FROM SHOP_PARAMETER
+    WHERE CATEGORY_ID = #{VALUE}
+  </select>
+</mapper>

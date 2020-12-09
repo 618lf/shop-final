@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.GoodsAttributeDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.GoodsAttribute"> 
+    <result column="GOODS_ID" property="goodsId" jdbcType="BIGINT"/>
+    <result column="ATTRIBUTE_ID" property="attributeId" jdbcType="BIGINT"/>
+    <result column="ATTRIBUTE_NAME" property="attributeName" jdbcType="VARCHAR"/>
+    <result column="ATTRIBUTE_OPTION_KEY" property="attributeOptionKey" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="long" >
+   SELECT GOODS_ID, ATTRIBUTE_ID, ATTRIBUTE_OPTION_KEY
+     FROM SHOP_GOODS_ATTRIBUTE
+    WHERE ID = #{id}
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.GoodsAttribute" >
+   DELETE FROM SHOP_GOODS_ATTRIBUTE WHERE GOODS_ID = #{goodsId} AND ATTRIBUTE_ID = #{attributeId}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.GoodsAttribute" >
+   INSERT INTO SHOP_GOODS_ATTRIBUTE (GOODS_ID, ATTRIBUTE_ID, ATTRIBUTE_OPTION_KEY)
+   VALUES (#{goodsId}, #{attributeId}, #{attributeOptionKey})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+   INSERT INTO SHOP_GOODS_ATTRIBUTE (GOODS_ID, ATTRIBUTE_ID, ATTRIBUTE_OPTION_KEY)
+   VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+   (#{item.goodsId}, #{item.attributeId}, #{item.attributeOptionKey})
+   </foreach> 
+  </insert>
+  
+  <select id="queryByCategoryId" resultMap="BaseResult" parameterType="java.util.Map">
+   SELECT GA.GOODS_ID, A.ID ATTRIBUTE_ID, A.NAME ATTRIBUTE_NAME,GA.ATTRIBUTE_OPTION_KEY
+     FROM SHOP_ATTRIBUTE A LEFT JOIN SHOP_GOODS_ATTRIBUTE GA
+       ON (A.ID = GA.ATTRIBUTE_ID AND GA.GOODS_ID = #{GOODS_ID} 
+           AND A.CATEGORY_ID = #{CATEGORY_ID})
+    WHERE A.CATEGORY_ID = #{CATEGORY_ID}
+  </select>
+  
+  <select id="queryRelasByGoodsId" resultMap="BaseResult" parameterType="long">
+   SELECT GOODS_ID, ATTRIBUTE_ID, '' ATTRIBUTE_NAME, ATTRIBUTE_OPTION_KEY
+     FROM SHOP_GOODS_ATTRIBUTE
+    WHERE GOODS_ID = #{VALUE}
+  </select>
+  
+</mapper>

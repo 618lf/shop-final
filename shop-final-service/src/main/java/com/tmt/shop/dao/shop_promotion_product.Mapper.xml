@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.PromotionProductDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.PromotionProduct"> 
+    <result column="PROMOTIONS" property="promotions" jdbcType="BIGINT"/>
+    <result column="PRODUCTS" property="products" jdbcType="BIGINT"/>
+    <result column="DISCOUNT" property="discount" jdbcType="FLOAT"/>
+    <result column="SCALE" property="scale" jdbcType="TINYINT"/>
+  </resultMap>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.PromotionProduct">
+   DELETE FROM SHOP_PROMOTION_PRODUCT WHERE PROMOTIONS = #{promotions} AND PRODUCTS = #{products}
+  </delete>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO SHOP_PROMOTION_PRODUCT (PROMOTIONS, PRODUCTS, DISCOUNT, SCALE)
+    VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.promotions}, #{item.products}, #{item.discount}, #{item.scale})
+   </foreach> 
+  </insert>
+  
+  <select id="queryProductByPromotionId" resultMap="BaseResult" parameterType="Long">
+   SELECT PROMOTIONS, PRODUCTS, DISCOUNT, SCALE 
+     FROM SHOP_PROMOTION_PRODUCT
+    WHERE PROMOTIONS = #{promotions} 
+  </select>
+  
+  <resultMap id="ProductBaseResult" type="com.tmt.shop.entity.PromotionProduct"> 
+    <result column="PROMOTIONS" property="promotions" jdbcType="BIGINT"/>
+    <result column="PRODUCTS" property="products" jdbcType="BIGINT"/>
+    <result column="DISCOUNT" property="discount" jdbcType="FLOAT"/>
+    <result column="SCALE" property="scale" jdbcType="TINYINT"/>
+    <result column="IMAGE" property="product.image" jdbcType="VARCHAR"/>
+    <result column="NAME" property="product.name" jdbcType="VARCHAR"/>
+    <result column="TIP" property="product.tip" jdbcType="VARCHAR"/>
+    <result column="SN" property="product.sn" jdbcType="VARCHAR"/>
+    <result column="PRICE" property="product.price" jdbcType="DECIMAL"/>
+  </resultMap>
+  
+  <select id="queryRichProductByPromotionId" resultMap="ProductBaseResult" parameterType="Long">
+   SELECT PROMOTIONS, PRODUCTS, DISCOUNT, SCALE, B.NAME, B.TIP, B.IMAGE, B.SN, B.PRICE
+     FROM SHOP_PROMOTION_PRODUCT A, SHOP_PRODUCT B
+    WHERE PROMOTIONS = #{promotions} AND A.PRODUCTS = B.ID
+  </select>
+  
+</mapper>

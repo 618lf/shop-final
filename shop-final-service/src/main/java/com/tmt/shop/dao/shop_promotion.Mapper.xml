@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.PromotionDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.Promotion"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="TITLE" property="title" jdbcType="VARCHAR"/>
+    <result column="IMAGE" property="image" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+    <result column="BEGIN_DATE" property="beginDate" jdbcType="TIMESTAMP"/>
+    <result column="END_DATE" property="endDate" jdbcType="TIMESTAMP"/>
+    <result column="TYPE" property="type" jdbcType="TINYINT"/>
+    <result column="IS_ENABLED" property="isEnabled" jdbcType="TINYINT"/>
+    <result column="IS_PRICE" property="isPrice" jdbcType="TINYINT"/>
+    <result column="IS_QUANTITY" property="isQuantity" jdbcType="TINYINT"/>
+    <result column="ORDER_PRICE" property="orderPrice" jdbcType="DECIMAL"/>
+    <result column="ORDER_QUANTITY" property="orderQuantity" jdbcType="INTEGER"/>
+    <result column="GETNO" property="getno" jdbcType="TINYINT"/>
+    <result column="REDUCE" property="reduce" jdbcType="DECIMAL"/>
+    <result column="DISCOUNT" property="discount" jdbcType="FLOAT"/>
+    <result column="IS_COUPON_ALLOWED" property="isCouponAllowed" jdbcType="TINYINT"/>
+    <result column="IS_MULTI" property="isMulti" jdbcType="TINYINT"/>
+    <result column="IS_SHARE" property="isShare" jdbcType="TINYINT"/>
+    <result column="SORT" property="sort" jdbcType="INTEGER"/>
+    <result column="INTRODUCTION" property="introduction" jdbcType="LONGVARCHAR"/>
+    <result column="REMARKS" property="remarks" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, NAME, TITLE, IMAGE, CREATE_DATE, UPDATE_DATE, BEGIN_DATE, END_DATE, 
+		  TYPE, IS_ENABLED, IS_PRICE, IS_QUANTITY, ORDER_PRICE, ORDER_QUANTITY, GETNO, 
+		  REDUCE, DISCOUNT, IS_COUPON_ALLOWED, IS_MULTI, IS_SHARE, SORT, INTRODUCTION,
+		  REMARKS
+     FROM SHOP_PROMOTION
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT ID, NAME, TITLE, IMAGE, CREATE_DATE, UPDATE_DATE, BEGIN_DATE, END_DATE, 
+		  TYPE, IS_ENABLED, IS_PRICE, IS_QUANTITY, ORDER_PRICE, ORDER_QUANTITY, GETNO, 
+		  REDUCE, DISCOUNT, IS_COUPON_ALLOWED, IS_MULTI, IS_SHARE, SORT, INTRODUCTION,
+		  REMARKS
+     FROM SHOP_PROMOTION
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition">
+   SELECT ID, NAME, TITLE, IMAGE, CREATE_DATE, UPDATE_DATE, BEGIN_DATE, END_DATE, 
+		  TYPE, IS_ENABLED, IS_PRICE, IS_QUANTITY, ORDER_PRICE, ORDER_QUANTITY, GETNO, 
+		  REDUCE, DISCOUNT, IS_COUPON_ALLOWED, IS_MULTI, IS_SHARE, SORT, INTRODUCTION,
+		  REMARKS
+     FROM SHOP_PROMOTION
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="java.lang.Integer">
+    SELECT COUNT(1) C FROM SHOP_PROMOTION
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.Promotion">
+   DELETE FROM SHOP_PROMOTION WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.Promotion">
+   INSERT INTO SHOP_PROMOTION (ID, NAME, TITLE, IMAGE, CREATE_DATE, UPDATE_DATE, BEGIN_DATE, END_DATE, 
+		  TYPE, IS_ENABLED, IS_PRICE, IS_QUANTITY, ORDER_PRICE, ORDER_QUANTITY, GETNO, 
+		  REDUCE, DISCOUNT, IS_COUPON_ALLOWED, IS_MULTI, IS_SHARE, SORT, INTRODUCTION, REMARKS)
+   VALUES (#{id}, #{name}, #{title}, #{image}, #{createDate}, #{updateDate}, #{beginDate}, #{endDate}, 
+		  #{type}, #{isEnabled}, #{isPrice}, #{isQuantity}, #{orderPrice}, #{orderQuantity}, #{getno}, 
+		  #{reduce}, #{discount}, #{isCouponAllowed}, #{isMulti}, #{isShare}, #{sort}, #{introduction}, #{remarks})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+   INSERT INTO SHOP_PROMOTION (ID, NAME, TITLE, IMAGE, CREATE_DATE, UPDATE_DATE, BEGIN_DATE, END_DATE, 
+		  TYPE, IS_ENABLED, IS_PRICE, IS_QUANTITY, ORDER_PRICE, ORDER_QUANTITY, GETNO, 
+		  REDUCE, DISCOUNT, IS_COUPON_ALLOWED, IS_MULTI, IS_SHARE, SORT, INTRODUCTION, REMARKS)
+    VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.id}, #{item.name}, #{item.title}, #{item.image}, #{item.createDate}, #{item.updateDate}, #{item.beginDate}, #{item.endDate}, 
+		  #{item.type}, #{item.isEnabled}, #{item.isPrice}, #{item.isQuantity}, #{item.orderPrice}, #{item.orderQuantity}, #{item.getno}, 
+		  #{item.reduce}, #{item.discount}, #{item.isCouponAllowed}, #{item.isMulti}, #{item.isShare}, #{item.sort}, #{item.introduction},
+		  #{item.remarks})
+   </foreach> 
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.shop.entity.Promotion">
+   UPDATE SHOP_PROMOTION
+      SET NAME = #{name},
+		  TITLE = #{title},
+		  IMAGE = #{image},
+		  UPDATE_DATE = #{updateDate},
+		  BEGIN_DATE = #{beginDate},
+		  END_DATE = #{endDate},
+		  TYPE = #{type},
+		  IS_ENABLED = #{isEnabled},
+		  IS_PRICE = #{isPrice},
+		  IS_QUANTITY = #{isQuantity},
+		  ORDER_PRICE = #{orderPrice},
+		  ORDER_QUANTITY = #{orderQuantity},
+		  GETNO = #{getno},
+		  REDUCE = #{reduce},
+		  DISCOUNT = #{discount},
+		  IS_COUPON_ALLOWED = #{isCouponAllowed},
+		  IS_MULTI = #{isMulti},
+		  IS_SHARE = #{isShare},
+		  SORT = #{sort},
+		  INTRODUCTION = #{introduction},
+		  REMARKS = #{remarks}
+    WHERE ID = #{id}
+  </update>
+  
+  <!-- 前端需要 -->
+  <resultMap id="SimpleBaseResult" type="com.tmt.shop.entity.Promotion"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="REMARKS" property="remarks" jdbcType="VARCHAR"/>
+    <result column="BEGIN_DATE" property="beginDate" jdbcType="TIMESTAMP"/>
+    <result column="END_DATE" property="endDate" jdbcType="TIMESTAMP"/>
+    <result column="TYPE" property="type" jdbcType="TINYINT"/>
+    <result column="IS_ENABLED" property="isEnabled" jdbcType="TINYINT"/>
+    <result column="IS_PRICE" property="isPrice" jdbcType="TINYINT"/>
+    <result column="IS_QUANTITY" property="isQuantity" jdbcType="TINYINT"/>
+    <result column="ORDER_PRICE" property="orderPrice" jdbcType="DECIMAL"/>
+    <result column="ORDER_QUANTITY" property="orderQuantity" jdbcType="INTEGER"/>
+    <result column="REDUCE" property="reduce" jdbcType="DECIMAL"/>
+    <result column="DISCOUNT" property="discount" jdbcType="FLOAT"/>
+    <result column="IS_COUPON_ALLOWED" property="isCouponAllowed" jdbcType="TINYINT"/>
+  </resultMap>
+  
+  <!-- 全局 -->
+  <select id="queryGlobalEnabledPromotions" resultMap="SimpleBaseResult" parameterType="java.util.Map">
+   SELECT ID, NAME, BEGIN_DATE, END_DATE, TYPE, IS_ENABLED, IS_PRICE, IS_QUANTITY, ORDER_PRICE, ORDER_QUANTITY, 
+		  REDUCE, DISCOUNT, IS_COUPON_ALLOWED, IS_MULTI, REMARKS
+     FROM SHOP_PROMOTION A
+    WHERE IS_ENABLED = 1 AND TYPE IN(1,2,3,5,6,7,8) 
+      AND #{now} &lt; END_DATE
+      AND NOT EXISTS(SELECT 1 FROM SHOP_PROMOTION_PRODUCT B WHERE A.ID = B.PROMOTIONS)
+     ORDER BY A.CREATE_DATE DESC
+  </select>
+  
+  <!-- 商品级别 -->
+  <select id="queryProductEnabledPromotions" resultMap="SimpleBaseResult" parameterType="java.util.Map">
+   SELECT A.ID, NAME, BEGIN_DATE, END_DATE, TYPE, IS_ENABLED, IS_PRICE, IS_QUANTITY, ORDER_PRICE, ORDER_QUANTITY, 
+		  REDUCE, A.DISCOUNT, IS_COUPON_ALLOWED, IS_MULTI, REMARKS
+     FROM SHOP_PROMOTION A, SHOP_PROMOTION_PRODUCT B
+    WHERE A.IS_ENABLED = 1 AND TYPE IN(1,2,3,4,5,6,7,8)
+      AND #{now} &lt; END_DATE
+      AND A.ID = B.PROMOTIONS AND B.PRODUCTS = #{productId}
+    ORDER BY A.CREATE_DATE DESC
+  </select>
+  
+</mapper>

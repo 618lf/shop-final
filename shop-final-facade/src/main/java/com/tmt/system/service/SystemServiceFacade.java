@@ -35,6 +35,13 @@ public interface SystemServiceFacade{
 	public User getUserByAccount(String account);
 	
 	/**
+	 * 获得用户对应公众号的OPENID
+	 * @param appId
+	 * @return
+	 */
+	public String getUserWechatOpenId(User user, String appId);
+	
+	/**
 	 * 用户头像
 	 * @param account
 	 * @return

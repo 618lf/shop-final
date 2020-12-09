@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.GoodsParameterGroupDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.GoodsParameterGroup"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="GOODS_ID" property="goodsId" jdbcType="BIGINT"/>
+    <result column="GROUP_NAME" property="groupName" jdbcType="VARCHAR"/>
+    <result column="SORT" property="sort" jdbcType="INTEGER"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="long" >
+   SELECT ID, GOODS_ID, GROUP_NAME, SORT
+     FROM SHOP_GOODS_PARAMETER_GROUP
+    WHERE ID = #{id}
+  </select>
+  
+  <delete id="deleteByGoodsId" parameterType="com.tmt.shop.entity.GoodsParameterGroup" >
+   DELETE FROM SHOP_GOODS_PARAMETER_GROUP WHERE GOODS_ID = #{goodsId}
+  </delete>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.GoodsParameterGroup" >
+   DELETE FROM SHOP_GOODS_PARAMETER_GROUP WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.GoodsParameterGroup" >
+   INSERT INTO SHOP_GOODS_PARAMETER_GROUP (ID, GOODS_ID, GROUP_NAME, SORT)
+   VALUES (#{id}, #{goodsId}, #{groupName}, #{sort})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO SHOP_GOODS_PARAMETER_GROUP (ID, GOODS_ID, GROUP_NAME, SORT)
+    VALUES 
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.id}, #{item.goodsId}, #{item.groupName}, #{item.sort})
+   </foreach> 
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.shop.entity.GoodsParameterGroup" >
+   UPDATE SHOP_GOODS_PARAMETER_GROUP
+      SET GOODS_ID = #{goodsId},
+		  GROUP_NAME = #{groupName},
+		  SORT = #{sort}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateSort" parameterType="com.tmt.shop.entity.GoodsParameterGroup" >
+   UPDATE SHOP_GOODS_PARAMETER_GROUP
+      SET SORT = #{sort}
+    WHERE ID = #{id}
+  </update>
+  
+  <select id="queryParameterGroupsByGoodsId" resultMap="BaseResult" parameterType="long" >
+   SELECT ID, GOODS_ID, GROUP_NAME, SORT
+     FROM SHOP_GOODS_PARAMETER_GROUP
+    WHERE GOODS_ID = #{VALUE}
+  </select>
+</mapper>

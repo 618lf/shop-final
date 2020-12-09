@@ -42,6 +42,11 @@ public class SystemService implements SystemServiceFacade {
 	public User getUserByAccount(String account) {
 		return userService.findUserByAccount(account);
 	}
+	
+	@Override
+	public String getUserWechatOpenId(User user, String appId) {
+		return userService.getUserWechatOpenId(user, appId);
+	}
 
 	@Override
 	public String getUserHeadimgById(Long userId) {

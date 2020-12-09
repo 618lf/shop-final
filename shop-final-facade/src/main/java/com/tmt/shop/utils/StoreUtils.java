@@ -1,8 +1,8 @@
 package com.tmt.shop.utils;
 
-import com.tmt.common.utils.CacheUtils;
-import com.tmt.common.utils.DateUtil3;
-import com.tmt.common.utils.SpringContextHolder;
+import com.tmt.core.utils.CacheUtils;
+import com.tmt.core.utils.SpringContextHolder;
+import com.tmt.core.utils.time.DateUtils;
 import com.tmt.shop.entity.ShopConstant;
 import com.tmt.shop.entity.Store;
 import com.tmt.shop.service.StoreServiceFacade;
@@ -19,7 +19,7 @@ public class StoreUtils {
 		if (store == null) {
 			StoreServiceFacade storeService = SpringContextHolder.getBean(StoreServiceFacade.class);
 			store = storeService.get(Store.DEFAULT_STORE);
-			store.setUpdateTime(DateUtil3.getTimeStampNow().getTime());
+			store.setUpdateTime(DateUtils.getTimeStampNow().getTime());
 			CacheUtils.put(key, store);
 		}
 		return store;
@@ -40,7 +40,7 @@ public class StoreUtils {
 		String key = new StringBuilder(ShopConstant.STORE_CACHE).append(Store.DEFAULT_STORE).toString();
 		Store store = CacheUtils.get(key);
 		if (store != null) {
-			store.setUpdateTime(DateUtil3.getTimeStampNow().getTime());
+			store.setUpdateTime(DateUtils.getTimeStampNow().getTime());
 			CacheUtils.put(key, store);
 		}
 	}

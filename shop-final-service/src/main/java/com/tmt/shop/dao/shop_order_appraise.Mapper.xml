@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.OrderAppraiseDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.OrderAppraise"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="SN" property="sn" jdbcType="VARCHAR"/>
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT"/>
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+    <result column="STATE" property="state" jdbcType="TINYINT"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, SN, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_DATE, STATE
+     FROM SHOP_ORDER_APPRAISE
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition">
+   SELECT ID, SN, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_DATE, STATE
+     FROM SHOP_ORDER_APPRAISE
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="java.lang.Integer">
+    SELECT COUNT(1) C FROM SHOP_ORDER_APPRAISE
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.OrderAppraise">
+   DELETE FROM SHOP_ORDER_APPRAISE WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.OrderAppraise">
+   INSERT INTO SHOP_ORDER_APPRAISE (ID, SN, CREATE_ID, CREATE_NAME, CREATE_DATE, STATE)
+   VALUES (#{id}, #{sn}, #{createId}, #{createName}, #{createDate}, #{state}) ON DUPLICATE KEY UPDATE STATE = STATE
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.shop.entity.OrderAppraise">
+   UPDATE SHOP_ORDER_APPRAISE
+      SET STATE = #{state},
+          UPDATE_DATE = #{updateDate}
+    WHERE ID = #{id}
+  </update>
+  
+  <select id="queryUserAppraiseTask" resultMap="BaseResult" parameterType="java.util.Map">
+   SELECT ID, SN, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_DATE, STATE
+     FROM SHOP_ORDER_APPRAISE
+    WHERE CREATE_ID = #{userId} AND STATE = #{state}
+    ORDER BY CREATE_DATE DESC
+  </select>
+  <select id="queryUserAppraiseTaskStat" parameterType="java.util.Map" resultType="java.lang.Integer">
+   SELECT COUNT(1) C
+     FROM SHOP_ORDER_APPRAISE
+    WHERE CREATE_ID = #{userId} AND STATE = #{state}
+  </select>
+  
+  <select id="queryUserAppraisedTask" resultMap="BaseResult" parameterType="java.util.Map">
+   SELECT ID, SN, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_DATE, STATE
+     FROM SHOP_ORDER_APPRAISE
+    WHERE CREATE_ID = #{userId} AND STATE IN(1,2)
+    ORDER BY UPDATE_DATE DESC
+  </select>
+  <select id="queryUserAppraisedTaskStat" parameterType="java.util.Map" resultType="java.lang.Integer">
+   SELECT COUNT(1) C
+     FROM SHOP_ORDER_APPRAISE
+    WHERE CREATE_ID = #{userId} AND STATE IN(1,2)
+  </select>
+  
+</mapper>

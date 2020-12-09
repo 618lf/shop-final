@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.CouponProductDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.CouponProduct"> 
+    <result column="COUPONS" property="coupons" jdbcType="BIGINT"/>
+    <result column="PRODUCTS" property="products" jdbcType="BIGINT"/>
+  </resultMap>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.CouponProduct">
+   DELETE FROM SHOP_COUPON_PRODUCT WHERE COUPONS = #{coupons} AND PRODUCTS = #{products}
+  </delete>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO SHOP_COUPON_PRODUCT (COUPONS, PRODUCTS)
+    VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.coupons}, #{item.products})
+   </foreach> 
+  </insert>
+  
+  <select id="queryProductByCouponId" resultMap="BaseResult" parameterType="Long">
+   SELECT COUPONS, PRODUCTS FROM SHOP_COUPON_PRODUCT
+    WHERE COUPONS = #{coupons} 
+  </select>
+  
+  <resultMap id="ProductBaseResult" type="com.tmt.shop.entity.CouponProduct"> 
+    <result column="COUPONS" property="coupons" jdbcType="BIGINT"/>
+    <result column="PRODUCTS" property="products" jdbcType="BIGINT"/>
+    <result column="IMAGE" property="product.image" jdbcType="VARCHAR"/>
+    <result column="NAME" property="product.name" jdbcType="VARCHAR"/>
+    <result column="SN" property="product.sn" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <select id="queryRichProductByCouponId" resultMap="ProductBaseResult" parameterType="Long">
+   SELECT COUPONS, PRODUCTS, B.NAME, B.IMAGE, B.SN
+     FROM SHOP_COUPON_PRODUCT A, SHOP_PRODUCT B
+    WHERE COUPONS = #{coupons} AND A.PRODUCTS = B.ID
+  </select>
+  
+</mapper>

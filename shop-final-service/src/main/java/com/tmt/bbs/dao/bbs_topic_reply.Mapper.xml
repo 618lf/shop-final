@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.bbs.dao.TopicReplyDao" >
+  <resultMap id="BaseResult" type="com.tmt.bbs.entity.TopicReply"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="TOPIC_ID" property="topicId" jdbcType="BIGINT"/>
+    <result column="CONTENT" property="content" jdbcType="VARCHAR"/>
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT"/>
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+    <result column="CREATE_RANK" property="createRank" jdbcType="VARCHAR"/>
+    <result column="CREATE_IMAGE" property="createImage" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="REPLY_USER" property="replyUser" jdbcType="VARCHAR"/>
+    <result column="REPLY_ID" property="replyId" jdbcType="BIGINT"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, TOPIC_ID, CONTENT, CREATE_ID, CREATE_NAME, CREATE_RANK, CREATE_IMAGE, CREATE_DATE, 
+		  REPLY_USER, REPLY_ID
+     FROM BBS_TOPIC_REPLY
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT ID, TOPIC_ID, CONTENT, CREATE_ID, CREATE_NAME, CREATE_RANK, CREATE_IMAGE, CREATE_DATE, 
+		  REPLY_USER, REPLY_ID
+     FROM BBS_TOPIC_REPLY
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition">
+   SELECT ID, TOPIC_ID, CONTENT, CREATE_ID, CREATE_NAME, CREATE_RANK, CREATE_IMAGE, CREATE_DATE, 
+		  REPLY_USER, REPLY_ID
+     FROM BBS_TOPIC_REPLY
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="java.lang.Integer">
+    SELECT COUNT(1) C FROM BBS_TOPIC_REPLY
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.bbs.entity.TopicReply">
+   DELETE FROM BBS_TOPIC_REPLY WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.bbs.entity.TopicReply">
+   INSERT INTO BBS_TOPIC_REPLY (ID, TOPIC_ID, CONTENT, CREATE_ID, CREATE_NAME, CREATE_RANK, CREATE_IMAGE, CREATE_DATE, 
+		  REPLY_USER, REPLY_ID)
+   VALUES (#{id}, #{topicId}, #{content}, #{createId}, #{createName}, #{createRank}, #{createImage}, #{createDate}, 
+		  #{replyUser}, #{replyId})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO BBS_TOPIC_REPLY (ID, TOPIC_ID, CONTENT, CREATE_ID, CREATE_NAME, CREATE_RANK, CREATE_IMAGE, CREATE_DATE, 
+		  REPLY_USER, REPLY_ID)
+    VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.id}, #{item.topicId}, #{item.content}, #{item.createId}, #{item.createName}, #{item.createRank}, #{item.createImage}, #{item.createDate}, 
+		  #{item.replyUser}, #{item.replyId})
+   </foreach> 
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.bbs.entity.TopicReply">
+   UPDATE BBS_TOPIC_REPLY
+      SET CONTENT = #{content}
+    WHERE ID = #{id}
+  </update>
+  
+  <!-- 用户回复 -->
+  <select id="queryUserReplys" resultType="java.lang.Long" parameterType="queryCondition">
+   SELECT DISTINCT TOPIC_ID FROM BBS_TOPIC_REPLY
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  
+</mapper>

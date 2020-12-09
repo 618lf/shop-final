@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.CouponDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.Coupon"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+    <result column="BEGIN_DATE" property="beginDate" jdbcType="TIMESTAMP"/>
+    <result column="END_DATE" property="endDate" jdbcType="TIMESTAMP"/>
+    <result column="ORDER_PRICE" property="orderPrice" jdbcType="DECIMAL"/>
+    <result column="IS_PRICE" property="isPrice" jdbcType="TINYINT"/>
+    <result column="IS_ENABLED" property="isEnabled" jdbcType="TINYINT"/>
+    <result column="IS_EXCHANGE" property="isExchange" jdbcType="TINYINT"/>
+    <result column="IS_FISSION" property="isFission" jdbcType="TINYINT"/>
+    <result column="FISSION_NUM" property="fissionNum" jdbcType="INTEGER"/>
+    <result column="EXPIRE_TYPE" property="expireType" jdbcType="TINYINT"/>
+    <result column="EXPIRE_DAYS" property="expireDays" jdbcType="INTEGER"/>
+    <result column="EXPIRE_DATE" property="expireDate" jdbcType="TIMESTAMP"/>
+    <result column="POINT" property="point" jdbcType="INTEGER"/>
+    <result column="VAL" property="val" jdbcType="INTEGER"/>
+    <result column="GETNO" property="getno" jdbcType="TINYINT"/>
+    <result column="TOTAL" property="total" jdbcType="INTEGER"/>
+    <result column="GETED" property="geted" jdbcType="INTEGER"/>
+    <result column="USED" property="used" jdbcType="INTEGER"/>
+  </resultMap>
+  
+  <resultMap id="AllBaseResult" type="com.tmt.shop.entity.Coupon" extends="BaseResult"> 
+    <result column="INTRODUCTION" property="introduction" jdbcType="LONGVARCHAR"/>
+  </resultMap>
+  
+  <select id="get" resultMap="AllBaseResult" parameterType="Long">
+   SELECT ID, NAME, CREATE_DATE, UPDATE_DATE, BEGIN_DATE, END_DATE, ORDER_PRICE, IS_PRICE, 
+		  IS_ENABLED, IS_EXCHANGE, IS_FISSION, FISSION_NUM, EXPIRE_TYPE, EXPIRE_DAYS, EXPIRE_DATE, 
+		  POINT, VAL, GETNO, TOTAL, GETED, USED, INTRODUCTION
+     FROM SHOP_COUPON
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition">
+   SELECT ID, NAME, CREATE_DATE, UPDATE_DATE, BEGIN_DATE, END_DATE, ORDER_PRICE, IS_PRICE, 
+		  IS_ENABLED, IS_EXCHANGE, IS_FISSION, FISSION_NUM, EXPIRE_TYPE, EXPIRE_DAYS, EXPIRE_DATE, 
+		  POINT, VAL, GETNO, TOTAL, GETED, USED
+     FROM SHOP_COUPON
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="java.lang.Integer">
+    SELECT COUNT(1) C FROM SHOP_COUPON
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <select id="queryByPromotionId" resultMap="BaseResult" parameterType="Long">
+   SELECT B.*
+     FROM SHOP_PROMOTION_COUPON A, SHOP_COUPON B
+    WHERE PROMOTIONS = #{promotions} AND A.COUPONS = B.ID
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.Coupon">
+   DELETE FROM SHOP_COUPON WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.Coupon">
+   INSERT INTO SHOP_COUPON (ID, NAME, CREATE_DATE, UPDATE_DATE, BEGIN_DATE, END_DATE, ORDER_PRICE, IS_PRICE, 
+		  IS_ENABLED, IS_EXCHANGE, IS_FISSION, FISSION_NUM, EXPIRE_TYPE, EXPIRE_DAYS, EXPIRE_DATE, 
+		  POINT, VAL, GETNO, TOTAL, GETED, USED, INTRODUCTION)
+   VALUES (#{id}, #{name}, #{createDate}, #{updateDate}, #{beginDate}, #{endDate}, #{orderPrice}, #{isPrice}, 
+		  #{isEnabled}, #{isExchange}, #{isFission}, #{fissionNum}, #{expireType}, #{expireDays}, #{expireDate}, 
+		  #{point}, #{val}, #{getno}, #{total}, #{geted}, #{used}, #{introduction})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO SHOP_COUPON (ID, NAME, CREATE_DATE, UPDATE_DATE, BEGIN_DATE, END_DATE, ORDER_PRICE, IS_PRICE, 
+		  IS_ENABLED, IS_EXCHANGE, IS_FISSION, FISSION_NUM, EXPIRE_TYPE, EXPIRE_DAYS, EXPIRE_DATE, 
+		  POINT, VAL, GETNO, TOTAL, GETED, USED, INTRODUCTION)
+    VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.id}, #{item.name}, #{item.createDate}, #{item.updateDate}, #{item.beginDate}, #{item.endDate}, #{item.orderPrice}, #{item.isPrice}, 
+		  #{item.isEnabled}, #{item.isExchange}, #{item.isFission}, #{item.fissionNum}, #{item.expireType}, #{item.expireDays}, #{item.expireDate}, 
+		  #{item.point}, #{item.val}, #{item.getno}, #{item.total}, #{item.geted}, #{item.used}, #{item.introduction})
+   </foreach> 
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.shop.entity.Coupon">
+   UPDATE SHOP_COUPON
+      SET NAME = #{name},
+		  UPDATE_DATE = #{updateDate},
+		  BEGIN_DATE = #{beginDate},
+		  END_DATE = #{endDate},
+		  ORDER_PRICE = #{orderPrice},
+		  IS_PRICE = #{isPrice},
+		  IS_ENABLED = #{isEnabled},
+		  IS_EXCHANGE = #{isExchange},
+		  FISSION_NUM = #{fissionNum},
+		  POINT = #{point},
+		  GETNO = #{getno},
+		  INTRODUCTION = #{introduction}
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateGeted" parameterType="com.tmt.shop.entity.Coupon">
+   UPDATE SHOP_COUPON
+      SET GETED = (CASE WHEN GETED IS NULL THEN 0 ELSE GETED END) + 1
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateUsed" parameterType="com.tmt.shop.entity.Coupon">
+   UPDATE SHOP_COUPON
+      SET USED = (CASE WHEN USED IS NULL THEN 0 ELSE USED END) + 1
+    WHERE ID = #{id}
+  </update>
+  
+  <update id="updateUnUsed" parameterType="com.tmt.shop.entity.Coupon">
+   UPDATE SHOP_COUPON
+      SET USED = (CASE WHEN USED IS NULL THEN 1 ELSE USED END) - 1
+    WHERE ID = #{id}
+  </update>
+</mapper>

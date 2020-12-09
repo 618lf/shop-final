@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.OrderLogDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.OrderLog"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="ORDER_ID" property="orderId" jdbcType="BIGINT"/>
+    <result column="TYPE" property="type" jdbcType="VARCHAR"/>
+    <result column="CONTENT" property="content" jdbcType="VARCHAR"/>
+    <result column="CREATE_ID" property="createId" jdbcType="BIGINT"/>
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="long" >
+   SELECT ID, ORDER_ID, TYPE, CONTENT, CREATE_ID, CREATE_NAME, CREATE_DATE
+     FROM SHOP_ORDER_LOG
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT ID, ORDER_ID, TYPE, CONTENT, CREATE_ID, CREATE_NAME, CREATE_DATE
+     FROM SHOP_ORDER_LOG
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition" >
+   SELECT ID, ORDER_ID, TYPE, CONTENT, CREATE_ID, CREATE_NAME, CREATE_DATE
+     FROM SHOP_ORDER_LOG
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="int" >
+    SELECT COUNT(1) C FROM SHOP_ORDER_LOG
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.OrderLog" >
+   DELETE FROM SHOP_ORDER_LOG WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.OrderLog" >
+   INSERT INTO SHOP_ORDER_LOG (ID, ORDER_ID, TYPE, CONTENT, CREATE_ID, CREATE_NAME, CREATE_DATE)
+   VALUES (#{id}, #{orderId}, #{type}, #{content}, #{createId}, #{createName}, #{createDate})
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.shop.entity.OrderLog" >
+   UPDATE SHOP_ORDER_LOG
+      SET ORDER_ID = #{orderId},
+		  TYPE = #{type},
+		  CONTENT = #{content}
+    WHERE ID = #{id}
+  </update>
+  
+</mapper>

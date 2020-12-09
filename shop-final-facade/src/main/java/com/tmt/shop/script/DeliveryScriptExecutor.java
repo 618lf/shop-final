@@ -5,10 +5,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.tmt.common.groovy.ScriptExecutor;
-import com.tmt.common.utils.DateUtil3;
-import com.tmt.common.utils.Maps;
-import com.tmt.common.utils.SpringContextHolder;
+import com.tmt.core.groovy.ScriptExecutor;
+import com.tmt.core.utils.Maps;
+import com.tmt.core.utils.SpringContextHolder;
+import com.tmt.core.utils.time.DateUtils;
 import com.tmt.shop.entity.GoodsDelivery;
 import com.tmt.shop.entity.Order;
 import com.tmt.shop.entity.OrderItem;
@@ -53,7 +53,7 @@ public class DeliveryScriptExecutor extends ScriptExecutor{
 		// 大部分是这种情况
 		else if(items.size() == 1) {
 			GoodsDelivery delivery = goodsService.getGoodsDelivery(items.get(0).getGoodsId());
-			return delivery == null?noDelivery:this.getMaxDeliveryTimes(DateUtil3.getTodayTime(), delivery);
+			return delivery == null?noDelivery:this.getMaxDeliveryTimes(DateUtils.getTodayTime(), delivery);
 		}
 		
 		// 购买了多件商品
@@ -66,7 +66,7 @@ public class DeliveryScriptExecutor extends ScriptExecutor{
 				}
 			}
 			
-			String max = null; Date now = DateUtil3.getTodayTime();
+			String max = null; Date now = DateUtils.getTodayTime();
 			Iterator<Long> keys = deliverys.keySet().iterator();
 			while(keys.hasNext()) {
 				Long key = keys.next();
@@ -84,9 +84,9 @@ public class DeliveryScriptExecutor extends ScriptExecutor{
 	// 获取最大的
 	private String getMaxDeliveryTimes(Date orderDate, GoodsDelivery delivery) {
 		Map<String, Object> context = Maps.newHashMap();
-		context.put("orderDate", DateUtil3.getTodayTime());
-		context.put("currDay", DateUtil3.getTodayDate());
-		context.put("currDate", DateUtil3.getTodayTime());
+		context.put("orderDate", DateUtils.getTodayTime());
+		context.put("currDay", DateUtils.getTodayDate());
+		context.put("currDate", DateUtils.getTodayTime());
 		Object o = this.execute(delivery.getDeliveryExpression(), context);
 		
 		// 一般不会出现这种情况
@@ -95,7 +95,7 @@ public class DeliveryScriptExecutor extends ScriptExecutor{
 		} 
 		else if(o instanceof Date){
 			Date o_date = (Date)o;
-			return DateUtil3.getFormatDate(o_date, "yyyy-MM-dd HH:mm:ss");
+			return DateUtils.getFormatDate(o_date, "yyyy-MM-dd HH:mm:ss");
 		}
 		
 		// 其他情况 string 表示

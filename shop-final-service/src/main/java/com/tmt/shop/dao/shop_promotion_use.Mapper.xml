@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.PromotionUseDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.PromotionUse"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="PROMOTION_ID" property="promotionId" jdbcType="BIGINT"/>
+    <result column="USER_ID" property="userId" jdbcType="BIGINT"/>
+    <result column="USER_NAME" property="userName" jdbcType="VARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="RECOMMEND_ID" property="recommendId" jdbcType="BIGINT"/>
+    <result column="IS_RETURN" property="isReturn" jdbcType="TINYINT"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, PROMOTION_ID, USER_ID, USER_NAME, CREATE_DATE, RECOMMEND_ID, IS_RETURN
+     FROM SHOP_PROMOTION_USE
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition">
+   SELECT ID, PROMOTION_ID, USER_ID, USER_NAME, CREATE_DATE, RECOMMEND_ID, IS_RETURN
+     FROM SHOP_PROMOTION_USE
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="java.lang.Integer">
+    SELECT COUNT(1) C FROM SHOP_PROMOTION_USE
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.PromotionUse">
+   DELETE FROM SHOP_PROMOTION_USE WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.PromotionUse">
+   INSERT INTO SHOP_PROMOTION_USE (ID, PROMOTION_ID, USER_ID, USER_NAME, CREATE_DATE, RECOMMEND_ID, IS_RETURN)
+   VALUES (#{id}, #{promotionId}, #{userId}, #{userName}, #{createDate}, #{recommendId}, #{isReturn})
+  </insert>
+  
+  <!-- 用户获取的促销的数量 -->
+  <select id="userFetchPromotion" resultType="java.lang.Integer" parameterType="com.tmt.shop.entity.PromotionUse">
+    SELECT COUNT(1) C FROM SHOP_PROMOTION_USE
+     WHERE PROMOTION_ID = #{promotionId}
+       AND USER_ID = #{userId}
+  </select>
+  
+  <!--获取用户促销 -->
+  <select id="getUserPromotion" resultMap="BaseResult" parameterType="com.tmt.shop.entity.PromotionUse">
+   SELECT ID, PROMOTION_ID, USER_ID, USER_NAME, CREATE_DATE, RECOMMEND_ID, IS_RETURN
+     FROM SHOP_PROMOTION_USE
+    WHERE PROMOTION_ID = #{promotionId} AND USER_ID = #{userId} LIMIT 1
+  </select>
+  
+  <update id="updateReturn" parameterType="com.tmt.shop.entity.Product" >
+   UPDATE SHOP_PROMOTION_USE
+      SET IS_RETURN = 1
+    WHERE ID = #{id}
+  </update>
+  
+</mapper>

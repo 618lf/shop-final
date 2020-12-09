@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.EpayDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.Epay"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="TYPE" property="type" jdbcType="TINYINT"/>
+    <result column="ICON" property="icon" jdbcType="VARCHAR"/>
+    <result column="WEBSITE" property="website" jdbcType="VARCHAR"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="PARTNER_ID" property="partnerId" jdbcType="VARCHAR"/>
+    <result column="PARTNER_NAME" property="partnerName" jdbcType="VARCHAR"/>
+    <result column="PARTNER_KEY" property="partnerKey" jdbcType="VARCHAR"/>
+    <result column="PARTNER_ACCOUNT" property="partnerAccount" jdbcType="VARCHAR"/>
+    <result column="PAY_DOMAIN" property="payDomain" jdbcType="VARCHAR"/>
+    <result column="PAY_URL" property="payUrl" jdbcType="VARCHAR"/>
+    <result column="METHOD" property="method" jdbcType="VARCHAR"/>
+    <result column="REMARKS" property="remarks" jdbcType="VARCHAR"/>
+    <result column="DEL_FLAG" property="delFlag" jdbcType="TINYINT"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, TYPE, ICON, WEBSITE, NAME, PARTNER_ID, PARTNER_NAME, PARTNER_KEY, PARTNER_ACCOUNT, PAY_DOMAIN, 
+		  PAY_URL, METHOD, REMARKS, DEL_FLAG
+     FROM SHOP_EPAY
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT ID, TYPE, ICON, WEBSITE, NAME, PARTNER_ID, PARTNER_NAME, PARTNER_KEY, PARTNER_ACCOUNT, PAY_DOMAIN, 
+		  PAY_URL, METHOD, REMARKS, DEL_FLAG
+     FROM SHOP_EPAY
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition" >
+   SELECT ID, TYPE, ICON, WEBSITE, NAME, PARTNER_ID, PARTNER_NAME, PARTNER_KEY, PARTNER_ACCOUNT, PAY_DOMAIN, 
+		  PAY_URL, METHOD, REMARKS, DEL_FLAG
+     FROM SHOP_EPAY
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="int" >
+    SELECT COUNT(1) C FROM SHOP_EPAY
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.Epay" >
+   DELETE FROM SHOP_EPAY WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.Epay" >
+   INSERT INTO SHOP_EPAY (ID, TYPE, ICON, WEBSITE, NAME, PARTNER_ID, PARTNER_NAME, PARTNER_KEY, PARTNER_ACCOUNT, PAY_DOMAIN, 
+		  PAY_URL, METHOD, REMARKS, DEL_FLAG)
+   VALUES (#{id}, #{type}, #{icon}, #{website}, #{name}, #{partnerId}, #{partnerName}, #{partnerKey}, #{partnerAccount}, #{payDomain}, 
+		  #{payUrl}, #{method}, #{remarks}, #{delFlag})
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.shop.entity.Epay" >
+   UPDATE SHOP_EPAY
+      SET ICON = #{icon},
+		  WEBSITE = #{website},
+		  NAME = #{name},
+		  PARTNER_ID = #{partnerId},
+		  PARTNER_NAME = #{partnerName},
+		  PARTNER_KEY = #{partnerKey},
+		  PARTNER_ACCOUNT = #{partnerAccount},
+		  PAY_DOMAIN = #{payDomain},
+		  PAY_URL = #{payUrl},
+		  METHOD = #{method},
+		  REMARKS = #{remarks},
+		  DEL_FLAG = #{delFlag}
+    WHERE ID = #{id}
+  </update>
+  
+  <select id="queryUseableEpays" resultMap="BaseResult">
+   SELECT ID, TYPE, ICON, WEBSITE, NAME, PARTNER_ID, PARTNER_NAME, PARTNER_KEY, PARTNER_ACCOUNT, PAY_DOMAIN, 
+		  PAY_URL, METHOD, REMARKS, DEL_FLAG
+     FROM SHOP_EPAY WHERE DEL_FLAG = 1 ORDER BY ID
+  </select>
+  
+</mapper>

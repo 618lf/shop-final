@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.shop.dao.AttributeOptionDao" >
+  <resultMap id="BaseResult" type="com.tmt.shop.entity.AttributeOption"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="ATTRIBUTE_ID" property="attributeId" jdbcType="BIGINT"/>
+    <result column="SORT" property="sort" jdbcType="INTEGER"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <delete id="delete" parameterType="com.tmt.shop.entity.AttributeOption" >
+   DELETE FROM SHOP_ATTRIBUTE_OPTION WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.shop.entity.AttributeOption" >
+   INSERT INTO SHOP_ATTRIBUTE_OPTION (ID, ATTRIBUTE_ID, SORT, NAME)
+   VALUES (#{id}, #{attributeId}, #{sort}, #{name})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO SHOP_ATTRIBUTE_OPTION (ID, ATTRIBUTE_ID, SORT, NAME)
+    VALUES 
+   <foreach collection="list" item="item" index="index" separator="," >  
+   (#{item.id}, #{item.attributeId}, #{item.sort}, #{item.name})
+   </foreach> 
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.shop.entity.AttributeOption" >
+   UPDATE SHOP_ATTRIBUTE_OPTION
+      SET ATTRIBUTE_ID = #{attributeId},
+		  SORT = #{sort},
+		  NAME = #{name}
+    WHERE ID = #{id}
+  </update>
+  
+  <select id="queryByAttributeId" resultMap="BaseResult" parameterType="long">
+   SELECT ID, ATTRIBUTE_ID, SORT, NAME
+     FROM SHOP_ATTRIBUTE_OPTION
+    WHERE ATTRIBUTE_ID = #{VALUE} ORDER BY SORT
+  </select>
+  
+</mapper>

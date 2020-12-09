@@ -1,10 +1,10 @@
 package com.tmt.shop.script;
 
-import groovy.lang.Script;
-
 import java.util.Date;
 
-import com.tmt.common.utils.DateUtil3;
+import com.tmt.core.utils.time.DateUtils;
+
+import groovy.lang.Script;
 
 /**
  * 表达式计算基类
@@ -35,9 +35,9 @@ public class DeliveryScript extends Script {
 		} else {
 			pattern = dates;
 		}
-		Date currDate = DateUtil3.getTodayTime();
-		String dateStr = DateUtil3.getFormatDate(currDate, pattern);
-		Date formateDate = DateUtil3.getFormatDate(dateStr, _pattern);
+		Date currDate = DateUtils.getTodayTime();
+		String dateStr = DateUtils.getFormatDate(currDate, pattern);
+		Date formateDate = DateUtils.getFormatDate(dateStr, _pattern);
 		return currDate.compareTo(formateDate) <= 0;
 	}
 	
@@ -48,7 +48,7 @@ public class DeliveryScript extends Script {
 	 * @return
 	 */
 	public Date addDay(Date date, int offset) {
-		return DateUtil3.getDateByOffset(date, offset);
+		return DateUtils.getDateByOffset(date, offset);
 	}
 	
 	/**
@@ -58,7 +58,7 @@ public class DeliveryScript extends Script {
 	 * @return
 	 */
 	public String toStr(Date date, String pattern) {
-		return DateUtil3.getFormatDate(date, pattern);
+		return DateUtils.getFormatDate(date, pattern);
 	}
 	
 	/**
