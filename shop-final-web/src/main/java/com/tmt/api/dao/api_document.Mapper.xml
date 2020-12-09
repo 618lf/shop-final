@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.api.dao.DocumentDao" >
+  <resultMap id="BaseResult" type="com.tmt.api.entity.Document"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="PROJECT_ID" property="projectId" jdbcType="BIGINT"/>
+    <result column="GROUP_ID" property="groupId" jdbcType="BIGINT"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="STATUS" property="status" jdbcType="TINYINT"/>
+    <result column="STAR_LEVEL" property="starLevel" jdbcType="TINYINT"/>
+    <result column="REQUEST_URL" property="requestUrl" jdbcType="VARCHAR"/>
+    <result column="REQUEST_METHOD" property="requestMethod" jdbcType="VARCHAR"/>
+    <result column="REQUEST_HEADERS" property="requestHeaders" jdbcType="LONGVARCHAR"/>
+    <result column="QUERY_PARAMS" property="queryParams" jdbcType="LONGVARCHAR"/>
+    <result column="RESPONSE_PARAMS" property="responseParams" jdbcType="LONGVARCHAR"/>
+    <result column="SUCCESS_RESP_TYPE" property="successRespType" jdbcType="VARCHAR"/>
+    <result column="SUCCESS_RESP_EXAMPLE" property="successRespExample" jdbcType="LONGVARCHAR"/>
+    <result column="FAIL_RESP_TYPE" property="failRespType" jdbcType="VARCHAR"/>
+    <result column="FAIL_RESP_EXAMPLE" property="failRespExample" jdbcType="LONGVARCHAR"/>
+    <result column="REMARKS" property="remarks" jdbcType="LONGVARCHAR"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, PROJECT_ID, GROUP_ID, NAME, STATUS, STAR_LEVEL, REQUEST_URL, REQUEST_METHOD, 
+		  REQUEST_HEADERS, QUERY_PARAMS, RESPONSE_PARAMS, SUCCESS_RESP_TYPE, SUCCESS_RESP_EXAMPLE, FAIL_RESP_TYPE, FAIL_RESP_EXAMPLE, 
+		  REMARKS, CREATE_DATE, UPDATE_DATE
+     FROM API_DOCUMENT
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT ID, PROJECT_ID, GROUP_ID, NAME, STATUS, STAR_LEVEL, REQUEST_URL, REQUEST_METHOD, 
+		  REQUEST_HEADERS, QUERY_PARAMS, RESPONSE_PARAMS, SUCCESS_RESP_TYPE, SUCCESS_RESP_EXAMPLE, FAIL_RESP_TYPE, FAIL_RESP_EXAMPLE, 
+		  REMARKS, CREATE_DATE, UPDATE_DATE
+     FROM API_DOCUMENT
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition">
+   SELECT ID, PROJECT_ID, GROUP_ID, NAME, STATUS, STAR_LEVEL, REQUEST_URL, REQUEST_METHOD, 
+		  REQUEST_HEADERS, QUERY_PARAMS, RESPONSE_PARAMS, SUCCESS_RESP_TYPE, SUCCESS_RESP_EXAMPLE, FAIL_RESP_TYPE, FAIL_RESP_EXAMPLE, 
+		  REMARKS, CREATE_DATE, UPDATE_DATE
+     FROM API_DOCUMENT
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="java.lang.Integer">
+    SELECT COUNT(1) C FROM API_DOCUMENT
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.api.entity.Document">
+   DELETE FROM API_DOCUMENT WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.api.entity.Document">
+   INSERT INTO API_DOCUMENT (ID, PROJECT_ID, GROUP_ID, NAME, STATUS, STAR_LEVEL, REQUEST_URL, REQUEST_METHOD, 
+		  REQUEST_HEADERS, QUERY_PARAMS, RESPONSE_PARAMS, SUCCESS_RESP_TYPE, SUCCESS_RESP_EXAMPLE, FAIL_RESP_TYPE, FAIL_RESP_EXAMPLE, 
+		  REMARKS, CREATE_DATE, UPDATE_DATE)
+   VALUES (#{id}, #{projectId}, #{groupId}, #{name}, #{status}, #{starLevel}, #{requestUrl}, #{requestMethod}, 
+		  #{requestHeaders}, #{queryParams}, #{responseParams}, #{successRespType}, #{successRespExample}, #{failRespType}, #{failRespExample}, 
+		  #{remarks}, #{createDate}, #{updateDate})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO API_DOCUMENT (ID, PROJECT_ID, GROUP_ID, NAME, STATUS, STAR_LEVEL, REQUEST_URL, REQUEST_METHOD, 
+		  REQUEST_HEADERS, QUERY_PARAMS, RESPONSE_PARAMS, SUCCESS_RESP_TYPE, SUCCESS_RESP_EXAMPLE, FAIL_RESP_TYPE, FAIL_RESP_EXAMPLE, 
+		  REMARKS, CREATE_DATE, UPDATE_DATE)
+    VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.id}, #{item.projectId}, #{item.groupId}, #{item.name}, #{item.status}, #{item.starLevel}, #{item.requestUrl}, #{item.requestMethod}, 
+		  #{item.requestHeaders}, #{item.queryParams}, #{item.responseParams}, #{item.successRespType}, #{item.successRespExample}, #{item.failRespType}, #{item.failRespExample}, 
+		  #{item.remarks}, #{item.createDate}, #{item.updateDate})
+   </foreach> 
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.api.entity.Document">
+   UPDATE API_DOCUMENT
+      SET PROJECT_ID = #{projectId},
+		  GROUP_ID = #{groupId},
+		  NAME = #{name},
+		  STATUS = #{status},
+		  STAR_LEVEL = #{starLevel},
+		  REQUEST_URL = #{requestUrl},
+		  REQUEST_METHOD = #{requestMethod},
+		  REQUEST_HEADERS = #{requestHeaders},
+		  QUERY_PARAMS = #{queryParams},
+		  RESPONSE_PARAMS = #{responseParams},
+		  SUCCESS_RESP_TYPE = #{successRespType},
+		  SUCCESS_RESP_EXAMPLE = #{successRespExample},
+		  FAIL_RESP_TYPE = #{failRespType},
+		  FAIL_RESP_EXAMPLE = #{failRespExample},
+		  REMARKS = #{remarks},
+		  UPDATE_DATE = #{updateDate}
+    WHERE ID = #{id}
+  </update>
+  
+  
+</mapper>

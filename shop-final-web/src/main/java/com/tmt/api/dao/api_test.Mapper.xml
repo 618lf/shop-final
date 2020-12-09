@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.api.dao.TestDao" >
+  <resultMap id="BaseResult" type="com.tmt.api.entity.Test"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="DOCUMENT_ID" property="documentId" jdbcType="BIGINT"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+    <result column="REQUEST_URL" property="requestUrl" jdbcType="VARCHAR"/>
+    <result column="REQUEST_METHOD" property="requestMethod" jdbcType="VARCHAR"/>
+    <result column="REQUEST_HEADERS" property="requestHeaders" jdbcType="LONGVARCHAR"/>
+    <result column="QUERY_PARAMS" property="queryParams" jdbcType="LONGVARCHAR"/>
+    <result column="RESP_TYPE" property="respType" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <resultMap id="ListBaseResult" type="com.tmt.api.entity.Test"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="DOCUMENT_ID" property="documentId" jdbcType="BIGINT"/>
+    <result column="DOCUMENT_NAME" property="documentName" jdbcType="BIGINT"/>
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+    <result column="REQUEST_URL" property="requestUrl" jdbcType="VARCHAR"/>
+    <result column="REQUEST_METHOD" property="requestMethod" jdbcType="VARCHAR"/>
+    <result column="REQUEST_HEADERS" property="requestHeaders" jdbcType="LONGVARCHAR"/>
+    <result column="QUERY_PARAMS" property="queryParams" jdbcType="LONGVARCHAR"/>
+    <result column="RESP_TYPE" property="respType" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <select id="get" resultMap="ListBaseResult" parameterType="Long">
+   SELECT A.ID, A.DOCUMENT_ID, B.NAME DOCUMENT_NAME, A.CREATE_DATE, A.UPDATE_DATE, A.REQUEST_URL, A.REQUEST_METHOD, 
+          A.REQUEST_HEADERS, A.QUERY_PARAMS, A.RESP_TYPE
+     FROM API_TEST A, API_DOCUMENT B
+    WHERE A.ID = #{id} AND A.DOCUMENT_ID = B.ID
+  </select>
+  
+  <select id="findByCondition" resultMap="ListBaseResult" parameterType="queryCondition">
+   SELECT A.ID, A.DOCUMENT_ID, B.NAME DOCUMENT_NAME, A.CREATE_DATE, A.UPDATE_DATE, A.REQUEST_URL, A.REQUEST_METHOD, 
+          A.REQUEST_HEADERS, A.QUERY_PARAMS, A.RESP_TYPE
+     FROM API_TEST A, API_DOCUMENT B
+    WHERE A.DOCUMENT_ID = B.ID
+    <include refid="COMMON.andClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="java.lang.Integer">
+    SELECT COUNT(1) C FROM API_TEST
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.api.entity.Test">
+   DELETE FROM API_TEST WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.api.entity.Test">
+   INSERT INTO API_TEST (ID, DOCUMENT_ID, CREATE_DATE, UPDATE_DATE, REQUEST_URL, REQUEST_METHOD, REQUEST_HEADERS, QUERY_PARAMS, 
+		  RESP_TYPE)
+   VALUES (#{id}, #{documentId}, #{createDate}, #{updateDate}, #{requestUrl}, #{requestMethod}, #{requestHeaders}, #{queryParams}, 
+		  #{respType})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO API_TEST (ID, DOCUMENT_ID, CREATE_DATE, UPDATE_DATE, REQUEST_URL, REQUEST_METHOD, REQUEST_HEADERS, QUERY_PARAMS, 
+		  RESP_TYPE)
+    VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.id}, #{item.documentId}, #{item.createDate}, #{item.updateDate}, #{item.requestUrl}, #{item.requestMethod}, #{item.requestHeaders}, #{item.queryParams}, 
+		  #{item.respType})
+   </foreach> 
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.api.entity.Test">
+   UPDATE API_TEST
+      SET DOCUMENT_ID = #{documentId},
+		  UPDATE_DATE = #{updateDate},
+		  REQUEST_URL = #{requestUrl},
+		  REQUEST_METHOD = #{requestMethod},
+		  REQUEST_HEADERS = #{requestHeaders},
+		  QUERY_PARAMS = #{queryParams},
+		  RESP_TYPE = #{respType}
+    WHERE ID = #{id}
+  </update>
+  
+  <select id="queryByDocumnet" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, DOCUMENT_ID, CREATE_DATE, UPDATE_DATE, REQUEST_URL, REQUEST_METHOD, REQUEST_HEADERS, QUERY_PARAMS, 
+		  RESP_TYPE
+     FROM API_TEST
+    WHERE DOCUMENT_ID = #{id}
+    ORDER BY CREATE_DATE DESC
+  </select>
+</mapper>

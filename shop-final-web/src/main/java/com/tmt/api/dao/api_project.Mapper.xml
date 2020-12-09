@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.api.dao.ProjectDao" >
+  <resultMap id="BaseResult" type="com.tmt.api.entity.Project"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="REMARKS" property="remarks" jdbcType="VARCHAR"/>
+    <result column="PERMISSION" property="permission" jdbcType="TINYINT"/>
+    <result column="BASE_URL_PRODUCT" property="baseUrlProduct" jdbcType="VARCHAR"/>
+    <result column="BASE_URL_PPE" property="baseUrlPpe" jdbcType="VARCHAR"/>
+    <result column="BASE_URL_QA" property="baseUrlQa" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, NAME, REMARKS, PERMISSION, BASE_URL_PRODUCT, BASE_URL_PPE, BASE_URL_QA
+     FROM API_PROJECT
+    WHERE ID = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResult">
+   SELECT ID, NAME, REMARKS, PERMISSION, BASE_URL_PRODUCT, BASE_URL_PPE, BASE_URL_QA
+     FROM API_PROJECT
+  </select>
+  
+  <select id="findByCondition" resultMap="BaseResult" parameterType="queryCondition">
+   SELECT ID, NAME, REMARKS, PERMISSION, BASE_URL_PRODUCT, BASE_URL_PPE, BASE_URL_QA
+     FROM API_PROJECT
+    <include refid="COMMON.whereClause"/>
+    <if test="orderByClause != null">ORDER BY ${orderByClause}</if>
+  </select>
+  <select id="findByConditionStat" parameterType="queryCondition" resultType="java.lang.Integer">
+    SELECT COUNT(1) C FROM API_PROJECT
+    <include refid="COMMON.whereClause" />
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.api.entity.Project">
+   DELETE FROM API_PROJECT WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.api.entity.Project">
+   INSERT INTO API_PROJECT (ID, NAME, REMARKS, PERMISSION, BASE_URL_PRODUCT, BASE_URL_PPE, BASE_URL_QA)
+   VALUES (#{id}, #{name}, #{remarks}, #{permission}, #{baseUrlProduct}, #{baseUrlPpe}, #{baseUrlQa})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO API_PROJECT (ID, NAME, REMARKS, PERMISSION, BASE_URL_PRODUCT, BASE_URL_PPE, BASE_URL_QA)
+    VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.id}, #{item.name}, #{item.remarks}, #{item.permission}, #{item.baseUrlProduct}, #{item.baseUrlPpe}, #{item.baseUrlQa})
+   </foreach> 
+  </insert>
+  
+  <update id="update" parameterType="com.tmt.api.entity.Project">
+   UPDATE API_PROJECT
+      SET NAME = #{name},
+		  REMARKS = #{remarks},
+		  PERMISSION = #{permission},
+		  BASE_URL_PRODUCT = #{baseUrlProduct},
+		  BASE_URL_PPE = #{baseUrlPpe},
+		  BASE_URL_QA = #{baseUrlQa}
+    WHERE ID = #{id}
+  </update>
+  
+  
+</mapper>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmt.api.dao.GroupDao" >
+  <resultMap id="BaseResult" type="com.tmt.api.entity.Group"> 
+    <result column="ID" property="id" jdbcType="BIGINT"/>
+    <result column="PROJECT_ID" property="projectId" jdbcType="BIGINT"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="SORT" property="sort" jdbcType="INTEGER"/>
+  </resultMap>
+  
+  <select id="get" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, PROJECT_ID, NAME, SORT
+     FROM API_GROUP
+    WHERE ID = #{id}
+  </select>
+  
+  <delete id="delete" parameterType="com.tmt.api.entity.Group">
+   DELETE FROM API_GROUP WHERE ID = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.tmt.api.entity.Group">
+   INSERT INTO API_GROUP (ID, PROJECT_ID, NAME, SORT)
+   VALUES (#{id}, #{projectId}, #{name}, #{sort})
+  </insert>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO API_GROUP (ID, PROJECT_ID, NAME, SORT)
+    VALUES
+   <foreach collection="list" item="item" index="index" separator="," >  
+    (#{item.id}, #{item.projectId}, #{item.name}, #{item.sort})
+   </foreach> 
+  </insert>
+  
+  <update id="updateSort" parameterType="com.tmt.api.entity.Group">
+   UPDATE API_GROUP
+      SET SORT = #{sort}
+    WHERE ID = #{id}
+  </update>
+  
+  <select id="queryByProject" resultMap="BaseResult" parameterType="Long">
+   SELECT ID, PROJECT_ID, NAME, SORT
+     FROM API_GROUP
+    WHERE PROJECT_ID = #{id} 
+    ORDER BY SORT 
+  </select>
+  
+</mapper>

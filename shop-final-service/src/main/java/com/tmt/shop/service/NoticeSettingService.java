@@ -4,12 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.tmt.Constants;
 import com.tmt.core.persistence.BaseDao;
 import com.tmt.core.service.BaseService;
 import com.tmt.core.utils.CacheUtils;
 import com.tmt.shop.dao.NoticeSettingDao;
 import com.tmt.shop.entity.NoticeSetting;
-import com.tmt.system.entity.SystemConstant;
 
 /**
  * 通知设置 管理
@@ -36,7 +36,7 @@ public class NoticeSettingService extends BaseService<NoticeSetting,Byte> implem
 		this.update("updateTmsg", setting);
 		
 		// 删除缓存
-		String key = new StringBuilder(SystemConstant.CACHE_MSG_CONFIG).append(setting.getId()).toString();
+		String key = new StringBuilder(Constants.CACHE_MSG_CONFIG).append(setting.getId()).toString();
 		CacheUtils.getSysCache().delete(key);
 	}
 	
@@ -49,7 +49,7 @@ public class NoticeSettingService extends BaseService<NoticeSetting,Byte> implem
 		this.update("updateSitemsg", setting);
 		
 		// 删除缓存
-		String key = new StringBuilder(SystemConstant.CACHE_MSG_CONFIG).append(setting.getId()).toString();
+		String key = new StringBuilder(Constants.CACHE_MSG_CONFIG).append(setting.getId()).toString();
 		CacheUtils.getSysCache().delete(key);
 	}
 	
@@ -62,7 +62,7 @@ public class NoticeSettingService extends BaseService<NoticeSetting,Byte> implem
 		this.update("updateSmsg", setting);
 		
 		// 删除缓存
-		String key = new StringBuilder(SystemConstant.CACHE_MSG_CONFIG).append(setting.getId()).toString();
+		String key = new StringBuilder(Constants.CACHE_MSG_CONFIG).append(setting.getId()).toString();
 		CacheUtils.getSysCache().delete(key);
 	}
 
@@ -71,7 +71,7 @@ public class NoticeSettingService extends BaseService<NoticeSetting,Byte> implem
 	 */
 	@Override
 	public NoticeSetting getByType(Byte type) {
-		String key = new StringBuilder(SystemConstant.CACHE_MSG_CONFIG).append(type).toString();
+		String key = new StringBuilder(Constants.CACHE_MSG_CONFIG).append(type).toString();
 		NoticeSetting setting = CacheUtils.getSysCache().get(key);
 		if (setting == null) {
 			setting = this.get(type);
